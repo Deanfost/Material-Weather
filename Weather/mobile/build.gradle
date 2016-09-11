@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "dean.weather"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -19,6 +19,10 @@ android {
     }
 }
 
+ext {
+    supportLibVersion = '24.2.0'  // variable that can be referenced to keep support libs consistent
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
@@ -26,4 +30,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.google.android.gms:play-services:9.4.0'
     compile 'com.intuit.sdp:sdp-android:1.0.3'
+    compile "com.android.support:design:23.4.0"
 }
