@@ -31,6 +31,6 @@ public class pagerAdapter extends FragmentPagerAdapter {
         fragmentsTitleList.add(title);
     }
     public CharSequence getPageTitle(int position){
-        return fragmentsTitleList.get(position);
+        return null; //Only set icons in tabs
     }
 }

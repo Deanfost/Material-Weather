@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
         mainPagerAdapter.addFragment(new dailyFrag(), "Daily");
         mainViewPager.setAdapter(mainPagerAdapter);
         mainTabLayout.setupWithViewPager(mainViewPager);
+        mainTabLayout.getTabAt(0).setIcon(R.drawable.locations_material);
+        mainTabLayout.getTabAt(1).setIcon(R.drawable.details_material);
+        mainTabLayout.getTabAt(2).setIcon(R.drawable.hourly_material);
+        mainTabLayout.getTabAt(3).setIcon(R.drawable.daily_material);
+
 
     }
     //Action bar events
