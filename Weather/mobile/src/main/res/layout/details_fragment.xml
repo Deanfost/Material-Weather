@@ -3,39 +3,69 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_230sdp"
-        android:orientation="vertical"
-        android:background="@color/colorAccent"
-        android:layout_margin="@dimen/_10sdp"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/_40sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/_6sdp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Report Frag"
-            android:textSize="@dimen/_20sdp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240sdp"
+                android:orientation="vertical"
+                android:background="@color/colorAccent"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:elevation="@dimen/_2sdp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Report Frag"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_230sdp"
-        android:orientation="vertical"
-        android:background="@color/colorAccent"
-        android:layout_margin="@dimen/_10sdp"
-        android:gravity="center">
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Details Frag"
-            android:textSize="@dimen/_20sdp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240sdp"
+                android:orientation="vertical"
+                android:background="@color/colorAccent"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:elevation="@dimen/_2sdp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Details Frag"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:orientation="vertical"
+                android:background="@color/colorAccent"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:elevation="@dimen/_2sdp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admob"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>

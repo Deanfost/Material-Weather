@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
     //View pager
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //Customize the app bar and status bar
         assert toolbar != null;
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Boston, MA");
         toolbar.setSubtitle("May 5, 2016");
         toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorPrimary));
@@ -42,32 +41,25 @@ public class MainActivity extends AppCompatActivity {
         mainViewPager = (ViewPager) findViewById(R.id.viewPager);
         //Setup tab navigation
         mainTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mainPagerAdapter.addFragment(new locationsFrag(), "Daily");
+//        mainPagerAdapter.addFragment(new locationsFrag(), "Locations");
         mainPagerAdapter.addFragment(new detailsFrag(), "Details");
         mainPagerAdapter.addFragment(new hourlyFrag(), "Hourly");
         mainPagerAdapter.addFragment(new dailyFrag(), "Daily");
         mainViewPager.setAdapter(mainPagerAdapter);
         mainTabLayout.setupWithViewPager(mainViewPager);
-        mainTabLayout.getTabAt(0).setIcon(R.drawable.locations_material);
-        mainTabLayout.getTabAt(1).setIcon(R.drawable.details_material);
-        mainTabLayout.getTabAt(2).setIcon(R.drawable.hourly_material);
-        mainTabLayout.getTabAt(3).setIcon(R.drawable.daily_material);
-
+//        mainTabLayout.getTabAt(0).setIcon(R.drawable.locations_material);
+        mainTabLayout.getTabAt(0).setIcon(R.drawable.details_material);
+        mainTabLayout.getTabAt(1).setIcon(R.drawable.hourly_material);
+        mainTabLayout.getTabAt(2).setIcon(R.drawable.daily_material);
 
     }
     //Action bar events
-
-        /**
-         * Handles action selection.
-         * @param item
-         * @return
-         */
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             switch(item.getItemId()){
                 //Settings
-                case R.id.action_settings:
-                    return true;
+//                case R.id.action_settings:
+//                    return true;
                 //Remove ads
                 case R.id.action_remove_ads:
                     return true;
