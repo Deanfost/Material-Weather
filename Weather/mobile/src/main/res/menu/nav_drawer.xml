@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_current_location"
+            android:icon="@drawable/my_location"
+            android:title="Current location"
+            android:checked="true"/>
+        <item
+            android:id="@+id/nav_another_location"
+            android:title="Another location" />
+    </group>
+
+    <item android:title="Manage locations">
+        <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_add_locations"
+                android:icon="@drawable/add_location"
+                android:title="Add Location"
+                android:checked="true"/>
+            <item
+                android:id="@+id/nav_second_fragment"
+                android:icon="@drawable/edit_location"
+                android:title="Edit locations" />
+        </group>
+    </item>
+</menu>

@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_230sdp"
         android:orientation="vertical"
-        android:background="@color/colorAccent"
         android:layout_margin="@dimen/_10sdp"
         android:gravity="center">
 

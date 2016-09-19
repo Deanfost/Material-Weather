@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/_6sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_230sdp"
+        android:layout_height="@dimen/_362sdp"
         android:orientation="vertical"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:layout_margin="@dimen/_10sdp"
-        android:gravity="center">
+        android:gravity="center"
+        android:elevation="@dimen/_2sdp"
+        android:alpha=".65">
 
         <TextView
             android:layout_width="wrap_content"

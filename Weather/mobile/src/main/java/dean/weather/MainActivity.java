@@ -1,34 +1,42 @@
 package dean.weather;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity{
     //View pager
     static final int NUM_TABS = 4;
     pagerAdapter mainPagerAdapter;
     ViewPager mainViewPager;
     TabLayout mainTabLayout;
+    ImageView backgroundImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Customize toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //Customize the app bar and status bar
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Boston, MA");
-        toolbar.setSubtitle("May 5, 2016");
+//        toolbar.setSubtitle("May 5, 2016");
         toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorPrimary));
         //Set color of system bar
 //        Window window = this.getWindow();
@@ -41,16 +49,41 @@ public class MainActivity extends AppCompatActivity {
         mainViewPager = (ViewPager) findViewById(R.id.viewPager);
         //Setup tab navigation
         mainTabLayout = (TabLayout) findViewById(R.id.tabs);
-//        mainPagerAdapter.addFragment(new locationsFrag(), "Locations");
+        mainPagerAdapter.addFragment(new locationsFrag(), "Locations");
         mainPagerAdapter.addFragment(new detailsFrag(), "Details");
         mainPagerAdapter.addFragment(new hourlyFrag(), "Hourly");
         mainPagerAdapter.addFragment(new dailyFrag(), "Daily");
         mainViewPager.setAdapter(mainPagerAdapter);
         mainTabLayout.setupWithViewPager(mainViewPager);
-//        mainTabLayout.getTabAt(0).setIcon(R.drawable.locations_material);
-        mainTabLayout.getTabAt(0).setIcon(R.drawable.details_material);
-        mainTabLayout.getTabAt(1).setIcon(R.drawable.hourly_material);
-        mainTabLayout.getTabAt(2).setIcon(R.drawable.daily_material);
+        mainTabLayout.getTabAt(0).setIcon(R.drawable.locations_material);
+        mainTabLayout.getTabAt(1).setIcon(R.drawable.details_material);
+        mainTabLayout.getTabAt(2).setIcon(R.drawable.hourly_material);
+        mainTabLayout.getTabAt(3).setIcon(R.drawable.daily_material);
+        mainViewPager.setCurrentItem(1);
+
+        //Load background image
+        backgroundImage = (ImageView) findViewById(R.id.background_image_view);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        final int screenWidth = size.x;
+        final int screenHeight = size.y;
+
+        runOnUiThread(new Runnable(){
+            @Override
+            public void run(){
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeResource(getResources(), R.drawable.foggy_mountains, options);
+//                int imageHeight = options.outHeight;
+//                int imageWidth = options.outWidth;
+//                String imageType = options.outMimeType;
+
+                backgroundImage.setImageBitmap(
+                        decodeSampledBitmapFromResource(getResources(), R.drawable.foggy_mountains, 500,500));
+            }
+        });
+
 
     }
     //Action bar events
@@ -58,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             switch(item.getItemId()){
                 //Settings
-//                case R.id.action_settings:
-//                    return true;
+                case R.id.action_settings:
+                    return true;
                 //Remove ads
                 case R.id.action_remove_ads:
                     return true;
@@ -84,4 +117,44 @@ public class MainActivity extends AppCompatActivity {
             inflater.inflate(R.menu.appbar_items, menu);
             return true;
         }
+
+    //Image loading
+        public static int calculateInSampleSize(
+                BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            //Height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                // Subsample the image
+                while ((halfHeight / inSampleSize) >= reqHeight
+                        && (halfWidth / inSampleSize) >= reqWidth) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
+        }
+
+        public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                             int reqWidth, int reqHeight) {
+
+            // First decode with inJustDecodeBounds=true to check dimensions
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeResource(res, resId, options);
+
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
+            return BitmapFactory.decodeResource(res, resId, options);
+        }
+
 }

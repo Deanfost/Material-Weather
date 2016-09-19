@@ -2,7 +2,7 @@
     <string name="app_name">Weather</string>
 
     <!-- Overflow menu -->
-    <!--<string name="action_settings">Settings</string>-->
+    <string name="action_settings">Settings</string>
     <string name="action_rate">Rate this app</string>
     <string name="action_remove_ads">Remove ads</string>
     <string name="action_refresh">Refresh</string>
