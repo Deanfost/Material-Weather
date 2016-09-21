@@ -3,14 +3,11 @@ package dean.weather;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,14 +27,15 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Customize toolbar
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //Customize the app bar and status bar
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Boston, MA");
 //        toolbar.setSubtitle("May 5, 2016");
-        toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorPrimary));
+        toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
+
         //Set color of system bar
 //        Window window = this.getWindow();
 //        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -60,14 +58,15 @@ public class MainActivity extends AppCompatActivity{
         mainTabLayout.getTabAt(2).setIcon(R.drawable.hourly_material);
         mainTabLayout.getTabAt(3).setIcon(R.drawable.daily_material);
         mainViewPager.setCurrentItem(1);
+        mainTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         //Load background image
         backgroundImage = (ImageView) findViewById(R.id.background_image_view);
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        final int screenWidth = size.x;
-        final int screenHeight = size.y;
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        final int screenWidth = size.x;
+//        final int screenHeight = size.y;
 
         runOnUiThread(new Runnable(){
             @Override

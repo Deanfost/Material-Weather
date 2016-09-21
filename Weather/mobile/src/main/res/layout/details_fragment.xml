@@ -10,26 +10,68 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="@dimen/_6sdp">
+            android:padding="@dimen/_6sdp"
+            android:animateLayoutChanges="true">
 
+            <!-- Report layout -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_240sdp"
                 android:orientation="vertical"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/background_ripple_blue"
                 android:layout_margin="@dimen/_10sdp"
                 android:elevation="@dimen/_2sdp"
                 android:alpha=".65"
-                android:padding="@dimen/_16sdp">
+                android:padding="@dimen/_16sdp"
+                android:clickable="true"
+                android:id="@+id/reportLayout">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Today"
-                    android:textSize="@dimen/_24sdp"
-                    android:textStyle="bold"
+                    android:textSize="@dimen/_18sdp"
                     android:textColor="@color/colorAccent"
-                    android:id="@+id/reportTitle"/>
+                    android:id="@+id/reportTitle"
+                    android:layout_marginBottom="@dimen/_10sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Good Day"
+                    android:textSize="@dimen/_24sdp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/reportRank"
+                    android:layout_marginBottom="@dimen/_10sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="72"
+                    android:textSize="@dimen/_24sdp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/reportTemp"
+                    android:layout_marginBottom="@dimen/_10sdp"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_foggy"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/reportConditions"/>
+
+                <!-- Details "button" for report fragment -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Details"
+                    android:textSize="@dimen/_16sdp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/reportDetailsBtn"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_gravity="bottom|right"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"/>
 
             </LinearLayout>
 
@@ -37,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_240sdp"
                 android:orientation="vertical"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorBlue"
                 android:layout_margin="@dimen/_10sdp"
                 android:elevation="@dimen/_2sdp"
                 android:alpha=".65"
@@ -46,18 +88,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Details"
-                    android:textSize="@dimen/_24sdp"
+                    android:text="Now"
+                    android:textSize="@dimen/_18sdp"
                     android:textColor="@color/colorAccent"
-                    android:textStyle="bold"
-                    android:id="@+id/detailsTitle"/>
+                    android:id="@+id/detailsTitle" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp"
                 android:orientation="vertical"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorBlue"
                 android:layout_margin="@dimen/_10sdp"
                 android:gravity="center"
                 android:elevation="@dimen/_2sdp"
@@ -67,8 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Admob"
-                    android:textSize="@dimen/_20sdp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_20sdp" />
             </LinearLayout>
 
         </LinearLayout>
