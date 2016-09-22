@@ -14,11 +14,12 @@ import android.widget.TextView;
  * Created by DeanF on 9/16/2016.
  */
 public class detailsFrag extends Fragment {
-    TextView detailsTitle;
-    TextView reportTitle;
-    TextView reportTemp;
-    Typeface robotoLight;
     LinearLayout reportLayout;
+    TextView reportTemp;
+    TextView detailsSunriseSetValue;
+    TextView detailsWindValue;
+    TextView detailsHumidityValue;
+    Typeface robotoLight;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,13 +36,17 @@ public class detailsFrag extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //Setup references
         robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
-        detailsTitle = (TextView) getView().findViewById(R.id.detailsTitle);
-        reportTitle = (TextView) getView().findViewById(R.id.reportTitle);
         reportTemp = (TextView) getView().findViewById(R.id.reportTemp);
         reportLayout = (LinearLayout) getView().findViewById(R.id.reportLayout);
+        detailsSunriseSetValue = (TextView) getView().findViewById(R.id.detailsSunriseSetTime);
+        detailsWindValue = (TextView) getView().findViewById(R.id.detailsWindValue);
+        detailsHumidityValue = (TextView) getView().findViewById(R.id.detailsHumityValue);
 
         //Customize font
         reportTemp.setTypeface(robotoLight);
+        detailsSunriseSetValue.setTypeface(robotoLight);
+        detailsWindValue.setTypeface(robotoLight);
+        detailsHumidityValue.setTypeface(robotoLight);
         reportTemp.setText("72" + (char) 0x00B0);//Set the temp with degree symbol
 
     }

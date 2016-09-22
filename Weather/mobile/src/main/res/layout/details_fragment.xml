@@ -60,7 +60,7 @@
                     android:scaleType="fitCenter"
                     android:id="@+id/reportConditions"/>
 
-                <!-- Details "button" for report fragment -->
+                <!-- Details "button" for report layout -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,15 +75,16 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_240sdp"
-                android:orientation="vertical"
-                android:background="@color/colorBlue"
+                android:background="@drawable/background_ripple_blue"
                 android:layout_margin="@dimen/_10sdp"
                 android:elevation="@dimen/_2sdp"
                 android:alpha=".65"
-                android:padding="@dimen/_16sdp">
+                android:padding="@dimen/_16sdp"
+                android:clickable="true"
+                android:id="@+id/detailsLayout">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,7 +93,84 @@
                     android:textSize="@dimen/_18sdp"
                     android:textColor="@color/colorAccent"
                     android:id="@+id/detailsTitle" />
-            </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_sunrise"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/detailsSunriseSet"
+                    android:layout_below="@+id/detailsTitle"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_alignStart="@+id/detailsTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6:35AM"
+                    android:textSize="@dimen/_18sdp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/detailsSunriseSetTime"
+                    android:layout_toEndOf="@+id/detailsSunriseSet"
+                    android:layout_alignBottom="@+id/detailsSunriseSet"
+                    android:layout_marginLeft="@dimen/_15sdp"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_windrose"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/detailsWind"
+                    android:layout_below="@+id/detailsSunriseSet"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_alignStart="@+id/detailsTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NE 8 MPH"
+                    android:textSize="@dimen/_18sdp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/detailsWindValue"
+                    android:layout_alignBottom="@+id/detailsWind"
+                    android:layout_alignStart="@+id/detailsSunriseSetTime" />
+
+                <ImageView
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_humidity"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/detailsHumidity"
+                    android:layout_below="@+id/detailsWind"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_alignStart="@+id/detailsTitle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="64%"
+                    android:textSize="@dimen/_18sdp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/detailsHumityValue"
+                    android:layout_alignBottom="@+id/detailsHumidity"
+                    android:layout_alignStart="@+id/detailsWindValue" />
+
+                <!-- Details "button" for details layout -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Details"
+                    android:textSize="@dimen/_16sdp"
+                    android:textColor="@color/colorAccent"
+                    android:id="@+id/detailsDetailsBtn"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_gravity="bottom|right"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/_10sdp"/>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

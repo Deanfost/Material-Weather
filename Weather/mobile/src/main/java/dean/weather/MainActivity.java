@@ -3,6 +3,8 @@ package dean.weather;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity{
     ViewPager mainViewPager;
     TabLayout mainTabLayout;
     ImageView backgroundImage;
+    AppBarLayout appbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,16 @@ public class MainActivity extends AppCompatActivity{
         mainTabLayout.getTabAt(2).setIcon(R.drawable.hourly_material);
         mainTabLayout.getTabAt(3).setIcon(R.drawable.daily_material);
         mainViewPager.setCurrentItem(1);
-        mainTabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+        //Turn off tab layout collapsing
+        appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);
+        AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        toolbarLayoutParams.setScrollFlags(0);
+        toolbar.setLayoutParams(toolbarLayoutParams);
+
+        CoordinatorLayout.LayoutParams appbarLayoutParams = (CoordinatorLayout.LayoutParams) appbarLayout.getLayoutParams();
+        appbarLayoutParams.setBehavior(null);
+        appbarLayout.setLayoutParams(appbarLayoutParams);
 
         //Load background image
         backgroundImage = (ImageView) findViewById(R.id.background_image_view);
