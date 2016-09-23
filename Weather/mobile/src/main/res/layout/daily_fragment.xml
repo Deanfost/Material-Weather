@@ -4,22 +4,44 @@
     android:layout_height="match_parent"
     android:padding="@dimen/_6sdp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_362sdp"
-        android:orientation="vertical"
-        android:background="@color/colorBlue"
+        android:background="@drawable/background_ripple_blue"
         android:layout_margin="@dimen/_10sdp"
-        android:gravity="center"
         android:elevation="@dimen/_2sdp"
-        android:alpha=".65">
+        android:alpha=".65"
+        android:clickable="true"
+        android:id="@+id/dailyLayout"
+        android:padding="@dimen/_16sdp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Daily Frag"
-            android:textSize="@dimen/_20sdp"
-            android:textStyle="bold" />
+            android:text="Daily"
+            android:textSize="@dimen/_22sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/dailyTitle"
+            android:layout_marginBottom="@dimen/_10sdp"/>
 
-    </LinearLayout>
+
+
+        <!-- Details "button" for daily layout -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Details"
+            android:textSize="@dimen/_16sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/dailyDetailsBtn"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_gravity="bottom|right"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/_10sdp"/>
+
+
+    </RelativeLayout>
 </LinearLayout>

@@ -1,25 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/_6sdp">
+    android:padding="@dimen/_6sdp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_362sdp"
-        android:orientation="vertical"
-        android:background="@color/colorBlue"
+        android:layout_height="@dimen/_320sdp"
+        android:background="@drawable/background_ripple_blue"
         android:layout_margin="@dimen/_10sdp"
-        android:gravity="center"
         android:elevation="@dimen/_2sdp"
-        android:alpha=".65">
+        android:alpha=".65"
+        android:clickable="true"
+        android:id="@+id/dailyLayout"
+        android:padding="@dimen/_16sdp"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hourly Frag"
-            android:textSize="@dimen/_20sdp"
-            android:textStyle="bold" />
+            android:text="Hourly"
+            android:textSize="@dimen/_22sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/dailyTitle"
+            android:layout_marginBottom="@dimen/_10sdp"/>
+
+        <!-- Description of the day -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear throughout the day, with a chance of rain at night."
+            android:textSize="@dimen/_15sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/hourlyDescription"
+            android:layout_marginBottom="@dimen/_15sdp"/>
+
+        <!-- Hours and their details -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="5"
+            android:columnCount="4"
+            android:orientation="horizontal"
+            android:id="@+id/hourlyGrid">
+
+            <!-- Row 1 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7AM"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourly1"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="72&#xb0;"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyTemp1"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyConditionsD1"
+                android:layout_row="0"
+                android:layout_column="2"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <ImageView
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/ic_sunny"
+                android:scaleType="fitCenter"
+                android:id="@+id/hourlyConditions1"
+                android:layout_row="0"
+                android:layout_column="3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <!-- Row 2 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8AM"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourly2"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="74&#xb0;"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyTemp2"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyConditionsD2"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <ImageView
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/ic_sunny"
+                android:scaleType="fitCenter"
+                android:id="@+id/hourlyConditions2"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <!-- Row 3 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9AM"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourly3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="75&#xb0;"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyTemp3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyConditionsD3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <ImageView
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/ic_sunny"
+                android:scaleType="fitCenter"
+                android:id="@+id/hourlyConditions3"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <!-- Row 4 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10AM"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourly4"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="77&#xb0;"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyTemp4"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cloudy"
+                android:textSize="@dimen/_20sdp"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/hourlyConditionsD4"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+            <ImageView
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/ic_cloudy"
+                android:scaleType="fitCenter"
+                android:id="@+id/hourlyConditions4"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="@dimen/_10sdp"/>
+
+        </GridLayout>
+
+        <!-- Details "button" for details layout -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Details"
+            android:textSize="@dimen/_16sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/dailyDetailsBtn"
+            android:layout_gravity="bottom|right"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"/>
 
     </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/_50sdp"-->
+        <!--android:orientation="vertical"-->
+        <!--android:background="@color/colorBlue"-->
+        <!--android:layout_margin="@dimen/_10sdp"-->
+        <!--android:gravity="center"-->
+        <!--android:elevation="@dimen/_2sdp"-->
+        <!--android:alpha=".65">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Admob"-->
+            <!--android:textSize="@dimen/_20sdp" />-->
+    <!--</LinearLayout>-->
 </LinearLayout>
