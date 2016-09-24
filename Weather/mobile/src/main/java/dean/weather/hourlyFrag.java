@@ -21,7 +21,7 @@ public class hourlyFrag extends Fragment {
     ImageView hourlyConditions2;
     ImageView hourlyConditions3;
     ImageView hourlyConditions4;
-    Typeface robotLight;
+    Typeface robotoLight;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.hourly_fragment, container, false);
@@ -40,7 +40,7 @@ public class hourlyFrag extends Fragment {
         hourlyConditions2 = (ImageView) getView().findViewById(R.id.hourlyConditions2);
         hourlyConditions3 = (ImageView) getView().findViewById(R.id.hourlyConditions3);
         hourlyConditions4 = (ImageView) getView().findViewById(R.id.hourlyConditions4);
-        robotLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+        robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         //Gather all TextViews and attach a reference
         ArrayList<TextView> textViewArrayList = new ArrayList<>();
         for(int i = 0; i < gridLayout.getChildCount(); i++ ){
@@ -51,7 +51,7 @@ public class hourlyFrag extends Fragment {
 
         //Change font on each TextView
         for(TextView tv: textViewArrayList){
-            tv.setTypeface(robotLight);
+            tv.setTypeface(robotoLight);
         }
     }
 }
