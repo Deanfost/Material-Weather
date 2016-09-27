@@ -42,7 +42,7 @@
                 android:layout_below="@id/dailyTitle"
                 android:layout_marginBottom="@dimen/_20sdp"/>
 
-            <!-- Collumn descriptions for the grid -->
+            <!-- Column descriptions for the grid -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
