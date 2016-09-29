@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 
@@ -40,10 +42,10 @@ public class MainActivity extends AppCompatActivity{
         toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
 
         //Set color of system bar
-//        Window window = this.getWindow();
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        window.setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
 
         //Setup pager and adapter
         mainPagerAdapter = new pagerAdapter(getSupportFragmentManager());
@@ -56,10 +58,10 @@ public class MainActivity extends AppCompatActivity{
         mainPagerAdapter.addFragment(new dailyFrag(), "Daily");
         mainViewPager.setAdapter(mainPagerAdapter);
         mainTabLayout.setupWithViewPager(mainViewPager);
-        mainTabLayout.getTabAt(0).setIcon(R.drawable.locations_material);
-        mainTabLayout.getTabAt(1).setIcon(R.drawable.details_material);
-        mainTabLayout.getTabAt(2).setIcon(R.drawable.hourly_material);
-        mainTabLayout.getTabAt(3).setIcon(R.drawable.daily_material);
+        mainTabLayout.getTabAt(0).setIcon(R.drawable.ic_currentlocation);
+        mainTabLayout.getTabAt(1).setIcon(R.drawable.ic_details);
+        mainTabLayout.getTabAt(2).setIcon(R.drawable.ic_hourly);
+        mainTabLayout.getTabAt(3).setIcon(R.drawable.ic_daily);
         mainViewPager.setCurrentItem(1);
 
         //Turn off tab layout collapsing

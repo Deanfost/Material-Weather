@@ -59,7 +59,8 @@
                     android:layout_height="@dimen/_30sdp"
                     android:src="@drawable/ic_sunny"
                     android:scaleType="fitCenter"
-                    android:id="@+id/reportConditions"/>
+                    android:id="@+id/reportConditions"
+                    android:adjustViewBounds="false" />
 
                 <!-- Details "button" for report layout -->
                 <TextView

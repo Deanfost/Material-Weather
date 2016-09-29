@@ -4,57 +4,63 @@
     android:layout_height="match_parent"
     android:padding="@dimen/_6sdp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:background="@drawable/background_ripple_blue"
-            android:layout_margin="@dimen/_10sdp"
-            android:elevation="@dimen/_2sdp"
-            android:alpha=".65"
-            android:padding="@dimen/_16sdp"
-            android:clickable="true"
-            android:id="@+id/dailyCurrentLayout"
-            android:layout_height="@dimen/_75sdp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/background_ripple_blue"
+        android:layout_margin="@dimen/_10sdp"
+        android:elevation="@dimen/_2sdp"
+        android:alpha=".65"
+        android:padding="@dimen/_16sdp"
+        android:clickable="true"
+        android:id="@+id/dailyCurrentLayout"
+        android:layout_height="@dimen/_75sdp">
 
-            <ImageView
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:src="@drawable/locations_material"
-                android:scaleType="fitCenter"
-                android:id="@+id/currentLocationIcon"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_marginRight="@dimen/_8sdp"
-                android:layout_alignBottom="@+id/currentLocation"
-                android:layout_alignParentStart="true" />
+        <ImageView
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:src="@drawable/ic_currentlocation"
+            android:scaleType="fitCenter"
+            android:id="@+id/currentLocationIcon"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:layout_alignBottom="@+id/currentLocation"
+            android:layout_alignParentStart="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Boston, MA"
-                android:textSize="@dimen/_18sdp"
-                android:textColor="@color/colorAccent"
-                android:id="@+id/currentLocation"
-                android:layout_toRightOf="@+id/currentLocationIcon"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Boston, MA"
+            android:textSize="@dimen/_18sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/currentLocation"
+            android:layout_toRightOf="@+id/currentLocationIcon"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sunny"
-                android:textSize="@dimen/_12sdp"
-                android:textColor="@color/colorAccent"
-                android:id="@+id/locationsCurrentConditions"
-                android:layout_below="@id/currentLocation"
-                android:layout_toRightOf="@+id/currentLocationIcon"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_above="@+id/currentLocation"
+            android:id="@+id/adjusterImage"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="72&#xb0;"
-                android:textSize="@dimen/_35sdp"
-                android:textColor="@color/colorAccent"
-                android:id="@+id/locationsCurrentTemp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignBottom="@+id/locationsCurrentConditions"
-                android:layout_alignTop="@+id/currentLocationIcon" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sunny"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/locationsCurrentConditions"
+            android:layout_alignStart="@+id/currentLocation"
+            android:layout_below="@+id/currentLocation"
+            android:layout_marginTop="@dimen/_2sdp"/>
 
-        </RelativeLayout>
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="72&#xb0;"
+            android:textSize="@dimen/_35sdp"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/locationsCurrentTemp"
+            android:gravity="top"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/adjusterImage"/>
+
+    </RelativeLayout>
+</LinearLayout>

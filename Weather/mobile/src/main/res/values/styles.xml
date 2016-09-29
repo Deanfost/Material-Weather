@@ -24,6 +24,4 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">#FFFFFF</item>
     </style>
-
-
 </resources>
