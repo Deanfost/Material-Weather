@@ -63,4 +63,12 @@
             android:layout_alignTop="@+id/adjusterImage"/>
 
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:background="#FFFFFF"
+        android:layout_gravity="center_horizontal"/>
 </LinearLayout>

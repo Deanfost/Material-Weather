@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,9 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -97,7 +101,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
     }
     //Action bar events
         @Override
@@ -169,5 +172,7 @@ public class MainActivity extends AppCompatActivity{
             options.inJustDecodeBounds = false;
             return BitmapFactory.decodeResource(res, resId, options);
         }
+
+
 
 }

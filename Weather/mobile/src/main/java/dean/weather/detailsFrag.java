@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -15,6 +17,7 @@ import android.widget.TextView;
  */
 public class detailsFrag extends Fragment {
     LinearLayout reportLayout;
+    RelativeLayout detailsLayout;
     TextView reportTemp;
     TextView detailsSunriseSetValue;
     TextView detailsWindValue;
@@ -38,6 +41,7 @@ public class detailsFrag extends Fragment {
         robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         reportTemp = (TextView) getView().findViewById(R.id.reportTemp);
         reportLayout = (LinearLayout) getView().findViewById(R.id.reportLayout);
+        detailsLayout = (RelativeLayout) getView().findViewById(R.id.detailsLayout);
         detailsSunriseSetValue = (TextView) getView().findViewById(R.id.detailsSunriseSetTime);
         detailsWindValue = (TextView) getView().findViewById(R.id.detailsWindValue);
         detailsHumidityValue = (TextView) getView().findViewById(R.id.detailsHumityValue);
@@ -48,6 +52,26 @@ public class detailsFrag extends Fragment {
         detailsWindValue.setTypeface(robotoLight);
         detailsHumidityValue.setTypeface(robotoLight);
         reportTemp.setText("72" + (char) 0x00B0);//Set the temp with degree symbol
+
+        //Click listeners
+
+        //Report Layout
+        reportLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //Details Layout
+        detailsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Move to details activity
+                Intent detailsAct = new Intent(getContext(), detailsActivity.class);
+                startActivity(detailsAct);
+            }
+        });
 
     }
 }
