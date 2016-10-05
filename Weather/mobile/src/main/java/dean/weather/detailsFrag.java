@@ -68,7 +68,7 @@ public class detailsFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 //Move to details activity
-                Intent detailsAct = new Intent(getContext(), detailsActivity.class);
+                Intent detailsAct = new Intent(getActivity(), detailsActivity.class);
                 startActivity(detailsAct);
             }
         });
