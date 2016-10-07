@@ -1,6 +1,5 @@
 package dean.weather;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,12 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -38,7 +34,7 @@ public class MainActivity extends AppCompatActivity{
         //Customize toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //Customize the app bar and status bar
+        //Customize the app bar
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Boston, MA");
@@ -172,7 +168,5 @@ public class MainActivity extends AppCompatActivity{
             options.inJustDecodeBounds = false;
             return BitmapFactory.decodeResource(res, resId, options);
         }
-
-
 
 }

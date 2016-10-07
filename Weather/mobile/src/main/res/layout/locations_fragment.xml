@@ -34,12 +34,6 @@
             android:id="@+id/currentLocation"
             android:layout_toRightOf="@+id/currentLocationIcon"/>
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_above="@+id/currentLocation"
-            android:id="@+id/adjusterImage"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,16 +53,23 @@
             android:textColor="@color/colorAccent"
             android:id="@+id/locationsCurrentTemp"
             android:gravity="top"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/adjusterImage"/>
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
+    <!-- Separator -->
     <TextView
         android:layout_width="@dimen/_200sdp"
         android:layout_height="@dimen/_2sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         android:background="#FFFFFF"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_6sdp">
+
+    </ListView>
 </LinearLayout>
