@@ -20,7 +20,7 @@
         </activity>
 
         //Details activity
-        <activity android:name=".detailsActivity"
+        <activity android:name=".hourlyActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">

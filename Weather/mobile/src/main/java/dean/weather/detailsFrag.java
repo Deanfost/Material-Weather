@@ -3,7 +3,6 @@ package dean.weather;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,8 +67,7 @@ public class detailsFrag extends Fragment {
             @Override
             public void onClick(View v) {
                 //Move to details activity
-                Intent detailsAct = new Intent(getActivity(), detailsActivity.class);
-                startActivity(detailsAct);
+
             }
         });
 

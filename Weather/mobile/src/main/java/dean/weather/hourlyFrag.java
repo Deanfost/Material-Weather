@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
  */
 public class hourlyFrag extends Fragment {
     GridLayout gridLayout;
+    LinearLayout hourlyLayout;
     ImageView hourlyConditions1;
     ImageView hourlyConditions2;
     ImageView hourlyConditions3;
@@ -53,6 +56,18 @@ public class hourlyFrag extends Fragment {
         for(TextView tv: textViewArrayList){
             tv.setTypeface(robotoLight);
         }
+
+        //Setup click events
+        hourlyLayout = (LinearLayout) getView().findViewById(R.id.dailyLayout);
+
+        hourlyLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open hourly activity
+                Intent hourlyIntent = new Intent(getContext(), hourlyActivity.class);
+                startActivity(hourlyIntent);
+            }
+        });
     }
 }
 
