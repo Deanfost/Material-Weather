@@ -12,6 +12,9 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by DeanF on 10/1/2016.
  */
@@ -21,9 +24,9 @@ public class hourlyActivity extends AppCompatActivity {
     private RecyclerView.Adapter detailsRecyclerAdapter;
     private RecyclerView.LayoutManager detailsLayoutManager;
     //Example data sets for testing
-    private int[] pulledHours;
-    private int[] pulledTemps;
-    private String[] pulledConditions;
+    private List<Integer> pulledHours;
+    private List<Integer> pulledTemps;
+    private List<String> pulledConditions;
     Context pulledContext;
 
     @Override
@@ -51,21 +54,25 @@ public class hourlyActivity extends AppCompatActivity {
         window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
 
         //Setup example datasets
+        pulledHours = new ArrayList<>();
+        pulledTemps = new ArrayList<>();
+        pulledConditions = new ArrayList<>();
+
         //pulledHours
         int hour = 1;
         for(int i = 0; i < 12; i++){
-            pulledHours[i] = hour;
+            pulledHours.add(hour);
             hour++;
         }
         //pulledTemps
         int temp = 65;
         for(int i = 0; i < 12; i++){
-            pulledTemps[i] = temp;
+            pulledTemps.add(temp);
             temp+= 2;
         }
         //pulledConditions
         for(int i = 0; i < 12; i++){
-            pulledConditions[i] = "Overcast";
+            pulledConditions.add("Overcast");
         }
 
         //Setup recycler view

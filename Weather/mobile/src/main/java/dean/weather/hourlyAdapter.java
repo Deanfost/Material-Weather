@@ -8,14 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by DeanF on 10/7/2016.
  */
 
 public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder> {
-    private int[] hourSet;
-    private int[] tempSet;
-    private String[] conditionSet;
+    private List<Integer> hourSet;
+    private List<Integer> tempSet;
+    private List<String> conditionSet;
     private Context context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -36,7 +38,7 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
     }
 
     //Pass pulled data from API
-    public hourlyAdapter(Context pulledContext, int[] pulledHours, int[] pulledTemps, String[] pulledConditions){
+    public hourlyAdapter(Context pulledContext, List<Integer> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions){
         context = pulledContext;
         hourSet = pulledHours;
         tempSet = pulledTemps;
@@ -61,25 +63,24 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
     @Override
     public void onBindViewHolder(hourlyAdapter.ViewHolder holder, int position) {
         //Get the data based on position
-        int pulledHour = hourSet[position];
-        int pulledTemp = tempSet[position];
-        String pulledCond = conditionSet[position];
+        int pulledHour = hourSet.get(position);
+        int pulledTemp = tempSet.get(position);
+        String pulledCond = conditionSet.get(position);
 
         //Set item views to pulled data values
         TextView hourView = holder.hourlyHour;
-        hourView.setText(pulledHour);
+        hourView.setText(String.valueOf(pulledHour)+ "PM");
         TextView tempView = holder.hourlyTemp;
-        tempView.setText(pulledTemp + (char) 0x00B0);
+        tempView.setText(String.valueOf(pulledTemp) + (char) 0x00B0);
         TextView condView = holder.hourlyCond;
         condView.setText(pulledCond);
         ImageView iconView = holder.hourlyIcon;
         iconView.setImageResource(R.drawable.ic_cloudy);
-
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return hourSet.size();
     }
 
     //Provide easy access to context object in the recyclerview
