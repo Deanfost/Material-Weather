@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -23,6 +24,7 @@ public class hourlyActivity extends AppCompatActivity {
     private int[] pulledHours;
     private int[] pulledTemps;
     private String[] pulledConditions;
+    Context pulledContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,8 @@ public class hourlyActivity extends AppCompatActivity {
         detailsRecyclerView.setLayoutManager(detailsLayoutManager);
 
         //Setup adapter
-        detailsRecyclerAdapter = new hourlyAdapter(pulledHours, pulledTemps, pulledConditions);
+        pulledContext = this;
+        detailsRecyclerAdapter = new hourlyAdapter(pulledContext, pulledHours, pulledTemps, pulledConditions);
         detailsRecyclerView.setAdapter(detailsRecyclerAdapter);
     }
 
