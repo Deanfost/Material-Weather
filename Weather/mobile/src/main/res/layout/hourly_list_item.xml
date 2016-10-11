@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_50sdp"
-    android:elevation="2dp"
     android:background="@color/colorWhite"
     android:layout_marginBottom="@dimen/_1sdp"
     android:paddingLeft="@dimen/_8sdp"
