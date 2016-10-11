@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class hourlyFrag extends Fragment {
     GridLayout gridLayout;
     LinearLayout hourlyLayout;
+    TextView hourlyDetailsBtn;
     ImageView hourlyConditions1;
     ImageView hourlyConditions2;
     ImageView hourlyConditions3;
@@ -59,8 +60,18 @@ public class hourlyFrag extends Fragment {
 
         //Setup click events
         hourlyLayout = (LinearLayout) getView().findViewById(R.id.dailyLayout);
+        hourlyDetailsBtn = (TextView) getView().findViewById(R.id.hourlyDetailsBtn);
 
         hourlyLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open hourly activity
+                Intent hourlyIntent = new Intent(getContext(), hourlyActivity.class);
+                startActivity(hourlyIntent);
+            }
+        });
+
+        hourlyDetailsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Open hourly activity
