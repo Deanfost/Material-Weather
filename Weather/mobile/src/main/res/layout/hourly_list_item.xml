@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="2dp">
+    android:layout_height="@dimen/_50sdp"
+    android:elevation="2dp"
+    android:background="@color/colorWhite"
+    android:layout_marginBottom="@dimen/_1sdp"
+    android:paddingLeft="@dimen/_8sdp"
+    android:paddingRight="@dimen/_8sdp">
 
     <!-- Hours and their details -->
     <GridLayout
@@ -10,7 +14,8 @@
         android:layout_height="wrap_content"
         android:rowCount="1"
         android:columnCount="4"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical">
 
         <!-- Row 1 -->
         <TextView
@@ -22,10 +27,10 @@
             android:layout_row="0"
             android:layout_column="0"
             android:layout_columnWeight="1"
-            android:layout_marginBottom="@dimen/_10sdp"/>
+            android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_30sdp"
             android:layout_height="wrap_content"
             android:text="72&#xb0;"
             android:textSize="@dimen/_18sdp"
@@ -33,18 +38,18 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_columnWeight="1"
-            android:layout_marginBottom="@dimen/_10sdp"/>
+            android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_50sdp"
             android:layout_height="wrap_content"
-            android:text="Clear"
+            android:text="NE4MPH"
             android:textSize="@dimen/_18sdp"
             android:id="@+id/hourlyListItem3"
             android:layout_row="0"
             android:layout_column="2"
             android:layout_columnWeight="1"
-            android:layout_marginBottom="@dimen/_10sdp"/>
+            android:layout_gravity="center_vertical"/>
 
         <ImageView
             android:layout_width="@dimen/_25sdp"
@@ -55,7 +60,7 @@
             android:layout_row="0"
             android:layout_column="3"
             android:layout_columnWeight="1"
-            android:layout_marginBottom="@dimen/_10sdp"/>
+            android:layout_gravity="center_vertical"/>
 
     </GridLayout>
 </FrameLayout>

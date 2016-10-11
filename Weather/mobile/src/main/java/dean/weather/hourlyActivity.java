@@ -27,6 +27,7 @@ public class hourlyActivity extends AppCompatActivity {
     private List<Integer> pulledHours;
     private List<Integer> pulledTemps;
     private List<String> pulledConditions;
+    private List<String> pulledWind;
     Context pulledContext;
 
     @Override
@@ -57,7 +58,7 @@ public class hourlyActivity extends AppCompatActivity {
         pulledHours = new ArrayList<>();
         pulledTemps = new ArrayList<>();
         pulledConditions = new ArrayList<>();
-
+        pulledWind = new ArrayList<>();
         //pulledHours
         int hour = 1;
         for(int i = 0; i < 12; i++){
@@ -74,6 +75,12 @@ public class hourlyActivity extends AppCompatActivity {
         for(int i = 0; i < 12; i++){
             pulledConditions.add("Overcast");
         }
+        //pulledWind
+        int wind = 4;
+        for(int i = 0; i < 12; i++){
+            pulledWind.add("NE" + String.valueOf(wind) + "MPH");
+            wind+= 3;
+        }
 
         //Setup recycler view
         detailsRecyclerView = (RecyclerView) findViewById(R.id.detailsRecyclerView);
@@ -85,7 +92,7 @@ public class hourlyActivity extends AppCompatActivity {
 
         //Setup adapter
         pulledContext = this;
-        detailsRecyclerAdapter = new hourlyAdapter(pulledContext, pulledHours, pulledTemps, pulledConditions);
+        detailsRecyclerAdapter = new hourlyAdapter(pulledContext, pulledHours, pulledTemps, pulledConditions, pulledWind);
         detailsRecyclerView.setAdapter(detailsRecyclerAdapter);
     }
 

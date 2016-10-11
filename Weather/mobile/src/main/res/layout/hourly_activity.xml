@@ -22,13 +22,50 @@
             <!--android:background="@color/colorWhite"-->
             <!--android:elevation="@dimen/_2sdp">-->
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/colorBlue"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingRight="@dimen/_8sdp"
+            android:elevation="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TIME"
+                android:textColor="@color/colorWhite"
+                android:layout_marginRight="@dimen/_46sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TEMP"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginRight="@dimen/_60sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WIND"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginRight="@dimen/_57sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COND"
+                android:textColor="@color/colorWhite" />
+
+        </LinearLayout>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/detailsRecyclerView"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/_16sdp"/>
+            android:layout_height="match_parent" />
 
         <!--</LinearLayout>-->
 
