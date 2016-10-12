@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/ic_currentlocation"
+            android:src="@drawable/ic_currentlocation_white"
             android:scaleType="fitCenter"
             android:id="@+id/currentLocationIcon"
             android:layout_marginRight="@dimen/_8sdp"

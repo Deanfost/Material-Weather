@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity{
         mainPagerAdapter.addFragment(new dailyFrag(), "Daily");
         mainViewPager.setAdapter(mainPagerAdapter);
         mainTabLayout.setupWithViewPager(mainViewPager);
-        mainTabLayout.getTabAt(0).setIcon(R.drawable.ic_currentlocation);
-        mainTabLayout.getTabAt(1).setIcon(R.drawable.ic_details);
-        mainTabLayout.getTabAt(2).setIcon(R.drawable.ic_hourly);
-        mainTabLayout.getTabAt(3).setIcon(R.drawable.ic_daily);
+        mainTabLayout.getTabAt(0).setIcon(R.drawable.ic_currentlocation_white);
+        mainTabLayout.getTabAt(1).setIcon(R.drawable.ic_details_white);
+        mainTabLayout.getTabAt(2).setIcon(R.drawable.ic_hourly_white);
+        mainTabLayout.getTabAt(3).setIcon(R.drawable.ic_daily_white);
         mainViewPager.setCurrentItem(1);
 
         //Turn off tab layout collapsing
