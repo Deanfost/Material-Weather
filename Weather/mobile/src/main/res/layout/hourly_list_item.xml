@@ -4,8 +4,8 @@
     android:layout_height="@dimen/_50sdp"
     android:background="@color/colorWhite"
     android:layout_marginBottom="@dimen/_1sdp"
-    android:paddingLeft="@dimen/_8sdp"
-    android:paddingRight="@dimen/_8sdp">
+    android:paddingLeft="@dimen/_16sdp"
+    android:paddingRight="@dimen/_16sdp">
 
     <!-- Hours and their details -->
     <GridLayout
@@ -16,7 +16,6 @@
         android:orientation="horizontal"
         android:layout_gravity="center_vertical">
 
-        <!-- Row 1 -->
         <TextView
             android:layout_width="@dimen/_40sdp"
             android:layout_height="wrap_content"
@@ -29,7 +28,7 @@
             android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="@dimen/_30sdp"
+            android:layout_width="@dimen/_20sdp"
             android:layout_height="wrap_content"
             android:text="72&#xb0;"
             android:textSize="@dimen/_18sdp"
@@ -40,7 +39,7 @@
             android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="@dimen/_50sdp"
+            android:layout_width="@dimen/_60sdp"
             android:layout_height="wrap_content"
             android:text="NE4MPH"
             android:textSize="@dimen/_18sdp"
@@ -53,13 +52,14 @@
         <ImageView
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/ic_sunny_white"
+            android:src="@drawable/ic_sunny_black"
             android:scaleType="fitCenter"
             android:id="@+id/hourlyListItem4"
             android:layout_row="0"
             android:layout_column="3"
             android:layout_columnWeight="1"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_2sdp"/>
 
     </GridLayout>
 </FrameLayout>

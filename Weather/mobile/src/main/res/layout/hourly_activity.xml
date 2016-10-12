@@ -22,13 +22,14 @@
             <!--android:background="@color/colorWhite"-->
             <!--android:elevation="@dimen/_2sdp">-->
 
+        <!-- Header bar under the appbar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:background="@color/colorBlue"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/_8sdp"
-            android:paddingRight="@dimen/_8sdp"
+            android:paddingLeft="@dimen/_16sdp"
+            android:paddingRight="@dimen/_16sdp"
             android:elevation="4dp">
 
             <TextView
@@ -36,21 +37,21 @@
                 android:layout_height="wrap_content"
                 android:text="TIME"
                 android:textColor="@color/colorWhite"
-                android:layout_marginRight="@dimen/_46sdp"/>
+                android:layout_marginRight="@dimen/_44sdp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TEMP"
                     android:textColor="@color/colorWhite"
-                    android:layout_marginRight="@dimen/_60sdp"/>
+                    android:layout_marginRight="@dimen/_20sdp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="WIND"
                     android:textColor="@color/colorWhite"
-                    android:layout_marginRight="@dimen/_57sdp"/>
+                    android:layout_marginRight="@dimen/_72sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"
