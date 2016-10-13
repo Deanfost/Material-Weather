@@ -17,7 +17,7 @@
         android:layout_gravity="center_vertical">
 
         <TextView
-            android:layout_width="@dimen/_40sdp"
+            android:layout_width="@dimen/_25sdp"
             android:layout_height="wrap_content"
             android:text="7AM"
             android:textSize="@dimen/_18sdp"
@@ -28,7 +28,7 @@
             android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="@dimen/_20sdp"
+            android:layout_width="@dimen/_25sdp"
             android:layout_height="wrap_content"
             android:text="72&#xb0;"
             android:textSize="@dimen/_18sdp"
@@ -39,9 +39,9 @@
             android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="@dimen/_60sdp"
+            android:layout_width="@dimen/_25sdp"
             android:layout_height="wrap_content"
-            android:text="NE4MPH"
+            android:text="20%"
             android:textSize="@dimen/_18sdp"
             android:id="@+id/hourlyListItem3"
             android:layout_row="0"

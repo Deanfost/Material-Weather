@@ -30,34 +30,41 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/_16sdp"
             android:paddingRight="@dimen/_16sdp"
-            android:elevation="4dp">
+            android:elevation="4dp"
+            android:weightSum="4">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TIME"
                 android:textColor="@color/colorWhite"
-                android:layout_marginRight="@dimen/_44sdp"/>
+                android:layout_weight="1"
+                android:gravity="left"
+                android:layout_marginRight="@dimen/_5sdp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TEMP"
                     android:textColor="@color/colorWhite"
-                    android:layout_marginRight="@dimen/_20sdp"/>
+                    android:layout_weight="1"
+                    android:gravity="left"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="WIND"
+                    android:text="PRECIP"
                     android:textColor="@color/colorWhite"
-                    android:layout_marginRight="@dimen/_72sdp"/>
+                    android:layout_weight="1"
+                    android:gravity="left"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="COND"
-                android:textColor="@color/colorWhite" />
+                android:textColor="@color/colorWhite"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"/>
 
         </LinearLayout>
 
@@ -66,9 +73,22 @@
             android:id="@+id/detailsRecyclerView"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="@dimen/_337sdp" />
 
-        <!--</LinearLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:orientation="vertical"
+        android:background="@color/colorBlue"
+        android:gravity="center"
+        android:elevation="@dimen/_2sdp"
+        android:alpha=".65"
+        android:layout_gravity="center_horizontal|bottom">
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admob"
+            android:textSize="@dimen/_20sdp" />
+    </LinearLayout>
 </LinearLayout>

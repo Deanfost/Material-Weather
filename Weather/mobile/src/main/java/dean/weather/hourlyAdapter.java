@@ -19,7 +19,7 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
     private List<Integer> hourSet;
     private List<Integer> tempSet;
     private List<String> conditionSet;
-    private List<String> windSet;
+    private List<String> precipSet;
     private Context context;
     Typeface robotoLight;
 
@@ -27,7 +27,7 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
         //Make references to each view in the row
         public TextView hourlyHour;
         public TextView hourlyTemp;
-        public TextView hourlyWind;
+        public TextView hourlyPrecip;
         public ImageView hourlyIcon;
 
         //Create public constructor that accepts entire row and finds each subview
@@ -35,18 +35,18 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
             super(itemView);
             hourlyHour = (TextView) itemView.findViewById(R.id.hourlyListItem1);
             hourlyTemp = (TextView) itemView.findViewById(R.id.hourlyListItem2);
-            hourlyWind = (TextView) itemView.findViewById(R.id.hourlyListItem3);
+            hourlyPrecip = (TextView) itemView.findViewById(R.id.hourlyListItem3);
             hourlyIcon = (ImageView) itemView.findViewById(R.id.hourlyListItem4);
         }
     }
 
     //Pass pulled data from API
-    public hourlyAdapter(Context pulledContext, List<Integer> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<String> pulledWind){
+    public hourlyAdapter(Context pulledContext, List<Integer> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<String> pulledPrecip){
         context = pulledContext;
         hourSet = pulledHours;
         tempSet = pulledTemps;
         conditionSet = pulledConditions;
-        windSet = pulledWind;
+        precipSet = pulledPrecip;
     }
 
     //Inflate the layout and return the holder
@@ -72,15 +72,15 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
         int pulledHour = hourSet.get(position);
         int pulledTemp = tempSet.get(position);
         String pulledCond = conditionSet.get(position);
-        String pulledWind = windSet.get(position);
+        String pulledPrecip = precipSet.get(position);
 
         //Set item views to pulled data values
         TextView hourView = holder.hourlyHour;
         hourView.setText(String.valueOf(pulledHour)+ "PM");
         TextView tempView = holder.hourlyTemp;
         tempView.setText(String.valueOf(pulledTemp) + (char) 0x00B0);
-        TextView windView = holder.hourlyWind;
-        windView.setText(pulledWind);
+        TextView windView = holder.hourlyPrecip;
+        windView.setText(pulledPrecip);
         ImageView condView = holder.hourlyIcon;
         condView.setImageResource(R.drawable.ic_partlycloudy_white);
 
