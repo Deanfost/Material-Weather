@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/detailsToolbar"
+            android:id="@+id/hourlyToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -70,7 +70,7 @@
 
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/detailsRecyclerView"
+            android:id="@+id/dailyRecyclerView"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_337sdp" />

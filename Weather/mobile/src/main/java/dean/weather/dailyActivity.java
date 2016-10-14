@@ -16,17 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by DeanF on 10/1/2016.
+ * Created by DeanF on 10/13/2016.
  */
 
-public class hourlyActivity extends AppCompatActivity {
-    private RecyclerView hourlyRecyclerView;
-    private RecyclerView.Adapter hourlyRecyclerAdapter;
-    private RecyclerView.LayoutManager hourlyLayoutManager;
+public class dailyActivity extends AppCompatActivity {
+
+    private RecyclerView dailyRecyclerView;
+    private RecyclerView.Adapter dailyRecyclerAdapter;
+    private RecyclerView.LayoutManager dailyLayoutManager;
     //Example data sets for testing
-    private List<Integer> pulledHours;
-    private List<Integer> pulledTemps;
+    private List<Integer> pulledDates;
+    private List<Integer> pulledDescriptions;
     private List<String> pulledConditions;
+    private List<String> pulledHILOs;
     private List<String> pulledPrecip;
     Context pulledContext;
 
@@ -36,14 +38,14 @@ public class hourlyActivity extends AppCompatActivity {
         setContentView(R.layout.hourly_activity);
 
         //Set toolbar
-        Toolbar hourlyToolbar = (Toolbar) findViewById(R.id.hourlyToolbar);
-        setSupportActionBar(hourlyToolbar);
+        Toolbar dailyToolbar = (Toolbar) findViewById(R.id.dailyToolbar);
+        setSupportActionBar(dailyToolbar);
 
         //Customize the app bar
-        assert hourlyToolbar != null;
+        assert dailyToolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Hourly");
-        hourlyToolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
+        dailyToolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
         //Enable up functions
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -55,45 +57,24 @@ public class hourlyActivity extends AppCompatActivity {
         window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
 
         //Setup example datasets
-        pulledHours = new ArrayList<>();
-        pulledTemps = new ArrayList<>();
+        pulledDates = new ArrayList<>();
+        pulledDescriptions = new ArrayList<>();
         pulledConditions = new ArrayList<>();
-        pulledPrecip = new ArrayList<>();
-        //pulledHours
-        int hour = 1;
-        for(int i = 0; i < 12; i++){
-            pulledHours.add(hour);
-            hour++;
-        }
-        //pulledTemps
-        int temp = 65;
-        for(int i = 0; i < 12; i++){
-            pulledTemps.add(temp);
-            temp+= 2;
-        }
-        //pulledConditions
-        for(int i = 0; i < 12; i++){
-            pulledConditions.add("Overcast");
-        }
-        //pulledPrecip
-        int precip = 4;
-        for(int i = 0; i < 12; i++){
-            pulledPrecip.add(String.valueOf(precip) + "%");
-            precip+= 3;
-        }
+        pulledHILOs = new ArrayList<>();
+        //TODO setup example datasets
 
         //Setup recycler view
-        hourlyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
-        hourlyRecyclerView.setHasFixedSize(true);
+        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
+        dailyRecyclerView.setHasFixedSize(true);
 
         //Linear Layout Manager
-        hourlyLayoutManager = new LinearLayoutManager(this);
-        hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
+        dailyLayoutManager = new LinearLayoutManager(this);
+        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
 
         //Setup adapter
         pulledContext = this;
-        hourlyRecyclerAdapter = new hourlyAdapter(pulledContext, pulledHours, pulledTemps, pulledConditions, pulledPrecip);
-        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
+        dailyRecyclerAdapter = new hourlyAdapter(pulledContext, pulledDates, pulledDescriptions, pulledConditions, pulledHILOs);
+        dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 
     //Action bar events

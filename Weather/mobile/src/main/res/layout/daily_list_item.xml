@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/hourlyCard"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_220sdp"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_16sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_card_title"
+                android:textSize="@dimen/_18sdp"
+                android:id="@+id/dailyCardItem1"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:src="@drawable/ic_sunny_white"
+                android:scaleType="fitCenter"
+                android:id="@+id/dailyCardItem2"
+                android:layout_gravity="center_vertical"
+                android:tint="@color/colorLightBlack"
+                android:layout_below="@+id/dailyCardItem1"
+                android:layout_marginTop="@dimen/_6sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:textSize="@dimen/_18sdp"
+                android:id="@+id/dailyCardItem3"
+                android:layout_gravity="center_vertical"
+                android:layout_alignBottom="@+id/dailyCardItem2"
+                android:layout_toRightOf="@+id/dailyCardItem2"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_4sdp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precip - "
+                android:textSize="@dimen/_16sdp"
+                android:id="@+id/dailyCardItem4"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:layout_below="@+id/dailyCardItem2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5%"
+                android:textSize="@dimen/_16sdp"
+                android:id="@+id/dailyCardItem5"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:layout_below="@+id/dailyCardItem2"
+                android:layout_toRightOf="@+id/dailyCardItem4"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wind - "
+                android:textSize="@dimen/_16sdp"
+                android:id="@+id/dailyCardItem6"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:layout_below="@+id/dailyCardItem5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NE4MPH"
+                android:textSize="@dimen/_16sdp"
+                android:id="@+id/dailyCardItem7"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:layout_below="@+id/dailyCardItem5"
+                android:layout_toRightOf="@+id/dailyCardItem6"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear throughout the day."
+                android:textSize="@dimen/_16sdp"
+                android:id="@+id/dailyCardItem8"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="82&#xb0;/64&#xb0;"
+                android:textSize="@dimen/_28sdp"
+                android:id="@+id/dailyCardItem9"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/_4sdp"/>
+
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

@@ -7,5 +7,6 @@
     <string name="action_remove_ads">Remove ads</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_current_location">Current location</string>
+    <string name="sample_card_title">"Sunday\nOctober 1"</string>
 
 </resources>
