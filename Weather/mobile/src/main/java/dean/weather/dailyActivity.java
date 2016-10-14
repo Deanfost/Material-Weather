@@ -30,6 +30,7 @@ public class dailyActivity extends AppCompatActivity {
     private List<String> pulledConditions;
     private List<String> pulledHILOs;
     private List<String> pulledPrecip;
+    private List<String> pulledWind;
     Context pulledContext;
 
     @Override
@@ -61,7 +62,11 @@ public class dailyActivity extends AppCompatActivity {
         pulledDescriptions = new ArrayList<>();
         pulledConditions = new ArrayList<>();
         pulledHILOs = new ArrayList<>();
+        pulledPrecip = new ArrayList<>();
+        pulledWind = new ArrayList<>();
+
         //TODO setup example datasets
+        
 
         //Setup recycler view
         dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
