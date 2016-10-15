@@ -12,7 +12,10 @@
         android:layout_height="@dimen/_220sdp"
         card_view:cardCornerRadius="4dp"
         card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="@dimen/_2sdp">
+        card_view:cardElevation="@dimen/_2sdp"
+        android:stateListAnimator="@animator/lift_on_touch"
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -58,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Precip - "
-                android:textSize="@dimen/_16sdp"
+                android:textSize="@dimen/_14sdp"
                 android:id="@+id/dailyCardItem4"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="@dimen/_6sdp"
@@ -69,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5%"
-                android:textSize="@dimen/_16sdp"
+                android:textSize="@dimen/_14sdp"
                 android:id="@+id/dailyCardItem5"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="@dimen/_6sdp"
@@ -81,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wind - "
-                android:textSize="@dimen/_16sdp"
+                android:textSize="@dimen/_14sdp"
                 android:id="@+id/dailyCardItem6"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="@dimen/_6sdp"
@@ -92,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="NE4MPH"
-                android:textSize="@dimen/_16sdp"
+                android:textSize="@dimen/_14sdp"
                 android:id="@+id/dailyCardItem7"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="@dimen/_6sdp"

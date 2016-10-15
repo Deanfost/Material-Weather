@@ -89,7 +89,7 @@ public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> 
         int pulledPrecip = precipSet.get(position);
         String pulledWind = windSet.get(position);
 
-//        //Set item views to pulled data values
+        //Set item views to pulled data values
         TextView dateView = holder.dateView;
         dateView.setText(pulledDate);
         TextView descView = holder.descView;
@@ -102,7 +102,7 @@ public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> 
         windView.setText(pulledWind);
         TextView condView = holder.condView;
         ImageView condIcon = holder.condIcon;
-        //TODO - Determine the icon and conditions to set
+        //Determine which condition and icon to set
         switch (pulledCond){
             case "clear":
                 condView.setText("Clear");
@@ -114,9 +114,7 @@ public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> 
         windView.setTypeface(robotoLight);
         descView.setTypeface(robotoLight);
         HILOView.setTypeface(robotoLight);
-
     }
-
 
     @Override
     public int getItemCount() {
