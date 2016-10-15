@@ -12,60 +12,13 @@
         android:background="?attr/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:elevation="4dp"/>
-
-    <!-- Header bar under the appbar -->
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/_40sdp"-->
-        <!--android:background="@color/colorBlue"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:paddingLeft="@dimen/_16sdp"-->
-        <!--android:paddingRight="@dimen/_16sdp"-->
-        <!--android:elevation="4dp"-->
-        <!--android:weightSum="4">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="DAY"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="left"-->
-            <!--android:layout_marginRight="@dimen/_5sdp"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="EH"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="left"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="PRECIP"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="left"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="COND"-->
-            <!--android:textColor="@color/colorWhite"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center_horizontal"/>-->
-
-    <!--</LinearLayout>-->
-
+        android:elevation="4dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/dailyRecyclerView"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_337sdp" />
+        android:layout_height="@dimen/_377sdp" />
 
     <LinearLayout
         android:layout_width="match_parent"

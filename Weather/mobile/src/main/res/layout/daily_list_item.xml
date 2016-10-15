@@ -10,7 +10,9 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_220sdp"
-        card_view:cardCornerRadius="4dp">
+        card_view:cardCornerRadius="4dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="@dimen/_2sdp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,8 +30,8 @@
 
             <!-- Icon -->
             <ImageView
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:src="@drawable/ic_sunny_white"
                 android:scaleType="fitCenter"
                 android:id="@+id/dailyCardItem2"

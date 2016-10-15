@@ -19,12 +19,17 @@
             </intent-filter>
         </activity>
 
-        //Details activity
+        //Hourly Activity
         <activity android:name=".hourlyActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
         </activity>
+        //Daily activity
+        <activity android:name=".dailyActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
-
 </manifest>

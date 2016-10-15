@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.text.Line;
@@ -21,8 +23,9 @@ import java.util.ArrayList;
  */
 public class dailyFrag extends Fragment {
     Typeface robotoLight;
-//    LinearLayout dailyColDescLayout;
     GridLayout dailyGridLayout;
+    RelativeLayout dailyFragLayout;
+    TextView dailyDetailsBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,16 +40,12 @@ public class dailyFrag extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //Setup references
-//        dailyColDescLayout = (LinearLayout) getView().findViewById(R.id.dailyColDescLayout);
         dailyGridLayout = (GridLayout) getView().findViewById(R.id.dailyGrid);
+        dailyFragLayout = (RelativeLayout) getView().findViewById(R.id.dailyLayout);
+        dailyDetailsBtn = (TextView) getView().findViewById(R.id.dailyDetailsBtn);
         robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         //Customize fonts
-        //Gather views from layouts and attach references to them
-//        ArrayList<TextView> colDescViews = new ArrayList<>();
         ArrayList<TextView> dailyGridViews = new ArrayList<>();
-//        for(int i = 0; i < dailyColDescLayout.getChildCount(); i++){
-//            colDescViews.add((TextView) dailyColDescLayout.getChildAt(i));
-//        }
         for(int i = 0; i < dailyGridLayout.getChildCount(); i++){
             if(dailyGridLayout.getChildAt(i) instanceof TextView){
                 dailyGridViews.add((TextView) dailyGridLayout.getChildAt(i));
@@ -54,12 +53,25 @@ public class dailyFrag extends Fragment {
         }
 
         //Set the font
-//        for(TextView tv: colDescViews){
-//            tv.setTypeface(robotoLight);
-//        }
-
         for(TextView tv: dailyGridViews){
             tv.setTypeface(robotoLight);
         }
+
+        //Setup click events
+        dailyFragLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dailyAct = new Intent(getContext(), dailyActivity.class);
+                startActivity(dailyAct);
+            }
+        });
+
+        dailyDetailsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dailyAct = new Intent(getContext(), dailyActivity.class);
+                startActivity(dailyAct);
+            }
+        });
     }
 }
