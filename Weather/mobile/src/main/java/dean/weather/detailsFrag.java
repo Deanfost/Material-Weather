@@ -52,8 +52,7 @@ public class detailsFrag extends Fragment {
         detailsHumidityValue.setTypeface(robotoLight);
         reportTemp.setText("72" + (char) 0x00B0);//Set the temp with degree symbol
 
-        //Click listeners
-
+        //Setup click events
         //Report Layout
         reportLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -10,12 +10,22 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import com.johnhiott.darkskyandroidlib.ForecastApi;
+import com.johnhiott.darkskyandroidlib.RequestBuilder;
+import com.johnhiott.darkskyandroidlib.models.Request;
+import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -30,15 +40,41 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Get the Dark Sky Wrapper API ready
+        ForecastApi.create("331ebe65d3032e48b3c603c113435992");
+
+        //Form a pull request
+//        RequestBuilder weather = new RequestBuilder();
+//        Request request = new Request();
+//        request.setLat("32.00");
+//        request.setLng("-81.00");
+//        request.setUnits(Request.Units.US);
+//        request.setLanguage(Request.Language.ENGLISH);
+//
+//        weather.getWeather(request, new Callback<WeatherResponse>() {
+//            @Override
+//            public void success(WeatherResponse weatherResponse, Response response) {
+//                //Do something
+//
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError retrofitError) {
+//                Log.e("It made a death", "Error while calling: " + retrofitError.getUrl());
+//            }
+//        });
+
+        //Set content view
         setContentView(R.layout.activity_main);
+
         //Customize toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         //Customize the app bar
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Boston, MA");
-//        toolbar.setSubtitle("May 5, 2016");
         toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
 
         //Set color of system bar
@@ -155,7 +191,6 @@ public class MainActivity extends AppCompatActivity{
 
         public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                              int reqWidth, int reqHeight) {
-
             // First decode with inJustDecodeBounds=true to check dimensions
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -168,5 +203,4 @@ public class MainActivity extends AppCompatActivity{
             options.inJustDecodeBounds = false;
             return BitmapFactory.decodeResource(res, resId, options);
         }
-
 }
