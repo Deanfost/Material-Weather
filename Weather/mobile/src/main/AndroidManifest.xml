@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/MaterialTheme">
 
+        //Intro activity
+        <activity android:name=".decisionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
         //Main Activity
         <activity android:name=".MainActivity"
             android:configChanges="orientation"

@@ -1,11 +1,18 @@
 package dean.weather;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +25,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.Request;
@@ -28,7 +38,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     //View pager
     static final int NUM_TABS = 4;
     pagerAdapter mainPagerAdapter;
@@ -36,10 +47,28 @@ public class MainActivity extends AppCompatActivity{
     TabLayout mainTabLayout;
     ImageView backgroundImage;
     AppBarLayout appbarLayout;
+    GoogleApiClient googleApiClient;
+    String lattitude;
+    String longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Create an instance of GoogleAPIClient
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+        //Connect to the Google API
+        googleApiClient.connect();
+
+        //Gather the location
+
+
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
@@ -118,9 +147,9 @@ public class MainActivity extends AppCompatActivity{
 //        final int screenWidth = size.x;
 //        final int screenHeight = size.y;
 
-        runOnUiThread(new Runnable(){
+        runOnUiThread(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeResource(getResources(), R.drawable.foggy_mountains, options);
@@ -129,78 +158,107 @@ public class MainActivity extends AppCompatActivity{
 //                String imageType = options.outMimeType;
 
                 backgroundImage.setImageBitmap(
-                        decodeSampledBitmapFromResource(getResources(), R.drawable.foggy_mountains, 500,500));
+                        decodeSampledBitmapFromResource(getResources(), R.drawable.foggy_mountains, 500, 500));
             }
         });
 
     }
-    //Action bar events
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            switch(item.getItemId()){
-                //Settings
-                case R.id.action_settings:
-                    return true;
-                //Remove ads
-                case R.id.action_remove_ads:
-                    return true;
-                //Rate the app
-                case R.id.action_rate:
-                    return true;
-                //Refresh data
-                case R.id.action_refresh:
-                    return true;
-                //Choose current location
-                case R.id.action_current_location:
-                    return true;
-                //User action not recognized
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
-        }
 
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.appbar_items, menu);
-            return true;
+    //Action bar events
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //Settings
+            case R.id.action_settings:
+                return true;
+            //Remove ads
+            case R.id.action_remove_ads:
+                return true;
+            //Rate the app
+            case R.id.action_rate:
+                return true;
+            //Refresh data
+            case R.id.action_refresh:
+                return true;
+            //Choose current location
+            case R.id.action_current_location:
+                return true;
+            //User action not recognized
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_items, menu);
+        return true;
+    }
 
     //Image loading
-        public static int calculateInSampleSize(
-                BitmapFactory.Options options, int reqWidth, int reqHeight) {
-            //Height and width of image
-            final int height = options.outHeight;
-            final int width = options.outWidth;
-            int inSampleSize = 1;
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        //Height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
 
-            if (height > reqHeight || width > reqWidth) {
+        if (height > reqHeight || width > reqWidth) {
 
-                final int halfHeight = height / 2;
-                final int halfWidth = width / 2;
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
 
-                // Subsample the image
-                while ((halfHeight / inSampleSize) >= reqHeight
-                        && (halfWidth / inSampleSize) >= reqWidth) {
-                    inSampleSize *= 2;
-                }
+            // Subsample the image
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
             }
-
-            return inSampleSize;
         }
 
-        public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                             int reqWidth, int reqHeight) {
-            // First decode with inJustDecodeBounds=true to check dimensions
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeResource(res, resId, options);
+        return inSampleSize;
+    }
 
-            // Calculate inSampleSize
-            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
 
-            // Decode bitmap with inSampleSize set
-            options.inJustDecodeBounds = false;
-            return BitmapFactory.decodeResource(res, resId, options);
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    //Google API Client
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        int loacationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        if(lastLocation != null){
+            lattitude = String.valueOf(lastLocation.getLatitude());
+            longitude = String.valueOf(lastLocation.getLongitude());
         }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
 }
