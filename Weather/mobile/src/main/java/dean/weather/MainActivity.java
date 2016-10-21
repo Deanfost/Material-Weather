@@ -17,6 +17,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +34,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -39,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements
     static final int NUM_TABS = 4;
     pagerAdapter mainPagerAdapter;
     ViewPager mainViewPager;
+
+    private RecyclerView hourlyRecyclerView;
+    private RecyclerView.Adapter hourlyRecyclerAdapter;
+    private RecyclerView.LayoutManager hourlyLayoutManager;
+
     TabLayout mainTabLayout;
     ImageView backgroundImage;
     AppBarLayout appbarLayout;
@@ -47,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements
     Typeface robotoLight;
     TextView currentTemp;
     TextView currentConditions;
+
+    public List<Integer> pulledHours;
+    public List<Integer> pulledTemps;
+    public List<String> pulledConditions;
+    public List<String> pulledPrecip;
+
     GoogleApiClient googleApiClient;
     public String latitude;
     public String longitude;
@@ -131,6 +147,46 @@ public class MainActivity extends AppCompatActivity implements
         //Setup pager and adapter
 //        mainPagerAdapter = new pagerAdapter(getSupportFragmentManager());
 //        mainViewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        //Setup example hourly data sets
+        pulledHours = new ArrayList<>();
+        pulledTemps = new ArrayList<>();
+        pulledConditions = new ArrayList<>();
+        pulledPrecip = new ArrayList<>();
+        //pulledHours
+        int hour = 1;
+        for (int i = 0; i < 12; i++) {
+            pulledHours.add(hour);
+            hour++;
+        }
+        //pulledTemps
+        int temp = 65;
+        for (int i = 0; i < 12; i++) {
+            pulledTemps.add(temp);
+            temp += 2;
+        }
+        //pulledConditions
+        for (int i = 0; i < 12; i++) {
+            pulledConditions.add("Overcast");
+        }
+        //pulledPrecip
+        int precip = 4;
+        for (int i = 0; i < 12; i++) {
+            pulledPrecip.add(String.valueOf(precip) + "%");
+            precip += 3;
+        }
+
+        //Setup recycler view
+        hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
+        hourlyRecyclerView.setHasFixedSize(true);
+
+        //Linear Layout Manager
+        hourlyLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
+
+        //Setup adapter
+        hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledPrecip);
+        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
     }
 
     //Action bar events

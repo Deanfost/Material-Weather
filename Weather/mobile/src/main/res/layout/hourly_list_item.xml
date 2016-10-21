@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/_90sdp"
-    android:layout_height="@dimen/_120sdp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_60sdp"
+    android:layout_height="@dimen/_90sdp"
     android:layout_marginBottom="@dimen/_1sdp"
-    android:paddingLeft="@dimen/_16sdp"
-    android:paddingRight="@dimen/_16sdp"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingTop="@dimen/_5sdp">
 
     <!-- Hours and their details -->
 
         <TextView
-            android:layout_width="@dimen/_25sdp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="7AM"
-            android:textSize="@dimen/_18sdp"
+            android:textSize="@dimen/_10sdp"
             android:id="@+id/hourlyListItem1"
-            android:layout_columnWeight="1"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"/>
 
-        <TextView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="wrap_content"
-            android:text="72&#xb0;"
-            android:textSize="@dimen/_18sdp"
-            android:id="@+id/hourlyListItem2"
-            android:layout_columnWeight="1"
-            android:layout_gravity="center_vertical"/>
-
-        <TextView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="wrap_content"
-            android:text="20%"
-            android:textSize="@dimen/_18sdp"
-            android:id="@+id/hourlyListItem3"
-            android:layout_columnWeight="1"
-            android:layout_gravity="center_vertical"/>
-
-            <ImageView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/ic_sunny_white"
+        <ImageView
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:src="@drawable/ic_cloudy_color"
             android:scaleType="fitCenter"
             android:id="@+id/hourlyListItem4"
-            android:layout_columnWeight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/_2sdp"
-            android:tint="@color/colorLightBlack"/>
-</FrameLayout>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_4sdp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="72&#xb0;"
+            android:textSize="@dimen/_12sdp"
+            android:id="@+id/hourlyListItem2"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_4sdp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="20%"
+            android:textSize="@dimen/_11sdp"
+            android:id="@+id/hourlyListItem3"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_4sdp"/>
+</LinearLayout>

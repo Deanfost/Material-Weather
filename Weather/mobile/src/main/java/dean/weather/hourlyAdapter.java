@@ -82,7 +82,8 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
         TextView windView = holder.hourlyPrecip;
         windView.setText(pulledPrecip);
         ImageView condView = holder.hourlyIcon;
-        condView.setImageResource(R.drawable.ic_partlycloudy_white);
+        //TODO - IMPLEMENT LOGIC TO HANDLE ICON SELECTION
+        condView.setImageResource(R.drawable.ic_cloudy_color);
 
         //Customize fonts
         hourView.setTypeface(robotoLight);

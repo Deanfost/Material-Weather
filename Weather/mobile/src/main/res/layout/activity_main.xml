@@ -89,30 +89,36 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_80sdp"
+                android:layout_height="@dimen/_110sdp"
                 android:orientation="vertical"
                 android:background="@color/colorWhite"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:id="@+id/hourlyContentView">
+                android:id="@+id/hourlyContentView"
+                android:gravity="center_vertical">
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_80sdp"
-                    android:id="@+id/hourlyScrollView">
+                    android:layout_height="@dimen/_100sdp"
+                    android:id="@+id/hourlyRecyclerView">
 
                 </android.support.v7.widget.RecyclerView>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_250sdp"
+                android:layout_height="@dimen/_180sdp"
                 android:orientation="vertical"
-                android:id="@+id/detailsContentView"
+                android:id="@+id/dailyContentView"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:background="@color/colorWhite">
 
-            </LinearLayout>
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_16sdp">
 
+                </GridLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
