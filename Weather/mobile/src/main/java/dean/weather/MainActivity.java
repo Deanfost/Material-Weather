@@ -11,13 +11,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,13 +27,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
-import com.johnhiott.darkskyandroidlib.RequestBuilder;
-import com.johnhiott.darkskyandroidlib.models.Request;
-import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -48,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements
     ImageView backgroundImage;
     AppBarLayout appbarLayout;
     GoogleApiClient googleApiClient;
-    String lattitude;
-    String longitude;
+    public String latitude;
+    public String longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,11 +229,19 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         int loacationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        //TODO - Implement logic to display blank activity telling the user to pick a location or to enable location services if current location is selected
+        if(loacationPermissionCheck == PackageManager.PERMISSION_GRANTED){
+            //Gather location and display data properly
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if(lastLocation != null){
+                latitude = String.valueOf(lastLocation.getLatitude());
+                longitude = String.valueOf(lastLocation.getLongitude());
 
-        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if(lastLocation != null){
-            lattitude = String.valueOf(lastLocation.getLatitude());
-            longitude = String.valueOf(lastLocation.getLongitude());
+            }
+        }
+        else{
+            //Tell the user to enable location services
+
         }
     }
 

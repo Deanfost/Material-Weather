@@ -10,8 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/MaterialTheme">
 
-        //Intro activity
+        //Decision activity
         <activity android:name=".decisionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        //Intro activity
+        <activity android:name=".introActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>
@@ -20,10 +31,6 @@
         <activity android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         //Hourly Activity

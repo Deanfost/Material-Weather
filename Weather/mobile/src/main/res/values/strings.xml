@@ -8,5 +8,6 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_current_location">Current location</string>
     <string name="sample_card_title">"Sunday\nOctober 1"</string>
+    <string name="first_launch_key">key_first_launch</string>
 
 </resources>
