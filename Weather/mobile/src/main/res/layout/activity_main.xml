@@ -2,7 +2,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -18,30 +19,100 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill" />
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_80sdp">
+        android:layout_marginTop="@dimen/_40sdp">
 
-        <ImageView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/background_image_view"
-            android:scaleType="centerCrop"/>
+            android:orientation="vertical"
+            android:background="@color/colorWhiteDark">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240sdp"
+                android:id="@+id/topContentLayout"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currentLocation"
+                    android:text="Boston"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_gravity="left|top"
+                    android:layout_marginLeft="@dimen/_16sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currentDate"
+                    android:text="October 1, 2016"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_gravity="left|top"
+                    android:layout_marginLeft="@dimen/_16sdp"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_85sdp"
+                    android:layout_height="@dimen/_85sdp"
+                    android:id="@+id/iconCurrentConditions"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_cloudy_color"
+                    android:layout_marginTop="@dimen/_6sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currentTemp"
+                    android:text="75&#xb0;"
+                    android:textSize="34sp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:id="@+id/currentConditions"
+                    android:gravity="center"
+                    android:text="Cloudy"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_80sdp"
+                android:orientation="vertical"
+                android:background="@color/colorWhite"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:id="@+id/hourlyContentView">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:id="@+id/hourlyScrollView">
+
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_250sdp"
+                android:orientation="vertical"
+                android:id="@+id/detailsContentView"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:background="@color/colorWhite">
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +42,11 @@ public class MainActivity extends AppCompatActivity implements
     TabLayout mainTabLayout;
     ImageView backgroundImage;
     AppBarLayout appbarLayout;
+    LinearLayout topLayout;
+    ImageView currentConditionsIcon;
+    Typeface robotoLight;
+    TextView currentTemp;
+    TextView currentConditions;
     GoogleApiClient googleApiClient;
     public String latitude;
     public String longitude;
@@ -100,66 +108,29 @@ public class MainActivity extends AppCompatActivity implements
         //Customize the app bar
         assert toolbar != null;
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("Boston, MA");
-        toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
+        getSupportActionBar().setTitle("Weather");
+        toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlueDark));
 
         //Set color of system bar
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
+        window.setStatusBarColor(this.getResources().getColor(R.color.colorBlueDark));
+
+        //Set color of the top layout
+        topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
+        topLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+
+        //Customize views
+        robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
+        currentTemp = (TextView) findViewById(R.id.currentTemp);
+        currentConditions = (TextView) findViewById(R.id.currentConditions);
+        currentTemp.setTypeface(robotoLight);
+        currentConditions.setTypeface(robotoLight);
 
         //Setup pager and adapter
-        mainPagerAdapter = new pagerAdapter(getSupportFragmentManager());
-        mainViewPager = (ViewPager) findViewById(R.id.viewPager);
-        //Setup tab navigation
-        mainTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mainTabLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
-        mainPagerAdapter.addFragment(new locationsFrag(), "Locations");
-        mainPagerAdapter.addFragment(new detailsFrag(), "Details");
-        mainPagerAdapter.addFragment(new hourlyFrag(), "Hourly");
-        mainPagerAdapter.addFragment(new dailyFrag(), "Daily");
-        mainViewPager.setAdapter(mainPagerAdapter);
-        mainTabLayout.setupWithViewPager(mainViewPager);
-        mainTabLayout.getTabAt(0).setIcon(R.drawable.ic_currentlocation_white);
-        mainTabLayout.getTabAt(1).setIcon(R.drawable.ic_details_white);
-        mainTabLayout.getTabAt(2).setIcon(R.drawable.ic_hourly_white);
-        mainTabLayout.getTabAt(3).setIcon(R.drawable.ic_daily_white);
-        mainViewPager.setCurrentItem(1);
-
-        //Turn off tab layout collapsing
-        appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);
-        AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-        toolbarLayoutParams.setScrollFlags(0);
-        toolbar.setLayoutParams(toolbarLayoutParams);
-
-        CoordinatorLayout.LayoutParams appbarLayoutParams = (CoordinatorLayout.LayoutParams) appbarLayout.getLayoutParams();
-        appbarLayoutParams.setBehavior(null);
-        appbarLayout.setLayoutParams(appbarLayoutParams);
-
-        //Load background image
-        backgroundImage = (ImageView) findViewById(R.id.background_image_view);
-//        Display display = getWindowManager().getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        final int screenWidth = size.x;
-//        final int screenHeight = size.y;
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeResource(getResources(), R.drawable.foggy_mountains, options);
-//                int imageHeight = options.outHeight;
-//                int imageWidth = options.outWidth;
-//                String imageType = options.outMimeType;
-
-                backgroundImage.setImageBitmap(
-                        decodeSampledBitmapFromResource(getResources(), R.drawable.foggy_mountains, 500, 500));
-            }
-        });
-
+//        mainPagerAdapter = new pagerAdapter(getSupportFragmentManager());
+//        mainViewPager = (ViewPager) findViewById(R.id.viewPager);
     }
 
     //Action bar events
@@ -189,44 +160,6 @@ public class MainActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.appbar_items, menu);
         return true;
-    }
-
-    //Image loading
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        //Height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Subsample the image
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                         int reqWidth, int reqHeight) {
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
     }
 
     //Google API Client
