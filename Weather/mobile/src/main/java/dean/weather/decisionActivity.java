@@ -24,18 +24,18 @@ public class decisionActivity extends Activity{
         int firstLaunch = sharedPreferences.getInt(getString(R.string.first_launch_key), 0);
         Log.i("firstLaunch", String.valueOf(firstLaunch));
         if(firstLaunch == 0) {
-            //Launch intro activity and clear the stack after 3 seconds
+            //Launch intro activity and clear the stack
             Intent introAct = new Intent(getApplicationContext(), introActivity.class);
             introAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(introAct);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(0, 0);
         }
         else{
-            //Launch main activity and clear the stack after 3 seconds
+            //Launch main activity and clear the stack
             Intent mainAct = new Intent(getApplicationContext(), MainActivity.class);
             mainAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(mainAct);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overridePendingTransition(0, 0);
         }
     }
 }

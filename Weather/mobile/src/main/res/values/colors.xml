@@ -5,6 +5,7 @@
     <color name="colorOrange">#FF9800</color>
     <!--<color name="colorOrangeDark">#FB8C00</color>-->
     <color name="colorBlack">#424242</color>
+    <color name="colorCompleteBlack">#000000</color>
     <!--<color name="colorBlackDark">#212121</color>-->
     <color name="colorYellow">#FFC107</color>
     <!--<color name="colorYellowDark">#FFB300</color>-->

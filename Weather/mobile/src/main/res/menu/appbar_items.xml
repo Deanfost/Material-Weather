@@ -10,12 +10,6 @@
     </item>
 
     <item
-        android:id="@+id/action_remove_ads"
-        android:title="@string/action_remove_ads"
-        app:showAsAction="never">
-    </item>
-
-    <item
         android:id="@+id/action_rate"
         android:title="@string/action_rate"
         app:showAsAction="never">

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center" >
+    android:orientation="vertical"
+    android:gravity="center">
 
     <Button
-        android:layout_width="@dimen/_100sdp"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/_50sdp"
-        android:id="@+id/launchMain"
-        android:text="Let's go!"
-        android:textColor="@color/colorBlack"
-        android:layout_gravity="center"/>
+        android:id="@+id/introPermission"
+        android:text="Enable Location Services"
+        android:textAllCaps="false"/>
 
 </LinearLayout>

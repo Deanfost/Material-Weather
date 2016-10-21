@@ -1,6 +1,7 @@
 package dean.weather;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -84,8 +85,13 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 //        });
 
-        //Set content view
+        //TODO - GET THE TIME AND WEATHER CONDITIONS AND SET THE COLOR OF THE ACTIVITY
+
+        //Set content view and customize header color
         setContentView(R.layout.activity_main);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorBlue)));
+        icon = null;
 
         //Customize toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements
         mainViewPager = (ViewPager) findViewById(R.id.viewPager);
         //Setup tab navigation
         mainTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mainTabLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
         mainPagerAdapter.addFragment(new locationsFrag(), "Locations");
         mainPagerAdapter.addFragment(new detailsFrag(), "Details");
         mainPagerAdapter.addFragment(new hourlyFrag(), "Hourly");
@@ -161,9 +168,6 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             //Settings
             case R.id.action_settings:
-                return true;
-            //Remove ads
-            case R.id.action_remove_ads:
                 return true;
             //Rate the app
             case R.id.action_rate:
