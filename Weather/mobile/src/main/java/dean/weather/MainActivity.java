@@ -10,6 +10,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -158,6 +159,17 @@ public class MainActivity extends AppCompatActivity implements
         //Setup pager and adapter
 //        mainPagerAdapter = new pagerAdapter(getSupportFragmentManager());
 //        mainViewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        //Turn off tab layout collapsing
+        appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);
+        AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        toolbarLayoutParams.setScrollFlags(0);
+        toolbar.setLayoutParams(toolbarLayoutParams);
+
+        CoordinatorLayout.LayoutParams appbarLayoutParams = (CoordinatorLayout.LayoutParams) appbarLayout.getLayoutParams();
+        appbarLayoutParams.setBehavior(null);
+        appbarLayout.setLayoutParams(appbarLayoutParams);
+
 
         //Setup example hourly data sets
         pulledHours = new ArrayList<>();
