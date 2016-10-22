@@ -3,7 +3,6 @@ package dean.weather;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -11,7 +10,6 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -45,9 +43,14 @@ public class MainActivity extends AppCompatActivity implements
     pagerAdapter mainPagerAdapter;
     ViewPager mainViewPager;
 
+    //Setup recyclerViews
     private RecyclerView hourlyRecyclerView;
     private RecyclerView.Adapter hourlyRecyclerAdapter;
     private RecyclerView.LayoutManager hourlyLayoutManager;
+
+    private RecyclerView dailyRecyclerView;
+    private RecyclerView.Adapter dailyRecyclerAdapter;
+    private RecyclerView.LayoutManager dailyLayoutManager;
 
     TabLayout mainTabLayout;
     ImageView backgroundImage;
@@ -58,10 +61,18 @@ public class MainActivity extends AppCompatActivity implements
     TextView currentTemp;
     TextView currentConditions;
 
+    //Hourly
     public List<Integer> pulledHours;
     public List<Integer> pulledTemps;
     public List<String> pulledConditions;
     public List<String> pulledPrecip;
+
+    //Daily
+    private List<String> pulledDays;
+    private List<String> pulleddailyCond;
+    private List<Integer> pulledHIs;
+    private List<Integer> pulledLOs;
+    private List<Integer> pulledPrecips;
 
     GoogleApiClient googleApiClient;
     public String latitude;
@@ -176,17 +187,71 @@ public class MainActivity extends AppCompatActivity implements
             precip += 3;
         }
 
-        //Setup recycler view
+        //Setup example daily datasets
+        pulledDays = new ArrayList<>();
+        pulleddailyCond = new ArrayList<>();
+        pulledHIs = new ArrayList<>();
+        pulledLOs = new ArrayList<>();
+        pulledPrecips = new ArrayList<>();
+
+        //Days
+        int dateInt = 1;
+        for(int i = 0; i < 8; i ++){
+            String dates = "Sat";
+            pulledDays.add(dates);
+            dateInt ++;
+        }
+
+        //Conditions
+        for(int i = 0; i < 8; i++){
+            String condition = "clear";
+            pulleddailyCond.add(condition);
+        }
+
+        //HIs
+        int HI = 70;
+        for(int i = 0; i < 10; i++){
+            pulledHIs.add(HI);
+            HI += 3;
+        }
+
+        //LOs
+        int LO = 50;
+        for(int i = 0; i < 10; i++){
+            pulledLOs.add(LO);
+            LO += 2;
+        }
+
+        //Precipitation
+        int dailyPrecip = 3;
+        for(int i = 0; i < 10; i++){
+            pulledPrecips.add(dailyPrecip);
+            dailyPrecip+= 3;
+        }
+
+        //Setup hourlyRecycler view
         hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
         hourlyRecyclerView.setHasFixedSize(true);
 
-        //Linear Layout Manager
+        //Hourly Layout Manager
         hourlyLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
 
-        //Setup adapter
+        //Hourly adapter
         hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledPrecip);
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
+
+        //Setup dailyRecycler view
+        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
+        dailyRecyclerView.setHasFixedSize(true);
+
+        //Daily Linear Layout Manager
+        dailyLayoutManager = new LinearLayoutManager(this);
+        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
+
+        //Daily Setup adapter
+        dailyRecyclerAdapter = new dailyAdapter(this, pulledDays, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
+        dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 
     //Action bar events

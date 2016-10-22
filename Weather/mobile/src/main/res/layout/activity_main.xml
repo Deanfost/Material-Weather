@@ -99,26 +99,41 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_100sdp"
-                    android:id="@+id/hourlyRecyclerView">
-
-                </android.support.v7.widget.RecyclerView>
+                    android:id="@+id/hourlyRecyclerView"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp"
+                android:layout_height="@dimen/_150sdp"
                 android:orientation="vertical"
                 android:id="@+id/dailyContentView"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:background="@color/colorWhite">
 
-                <GridLayout
+                <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="@dimen/_16sdp">
-
-                </GridLayout>
+                    android:layout_height="@dimen/_120sdp"
+                    android:id="@+id/dailyRecyclerView"/>
             </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:orientation="vertical"
+            android:id="@+id/detailsContentView"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:background="@color/colorWhite"
+            android:padding="@dimen/_16sdp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current details"
+                android:textSize="16sp"
+                android:id="@+id/currentDetailsLabel"/>
+
+        </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

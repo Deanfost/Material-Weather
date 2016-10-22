@@ -33,10 +33,10 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
         //Create public constructor that accepts entire row and finds each subview
         public ViewHolder(View itemView){
             super(itemView);
-            hourlyHour = (TextView) itemView.findViewById(R.id.hourlyListItem1);
-            hourlyTemp = (TextView) itemView.findViewById(R.id.hourlyListItem2);
-            hourlyPrecip = (TextView) itemView.findViewById(R.id.hourlyListItem3);
-            hourlyIcon = (ImageView) itemView.findViewById(R.id.hourlyListItem4);
+            hourlyHour = (TextView) itemView.findViewById(R.id.dailyListItem1);
+            hourlyTemp = (TextView) itemView.findViewById(R.id.dailyListItem2);
+            hourlyPrecip = (TextView) itemView.findViewById(R.id.dailyListItem3);
+            hourlyIcon = (ImageView) itemView.findViewById(R.id.dailyListItem4);
         }
     }
 

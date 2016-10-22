@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:text="7AM"
             android:textSize="@dimen/_10sdp"
-            android:id="@+id/hourlyListItem1"
+            android:id="@+id/dailyListItem1"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"/>
 
@@ -24,7 +24,7 @@
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/ic_cloudy_color"
             android:scaleType="fitCenter"
-            android:id="@+id/hourlyListItem4"
+            android:id="@+id/dailyListItem4"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_4sdp"/>
 
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="72&#xb0;"
             android:textSize="@dimen/_12sdp"
-            android:id="@+id/hourlyListItem2"
+            android:id="@+id/dailyListItem2"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:layout_marginTop="@dimen/_4sdp"/>
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="20%"
             android:textSize="@dimen/_11sdp"
-            android:id="@+id/hourlyListItem3"
+            android:id="@+id/dailyListItem3"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:layout_marginTop="@dimen/_4sdp"/>

@@ -124,7 +124,7 @@ public class dailyActivity extends AppCompatActivity {
 
         //Setup adapter
         pulledContext = this;
-        dailyRecyclerAdapter = new dailyAdapter(pulledContext, pulledDates, pulledDescriptions, pulledConditions, pulledHIs, pulledLOs, pulledPrecips, pulledWind);
+        dailyRecyclerAdapter = new dailyAdapter(pulledContext, pulledDates, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 

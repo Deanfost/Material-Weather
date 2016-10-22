@@ -16,49 +16,39 @@ import java.util.List;
  */
 
 public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> {
-    private List<String> dateSet;
-    private List<String> descriptionSet;
+    private List<String> daySet;
     private List<String> conditionSet;
     private List<Integer> HISet;
     private List<Integer> LOSet;
     private List<Integer> precipSet;
-    private List<String> windSet;
     private Context context;
     Typeface robotoLight;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //Make references to each view in the row
-        public TextView dateView;
+        public TextView dayView;
         public ImageView condIcon;
-        public TextView condView;
         public TextView precipView;
-        public TextView windView;
-        public TextView descView;
         public TextView HILOView;
 
         //Create public constructor that accepts entire row and finds each subview
         public ViewHolder(View itemView){
             super(itemView);
-            dateView = (TextView) itemView.findViewById(R.id.dailyCardItem1);
-            condIcon = (ImageView) itemView.findViewById(R.id.dailyCardItem2);
-            condView = (TextView) itemView.findViewById(R.id.dailyCardItem3);
-            precipView = (TextView) itemView.findViewById(R.id.dailyCardItem5);
-            windView = (TextView) itemView.findViewById(R.id.dailyCardItem7);
-            descView = (TextView) itemView.findViewById(R.id.dailyCardItem8);
-            HILOView = (TextView) itemView.findViewById(R.id.dailyCardItem9);
+            dayView = (TextView) itemView.findViewById(R.id.dailyListItem1);
+            HILOView = (TextView) itemView.findViewById(R.id.dailyListItem2);
+            precipView = (TextView) itemView.findViewById(R.id.dailyListItem3);
+            condIcon = (ImageView) itemView.findViewById(R.id.dailyListItem4);
         }
     }
 
     //Pass pulled data from API
-    public dailyAdapter(Context pulledContext, List<String> pulledDates, List<String> pulledDescriptions, List<String> pulledConditions, List<Integer> pulledHI, List<Integer> pulledLO, List<Integer> pulledPrecip, List<String> pulledWind){
+    public dailyAdapter(Context pulledContext, List<String> pulledDays, List<String> pulledConditions, List<Integer> pulledHI, List<Integer> pulledLO, List<Integer> pulledPrecip){
         context = pulledContext;
-        dateSet = pulledDates;
-        descriptionSet = pulledDescriptions;
+        daySet = pulledDays;
         conditionSet = pulledConditions;
         HISet = pulledHI;
         LOSet = pulledLO;
         precipSet = pulledPrecip;
-        windSet = pulledWind;
     }
 
     //Inflate the layout and return the holder
@@ -81,44 +71,35 @@ public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> 
         //Setup typeface
         robotoLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         //Get the data based on position
-        String pulledDate = dateSet.get(position);
-        String pulledDesc = descriptionSet.get(position);
+        String pulledDay = daySet.get(position);
         String pulledCond = conditionSet.get(position);
         int pulledHI = HISet.get(position);
         int pulledLO = LOSet.get(position);
         int pulledPrecip = precipSet.get(position);
-        String pulledWind = windSet.get(position);
 
         //Set item views to pulled data values
-        TextView dateView = holder.dateView;
-        dateView.setText(pulledDate);
-        TextView descView = holder.descView;
-        descView.setText(pulledDesc);
+        TextView dayView = holder.dayView;
+        dayView.setText(pulledDay);
         TextView HILOView = holder.HILOView;
         HILOView.setText(String.valueOf(pulledHI) + (char) 0x00B0 + "/" + String.valueOf(pulledLO)+ (char) 0x00B0);
         TextView precipView = holder.precipView;
         precipView.setText(String.valueOf(pulledPrecip)+ "%");
-        TextView windView = holder.windView;
-        windView.setText(pulledWind);
-        TextView condView = holder.condView;
         ImageView condIcon = holder.condIcon;
         //Determine which condition and icon to set
         switch (pulledCond){
-            case "clear":
-                condView.setText("Clear");
-                condIcon.setImageResource(R.drawable.ic_sunny_white);
+            case "cloudy":
+                condIcon.setImageResource(R.drawable.ic_cloudy_color);
                 break;
         }
         //Customize fonts
+        dayView.setTypeface(robotoLight);
         precipView.setTypeface(robotoLight);
-        windView.setTypeface(robotoLight);
-        descView.setTypeface(robotoLight);
         HILOView.setTypeface(robotoLight);
     }
 
     @Override
     public int getItemCount() {
-        return dateSet.size();
+        return daySet.size();
     }
 
     //Provide easy access to context object in the recyclerview
