@@ -61,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements
     Typeface robotoLight;
     TextView currentTemp;
     TextView currentConditions;
+    TextView currentWind;
+    TextView currentHumidity;
+    TextView currentDewpoint;
+    TextView currentPressure;
+    TextView currentVisibility;
+    TextView currentCloudCover;
 
     //Hourly
     public List<Integer> pulledHours;
@@ -153,12 +159,20 @@ public class MainActivity extends AppCompatActivity implements
         robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         currentTemp = (TextView) findViewById(R.id.currentTemp);
         currentConditions = (TextView) findViewById(R.id.currentConditions);
+        currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
+        currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
+        currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
+        currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
+        currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
+        currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
         currentTemp.setTypeface(robotoLight);
         currentConditions.setTypeface(robotoLight);
-
-        //Setup pager and adapter
-//        mainPagerAdapter = new pagerAdapter(getSupportFragmentManager());
-//        mainViewPager = (ViewPager) findViewById(R.id.viewPager);
+        currentWind.setTypeface(robotoLight);
+        currentHumidity.setTypeface(robotoLight);
+        currentDewpoint.setTypeface(robotoLight);
+        currentPressure.setTypeface(robotoLight);
+        currentVisibility.setTypeface(robotoLight);
+        currentCloudCover.setTypeface(robotoLight);
 
         //Turn off tab layout collapsing
         appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);
@@ -169,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements
         CoordinatorLayout.LayoutParams appbarLayoutParams = (CoordinatorLayout.LayoutParams) appbarLayout.getLayoutParams();
         appbarLayoutParams.setBehavior(null);
         appbarLayout.setLayoutParams(appbarLayoutParams);
-
 
         //Setup example hourly data sets
         pulledHours = new ArrayList<>();

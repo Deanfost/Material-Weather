@@ -93,7 +93,6 @@
                 android:layout_height="@dimen/_110sdp"
                 android:orientation="vertical"
                 android:background="@color/colorWhite"
-                android:layout_marginTop="@dimen/_1sdp"
                 android:id="@+id/hourlyContentView"
                 android:gravity="center_vertical">
 
@@ -120,7 +119,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="@dimen/_175sdp"
                 android:id="@+id/detailsContentView"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:background="@color/colorWhite"
@@ -134,6 +133,16 @@
                     android:id="@+id/currentDetailsLabel"
                     android:layout_marginBottom="@dimen/_16sdp"/>
 
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_windrose_white"
+                    android:tint="@color/colorLightBlack"
+                    android:layout_below="@id/currentDetailsLabel"
+                    android:id="@+id/currentWindIcon"
+                    android:layout_marginRight="@dimen/_6sdp"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -142,7 +151,18 @@
                     android:id="@+id/currentDetailsWindLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsLabel"/>
+                    android:layout_below="@id/currentDetailsLabel"
+                    android:layout_toRightOf="@id/currentWindIcon"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_humidity_white"
+                    android:tint="@color/colorLightBlack"
+                    android:layout_below="@id/currentDetailsWindLabel"
+                    android:id="@+id/currentHumidityIcon"
+                    android:layout_marginRight="@dimen/_6sdp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -152,8 +172,93 @@
                     android:id="@+id/currentDetailsHumidityLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsWindLabel"/>
-                
+                    android:layout_below="@id/currentDetailsWindLabel"
+                    android:layout_toRightOf="@+id/currentHumidityIcon"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_dewpoint_black"
+                    android:tint="@color/colorLightBlack"
+                    android:layout_below="@id/currentDetailsHumidityLabel"
+                    android:id="@+id/currentDewpointIcon"
+                    android:layout_marginRight="@dimen/_6sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dew point"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsDewpointLabel"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsHumidityLabel"
+                    android:layout_toRightOf="@+id/currentDewpointIcon"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_pressure_black"
+                    android:tint="@color/colorLightBlack"
+                    android:layout_below="@id/currentDetailsDewpointLabel"
+                    android:id="@+id/currentPressureIcon"
+                    android:layout_marginRight="@dimen/_6sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pressure"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsPressureLabel"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsDewpointLabel"
+                    android:layout_toRightOf="@id/currentPressureIcon"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_visibility_black"
+                    android:tint="@color/colorLightBlack"
+                    android:layout_below="@id/currentDetailsPressureLabel"
+                    android:id="@+id/currentVisibilityIcon"
+                    android:layout_marginRight="@dimen/_6sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Visibility"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsVisibilityLabel"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsPressureLabel"
+                    android:layout_toRightOf="@id/currentVisibilityIcon"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_cloudfilled_black"
+                    android:tint="@color/colorLightBlack"
+                    android:layout_below="@id/currentDetailsVisibilityLabel"
+                    android:id="@+id/currentCloudCoverIcon"
+                    android:layout_marginRight="@dimen/_6sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cloud cover"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsCloudCoverLabel"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsVisibilityLabel"
+                    android:layout_toRightOf="@id/currentCloudCoverIcon"/>
+
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
