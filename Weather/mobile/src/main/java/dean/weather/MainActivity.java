@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements
     public List<Integer> pulledHours;
     public List<Integer> pulledTemps;
     public List<String> pulledConditions;
-    public List<String> pulledPrecip;
+    public List<Integer> pulledWind;
 
     //Daily
     private List<String> pulledDays;
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements
         pulledHours = new ArrayList<>();
         pulledTemps = new ArrayList<>();
         pulledConditions = new ArrayList<>();
-        pulledPrecip = new ArrayList<>();
+        pulledWind = new ArrayList<>();
         //pulledHours
         int hour = 1;
         for (int i = 0; i < 12; i++) {
@@ -192,11 +192,11 @@ public class MainActivity extends AppCompatActivity implements
         for (int i = 0; i < 12; i++) {
             pulledConditions.add("Overcast");
         }
-        //pulledPrecip
-        int precip = 4;
+        //pulledWind
+        int wind = 4;
         for (int i = 0; i < 12; i++) {
-            pulledPrecip.add(String.valueOf(precip) + "%");
-            precip += 3;
+            pulledWind.add(wind);
+            wind += 3;
         }
 
         //Setup example daily datasets
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements
             LO += 2;
         }
 
-        //Precipitation
+        //Precipitat
         int dailyPrecip = 3;
         for(int i = 0; i < 10; i++){
             pulledPrecips.add(dailyPrecip);
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements
         hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
 
         //Hourly adapter
-        hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledPrecip);
+        hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledWind);
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 
         //Setup dailyRecycler view

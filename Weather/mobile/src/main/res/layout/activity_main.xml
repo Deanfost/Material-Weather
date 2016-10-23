@@ -118,10 +118,9 @@
                     android:id="@+id/dailyRecyclerView"/>
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_150sdp"
-                android:orientation="vertical"
                 android:id="@+id/detailsContentView"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:background="@color/colorWhite"
@@ -132,9 +131,30 @@
                     android:layout_height="wrap_content"
                     android:text="Current details"
                     android:textSize="16sp"
-                    android:id="@+id/currentDetailsLabel"/>
+                    android:id="@+id/currentDetailsLabel"
+                    android:layout_marginBottom="@dimen/_16sdp"/>
 
-            </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wind"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsWindLabel"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsLabel"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Humidity"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsHumidityLabel"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsWindLabel"/>
+                
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -27,7 +27,7 @@ import java.util.List;
 //    private List<Integer> pulledHours;
 //    private List<Integer> pulledTemps;
 //    private List<String> pulledConditions;
-//    private List<String> pulledPrecip;
+//    private List<String> pulledWind;
 //    Context pulledContext;
 //
 //    @Override
@@ -58,7 +58,7 @@ import java.util.List;
 //        pulledHours = new ArrayList<>();
 //        pulledTemps = new ArrayList<>();
 //        pulledConditions = new ArrayList<>();
-//        pulledPrecip = new ArrayList<>();
+//        pulledWind = new ArrayList<>();
 //        //pulledHours
 //        int hour = 1;
 //        for(int i = 0; i < 12; i++){
@@ -75,10 +75,10 @@ import java.util.List;
 //        for(int i = 0; i < 12; i++){
 //            pulledConditions.add("Overcast");
 //        }
-//        //pulledPrecip
+//        //pulledWind
 //        int precip = 4;
 //        for(int i = 0; i < 12; i++){
-//            pulledPrecip.add(String.valueOf(precip) + "%");
+//            pulledWind.add(String.valueOf(precip) + "%");
 //            precip+= 3;
 //        }
 //
@@ -92,7 +92,7 @@ import java.util.List;
 //
 //        //Setup adapter
 //        pulledContext = this;
-//        hourlyRecyclerAdapter = new hourlyAdapter(pulledContext, pulledHours, pulledTemps, pulledConditions, pulledPrecip);
+//        hourlyRecyclerAdapter = new hourlyAdapter(pulledContext, pulledHours, pulledTemps, pulledConditions, pulledWind);
 //        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 //    }
 //
