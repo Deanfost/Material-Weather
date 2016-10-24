@@ -3,14 +3,16 @@
     <color name="colorBlue">#2196F3</color>
     <color name="colorBlueDark">#1E88E5</color>
     <color name="colorOrange">#FF9800</color>
-    <!--<color name="colorOrangeDark">#FB8C00</color>-->
+    <color name="colorOrangeDark">#FB8C00</color>
     <color name="colorBlack">#424242</color>
     <color name="colorCompleteBlack">#000000</color>
-    <!--<color name="colorBlackDark">#212121</color>-->
+    <color name="colorBlackDark">#212121</color>
     <color name="colorYellow">#FFC107</color>
-    <!--<color name="colorYellowDark">#FFB300</color>-->
+    <color name="colorYellowDark">#FFB300</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhiteDark">#e0e0e0</color>
+    <color name="colorPurple">#673AB7</color>
+    <color name="colorPurpleDark">#5E35B1</color>
     <!-- Accents for all colors but black and black -->
     <color name="colorAccent">#ffffff</color>
     <color name="colorAccentDark">#424242</color>

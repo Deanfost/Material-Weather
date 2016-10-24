@@ -34,6 +34,7 @@ import com.google.android.gms.location.LocationServices;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -53,14 +54,18 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView.Adapter dailyRecyclerAdapter;
     private RecyclerView.LayoutManager dailyLayoutManager;
 
+    Toolbar toolbar;
+
+    Typeface robotoLight;
     TabLayout mainTabLayout;
     ImageView backgroundImage;
     AppBarLayout appbarLayout;
     LinearLayout topLayout;
     ImageView currentConditionsIcon;
-    Typeface robotoLight;
     TextView currentTemp;
     TextView currentConditions;
+    TextView todaysHi;
+    TextView todaysLo;
     TextView currentWind;
     TextView currentHumidity;
     TextView currentDewpoint;
@@ -107,8 +112,6 @@ public class MainActivity extends AppCompatActivity implements
         googleApiClient.connect();
 
         //Gather the location
-
-
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
@@ -133,38 +136,31 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 //        });
 
-        //TODO - GET THE TIME AND WEATHER CONDITIONS AND SET THE COLOR OF THE ACTIVITY
+        //Get the time of day and determine which colorSet to use
+//        int colorSet = getTimeColor();
+//        setLayoutColor(colorSet);
 
         //Set content view and customize header color
         setContentView(R.layout.activity_main);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorBlue)));
-        icon = null;
 
         //Customize toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Customize the app bar
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle("Weather");
-        toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlueDark));
 
-        //Set color of system bar
-        Window window = this.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(this.getResources().getColor(R.color.colorBlueDark));
-
-        //Set color of the top layout
+        //Top layout reference
         topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
-        topLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
 
         //Customize views
         robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         currentTemp = (TextView) findViewById(R.id.currentTemp);
         currentConditions = (TextView) findViewById(R.id.currentConditions);
+        todaysHi = (TextView) findViewById(R.id.todaysHi);
+        todaysLo = (TextView) findViewById(R.id.todaysLo);
         currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
         currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
         currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
@@ -177,8 +173,12 @@ public class MainActivity extends AppCompatActivity implements
         currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
         currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
         currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
+
+        //Typeface
         currentTemp.setTypeface(robotoLight);
         currentConditions.setTypeface(robotoLight);
+        todaysHi.setTypeface(robotoLight);
+        todaysLo.setTypeface(robotoLight);
         currentWind.setTypeface(robotoLight);
         currentHumidity.setTypeface(robotoLight);
         currentDewpoint.setTypeface(robotoLight);
@@ -360,5 +360,92 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStop() {
         googleApiClient.disconnect();
         super.onStop();
+    }
+
+    /**
+     * Gets the time of day, and determines which color set(colorPurple/colorPurpleDark) should be used.
+     * @return colorSet
+     */
+    private int getTimeColor() {
+        int colorSet = 0;
+        Calendar c = Calendar.getInstance();
+//        int hour =
+        //TODO - FIND OUT WHEN THE SUNRISE/SUNSET IS AND IF TIME IS WITHIN 30 MINS OF IT, SET COLOR TO YELLOW
+
+
+        return colorSet;
+    }
+
+    /**
+     * Customizes layout colors.
+     * @param colorSet
+     */
+    private void setLayoutColor(int colorSet){
+        //Setup resources to change
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        
+        switch (colorSet){
+            //Sunrise
+            case 0:
+                //Set color of header in task tray
+                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorYellowDark)));
+                icon = null;
+
+                //Set color of system bar
+                window.setStatusBarColor(this.getResources().getColor(R.color.colorYellowDark));
+
+                //Customize app bar
+                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorYellowDark));
+
+                //Top layout
+                topLayout.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+
+                //Views
+                currentWindValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                currentPressureValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                break;
+
+            //Daytime
+            case 1:
+                //Set color of header in task tray
+                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorBlueDark)));
+                icon = null;
+
+                //Set color of system bar
+                window.setStatusBarColor(this.getResources().getColor(R.color.colorBlueDark));
+
+                //Customize app bar
+                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlueDark));
+
+                //Top layout
+                topLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+
+                //Views
+                currentWindValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                currentPressureValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                break;
+            //Sunset
+            case 2:
+
+                break;
+            //Nighttime
+            case 3:
+
+                break;
+        }
+
+
     }
 }
