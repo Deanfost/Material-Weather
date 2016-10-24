@@ -67,6 +67,12 @@ public class MainActivity extends AppCompatActivity implements
     TextView currentPressure;
     TextView currentVisibility;
     TextView currentCloudCover;
+    TextView currentWindValue;
+    TextView currentHumidityValue;
+    TextView currentDewPointValue;
+    TextView currentPressureValue;
+    TextView currentVisibilityValue;
+    TextView currentCloudCoverValue;
 
     //Hourly
     public List<Integer> pulledHours;
@@ -165,6 +171,12 @@ public class MainActivity extends AppCompatActivity implements
         currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
         currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
         currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
+        currentWindValue = (TextView) findViewById(R.id.currentDetailsWindValue);
+        currentHumidityValue = (TextView) findViewById(R.id.currentDetailsHumidityValue);
+        currentDewPointValue = (TextView) findViewById(R.id.currentDetailsDewPointValue);
+        currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
+        currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
+        currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
         currentTemp.setTypeface(robotoLight);
         currentConditions.setTypeface(robotoLight);
         currentWind.setTypeface(robotoLight);
@@ -173,6 +185,12 @@ public class MainActivity extends AppCompatActivity implements
         currentPressure.setTypeface(robotoLight);
         currentVisibility.setTypeface(robotoLight);
         currentCloudCover.setTypeface(robotoLight);
+        currentWindValue.setTypeface(robotoLight);
+        currentHumidityValue.setTypeface(robotoLight);
+        currentDewPointValue.setTypeface(robotoLight);
+        currentPressureValue.setTypeface(robotoLight);
+        currentVisibilityValue.setTypeface(robotoLight);
+        currentCloudCoverValue.setTypeface(robotoLight);
 
         //Turn off tab layout collapsing
         appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);

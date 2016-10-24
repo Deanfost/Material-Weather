@@ -119,19 +119,21 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_175sdp"
+                android:layout_height="wrap_content"
                 android:id="@+id/detailsContentView"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:background="@color/colorWhite"
                 android:padding="@dimen/_16sdp">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Current details"
                     android:textSize="16sp"
                     android:id="@+id/currentDetailsLabel"
                     android:layout_marginBottom="@dimen/_16sdp"/>
+
+                <!-- Left side of details label -->
 
                 <ImageView
                     android:layout_width="@dimen/_15sdp"
@@ -144,13 +146,13 @@
                     android:layout_marginRight="@dimen/_6sdp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Wind"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsWindLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_145sdp"
                     android:layout_below="@id/currentDetailsLabel"
                     android:layout_toRightOf="@id/currentWindIcon"/>
 
@@ -165,13 +167,13 @@
                     android:layout_marginRight="@dimen/_6sdp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Humidity"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsHumidityLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_145sdp"
                     android:layout_below="@id/currentDetailsWindLabel"
                     android:layout_toRightOf="@+id/currentHumidityIcon"/>
 
@@ -186,13 +188,13 @@
                     android:layout_marginRight="@dimen/_6sdp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Dew point"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsDewpointLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_145sdp"
                     android:layout_below="@id/currentDetailsHumidityLabel"
                     android:layout_toRightOf="@+id/currentDewpointIcon"/>
 
@@ -207,13 +209,13 @@
                     android:layout_marginRight="@dimen/_6sdp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pressure"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsPressureLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_145sdp"
                     android:layout_below="@id/currentDetailsDewpointLabel"
                     android:layout_toRightOf="@id/currentPressureIcon"/>
 
@@ -228,13 +230,13 @@
                     android:layout_marginRight="@dimen/_6sdp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Visibility"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsVisibilityLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_145sdp"
                     android:layout_below="@id/currentDetailsPressureLabel"
                     android:layout_toRightOf="@id/currentVisibilityIcon"/>
 
@@ -249,17 +251,108 @@
                     android:layout_marginRight="@dimen/_6sdp"/>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cloud cover"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsCloudCoverLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_145sdp"
                     android:layout_below="@id/currentDetailsVisibilityLabel"
                     android:layout_toRightOf="@id/currentCloudCoverIcon"/>
 
+                <!-- Right side of details -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NE3MPH"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsWindValue"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsLabel"
+                    android:layout_toRightOf="@id/currentDetailsWindLabel"
+                    android:textColor="@color/colorBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="34%"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsHumidityValue"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsWindLabel"
+                    android:layout_toRightOf="@id/currentDetailsWindLabel"
+                    android:textColor="@color/colorBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="35&#xb0;"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsDewPointValue"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsHumidityLabel"
+                    android:layout_toRightOf="@id/currentDetailsWindLabel"
+                    android:textColor="@color/colorBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="27inHg"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsPressureValue"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsDewpointLabel"
+                    android:layout_toRightOf="@id/currentDetailsWindLabel"
+                    android:textColor="@color/colorBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8mi"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsVisibilityValue"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsPressureLabel"
+                    android:layout_toRightOf="@id/currentDetailsWindLabel"
+                    android:textColor="@color/colorBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="87%"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsCloudCoverValue"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsVisibilityLabel"
+                    android:layout_toRightOf="@id/currentDetailsWindLabel"
+                    android:textColor="@color/colorBlue"/>
             </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:orientation="vertical"
+                android:id="@+id/sunriseSunsetContentView"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:background="@color/colorWhite"
+                android:padding="@dimen/_16sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sunrise/Sunset"
+                    android:textSize="16sp"
+                    android:id="@+id/sunriseSunsetLabel"
+                    android:layout_marginBottom="@dimen/_16sdp"/>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
