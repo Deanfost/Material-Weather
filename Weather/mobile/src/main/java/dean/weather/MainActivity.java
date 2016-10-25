@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements
             LO += 2;
         }
 
-        //Precipitat
+        //Precipitation
         int dailyPrecip = 3;
         for(int i = 0; i < 10; i++){
             pulledPrecips.add(dailyPrecip);
@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        
+
         switch (colorSet){
             //Sunrise
             case 0:
@@ -411,6 +411,8 @@ public class MainActivity extends AppCompatActivity implements
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorYellow));
                 currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorYellow));
                 currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorYellow));
+
+                window = null;
                 break;
 
             //Daytime
@@ -435,17 +437,59 @@ public class MainActivity extends AppCompatActivity implements
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorBlue));
                 currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorBlue));
                 currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorBlue));
+
+                window = null;
                 break;
             //Sunset
             case 2:
+                //Set color of header in task tray
+                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorOrangeDark)));
+                icon = null;
 
+                //Set color of system bar
+                window.setStatusBarColor(this.getResources().getColor(R.color.colorOrangeDark));
+
+                //Customize app bar
+                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorOrange));
+
+                //Top layout
+                topLayout.setBackgroundColor(getResources().getColor(R.color.colorOrange));
+
+                //Views
+                currentWindValue.setTextColor(getResources().getColor(R.color.colorOrange));
+                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorOrange));
+                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorOrange));
+                currentPressureValue.setTextColor(getResources().getColor(R.color.colorOrange));
+                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorOrange));
+                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorOrange));
+
+                window = null;
                 break;
             //Nighttime
             case 3:
+                //Set color of header in task tray
+                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorPurpleDark)));
+                icon = null;
 
+                //Set color of system bar
+                window.setStatusBarColor(this.getResources().getColor(R.color.colorPurpleDark));
+
+                //Customize app bar
+                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorPurpleDark));
+
+                //Top layout
+                topLayout.setBackgroundColor(getResources().getColor(R.color.colorPurple));
+
+                //Views
+                currentWindValue.setTextColor(getResources().getColor(R.color.colorPurple));
+                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorPurple));
+                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorPurple));
+                currentPressureValue.setTextColor(getResources().getColor(R.color.colorPurple));
+                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorPurple));
+                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorPurple));
+
+                window = null;
                 break;
         }
-
-
     }
 }
