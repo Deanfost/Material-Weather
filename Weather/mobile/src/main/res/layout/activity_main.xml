@@ -34,7 +34,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_272sdp"
                 android:id="@+id/topContentLayout"
                 android:orientation="vertical">
 
@@ -88,23 +88,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/todaysHi"
-                    android:text="Hi - 76&#xb0;"
+                    android:id="@+id/todaysHiLo"
+                    android:text="76&#xb0;/54&#xb0;"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"
                     android:gravity="right"
-                    android:layout_marginRight="@dimen/_16sdp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/todaysLo"
-                    android:text="Lo - 56&#xb0;"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorWhite"
-                    android:gravity="right"
-                    android:layout_marginRight="@dimen/_16sdp"
-                    android:layout_marginBottom="@dimen/_16sdp"/>
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:layout_marginRight="@dimen/_16sdp" />
 
 
             </LinearLayout>
@@ -372,7 +363,6 @@
                     android:textSize="16sp"
                     android:id="@+id/sunriseSunsetLabel"
                     android:layout_marginBottom="@dimen/_16sdp"/>
-
 
             </LinearLayout>
         </LinearLayout>

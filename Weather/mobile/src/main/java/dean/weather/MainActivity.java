@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity implements
     ImageView currentConditionsIcon;
     TextView currentTemp;
     TextView currentConditions;
-    TextView todaysHi;
-    TextView todaysLo;
+    TextView todaysHiLo;
     TextView currentWind;
     TextView currentHumidity;
     TextView currentDewpoint;
@@ -136,11 +135,7 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 //        });
 
-        //Get the time of day and determine which colorSet to use
-//        int colorSet = getTimeColor();
-//        setLayoutColor(colorSet);
-
-        //Set content view and customize header color
+        //Set content view
         setContentView(R.layout.activity_main);
 
         //Customize toolbar
@@ -159,8 +154,7 @@ public class MainActivity extends AppCompatActivity implements
         robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         currentTemp = (TextView) findViewById(R.id.currentTemp);
         currentConditions = (TextView) findViewById(R.id.currentConditions);
-        todaysHi = (TextView) findViewById(R.id.todaysHi);
-        todaysLo = (TextView) findViewById(R.id.todaysLo);
+        todaysHiLo = (TextView) findViewById(R.id.todaysHiLo);
         currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
         currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
         currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
@@ -177,8 +171,7 @@ public class MainActivity extends AppCompatActivity implements
         //Typeface
         currentTemp.setTypeface(robotoLight);
         currentConditions.setTypeface(robotoLight);
-        todaysHi.setTypeface(robotoLight);
-        todaysLo.setTypeface(robotoLight);
+        todaysHiLo.setTypeface(robotoLight);
         currentWind.setTypeface(robotoLight);
         currentHumidity.setTypeface(robotoLight);
         currentDewpoint.setTypeface(robotoLight);
@@ -197,10 +190,14 @@ public class MainActivity extends AppCompatActivity implements
         AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
         toolbarLayoutParams.setScrollFlags(0);
         toolbar.setLayoutParams(toolbarLayoutParams);
-
         CoordinatorLayout.LayoutParams appbarLayoutParams = (CoordinatorLayout.LayoutParams) appbarLayout.getLayoutParams();
         appbarLayoutParams.setBehavior(null);
         appbarLayout.setLayoutParams(appbarLayoutParams);
+
+        //Get the time of day and determine which colorSet to use
+        //TODO - Finish determineLayoutColor
+        int colorSet = 1;
+        setLayoutColor(colorSet);
 
         //Setup example hourly data sets
         pulledHours = new ArrayList<>();
@@ -366,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements
      * Gets the time of day, and determines which color set(colorPurple/colorPurpleDark) should be used.
      * @return colorSet
      */
-    private int getTimeColor() {
+    private int determineLayoutColor() {
         int colorSet = 0;
         Calendar c = Calendar.getInstance();
 //        int hour =
