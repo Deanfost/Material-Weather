@@ -347,10 +347,9 @@
                     android:textColor="@color/colorBlue"/>
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_200sdp"
-                android:orientation="vertical"
+                android:layout_height="@dimen/_220sdp"
                 android:id="@+id/sunriseSunsetContentView"
                 android:layout_marginTop="@dimen/_1sdp"
                 android:background="@color/colorWhite"
@@ -364,7 +363,52 @@
                     android:id="@+id/sunriseSunsetLabel"
                     android:layout_marginBottom="@dimen/_16sdp"/>
 
-            </LinearLayout>
+                <ImageView
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:src="@drawable/ic_sunny_color"
+                    android:id="@+id/sunriseIcon"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:layout_marginRight="@dimen/_30sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7:01AM"
+                    android:textSize="22sp"
+                    android:id="@+id/sunriseTime"
+                    android:layout_marginBottom="@dimen/_19sdp"
+                    android:layout_toRightOf="@id/sunriseIcon"
+                    android:layout_alignBottom="@+id/sunriseIcon"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:src="@drawable/ic_moon_color"
+                    android:id="@+id/sunsetIcon"
+                    android:layout_below="@id/sunriseIcon"
+                    android:layout_marginRight="@dimen/_30sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6:24PM"
+                    android:textSize="22sp"
+                    android:id="@+id/sunsetTime"
+                    android:layout_marginBottom="@dimen/_19sdp"
+                    android:layout_toRightOf="@id/sunsetIcon"
+                    android:layout_alignBottom="@+id/sunsetIcon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Updated October 1, 1:04PM"
+                    android:textSize="12sp"
+                    android:id="@+id/updateTime"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -77,6 +77,9 @@ public class MainActivity extends AppCompatActivity implements
     TextView currentPressureValue;
     TextView currentVisibilityValue;
     TextView currentCloudCoverValue;
+    TextView sunriseTime;
+    TextView sunsetTime;
+    TextView updateTime;
 
     //Hourly
     public List<Integer> pulledHours;
@@ -167,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements
         currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
         currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
         currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
+        sunriseTime = (TextView) findViewById(R.id.sunriseTime);
+        sunsetTime = (TextView) findViewById(R.id.sunsetTime);
+        updateTime = (TextView) findViewById(R.id.updateTime);
 
         //Typeface
         currentTemp.setTypeface(robotoLight);
@@ -184,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements
         currentPressureValue.setTypeface(robotoLight);
         currentVisibilityValue.setTypeface(robotoLight);
         currentCloudCoverValue.setTypeface(robotoLight);
+        sunriseTime.setTypeface(robotoLight);
+        sunsetTime.setTypeface(robotoLight);
+        updateTime.setTypeface(robotoLight);
 
         //Turn off tab layout collapsing
         appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);
@@ -367,8 +376,7 @@ public class MainActivity extends AppCompatActivity implements
         int colorSet = 0;
         Calendar c = Calendar.getInstance();
 //        int hour =
-        //TODO - FIND OUT WHEN THE SUNRISE/SUNSET IS AND IF TIME IS WITHIN 30 MINS OF IT, SET COLOR TO YELLOW
-
+        //TODO - FIND OUT WHEN THE SUNRISE/SUNSET IS AND IF TIME IS WITHIN 30 MINS OF IT, SET COLOR TO YELLO
 
         return colorSet;
     }
@@ -447,7 +455,7 @@ public class MainActivity extends AppCompatActivity implements
                 window.setStatusBarColor(this.getResources().getColor(R.color.colorOrangeDark));
 
                 //Customize app bar
-                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorOrange));
+                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorOrangeDark));
 
                 //Top layout
                 topLayout.setBackgroundColor(getResources().getColor(R.color.colorOrange));
