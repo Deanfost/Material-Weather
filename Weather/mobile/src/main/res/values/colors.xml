@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorBlue">#2196F3</color>
-    <color name="colorBlueDark">#1E88E5</color>
+    <color name="colorBlue">#1E88E5</color>
+    <color name="colorBlueDark">#1976D2</color>
     <color name="colorOrange">#FFC107</color>
     <color name="colorOrangeDark">#FFB300</color>
     <color name="colorBlack">#424242</color>

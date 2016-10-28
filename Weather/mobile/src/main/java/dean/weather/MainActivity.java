@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -310,14 +312,8 @@ public class MainActivity extends AppCompatActivity implements
             //Settings
             case R.id.action_settings:
                 return true;
-            //Rate the app
-            case R.id.action_rate:
-                return true;
             //Refresh data
             case R.id.action_refresh:
-                return true;
-            //Choose current location
-            case R.id.action_current_location:
                 return true;
             //User action not recognized
             default:
@@ -329,6 +325,14 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.appbar_items, menu);
+
+        Drawable icSettings = menu.findItem(R.id.action_settings).getIcon();
+        icSettings = DrawableCompat.wrap(icSettings);
+        DrawableCompat.setTint(icSettings, getResources().getColor(R.color.colorWhite));
+
+        Drawable icRefresh = menu.findItem(R.id.action_refresh).getIcon();
+        icRefresh = DrawableCompat.wrap(icRefresh);
+        DrawableCompat.setTint(icRefresh, getResources().getColor(R.color.colorWhite));
         return true;
     }
 
