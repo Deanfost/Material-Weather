@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,15 +39,17 @@ public class introActivity extends AppCompatActivity {
             //If we don't have permission, it may be first start
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             String firstStart = sharedPref.getString(getResources().getString(R.string.first_launch_key), "0");
-            if(firstStart.equals(0)){
+            if(firstStart.equals("0")){
                 //It is first start, and we need to onboard the user, so we launch the onboarding activity
                 Intent onboardingIntent = new Intent(this, onboardingActivity.class);
                 startActivity(onboardingIntent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                Log.i("Intent", "Onboarding");
 
             }
             else{
                 //It isn't first start, but we need to request permission for location
+                Log.i("Intent", "Permissions");
                 setContentView(R.layout.need_permission_activity);
                 //Setup references and customizations for layout
                 Window window = this.getWindow();

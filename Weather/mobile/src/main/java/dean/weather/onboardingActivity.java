@@ -4,6 +4,7 @@ package dean.weather;
 import android.os.Bundle;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
+import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 
 /**
@@ -16,12 +17,11 @@ public class onboardingActivity  extends IntroActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(new SimpleSlide.Builder()
-        .title("Material Weather")
-        .description("Welcome to Material Weather, a clean, and simple to use weather app.")
-        .image(R.drawable.ic_sunny_color)
-        .background(R.color.colorBlue)
-        .backgroundDark(R.color.colorBlueDark)
-        .build());
+        //Create slide 1
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(R.layout.onboarding_frag_one)
+                .build());
     }
 }
