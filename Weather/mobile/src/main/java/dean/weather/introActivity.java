@@ -20,8 +20,7 @@ import android.widget.Button;
 
 public class introActivity extends AppCompatActivity {
     static int LOCATION_PERMISSIONS_REQUEST;
-    Button btnOnboardAccess;//Onboarding on first start
-    Button btnNeedAccess;//Need to enable permissions
+    Button btnNeedAccess;
 
     @Override
     protected void onStart() {
@@ -40,14 +39,10 @@ public class introActivity extends AppCompatActivity {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             String firstStart = sharedPref.getString(getResources().getString(R.string.first_launch_key), "0");
             if(firstStart.equals(0)){
-                //It is first start, and we need to onboard the user
-                setContentView(R.layout.onboarding_activity);
-                //Setup references and customizations for layout
-                Window window = this.getWindow();
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
-                btnOnboardAccess = (Button) findViewById(R.id.btnOnboardAccess);
+                //It is first start, and we need to onboard the user, so we launch the onboarding activity
+                Intent onboardingIntent = new Intent(this, onboardingActivity.class);
+                startActivity(onboardingIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
             }
             else{
