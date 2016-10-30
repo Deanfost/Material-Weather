@@ -2,8 +2,7 @@
 <com.heinrichreimersoftware.materialintro.view.parallax.ParallaxLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/_16sdp">
 
@@ -20,7 +19,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Your weather, simplified"
+        android:text="Quick, and accurate"
         android:textSize="24sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
@@ -30,11 +29,13 @@
     <TextView
         android:layout_width="@dimen/_130sdp"
         android:layout_height="wrap_content"
-        android:text="Welcome to Material Weather, a simple and easy to use weather app."
+        android:text="Get accurate reports for your location quickly and easily."
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:layout_marginBottom="@dimen/_40sdp"
         android:textColor="@color/colorWhite"/>
+
+
 
 </com.heinrichreimersoftware.materialintro.view.parallax.ParallaxLinearLayout>

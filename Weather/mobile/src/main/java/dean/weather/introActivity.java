@@ -26,6 +26,34 @@ public class introActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //Decide on which activity to launch
+        decideActivity();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    //Handle request results
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        //If the user didn't cancel the dialog
+        if (grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                //If the user allowed access, then launch the main activity
+                Intent startMain = new Intent(this, MainActivity.class);
+                startActivity(startMain);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        }
+    }
+
+    private void decideActivity(){
         LOCATION_PERMISSIONS_REQUEST = 42;
         //Make sure we can access the user's location
         int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -64,23 +92,6 @@ public class introActivity extends AppCompatActivity {
                         ActivityCompat.requestPermissions(introActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
                     }
                 });
-            }
-        }
-    }
-
-    //Handle request results
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        //If the user didn't cancel the dialog
-        if (grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                //If the user allowed access, then launch the main activity
-                Intent startMain = new Intent(this, MainActivity.class);
-                startActivity(startMain);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         }
     }
