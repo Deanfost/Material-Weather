@@ -2,7 +2,8 @@
 <com.heinrichreimersoftware.materialintro.view.parallax.ParallaxLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/_16sdp">
 
@@ -11,17 +12,17 @@
         android:layout_height="@dimen/_150sdp"
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_marker_color"
+        android:src="@drawable/ic_check_color"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_35sdp"
         app:layout_parallaxFactor="1"
         android:elevation="2dp"
-        android:tint="@color/marker_dark_orange"/>
+        android:tint="@color/check_mark_green"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Quick, and accurate"
+        android:text="Let's get started"
         android:textSize="24sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
@@ -31,13 +32,21 @@
     <TextView
         android:layout_width="@dimen/_140sdp"
         android:layout_height="wrap_content"
-        android:text="Get accurate reports for your location, instantly, and all in one place."
+        android:text="To begin, allow Material Weather to access your location."
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:layout_marginBottom="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
         android:textColor="@color/colorWhite"/>
 
-
+    <Button
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:text="Allow access"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorBlueDark"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btnOnboardingPermission"/>
 
 </com.heinrichreimersoftware.materialintro.view.parallax.ParallaxLinearLayout>

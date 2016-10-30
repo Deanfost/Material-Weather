@@ -13,9 +13,10 @@
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_sunny_color"
-        android:layout_marginTop="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_35sdp"
-        app:layout_parallaxFactor=".5"/>
+        app:layout_parallaxFactor="1"
+        android:elevation="2dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -28,7 +29,7 @@
         android:textColor="@color/colorWhite"/>
 
     <TextView
-        android:layout_width="@dimen/_130sdp"
+        android:layout_width="@dimen/_140sdp"
         android:layout_height="wrap_content"
         android:text="Welcome to Material Weather, a simple and easy to use weather app."
         android:textSize="15sp"

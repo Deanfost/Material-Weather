@@ -14,6 +14,8 @@
     <color name="colorWhiteDark">#e0e0e0</color>
     <color name="colorPurple">#673AB7</color>
     <color name="colorPurpleDark">#5E35B1</color>
+    <color name="marker_dark_orange">#EF6C00</color>
+    <color name="check_mark_green">#00E676</color>
     <!-- Accents for all colors but black and black -->
     <color name="colorAccent">#ffffff</color>
     <color name="colorAccentDark">#424242</color>
