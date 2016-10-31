@@ -45,7 +45,7 @@ public class introActivity extends AppCompatActivity {
         if (grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                //If the user allowed access, then launch the main activity
+                //Launch main
                 Intent startMain = new Intent(this, MainActivity.class);
                 startActivity(startMain);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

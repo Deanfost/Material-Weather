@@ -16,9 +16,9 @@
         android:layout_marginBottom="@dimen/_24sdp"/>
 
     <TextView
-        android:layout_width="@dimen/_130sdp"
+        android:layout_width="@dimen/_165sdp"
         android:layout_height="wrap_content"
-        android:text="Material Weather isn't able to get your location. To see weather data, allow access to your location."
+        android:text="Material Weather isn't allowed to use your location. To see weather data, allow now, or enable in settings."
         android:textSize="18sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"

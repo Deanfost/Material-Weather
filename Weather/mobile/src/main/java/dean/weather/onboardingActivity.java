@@ -4,8 +4,10 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -70,8 +72,6 @@ public class onboardingActivity  extends IntroActivity{
                         return true;
                     case 2:
                         return false;
-                    case 3:
-                        return true;
                 }
                 return true;
             }
@@ -84,8 +84,6 @@ public class onboardingActivity  extends IntroActivity{
                     case 1:
                         return true;
                     case 2:
-                        return true;
-                    case 3:
                         return true;
                 }
                 return false;
@@ -103,7 +101,12 @@ public class onboardingActivity  extends IntroActivity{
         if (grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                //If the user allowed access, then launch the main activity
+                //Permission granted
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(getString(R.string.first_launch_key), "1");
+                editor.apply();
+
                 Intent startMain = new Intent(this, MainActivity.class);
                 startActivity(startMain);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
