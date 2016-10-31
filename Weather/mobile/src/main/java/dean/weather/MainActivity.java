@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements
         //Customize the app bar
         assert toolbar != null;
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("Weather");
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
         //Top layout reference
         topLayout = (LinearLayout) findViewById(R.id.topContentLayout);

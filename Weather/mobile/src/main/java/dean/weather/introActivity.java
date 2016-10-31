@@ -78,6 +78,7 @@ public class introActivity extends AppCompatActivity {
             else{
                 //It isn't first start, but we need to request permission for location
                 Log.i("Intent", "Permissions");
+                //Launch permissions needed activity
                 setContentView(R.layout.need_permission_activity);
                 //Setup references and customizations for layout
                 Window window = this.getWindow();
