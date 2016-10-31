@@ -2,6 +2,9 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,12 +13,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,13 +38,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     //View pager
     static final int NUM_TABS = 4;
-    pagerAdapter mainPagerAdapter;
-    ViewPager mainViewPager;
 
     //Setup recyclerViews
     private RecyclerView hourlyRecyclerView;
@@ -57,11 +53,7 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView.LayoutManager dailyLayoutManager;
 
     Toolbar toolbar;
-
     Typeface robotoLight;
-    TabLayout mainTabLayout;
-    ImageView backgroundImage;
-    AppBarLayout appbarLayout;
     LinearLayout topLayout;
     ImageView currentConditionsIcon;
     TextView currentTemp;
@@ -82,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements
     TextView sunriseTime;
     TextView sunsetTime;
     TextView updateTime;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     //Hourly
     public List<Integer> pulledHours;
@@ -112,6 +106,16 @@ public class MainActivity extends AppCompatActivity implements
                     .build();
         }
 
+        //Set content view
+        setContentView(R.layout.activity_main);
+
+        //Add loading fragment to signify data pull
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment loadingFragment = new loadingFragment();
+        fragmentTransaction.add(R.id.mainContentLayout, loadingFragment);
+        fragmentTransaction.commit();
+
         //Connect to the Google API
         googleApiClient.connect();
 
@@ -140,9 +144,6 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 //        });
 
-        //Set content view
-        setContentView(R.layout.activity_main);
-
         //Customize toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -151,64 +152,6 @@ public class MainActivity extends AppCompatActivity implements
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-
-        //Top layout reference
-        topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
-
-        //Customize views
-        robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
-        currentTemp = (TextView) findViewById(R.id.currentTemp);
-        currentConditions = (TextView) findViewById(R.id.currentConditions);
-        todaysHiLo = (TextView) findViewById(R.id.todaysHiLo);
-        currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
-        currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
-        currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
-        currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
-        currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
-        currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
-        currentWindValue = (TextView) findViewById(R.id.currentDetailsWindValue);
-        currentHumidityValue = (TextView) findViewById(R.id.currentDetailsHumidityValue);
-        currentDewPointValue = (TextView) findViewById(R.id.currentDetailsDewPointValue);
-        currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
-        currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
-        currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
-        sunriseTime = (TextView) findViewById(R.id.sunriseTime);
-        sunsetTime = (TextView) findViewById(R.id.sunsetTime);
-        updateTime = (TextView) findViewById(R.id.updateTime);
-
-        //Typeface
-        currentTemp.setTypeface(robotoLight);
-        currentConditions.setTypeface(robotoLight);
-        todaysHiLo.setTypeface(robotoLight);
-        currentWind.setTypeface(robotoLight);
-        currentHumidity.setTypeface(robotoLight);
-        currentDewpoint.setTypeface(robotoLight);
-        currentPressure.setTypeface(robotoLight);
-        currentVisibility.setTypeface(robotoLight);
-        currentCloudCover.setTypeface(robotoLight);
-        currentWindValue.setTypeface(robotoLight);
-        currentHumidityValue.setTypeface(robotoLight);
-        currentDewPointValue.setTypeface(robotoLight);
-        currentPressureValue.setTypeface(robotoLight);
-        currentVisibilityValue.setTypeface(robotoLight);
-        currentCloudCoverValue.setTypeface(robotoLight);
-        sunriseTime.setTypeface(robotoLight);
-        sunsetTime.setTypeface(robotoLight);
-        updateTime.setTypeface(robotoLight);
-
-        //Turn off tab layout collapsing
-        appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);
-        AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-        toolbarLayoutParams.setScrollFlags(0);
-        toolbar.setLayoutParams(toolbarLayoutParams);
-        CoordinatorLayout.LayoutParams appbarLayoutParams = (CoordinatorLayout.LayoutParams) appbarLayout.getLayoutParams();
-        appbarLayoutParams.setBehavior(null);
-        appbarLayout.setLayoutParams(appbarLayoutParams);
-
-        //Get the time of day and determine which colorSet to use
-        //TODO - Finish determineLayoutColor
-        int colorSet = 1;
-        setLayoutColor(colorSet);
 
         //Setup example hourly data sets
         pulledHours = new ArrayList<>();
@@ -280,29 +223,6 @@ public class MainActivity extends AppCompatActivity implements
             dailyPrecip+= 3;
         }
 
-        //Setup hourlyRecycler view
-        hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
-        hourlyRecyclerView.setHasFixedSize(true);
-
-        //Hourly Layout Manager
-        hourlyLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
-
-        //Hourly adapter
-        hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledWind);
-        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
-
-        //Setup dailyRecycler view
-        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
-        dailyRecyclerView.setHasFixedSize(true);
-
-        //Daily Linear Layout Manager
-        dailyLayoutManager = new LinearLayoutManager(this);
-        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
-
-        //Daily Setup adapter
-        dailyRecyclerAdapter = new dailyAdapter(this, pulledDays, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
-        dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 
     //Action bar events
@@ -500,5 +420,83 @@ public class MainActivity extends AppCompatActivity implements
                 window = null;
                 break;
         }
+    }
+
+    /**
+     * Sets the views of the layout after data has been pulled and organized.
+     */
+    private void setViews(){
+        //Top layout reference
+        topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
+
+        //Customize views
+        robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
+        currentTemp = (TextView) findViewById(R.id.currentTemp);
+        currentConditions = (TextView) findViewById(R.id.currentConditions);
+        todaysHiLo = (TextView) findViewById(R.id.todaysHiLo);
+        currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
+        currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
+        currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
+        currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
+        currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
+        currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
+        currentWindValue = (TextView) findViewById(R.id.currentDetailsWindValue);
+        currentHumidityValue = (TextView) findViewById(R.id.currentDetailsHumidityValue);
+        currentDewPointValue = (TextView) findViewById(R.id.currentDetailsDewPointValue);
+        currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
+        currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
+        currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
+        sunriseTime = (TextView) findViewById(R.id.sunriseTime);
+        sunsetTime = (TextView) findViewById(R.id.sunsetTime);
+        updateTime = (TextView) findViewById(R.id.updateTime);
+
+        //Typeface
+        currentTemp.setTypeface(robotoLight);
+        currentConditions.setTypeface(robotoLight);
+        todaysHiLo.setTypeface(robotoLight);
+        currentWind.setTypeface(robotoLight);
+        currentHumidity.setTypeface(robotoLight);
+        currentDewpoint.setTypeface(robotoLight);
+        currentPressure.setTypeface(robotoLight);
+        currentVisibility.setTypeface(robotoLight);
+        currentCloudCover.setTypeface(robotoLight);
+        currentWindValue.setTypeface(robotoLight);
+        currentHumidityValue.setTypeface(robotoLight);
+        currentDewPointValue.setTypeface(robotoLight);
+        currentPressureValue.setTypeface(robotoLight);
+        currentVisibilityValue.setTypeface(robotoLight);
+        currentCloudCoverValue.setTypeface(robotoLight);
+        sunriseTime.setTypeface(robotoLight);
+        sunsetTime.setTypeface(robotoLight);
+        updateTime.setTypeface(robotoLight);
+
+        //Get the time of day and determine which colorSet to use
+        //TODO - Finish determineLayoutColor
+        int colorSet = 1;
+        setLayoutColor(colorSet);
+
+        //Setup hourlyRecycler view
+        hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
+        hourlyRecyclerView.setHasFixedSize(true);
+
+        //Hourly Layout Manager
+        hourlyLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
+
+        //Hourly adapter
+        hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledWind);
+        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
+
+        //Setup dailyRecycler view
+        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
+        dailyRecyclerView.setHasFixedSize(true);
+
+        //Daily Linear Layout Manager
+        dailyLayoutManager = new LinearLayoutManager(this);
+        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
+
+        //Daily Setup adapter
+        dailyRecyclerAdapter = new dailyAdapter(this, pulledDays, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
+        dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 }

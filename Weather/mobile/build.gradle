@@ -34,4 +34,5 @@ dependencies {
     compile 'com.github.johnhiott:DarkSkyApi:v0.1.5'
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.heinrichreimersoftware:material-intro:1.6'
+    compile 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
 }
