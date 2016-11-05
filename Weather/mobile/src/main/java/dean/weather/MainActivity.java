@@ -3,9 +3,6 @@ package dean.weather;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.content.IntentSender;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -61,7 +60,11 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView.LayoutManager dailyLayoutManager;
 
     Toolbar toolbar;
+
     Typeface robotoLight;
+//    TabLayout mainTabLayout;
+//    ImageView backgroundImage;
+//    AppBarLayout appbarLayout;
     LinearLayout topLayout;
     ImageView currentConditionsIcon;
     TextView currentTemp;
@@ -82,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements
     TextView sunriseTime;
     TextView sunsetTime;
     TextView updateTime;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
 
     //Hourly
     public List<Integer> pulledHours;
@@ -115,16 +116,6 @@ public class MainActivity extends AppCompatActivity implements
                     .build();
         }
 
-        //Set content view
-        setContentView(R.layout.activity_main);
-
-        //Add loading fragment to signify data pull
-        fragmentManager = getFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment loadingFragment = new loadingFragment();
-        fragmentTransaction.add(R.id.mainContentLayout, loadingFragment);
-        fragmentTransaction.commit();
-
         //Connect to the Google API
         googleApiClient.connect();
 
@@ -153,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements
 //            }
 //        });
 
+        //Set content view
+        setContentView(R.layout.activity_main);
+
         //Customize toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -161,59 +155,6 @@ public class MainActivity extends AppCompatActivity implements
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-
-        //Top layout reference
-        topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
-
-        //Customize views
-        robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
-        currentTemp = (TextView) findViewById(R.id.currentTemp);
-        currentConditions = (TextView) findViewById(R.id.currentConditions);
-        todaysHiLo = (TextView) findViewById(R.id.todaysHiLo);
-        currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
-        currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
-        currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
-        currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
-        currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
-        currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
-        currentWindValue = (TextView) findViewById(R.id.currentDetailsWindValue);
-        currentHumidityValue = (TextView) findViewById(R.id.currentDetailsHumidityValue);
-        currentDewPointValue = (TextView) findViewById(R.id.currentDetailsDewPointValue);
-        currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
-        currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
-        currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
-        sunriseTime = (TextView) findViewById(R.id.sunriseTime);
-        sunsetTime = (TextView) findViewById(R.id.sunsetTime);
-        updateTime = (TextView) findViewById(R.id.updateTime);
-
-        //Typeface
-        currentTemp.setTypeface(robotoLight);
-        currentConditions.setTypeface(robotoLight);
-        todaysHiLo.setTypeface(robotoLight);
-        currentWind.setTypeface(robotoLight);
-        currentHumidity.setTypeface(robotoLight);
-        currentDewpoint.setTypeface(robotoLight);
-        currentPressure.setTypeface(robotoLight);
-        currentVisibility.setTypeface(robotoLight);
-        currentCloudCover.setTypeface(robotoLight);
-        currentWindValue.setTypeface(robotoLight);
-        currentHumidityValue.setTypeface(robotoLight);
-        currentDewPointValue.setTypeface(robotoLight);
-        currentPressureValue.setTypeface(robotoLight);
-        currentVisibilityValue.setTypeface(robotoLight);
-        currentCloudCoverValue.setTypeface(robotoLight);
-        sunriseTime.setTypeface(robotoLight);
-        sunsetTime.setTypeface(robotoLight);
-        updateTime.setTypeface(robotoLight);
-
-        //Turn off tab layout collapsing
-        appbarLayout = (AppBarLayout) findViewById(R.id.appbarLayout);
-        AppBarLayout.LayoutParams toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-        toolbarLayoutParams.setScrollFlags(0);
-        toolbar.setLayoutParams(toolbarLayoutParams);
-        CoordinatorLayout.LayoutParams appbarLayoutParams = (CoordinatorLayout.LayoutParams) appbarLayout.getLayoutParams();
-        appbarLayoutParams.setBehavior(null);
-        appbarLayout.setLayoutParams(appbarLayoutParams);
 
         //Get the time of day and determine which setID to use
         //TODO - Finish determineLayoutColor
@@ -290,6 +231,8 @@ public class MainActivity extends AppCompatActivity implements
             dailyPrecip+= 3;
         }
 
+        //Display data
+        setViews();
     }
 
     //Action bar events
@@ -351,6 +294,8 @@ public class MainActivity extends AppCompatActivity implements
                                 if(lastLocation != null){
                                     latitude = String.valueOf(lastLocation.getLatitude());
                                     longitude = String.valueOf(lastLocation.getLongitude());
+                                    Log.i("Latitude", latitude);
+                                    Log.i("Longitude", longitude);
                                 }
                             }
                             catch (SecurityException e){
@@ -360,14 +305,14 @@ public class MainActivity extends AppCompatActivity implements
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied, but this can be fixed
                             // by showing the user a dialog.
-                            try {
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                locationStatus.startResolutionForResult(
-                                        MainActivity.this, REQUEST_CHECK_SETTINGS);
-                            } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
-                            }
+//                            try {
+//                                // Show the dialog by calling startResolutionForResult(),
+//                                // and check the result in onActivityResult().
+//                                locationStatus.startResolutionForResult(
+//                                        MainActivity.this, REQUEST_CHECK_SETTINGS);
+//                            } catch (IntentSender.SendIntentException e) {
+//                                // Ignore the error.
+//                            }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
@@ -375,7 +320,6 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 }
             });
-
         }
         else{
             //Tell the user to enable location services
@@ -405,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements
         return locationRequest;
     }
 
-    //Layout customizations
+    //Layout customizations and updates
     /**
      * Gets the time of day, and determines which color set(colorPurple/colorPurpleDark) should be used.
      * @return colorSet
@@ -536,21 +480,14 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    //Lifecycle events
-    @Override
-    protected void onStop() {
-        googleApiClient.disconnect();
-        super.onStop();
-    }
-
     /**
-     * Sets the views of the layout after data has been pulled and organized.
+     * Updates views with data from API.
      */
     private void setViews(){
         //Top layout reference
         topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
 
-        //Customize views
+        //Setup references
         robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         currentTemp = (TextView) findViewById(R.id.currentTemp);
         currentConditions = (TextView) findViewById(R.id.currentConditions);
@@ -570,6 +507,22 @@ public class MainActivity extends AppCompatActivity implements
         sunriseTime = (TextView) findViewById(R.id.sunriseTime);
         sunsetTime = (TextView) findViewById(R.id.sunsetTime);
         updateTime = (TextView) findViewById(R.id.updateTime);
+
+        //Setup hourlyRecycler view
+        hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
+        hourlyRecyclerView.setHasFixedSize(true);
+
+        //Hourly Layout Manager
+        hourlyLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
+
+        //Setup dailyRecycler view
+        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
+        dailyRecyclerView.setHasFixedSize(true);
+
+        //Daily Linear Layout Manager
+        dailyLayoutManager = new LinearLayoutManager(this);
+        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
 
         //Typeface
         currentTemp.setTypeface(robotoLight);
@@ -591,33 +544,23 @@ public class MainActivity extends AppCompatActivity implements
         sunsetTime.setTypeface(robotoLight);
         updateTime.setTypeface(robotoLight);
 
-        //Get the time of day and determine which colorSet to use
-        //TODO - Finish determineLayoutColor
-        int colorSet = 1;
-        setLayoutColor(colorSet);
+        //Update views
+        //TODO - SET VIEWS TO "--" IN XML TO SIGNIFY NO DATA IF IT IS NOT CHANGED
 
-        //Setup hourlyRecycler view
-        hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
-        hourlyRecyclerView.setHasFixedSize(true);
-
-        //Hourly Layout Manager
-        hourlyLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
-
+        //Setup adapters and load in data for recyclerViews
         //Hourly adapter
         hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledWind);
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 
-        //Setup dailyRecycler view
-        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
-        dailyRecyclerView.setHasFixedSize(true);
-
-        //Daily Linear Layout Manager
-        dailyLayoutManager = new LinearLayoutManager(this);
-        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
-
-        //Daily Setup adapter
+        //Daily adapter
         dailyRecyclerAdapter = new dailyAdapter(this, pulledDays, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
+    }
+
+    //Lifecycle events
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
     }
 }
