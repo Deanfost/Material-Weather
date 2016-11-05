@@ -16,7 +16,7 @@ public class onBoardingFragThree extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.onboarding_frag_three, container, false);
+        return inflater.inflate(R.layout.onboarding_frag_permissions, container, false);
     }
 
     @Override

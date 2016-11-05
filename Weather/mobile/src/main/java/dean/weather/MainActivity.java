@@ -2,6 +2,7 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,12 +16,12 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +33,15 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 
 import java.util.ArrayList;
@@ -42,10 +51,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    //View pager
-    static final int NUM_TABS = 4;
-    pagerAdapter mainPagerAdapter;
-    ViewPager mainViewPager;
 
     //Setup recyclerViews
     private RecyclerView hourlyRecyclerView;
@@ -96,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements
     private List<Integer> pulledLOs;
     private List<Integer> pulledPrecips;
 
+    //Google apis
     GoogleApiClient googleApiClient;
     public String latitude;
     public String longitude;
@@ -205,10 +211,10 @@ public class MainActivity extends AppCompatActivity implements
         appbarLayoutParams.setBehavior(null);
         appbarLayout.setLayoutParams(appbarLayoutParams);
 
-        //Get the time of day and determine which colorSet to use
+        //Get the time of day and determine which setID to use
         //TODO - Finish determineLayoutColor
-        int colorSet = 1;
-        setLayoutColor(colorSet);
+        int setID = 1;
+        setLayoutColor(setID);
 
         //Setup example hourly data sets
         pulledHours = new ArrayList<>();
@@ -336,23 +342,63 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    //Google API Client
+    //Google API Client events
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        int loacationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         //TODO - Implement logic to display blank activity telling the user to pick a location or to enable location services if current location is selected
-        if(loacationPermissionCheck == PackageManager.PERMISSION_GRANTED){
-            //Gather location and display data properly
-            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if(lastLocation != null){
-                latitude = String.valueOf(lastLocation.getLatitude());
-                longitude = String.valueOf(lastLocation.getLongitude());
+        if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
+            //Create location request
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(createLocationRequest());
 
-            }
+            //Create location settings request to make sure the request is permitted
+            PendingResult<LocationSettingsResult> locationSettingsResultPendingResult = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+
+            //Check location settings
+            locationSettingsResultPendingResult.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+                    final Status locationStatus = locationSettingsResult.getStatus();
+                    final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
+
+                    switch (locationStatus.getStatusCode()){
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            //All location requirements are satisfied, request location
+                            try{
+                                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                                if(lastLocation != null){
+                                    latitude = String.valueOf(lastLocation.getLatitude());
+                                    longitude = String.valueOf(lastLocation.getLongitude());
+                                }
+                            }
+                            catch (SecurityException e){
+                                Log.e("LocationPermission", "Permission denied");
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied, but this can be fixed
+                            // by showing the user a dialog.
+                            try {
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                locationStatus.startResolutionForResult(
+                                        MainActivity.this, REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
+                            break;
+                    }
+                }
+            });
+
         }
         else{
             //Tell the user to enable location services
-
+            //TODO - SHOW A FRAGMENT TELLING THE USER TO ENABLE LOCATIONS
         }
     }
 
@@ -366,23 +412,30 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    protected void onStop() {
-        googleApiClient.disconnect();
-        super.onStop();
+    /**
+     * Creates location request.
+     */
+    private LocationRequest createLocationRequest(){
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(300000);//5 Minutes
+        locationRequest.setFastestInterval(60000);//One minute
+        //City block accuracy
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return locationRequest;
     }
 
+    //Layout customizations
     /**
      * Gets the time of day, and determines which color set(colorPurple/colorPurpleDark) should be used.
      * @return colorSet
      */
     private int determineLayoutColor() {
-        int colorSet = 0;
+        int setID = 0;
         Calendar c = Calendar.getInstance();
 //        int hour =
-        //TODO - FIND OUT WHEN THE SUNRISE/SUNSET IS AND IF TIME IS WITHIN 30 MINS OF IT, SET COLOR TO YELLO
+        //TODO - FIND OUT WHEN THE SUNRISE/SUNSET IS AND IF TIME IS WITHIN 30 MINS OF IT, SET COLOR TO YELLOW
 
-        return colorSet;
+        return setID;
     }
 
     /**
@@ -501,4 +554,12 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
     }
+
+    //Lifecycle events
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
+
 }

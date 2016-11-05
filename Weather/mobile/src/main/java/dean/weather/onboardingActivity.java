@@ -22,7 +22,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 
 public class onboardingActivity  extends IntroActivity{
     static int LOCATION_PERMISSIONS_REQUEST = 42;
-    private Fragment onBoardingFragThree;
+    private Fragment onBoardingFragPermissions;
     private Class onBoardingFragThreeClass;
     public static Activity currentActivity;
 
@@ -32,7 +32,7 @@ public class onboardingActivity  extends IntroActivity{
         currentActivity = this;
         try {
             onBoardingFragThreeClass = onBoardingFragThree.class;
-            onBoardingFragThree = (Fragment) onBoardingFragThreeClass.newInstance();
+            onBoardingFragPermissions = (Fragment) onBoardingFragThreeClass.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -57,7 +57,14 @@ public class onboardingActivity  extends IntroActivity{
         addSlide(new FragmentSlide.Builder()
                 .backgroundDark(R.color.colorBlue)
                 .background(R.color.colorBlueLight)
-                .fragment(onBoardingFragThree)
+                .fragment(R.layout.onboarding_frag_two)
+                .build());
+
+        //Create slide 4
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(onBoardingFragPermissions)
                 .build());
 
         setSkipEnabled(false);

@@ -5,7 +5,9 @@
     android:layout_marginBottom="@dimen/_1sdp"
     android:paddingLeft="@dimen/_16sdp"
     android:paddingRight="@dimen/_16sdp"
-    android:background="@color/colorWhite">
+    android:background="@drawable/background_ripple_white"
+    android:clickable="true"
+    android:focusable="true">
 
     <!-- Day and its details -->
     <GridLayout
