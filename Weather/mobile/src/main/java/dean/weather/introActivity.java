@@ -53,6 +53,9 @@ public class introActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Chooses which activity to launch, depending on permissions and first launch.
+     */
     private void decideActivity(){
         LOCATION_PERMISSIONS_REQUEST = 42;
         //Make sure we can access the user's location

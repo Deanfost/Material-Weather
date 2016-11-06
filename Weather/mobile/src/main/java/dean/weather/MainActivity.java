@@ -1,7 +1,9 @@
 package dean.weather;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,8 +13,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -42,10 +42,17 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
+import com.johnhiott.darkskyandroidlib.RequestBuilder;
+import com.johnhiott.darkskyandroidlib.models.Request;
+import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -86,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements
     TextView sunsetTime;
     TextView updateTime;
 
+    //Location settings change
+    final int REQUEST_CHANGE_SETTINGS = 15;
+
     //Hourly
     public List<Integer> pulledHours;
     public List<Integer> pulledTemps;
@@ -119,31 +129,6 @@ public class MainActivity extends AppCompatActivity implements
         //Connect to the Google API
         googleApiClient.connect();
 
-        //Gather the location
-        //Get the Dark Sky Wrapper API ready
-        ForecastApi.create("331ebe65d3032e48b3c603c113435992");
-
-        //Form a pull request
-//        RequestBuilder weather = new RequestBuilder();
-//        Request request = new Request();
-//        request.setLat("32.00");
-//        request.setLng("-81.00");
-//        request.setUnits(Request.Units.US);
-//        request.setLanguage(Request.Language.ENGLISH);
-//
-//        weather.getWeather(request, new Callback<WeatherResponse>() {
-//            @Override
-//            public void success(WeatherResponse weatherResponse, Response response) {
-//                //Do something
-//
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError retrofitError) {
-//                Log.e("It made a death", "Error while calling: " + retrofitError.getUrl());
-//            }
-//        });
-
         //Set content view
         setContentView(R.layout.activity_main);
 
@@ -155,6 +140,48 @@ public class MainActivity extends AppCompatActivity implements
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+
+        //Setup references
+        robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
+        topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
+        currentTemp = (TextView) findViewById(R.id.currentTemp);
+        currentConditions = (TextView) findViewById(R.id.currentConditions);
+        todaysHiLo = (TextView) findViewById(R.id.todaysHiLo);
+        currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
+        currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
+        currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
+        currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
+        currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
+        currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
+        currentWindValue = (TextView) findViewById(R.id.currentDetailsWindValue);
+        currentHumidityValue = (TextView) findViewById(R.id.currentDetailsHumidityValue);
+        currentDewPointValue = (TextView) findViewById(R.id.currentDetailsDewPointValue);
+        currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
+        currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
+        currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
+        sunriseTime = (TextView) findViewById(R.id.sunriseTime);
+        sunsetTime = (TextView) findViewById(R.id.sunsetTime);
+        updateTime = (TextView) findViewById(R.id.updateTime);
+
+        //Typeface
+        currentTemp.setTypeface(robotoLight);
+        currentConditions.setTypeface(robotoLight);
+        todaysHiLo.setTypeface(robotoLight);
+        currentWind.setTypeface(robotoLight);
+        currentHumidity.setTypeface(robotoLight);
+        currentDewpoint.setTypeface(robotoLight);
+        currentPressure.setTypeface(robotoLight);
+        currentVisibility.setTypeface(robotoLight);
+        currentCloudCover.setTypeface(robotoLight);
+        currentWindValue.setTypeface(robotoLight);
+        currentHumidityValue.setTypeface(robotoLight);
+        currentDewPointValue.setTypeface(robotoLight);
+        currentPressureValue.setTypeface(robotoLight);
+        currentVisibilityValue.setTypeface(robotoLight);
+        currentCloudCoverValue.setTypeface(robotoLight);
+        sunriseTime.setTypeface(robotoLight);
+        sunsetTime.setTypeface(robotoLight);
+        updateTime.setTypeface(robotoLight);
 
         //Get the time of day and determine which setID to use
         //TODO - Finish determineLayoutColor
@@ -241,9 +268,11 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             //Settings
             case R.id.action_settings:
+                //TODO - GO TO SETTINGS ACTIVITY
                 return true;
             //Refresh data
             case R.id.action_refresh:
+                //TODO - REFRESH DATA
                 return true;
             //User action not recognized
             default:
@@ -256,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.appbar_items, menu);
 
+        //Customize menu options
         Drawable icSettings = menu.findItem(R.id.action_settings).getIcon();
         icSettings = DrawableCompat.wrap(icSettings);
         DrawableCompat.setTint(icSettings, getResources().getColor(R.color.colorWhite));
@@ -269,8 +299,74 @@ public class MainActivity extends AppCompatActivity implements
     //Google API Client events
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        //Get current location
+        requestLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Check the result of the location settings change request
+        if(requestCode == REQUEST_CHANGE_SETTINGS){
+            switch (requestCode) {
+                case REQUEST_CHANGE_SETTINGS:
+                    switch (resultCode) {
+                        case Activity.RESULT_OK:
+                            // All required changes were successfully made, so request location
+                            try{
+                                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                                if(lastLocation != null){
+                                    latitude = String.valueOf(lastLocation.getLatitude());
+                                    longitude = String.valueOf(lastLocation.getLongitude());
+                                    Log.i("Latitude", latitude);
+                                    Log.i("Longitude", longitude);
+                                }
+                            }
+                            catch (SecurityException e){
+                                Log.e("LocationPermission", "Permission denied");
+                            }
+                            break;
+                        case Activity.RESULT_CANCELED:
+                            // The user was asked to change settings, but chose not to
+                            //TODO - SHOW A LAYOUT SAYING TO ENABLE LOCATION TRACKING
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+
+    //Location updates
+    /**
+     * Creates location request.
+     */
+    private LocationRequest createLocationRequest(){
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(300000);//5 Minutes
+        locationRequest.setFastestInterval(60000);//One minute
+        //City block accuracy
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return locationRequest;
+    }
+
+    /**
+     * Checks for location permissions, location settings, and pulls location from Google Location API.
+     */
+    private void requestLocation(){
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        //TODO - Implement logic to display blank activity telling the user to pick a location or to enable location services if current location is selected
+        //TODO - Implement logic to display blank activity telling the user to enable location services if current location is selected
         if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
             //Create location request
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -296,6 +392,8 @@ public class MainActivity extends AppCompatActivity implements
                                     longitude = String.valueOf(lastLocation.getLongitude());
                                     Log.i("Latitude", latitude);
                                     Log.i("Longitude", longitude);
+                                    //Call API
+//                                    pullForecast();
                                 }
                             }
                             catch (SecurityException e){
@@ -305,14 +403,13 @@ public class MainActivity extends AppCompatActivity implements
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied, but this can be fixed
                             // by showing the user a dialog.
-//                            try {
-//                                // Show the dialog by calling startResolutionForResult(),
-//                                // and check the result in onActivityResult().
-//                                locationStatus.startResolutionForResult(
-//                                        MainActivity.this, REQUEST_CHECK_SETTINGS);
-//                            } catch (IntentSender.SendIntentException e) {
-//                                // Ignore the error.
-//                            }
+                            try {
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                locationStatus.startResolutionForResult(MainActivity.this, REQUEST_CHANGE_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
@@ -323,30 +420,8 @@ public class MainActivity extends AppCompatActivity implements
         }
         else{
             //Tell the user to enable location services
-            //TODO - SHOW A FRAGMENT TELLING THE USER TO ENABLE LOCATIONS
+            //TODO - SHOW A FRAGMENT TELLING THE USER TO ENABLE LOCATIONS AND IMPLEMENT LOGIC
         }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    /**
-     * Creates location request.
-     */
-    private LocationRequest createLocationRequest(){
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(300000);//5 Minutes
-        locationRequest.setFastestInterval(60000);//One minute
-        //City block accuracy
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        return locationRequest;
     }
 
     //Layout customizations and updates
@@ -484,29 +559,6 @@ public class MainActivity extends AppCompatActivity implements
      * Updates views with data from API.
      */
     private void setViews(){
-        //Top layout reference
-        topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
-
-        //Setup references
-        robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
-        currentTemp = (TextView) findViewById(R.id.currentTemp);
-        currentConditions = (TextView) findViewById(R.id.currentConditions);
-        todaysHiLo = (TextView) findViewById(R.id.todaysHiLo);
-        currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
-        currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
-        currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
-        currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
-        currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
-        currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
-        currentWindValue = (TextView) findViewById(R.id.currentDetailsWindValue);
-        currentHumidityValue = (TextView) findViewById(R.id.currentDetailsHumidityValue);
-        currentDewPointValue = (TextView) findViewById(R.id.currentDetailsDewPointValue);
-        currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
-        currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
-        currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
-        sunriseTime = (TextView) findViewById(R.id.sunriseTime);
-        sunsetTime = (TextView) findViewById(R.id.sunsetTime);
-        updateTime = (TextView) findViewById(R.id.updateTime);
 
         //Setup hourlyRecycler view
         hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
@@ -524,26 +576,6 @@ public class MainActivity extends AppCompatActivity implements
         dailyLayoutManager = new LinearLayoutManager(this);
         dailyRecyclerView.setLayoutManager(dailyLayoutManager);
 
-        //Typeface
-        currentTemp.setTypeface(robotoLight);
-        currentConditions.setTypeface(robotoLight);
-        todaysHiLo.setTypeface(robotoLight);
-        currentWind.setTypeface(robotoLight);
-        currentHumidity.setTypeface(robotoLight);
-        currentDewpoint.setTypeface(robotoLight);
-        currentPressure.setTypeface(robotoLight);
-        currentVisibility.setTypeface(robotoLight);
-        currentCloudCover.setTypeface(robotoLight);
-        currentWindValue.setTypeface(robotoLight);
-        currentHumidityValue.setTypeface(robotoLight);
-        currentDewPointValue.setTypeface(robotoLight);
-        currentPressureValue.setTypeface(robotoLight);
-        currentVisibilityValue.setTypeface(robotoLight);
-        currentCloudCoverValue.setTypeface(robotoLight);
-        sunriseTime.setTypeface(robotoLight);
-        sunsetTime.setTypeface(robotoLight);
-        updateTime.setTypeface(robotoLight);
-
         //Update views
         //TODO - SET VIEWS TO "--" IN XML TO SIGNIFY NO DATA IF IT IS NOT CHANGED
 
@@ -555,6 +587,41 @@ public class MainActivity extends AppCompatActivity implements
         //Daily adapter
         dailyRecyclerAdapter = new dailyAdapter(this, pulledDays, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
+    }
+
+    //Dark Sky API
+    /**
+     * Initializes API Wrapper Lib, and forms pull request to receive weather data.
+     */
+    private void pullForecast(){
+        //Get the Dark Sky Wrapper API ready
+        ForecastApi.create("331ebe65d3032e48b3c603c113435992");
+
+        //Form a pull request
+        RequestBuilder weather = new RequestBuilder();
+        Request request = new Request();
+        request.setLat(latitude);
+        request.setLng(longitude);
+        request.setUnits(Request.Units.US);
+        request.setLanguage(Request.Language.ENGLISH);
+
+        weather.getWeather(request, new Callback<WeatherResponse>() {
+            @Override
+            public void success(WeatherResponse weatherResponse, Response response) {
+                Log.i("DarkSky API", "Pull request successful");
+                //TODO - Parse JSON response
+
+                //TODO - Populate data sets
+
+                //TODO - Update views
+
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("DarkSky API", "Error while calling: " + retrofitError.getUrl());
+            }
+        });
     }
 
     //Lifecycle events

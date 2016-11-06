@@ -53,14 +53,14 @@ public class onboardingActivity  extends IntroActivity{
                 .fragment(R.layout.onboarding_frag_two)
                 .build());
 
-        //Create slide 3
-        addSlide(new FragmentSlide.Builder()
-                .backgroundDark(R.color.colorBlue)
-                .background(R.color.colorBlueLight)
-                .fragment(R.layout.onboarding_frag_two)
-                .build());
+//        //Create slide 3
+//        addSlide(new FragmentSlide.Builder()
+//                .backgroundDark(R.color.colorBlue)
+//                .background(R.color.colorBlueLight)
+//                .fragment(R.layout.onboarding_frag_three)
+//                .build());
 
-        //Create slide 4
+        //Create slide 3
         addSlide(new FragmentSlide.Builder()
                 .backgroundDark(R.color.colorBlue)
                 .background(R.color.colorBlueLight)
@@ -78,7 +78,9 @@ public class onboardingActivity  extends IntroActivity{
                     case 1:
                         return true;
                     case 2:
-                        return false;
+                        return true;
+//                    case 3:
+//                        return false;
                 }
                 return true;
             }
@@ -92,11 +94,12 @@ public class onboardingActivity  extends IntroActivity{
                         return true;
                     case 2:
                         return true;
+//                    case 3:
+//                        return true;
                 }
                 return false;
             }
         });
-
     }
 
     //Handle request results
