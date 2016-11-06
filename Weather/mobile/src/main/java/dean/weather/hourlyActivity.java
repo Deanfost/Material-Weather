@@ -24,10 +24,10 @@ import java.util.List;
 //    private RecyclerView.Adapter hourlyRecyclerAdapter;
 //    private RecyclerView.LayoutManager hourlyLayoutManager;
 //    //Example data sets for testing
-//    private List<Integer> pulledHours;
-//    private List<Integer> pulledTemps;
-//    private List<String> pulledConditions;
-//    private List<String> pulledWind;
+//    private List<Integer> passedHours;
+//    private List<Integer> passedTemps;
+//    private List<String> passedConditions;
+//    private List<String> passedWind;
 //    Context pulledContext;
 //
 //    @Override
@@ -55,30 +55,30 @@ import java.util.List;
 //        window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
 //
 //        //Setup example datasets
-//        pulledHours = new ArrayList<>();
-//        pulledTemps = new ArrayList<>();
-//        pulledConditions = new ArrayList<>();
-//        pulledWind = new ArrayList<>();
-//        //pulledHours
+//        passedHours = new ArrayList<>();
+//        passedTemps = new ArrayList<>();
+//        passedConditions = new ArrayList<>();
+//        passedWind = new ArrayList<>();
+//        //passedHours
 //        int hour = 1;
 //        for(int i = 0; i < 12; i++){
-//            pulledHours.add(hour);
+//            passedHours.add(hour);
 //            hour++;
 //        }
-//        //pulledTemps
+//        //passedTemps
 //        int temp = 65;
 //        for(int i = 0; i < 12; i++){
-//            pulledTemps.add(temp);
+//            passedTemps.add(temp);
 //            temp+= 2;
 //        }
-//        //pulledConditions
+//        //passedConditions
 //        for(int i = 0; i < 12; i++){
-//            pulledConditions.add("Overcast");
+//            passedConditions.add("Overcast");
 //        }
-//        //pulledWind
+//        //passedWind
 //        int precip = 4;
 //        for(int i = 0; i < 12; i++){
-//            pulledWind.add(String.valueOf(precip) + "%");
+//            passedWind.add(String.valueOf(precip) + "%");
 //            precip+= 3;
 //        }
 //
@@ -92,7 +92,7 @@ import java.util.List;
 //
 //        //Setup adapter
 //        pulledContext = this;
-//        hourlyRecyclerAdapter = new hourlyAdapter(pulledContext, pulledHours, pulledTemps, pulledConditions, pulledWind);
+//        hourlyRecyclerAdapter = new hourlyAdapter(pulledContext, passedHours, passedTemps, passedConditions, passedWind);
 //        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 //    }
 //

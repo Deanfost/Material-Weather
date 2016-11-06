@@ -3,22 +3,23 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -26,9 +27,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,7 +44,6 @@ import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -57,44 +54,18 @@ import retrofit.client.Response;
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    //Setup recyclerViews
-    private RecyclerView hourlyRecyclerView;
-    private RecyclerView.Adapter hourlyRecyclerAdapter;
-    private RecyclerView.LayoutManager hourlyLayoutManager;
-
-    private RecyclerView dailyRecyclerView;
-    private RecyclerView.Adapter dailyRecyclerAdapter;
-    private RecyclerView.LayoutManager dailyLayoutManager;
-
     Toolbar toolbar;
 
-    Typeface robotoLight;
-//    TabLayout mainTabLayout;
-//    ImageView backgroundImage;
-//    AppBarLayout appbarLayout;
-    LinearLayout topLayout;
-    ImageView currentConditionsIcon;
-    TextView currentTemp;
-    TextView currentConditions;
-    TextView todaysHiLo;
-    TextView currentWind;
-    TextView currentHumidity;
-    TextView currentDewpoint;
-    TextView currentPressure;
-    TextView currentVisibility;
-    TextView currentCloudCover;
-    TextView currentWindValue;
-    TextView currentHumidityValue;
-    TextView currentDewPointValue;
-    TextView currentPressureValue;
-    TextView currentVisibilityValue;
-    TextView currentCloudCoverValue;
-    TextView sunriseTime;
-    TextView sunsetTime;
-    TextView updateTime;
+    private Fragment selectedFragment;
+    private Class selectedFragmentClass;
 
     //Location settings change
     final int REQUEST_CHANGE_SETTINGS = 15;
+
+    //Google apis
+    GoogleApiClient googleApiClient;
+    public String latitude;
+    public String longitude;
 
     //Hourly
     public List<Integer> pulledHours;
@@ -104,15 +75,28 @@ public class MainActivity extends AppCompatActivity implements
 
     //Daily
     private List<String> pulledDays;
-    private List<String> pulleddailyCond;
+    private List<String> pulledDailyCond;
     private List<Integer> pulledHIs;
     private List<Integer> pulledLOs;
-    private List<Integer> pulledPrecips;
+    private List<Integer> pulledPrecip;
 
-    //Google apis
-    GoogleApiClient googleApiClient;
-    public String latitude;
-    public String longitude;
+    //Current
+    private int currentTemp;
+    private String currentConditions;
+    private String todaysHI;
+    private String todaysLO;
+    private String todaysHILO;//Concatenate the two variables above to this format - HI/LO
+    private String currentWind;
+    private int currentHumidity;
+    private int currentDewpoint;
+    private int currentPressure;//Be sure to add units on the end when updating views!
+    private int currentVisibilty;
+    private int currentCloudCover;
+    private int sunriseTime;
+    private int sunsetTime;
+    private String updateTime;
+
+    public static int setID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,125 +125,14 @@ public class MainActivity extends AppCompatActivity implements
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
-        //Setup references
-        robotoLight = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
-        topLayout = (LinearLayout) findViewById(R.id.topContentLayout);
-        currentTemp = (TextView) findViewById(R.id.currentTemp);
-        currentConditions = (TextView) findViewById(R.id.currentConditions);
-        todaysHiLo = (TextView) findViewById(R.id.todaysHiLo);
-        currentWind = (TextView) findViewById(R.id.currentDetailsWindLabel);
-        currentHumidity = (TextView) findViewById(R.id.currentDetailsHumidityLabel);
-        currentDewpoint = (TextView) findViewById(R.id.currentDetailsDewpointLabel);
-        currentPressure = (TextView) findViewById(R.id.currentDetailsPressureLabel);
-        currentVisibility = (TextView) findViewById(R.id.currentDetailsVisibilityLabel);
-        currentCloudCover = (TextView) findViewById(R.id.currentDetailsCloudCoverLabel);
-        currentWindValue = (TextView) findViewById(R.id.currentDetailsWindValue);
-        currentHumidityValue = (TextView) findViewById(R.id.currentDetailsHumidityValue);
-        currentDewPointValue = (TextView) findViewById(R.id.currentDetailsDewPointValue);
-        currentPressureValue = (TextView) findViewById(R.id.currentDetailsPressureValue);
-        currentVisibilityValue = (TextView) findViewById(R.id.currentDetailsVisibilityValue);
-        currentCloudCoverValue = (TextView) findViewById(R.id.currentDetailsCloudCoverValue);
-        sunriseTime = (TextView) findViewById(R.id.sunriseTime);
-        sunsetTime = (TextView) findViewById(R.id.sunsetTime);
-        updateTime = (TextView) findViewById(R.id.updateTime);
-
-        //Typeface
-        currentTemp.setTypeface(robotoLight);
-        currentConditions.setTypeface(robotoLight);
-        todaysHiLo.setTypeface(robotoLight);
-        currentWind.setTypeface(robotoLight);
-        currentHumidity.setTypeface(robotoLight);
-        currentDewpoint.setTypeface(robotoLight);
-        currentPressure.setTypeface(robotoLight);
-        currentVisibility.setTypeface(robotoLight);
-        currentCloudCover.setTypeface(robotoLight);
-        currentWindValue.setTypeface(robotoLight);
-        currentHumidityValue.setTypeface(robotoLight);
-        currentDewPointValue.setTypeface(robotoLight);
-        currentPressureValue.setTypeface(robotoLight);
-        currentVisibilityValue.setTypeface(robotoLight);
-        currentCloudCoverValue.setTypeface(robotoLight);
-        sunriseTime.setTypeface(robotoLight);
-        sunsetTime.setTypeface(robotoLight);
-        updateTime.setTypeface(robotoLight);
+        //Initialize loading fragment at start
+        selectedFragmentClass = loadingFragment.class;
+        processNewFragment();
 
         //Get the time of day and determine which setID to use
         //TODO - Finish determineLayoutColor
-        int setID = 1;
-        setLayoutColor(setID);
-
-        //Setup example hourly data sets
-        pulledHours = new ArrayList<>();
-        pulledTemps = new ArrayList<>();
-        pulledConditions = new ArrayList<>();
-        pulledWind = new ArrayList<>();
-        //pulledHours
-        int hour = 1;
-        for (int i = 0; i < 12; i++) {
-            pulledHours.add(hour);
-            hour++;
-        }
-        //pulledTemps
-        int temp = 65;
-        for (int i = 0; i < 12; i++) {
-            pulledTemps.add(temp);
-            temp += 2;
-        }
-        //pulledConditions
-        for (int i = 0; i < 12; i++) {
-            pulledConditions.add("Overcast");
-        }
-        //pulledWind
-        int wind = 4;
-        for (int i = 0; i < 12; i++) {
-            pulledWind.add(wind);
-            wind += 3;
-        }
-
-        //Setup example daily datasets
-        pulledDays = new ArrayList<>();
-        pulleddailyCond = new ArrayList<>();
-        pulledHIs = new ArrayList<>();
-        pulledLOs = new ArrayList<>();
-        pulledPrecips = new ArrayList<>();
-
-        //Days
-        int dateInt = 1;
-        for(int i = 0; i < 8; i ++){
-            String dates = "Sat";
-            pulledDays.add(dates);
-            dateInt ++;
-        }
-
-        //Conditions
-        for(int i = 0; i < 8; i++){
-            String condition = "clear";
-            pulleddailyCond.add(condition);
-        }
-
-        //HIs
-        int HI = 70;
-        for(int i = 0; i < 10; i++){
-            pulledHIs.add(HI);
-            HI += 3;
-        }
-
-        //LOs
-        int LO = 50;
-        for(int i = 0; i < 10; i++){
-            pulledLOs.add(LO);
-            LO += 2;
-        }
-
-        //Precipitation
-        int dailyPrecip = 3;
-        for(int i = 0; i < 10; i++){
-            pulledPrecips.add(dailyPrecip);
-            dailyPrecip+= 3;
-        }
-
-        //Display data
-        setViews();
+        setID = 1;
+        setMainLayoutColor(setID);
     }
 
     //Action bar events
@@ -439,10 +312,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Customizes layout colors.
+     * Customizes main layout colors.
      * @param colorSet
      */
-    private void setLayoutColor(int colorSet){
+    private void setMainLayoutColor(int colorSet){
         //Setup resources to change
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
@@ -463,17 +336,6 @@ public class MainActivity extends AppCompatActivity implements
                 //Customize app bar
                 toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorYellowDark));
 
-                //Top layout
-                topLayout.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-
-                //Views
-                currentWindValue.setTextColor(getResources().getColor(R.color.colorYellow));
-                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorYellow));
-                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorYellow));
-                currentPressureValue.setTextColor(getResources().getColor(R.color.colorYellow));
-                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorYellow));
-                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorYellow));
-
                 window = null;
                 break;
 
@@ -489,17 +351,6 @@ public class MainActivity extends AppCompatActivity implements
                 //Customize app bar
                 toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlueDark));
 
-                //Top layout
-                topLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
-
-                //Views
-                currentWindValue.setTextColor(getResources().getColor(R.color.colorBlue));
-                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorBlue));
-                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorBlue));
-                currentPressureValue.setTextColor(getResources().getColor(R.color.colorBlue));
-                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorBlue));
-                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorBlue));
-
                 window = null;
                 break;
             //Sunset
@@ -513,17 +364,6 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Customize app bar
                 toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorOrangeDark));
-
-                //Top layout
-                topLayout.setBackgroundColor(getResources().getColor(R.color.colorOrange));
-
-                //Views
-                currentWindValue.setTextColor(getResources().getColor(R.color.colorOrange));
-                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorOrange));
-                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorOrange));
-                currentPressureValue.setTextColor(getResources().getColor(R.color.colorOrange));
-                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorOrange));
-                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorOrange));
 
                 window = null;
                 break;
@@ -539,54 +379,9 @@ public class MainActivity extends AppCompatActivity implements
                 //Customize app bar
                 toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorPurpleDark));
 
-                //Top layout
-                topLayout.setBackgroundColor(getResources().getColor(R.color.colorPurple));
-
-                //Views
-                currentWindValue.setTextColor(getResources().getColor(R.color.colorPurple));
-                currentHumidityValue.setTextColor(getResources().getColor(R.color.colorPurple));
-                currentDewPointValue.setTextColor(getResources().getColor(R.color.colorPurple));
-                currentPressureValue.setTextColor(getResources().getColor(R.color.colorPurple));
-                currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorPurple));
-                currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorPurple));
-
                 window = null;
                 break;
         }
-    }
-
-    /**
-     * Updates views with data from API.
-     */
-    private void setViews(){
-
-        //Setup hourlyRecycler view
-        hourlyRecyclerView = (RecyclerView) findViewById(R.id.hourlyRecyclerView);
-        hourlyRecyclerView.setHasFixedSize(true);
-
-        //Hourly Layout Manager
-        hourlyLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        hourlyRecyclerView.setLayoutManager(hourlyLayoutManager);
-
-        //Setup dailyRecycler view
-        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
-        dailyRecyclerView.setHasFixedSize(true);
-
-        //Daily Linear Layout Manager
-        dailyLayoutManager = new LinearLayoutManager(this);
-        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
-
-        //Update views
-        //TODO - SET VIEWS TO "--" IN XML TO SIGNIFY NO DATA IF IT IS NOT CHANGED
-
-        //Setup adapters and load in data for recyclerViews
-        //Hourly adapter
-        hourlyRecyclerAdapter = new hourlyAdapter(this, pulledHours, pulledTemps, pulledConditions, pulledWind);
-        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
-
-        //Daily adapter
-        dailyRecyclerAdapter = new dailyAdapter(this, pulledDays, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
-        dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 
     //Dark Sky API
@@ -611,6 +406,8 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("DarkSky API", "Pull request successful");
                 //TODO - Parse JSON response
 
+                //TODO - Convert units
+
                 //TODO - Populate data sets
 
                 //TODO - Update views
@@ -629,5 +426,36 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStop() {
         googleApiClient.disconnect();
         super.onStop();
+    }
+
+    //Fragments
+    FragmentTransaction fragmentTransaction;
+    /**
+     * Creates instance of selected fragment in a new thread, and passes back the new fragment.
+     */
+    private void processNewFragment(){
+        final Handler fragmentHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == 0) {
+                    fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                    fragmentTransaction.replace(R.id.mainContentView, selectedFragment).commit();
+                }
+            }
+        };
+
+        Thread fragmentThread = new Thread() {
+            @Override
+            public void run(){
+                try {
+                    selectedFragment = (Fragment) selectedFragmentClass.newInstance();
+                    fragmentHandler.sendEmptyMessage(0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        fragmentThread.run();
     }
 }
