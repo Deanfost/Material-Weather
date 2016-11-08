@@ -44,6 +44,8 @@ public class MainFragment extends Fragment{
     private RecyclerView.Adapter dailyRecyclerAdapter;
     private RecyclerView.LayoutManager dailyLayoutManager;
 
+    private static String passedLocationValue;
+    private static String passedDateValue;
     private static String passedTempValue;
     private static String passedHILOValue;
     private static String passedWindValue;
@@ -58,6 +60,8 @@ public class MainFragment extends Fragment{
 
     Typeface robotoLight;
     LinearLayout topLayout;
+    TextView currentLocation;
+    TextView currentDate;
     ImageView currentConditionsIcon;
     TextView currentTemp;
     TextView currentConditions;
@@ -96,6 +100,8 @@ public class MainFragment extends Fragment{
         //Setup references
         robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         topLayout = (LinearLayout) getView().findViewById(R.id.topContentLayout);
+        currentLocation = (TextView) getView().findViewById(R.id.currentLocation);
+        currentDate = (TextView) getView().findViewById(R.id.currentDate);
         currentTemp = (TextView) getView().findViewById(R.id.currentTemp);
         currentConditions = (TextView) getView().findViewById(R.id.currentConditions);
         todaysHiLo = (TextView) getView().findViewById(R.id.todaysHiLo);
@@ -268,9 +274,11 @@ public class MainFragment extends Fragment{
     /**
      * Saves passed values from mainActivity to current variables.
      */
-    public static void passCurrentDataSets(String passedTemp, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
+    public static void passViewData(String passedLocation, String passedDate, String passedTemp, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
     String passedPressure, String passedVisibility, int passedCloudCover, int passedSunriseTime, int passedSunsetTime, int passedUpdateTime ){
 
+        passedLocationValue = passedLocation;
+        passedDateValue = passedDate;
         passedTempValue = passedTemp;
         passedHILOValue = passedHILO;
         passedWindValue = passedWind;

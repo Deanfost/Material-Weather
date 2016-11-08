@@ -125,6 +125,6 @@ public class OnboardingActivity extends IntroActivity{
     }
 
     public static void requestPermissions(){
-        ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
+        ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
     }
 }

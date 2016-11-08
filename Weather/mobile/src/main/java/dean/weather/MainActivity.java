@@ -3,6 +3,7 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -12,6 +13,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -52,7 +55,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer, NoConnectionFragment.connectionRefresher {
 
     Toolbar toolbar;
     LinearLayout mainActivityLayout;
@@ -108,8 +111,9 @@ public class MainActivity extends AppCompatActivity implements
                     .build();
         }
 
-        //Give permissionsFragment reference to mainActivity
+        //Give fragment interfaces reference to mainActivity
         PermissionsFragment.setInitializer(this);
+        NoConnectionFragment.setConnectionRefresher(this);
 
         //Connect to the Google API
         googleApiClient.connect();
@@ -130,11 +134,7 @@ public class MainActivity extends AppCompatActivity implements
         mainActivityLayout = (LinearLayout) findViewById(R.id.mainActivityLayout);
 
         //Initialize loading fragment at start
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LoadingFragment LoadingFragment = new LoadingFragment();
-        fragmentTransaction.add(R.id.mainContentView, LoadingFragment);
-        fragmentTransaction.commit();
+        loadingFragmentTransaction();
 
         //Get the time of day and determine which setID to use
         //TODO - Finish determineLayoutColor
@@ -190,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        //Show fragment to show the user that the connection failed
+        noConnectionFragmentTransaction();
     }
 
     @Override
@@ -210,6 +211,8 @@ public class MainActivity extends AppCompatActivity implements
                                     longitude = String.valueOf(lastLocation.getLongitude());
                                     Log.i("Latitude", latitude);
                                     Log.i("Longitude", longitude);
+                                    Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
+                                    snackbar.show();
                                 }
                             }
                             catch (SecurityException e){
@@ -218,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements
                             break;
                         case Activity.RESULT_CANCELED:
                             // The user was asked to change settings, but chose not to
-                            //TODO - SHOW A LAYOUT SAYING TO ENABLE LOCATION TRACKING
+                            loadingFragmentTransaction();
                             break;
                         default:
                             break;
@@ -246,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void requestLocation(){
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        //TODO - Implement logic to display blank activity telling the user to enable location services if current location is selected
         if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
             //Create location request
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -268,12 +270,14 @@ public class MainActivity extends AppCompatActivity implements
                             try{
                                 Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                                 if(lastLocation != null){
+                                    //Get latitude and longitude for DarkSky API
                                     latitude = String.valueOf(lastLocation.getLatitude());
                                     longitude = String.valueOf(lastLocation.getLongitude());
                                     Log.i("Latitude", latitude);
                                     Log.i("Longitude", longitude);
                                     Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
                                     snackbar.show();
+                                    mainFragmentTransaction();//this is only for testing! remove soon
                                     //Call API
 //                                    pullForecast();
                                 }
@@ -421,13 +425,14 @@ public class MainActivity extends AppCompatActivity implements
                 //TODO - Populate data sets
 
                 //TODO - Update views
-                mainFragmentTransaction();
+                mainFragmentTransaction();//Create method in mainFragment to update views
 
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.e("DarkSky API", "Error while calling: " + retrofitError.getUrl());
+                noConnectionFragmentTransaction();
             }
         });
     }
@@ -443,29 +448,52 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Create new mainFragment transaction.
      */
-    public void mainFragmentTransaction(){
+    private void mainFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         MainFragment MainFragment = new MainFragment();
         mainFragmentTransaction.add(R.id.mainContentView, MainFragment);
+        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
     /**
      * Create new loadingFragment transaction.
      */
-    public void loadingFragmentTransaction(){
+    private void loadingFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         LoadingFragment LoadingFragment = new LoadingFragment();
         mainFragmentTransaction.add(R.id.mainContentView, LoadingFragment);
+        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
 
     /**
-     * Conducts loadingFragment transaction, and begins pulling location and data.
+     * Create new noConnectionFragment transaction.
+     */
+    private void noConnectionFragmentTransaction(){
+        FragmentManager mainFragmentManager = getFragmentManager();
+        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        NoConnectionFragment noConnectionFragment = new NoConnectionFragment();
+        mainFragmentTransaction.add(R.id.mainContentView, noConnectionFragment);
+        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        mainFragmentTransaction.commit();
+    }
+
+    /**
+     * Conducts loadingFragment transaction, and begins pulling location and data(called from PermissionsFragment).
      */
     @Override
     public void beginNormalOperations() {
+        loadingFragmentTransaction();
+        requestLocation();
+    }
+
+    /**
+     * Conducts loadingFragment transaction, and begins pulling location and data(called from NoConnectionFragment).
+     */
+    @Override
+    public void retryConnection() {
         loadingFragmentTransaction();
         requestLocation();
     }

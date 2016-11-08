@@ -45,6 +45,7 @@ public class IntroActivity extends AppCompatActivity {
         if (grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
+                Log.i("Permissions", "Permission granted");
                 //Launch main
                 Intent startMain = new Intent(this, MainActivity.class);
                 startActivity(startMain);
@@ -59,7 +60,7 @@ public class IntroActivity extends AppCompatActivity {
     private void decideActivity(){
         LOCATION_PERMISSIONS_REQUEST = 42;
         //Make sure we can access the user's location
-        int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //Launch main if we do
         if(locationPermission == PackageManager.PERMISSION_GRANTED){
             Intent startMain = new Intent(this, MainActivity.class);
@@ -93,7 +94,7 @@ public class IntroActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //Request location permission
-                        ActivityCompat.requestPermissions(IntroActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
+                        ActivityCompat.requestPermissions(IntroActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
                     }
                 });
             }

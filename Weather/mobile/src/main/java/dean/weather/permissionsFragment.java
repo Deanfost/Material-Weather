@@ -27,6 +27,7 @@ public class PermissionsFragment extends Fragment {
         void beginNormalOperations();
     }
 
+    //Obtain reference to calling activity
     public static void setInitializer(Initializer initializer){
         sInitializer = initializer;
     }
@@ -46,7 +47,7 @@ public class PermissionsFragment extends Fragment {
         btnAllowAccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
 
             }
         });
