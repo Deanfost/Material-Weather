@@ -3,7 +3,7 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -12,10 +12,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,17 +52,15 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer {
 
     Toolbar toolbar;
-
-    private Fragment selectedFragment;
-    private Class selectedFragmentClass;
+    LinearLayout mainActivityLayout;
 
     //Location settings change
     final int REQUEST_CHANGE_SETTINGS = 15;
 
-    //Google apis
+    //Google APIs
     GoogleApiClient googleApiClient;
     public String latitude;
     public String longitude;
@@ -110,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements
                     .build();
         }
 
+        //Give permissionsFragment reference to mainActivity
+        PermissionsFragment.setInitializer(this);
+
         //Connect to the Google API
         googleApiClient.connect();
 
@@ -125,9 +126,15 @@ public class MainActivity extends AppCompatActivity implements
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
+        //Reference to mainLayout
+        mainActivityLayout = (LinearLayout) findViewById(R.id.mainActivityLayout);
+
         //Initialize loading fragment at start
-        selectedFragmentClass = loadingFragment.class;
-        processNewFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        LoadingFragment LoadingFragment = new LoadingFragment();
+        fragmentTransaction.add(R.id.mainContentView, LoadingFragment);
+        fragmentTransaction.commit();
 
         //Get the time of day and determine which setID to use
         //TODO - Finish determineLayoutColor
@@ -265,6 +272,8 @@ public class MainActivity extends AppCompatActivity implements
                                     longitude = String.valueOf(lastLocation.getLongitude());
                                     Log.i("Latitude", latitude);
                                     Log.i("Longitude", longitude);
+                                    Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
+                                    snackbar.show();
                                     //Call API
 //                                    pullForecast();
                                 }
@@ -294,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements
         else{
             //Tell the user to enable location services
             //TODO - SHOW A FRAGMENT TELLING THE USER TO ENABLE LOCATIONS AND IMPLEMENT LOGIC
+            loadingFragmentTransaction();
         }
     }
 
@@ -411,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements
                 //TODO - Populate data sets
 
                 //TODO - Update views
+                mainFragmentTransaction();
 
             }
 
@@ -429,33 +440,33 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //Fragments
-    FragmentTransaction fragmentTransaction;
     /**
-     * Creates instance of selected fragment in a new thread, and passes back the new fragment.
+     * Create new mainFragment transaction.
      */
-    private void processNewFragment(){
-        final Handler fragmentHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                if(msg.what == 0) {
-                    fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                    fragmentTransaction.replace(R.id.mainContentView, selectedFragment).commit();
-                }
-            }
-        };
+    public void mainFragmentTransaction(){
+        FragmentManager mainFragmentManager = getFragmentManager();
+        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        MainFragment MainFragment = new MainFragment();
+        mainFragmentTransaction.add(R.id.mainContentView, MainFragment);
+        mainFragmentTransaction.commit();
+    }
+    /**
+     * Create new loadingFragment transaction.
+     */
+    public void loadingFragmentTransaction(){
+        FragmentManager mainFragmentManager = getFragmentManager();
+        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        LoadingFragment LoadingFragment = new LoadingFragment();
+        mainFragmentTransaction.add(R.id.mainContentView, LoadingFragment);
+        mainFragmentTransaction.commit();
+    }
 
-        Thread fragmentThread = new Thread() {
-            @Override
-            public void run(){
-                try {
-                    selectedFragment = (Fragment) selectedFragmentClass.newInstance();
-                    fragmentHandler.sendEmptyMessage(0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        fragmentThread.run();
+    /**
+     * Conducts loadingFragment transaction, and begins pulling location and data.
+     */
+    @Override
+    public void beginNormalOperations() {
+        loadingFragmentTransaction();
+        requestLocation();
     }
 }

@@ -14,22 +14,15 @@
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!--//Decision activity-->
-        <!--<activity android:name=".decisionActivity"-->
-            <!--android:configChanges="orientation"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/SplashTheme">-->
-        <!--</activity>-->
-
         //Onboarding activity
-        <activity android:name=".onboardingActivity"
+        <activity android:name=".OnboardingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
         </activity>
 
         //Intro activity
-        <activity android:name=".introActivity"
+        <activity android:name=".IntroActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">

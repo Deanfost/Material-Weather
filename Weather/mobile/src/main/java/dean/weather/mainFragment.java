@@ -20,7 +20,7 @@ import java.util.List;
  * Created by DeanF on 11/6/2016.
  */
 
-public class mainFragment extends Fragment{
+public class MainFragment extends Fragment{
 
     //Hourly
     public static List<Integer> passedHours;
@@ -238,11 +238,11 @@ public class mainFragment extends Fragment{
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
-        hourlyRecyclerAdapter = new hourlyAdapter(getActivity(), passedHours, passedTemps, passedConditions, passedWind);
+        hourlyRecyclerAdapter = new HourlyAdapter(getActivity(), passedHours, passedTemps, passedConditions, passedWind);
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 
         //Daily adapter
-        dailyRecyclerAdapter = new dailyAdapter(getActivity(), passedDays, passedConditions, passedHIs, passedLOs, passedPrecip);
+        dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDays, passedConditions, passedHIs, passedLOs, passedPrecip);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
 
     }
@@ -253,15 +253,15 @@ public class mainFragment extends Fragment{
     public static void passRecyclerDataSets(List<Integer> passedHours, List<Integer> passedTemps, List<String> passedConditions, List<Integer> passedWind,
                                             List<String> passedDays, List<String> passedDailyCond, List<Integer> passedHis, List<Integer> passedLos, List<Integer> passedPrecip){
 
-        mainFragment.passedHours = new ArrayList<>(passedHours);
-        mainFragment.passedTemps = new ArrayList<>(passedTemps);
-        mainFragment.passedConditions = new ArrayList<>(passedConditions);
-        mainFragment.passedWind = new ArrayList<>(passedWind);
-        mainFragment.passedDays = new ArrayList<>(passedDays);
-        mainFragment.passedDailyCond = new ArrayList<>(passedDailyCond);
-        mainFragment.passedHIs = new ArrayList<>(passedHis);
-        mainFragment.passedLOs = new ArrayList<>(passedLos);
-        mainFragment.passedPrecip = new ArrayList<>(passedPrecip);
+        MainFragment.passedHours = new ArrayList<>(passedHours);
+        MainFragment.passedTemps = new ArrayList<>(passedTemps);
+        MainFragment.passedConditions = new ArrayList<>(passedConditions);
+        MainFragment.passedWind = new ArrayList<>(passedWind);
+        MainFragment.passedDays = new ArrayList<>(passedDays);
+        MainFragment.passedDailyCond = new ArrayList<>(passedDailyCond);
+        MainFragment.passedHIs = new ArrayList<>(passedHis);
+        MainFragment.passedLOs = new ArrayList<>(passedLos);
+        MainFragment.passedPrecip = new ArrayList<>(passedPrecip);
 
     }
 

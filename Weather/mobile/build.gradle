@@ -35,4 +35,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.heinrichreimersoftware:material-intro:1.6'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
+    compile 'com.leo.simplearcloader:simplearcloader:1.0.+'
 }

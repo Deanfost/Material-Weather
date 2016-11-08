@@ -19,7 +19,7 @@ import java.util.List;
  * Created by DeanF on 10/13/2016.
  */
 
-public class dailyActivity extends AppCompatActivity {
+public class DailyActivity extends AppCompatActivity {
     private RecyclerView dailyRecyclerView;
     private RecyclerView.Adapter dailyRecyclerAdapter;
     private RecyclerView.LayoutManager dailyLayoutManager;
@@ -124,7 +124,7 @@ public class dailyActivity extends AppCompatActivity {
 
         //Setup adapter
         pulledContext = this;
-        dailyRecyclerAdapter = new dailyAdapter(pulledContext, pulledDates, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
+        dailyRecyclerAdapter = new DailyAdapter(pulledContext, pulledDates, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 

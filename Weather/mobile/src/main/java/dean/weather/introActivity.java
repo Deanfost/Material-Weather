@@ -19,7 +19,7 @@ import android.widget.Button;
  * Created by DeanF on 10/21/2016.
  */
 
-public class introActivity extends AppCompatActivity {
+public class IntroActivity extends AppCompatActivity {
     static int LOCATION_PERMISSIONS_REQUEST;
     Button btnNeedAccess;
 
@@ -72,7 +72,7 @@ public class introActivity extends AppCompatActivity {
             String firstStart = sharedPref.getString(getResources().getString(R.string.first_launch_key), "0");
             if(firstStart.equals("0")){
                 //It is first start, and we need to onboard the user, so we launch the onboarding activity
-                Intent onboardingIntent = new Intent(this, onboardingActivity.class);
+                Intent onboardingIntent = new Intent(this, OnboardingActivity.class);
                 startActivity(onboardingIntent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 Log.i("Intent", "Onboarding");
@@ -93,7 +93,7 @@ public class introActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //Request location permission
-                        ActivityCompat.requestPermissions(introActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
+                        ActivityCompat.requestPermissions(IntroActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
                     }
                 });
             }

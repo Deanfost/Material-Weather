@@ -20,7 +20,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
  * Created by DeanF on 10/29/2016.
  */
 
-public class onboardingActivity  extends IntroActivity{
+public class OnboardingActivity extends IntroActivity{
     static int LOCATION_PERMISSIONS_REQUEST = 42;
     private Fragment onBoardingFragPermissions;
     private Class onBoardingFragThreeClass;
@@ -31,7 +31,7 @@ public class onboardingActivity  extends IntroActivity{
         super.onCreate(savedInstanceState);
         currentActivity = this;
         try {
-            onBoardingFragThreeClass = onBoardingFragThree.class;
+            onBoardingFragThreeClass = OnboardingFragThree.class;
             onBoardingFragPermissions = (Fragment) onBoardingFragThreeClass.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();

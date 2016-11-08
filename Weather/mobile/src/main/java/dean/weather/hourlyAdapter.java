@@ -15,7 +15,7 @@ import java.util.List;
  * Created by DeanF on 10/7/2016.
  */
 
-public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder> {
+public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder> {
     private List<Integer> hourSet;
     private List<Integer> tempSet;
     private List<String> conditionSet;
@@ -41,7 +41,7 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
     }
 
     //Pass pulled data from API
-    public hourlyAdapter(Context pulledContext, List<Integer> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
+    public HourlyAdapter(Context pulledContext, List<Integer> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
         context = pulledContext;
         hourSet = pulledHours;
         tempSet = pulledTemps;
@@ -51,7 +51,7 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
 
     //Inflate the layout and return the holder
     @Override
-    public hourlyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HourlyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
@@ -65,7 +65,7 @@ public class hourlyAdapter extends RecyclerView.Adapter<hourlyAdapter.ViewHolder
 
     //Populate the data into the item through the holder
     @Override
-    public void onBindViewHolder(hourlyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(HourlyAdapter.ViewHolder holder, int position) {
         //Setup typeface
         robotoLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         //Get the data based on position

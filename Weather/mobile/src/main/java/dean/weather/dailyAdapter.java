@@ -15,7 +15,7 @@ import java.util.List;
  * Created by DeanF on 10/14/2016.
  */
 
-public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> {
+public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> {
     private List<String> daySet;
     private List<String> conditionSet;
     private List<Integer> HISet;
@@ -42,7 +42,7 @@ public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> 
     }
 
     //Pass pulled data from API
-    public dailyAdapter(Context pulledContext, List<String> pulledDays, List<String> pulledConditions, List<Integer> pulledHI, List<Integer> pulledLO, List<Integer> pulledPrecip){
+    public DailyAdapter(Context pulledContext, List<String> pulledDays, List<String> pulledConditions, List<Integer> pulledHI, List<Integer> pulledLO, List<Integer> pulledPrecip){
         context = pulledContext;
         daySet = pulledDays;
         conditionSet = pulledConditions;
@@ -53,7 +53,7 @@ public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> 
 
     //Inflate the layout and return the holder
     @Override
-    public dailyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DailyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
@@ -61,7 +61,7 @@ public class dailyAdapter extends RecyclerView.Adapter<dailyAdapter.ViewHolder> 
         View rowView = layoutInflater.inflate(R.layout.daily_list_item, parent, false);
 
         //Return a new holder instance
-        dailyAdapter.ViewHolder viewHolder = new dailyAdapter.ViewHolder(rowView);
+        DailyAdapter.ViewHolder viewHolder = new DailyAdapter.ViewHolder(rowView);
         return viewHolder;
     }
 
