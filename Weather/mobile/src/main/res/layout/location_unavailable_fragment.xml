@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:padding="@dimen/_16sdp">
+
+    <ImageView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:id="@+id/iconCurrentConditions"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_locationunavailable_color"
+        android:layout_marginTop="@dimen/_55sdp"
+        android:tint="@color/location_red"
+        android:layout_marginBottom="@dimen/_24sdp"/>
+
+    <TextView
+        android:layout_width="@dimen/_165sdp"
+        android:layout_height="wrap_content"
+        android:text="Unable to retrieve location."
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/_105sdp"/>
+
+    <Button
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:text="Retry"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorBlue"
+        android:textColor="@color/colorWhite"
+        android:id="@+id/btnRetryLocation"/>
+
+</LinearLayout>

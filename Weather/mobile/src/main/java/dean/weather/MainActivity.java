@@ -3,18 +3,19 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Handler;
-import android.os.Message;
+import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -30,6 +31,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,13 +57,20 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer, NoConnectionFragment.connectionRefresher {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer,
+        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher {
 
+    //Layout
     Toolbar toolbar;
     LinearLayout mainActivityLayout;
 
     //Location settings change
     final int REQUEST_CHANGE_SETTINGS = 15;
+
+    //Address receiver
+    protected  Location lastLocation;
+    private AddressResultReceiver resultReceiver;
+    String receivedAddress;
 
     //Google APIs
     GoogleApiClient googleApiClient;
@@ -114,9 +123,13 @@ public class MainActivity extends AppCompatActivity implements
         //Give fragment interfaces reference to mainActivity
         PermissionsFragment.setInitializer(this);
         NoConnectionFragment.setConnectionRefresher(this);
+        LocationUnavailableFragment.setDataFetcher(this);
 
         //Connect to the Google API
         googleApiClient.connect();
+
+        //Initialize resultReceiver
+        resultReceiver = new AddressResultReceiver(new android.os.Handler());
 
         //Set content view
         setContentView(R.layout.activity_main);
@@ -191,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         //Show fragment to show the user that the connection failed
+        Log.i("APIConnection", "Failed");
         noConnectionFragmentTransaction();
     }
 
@@ -205,15 +219,7 @@ public class MainActivity extends AppCompatActivity implements
                         case Activity.RESULT_OK:
                             // All required changes were successfully made, so request location
                             try{
-                                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                                if(lastLocation != null){
-                                    latitude = String.valueOf(lastLocation.getLatitude());
-                                    longitude = String.valueOf(lastLocation.getLongitude());
-                                    Log.i("Latitude", latitude);
-                                    Log.i("Longitude", longitude);
-                                    Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
-                                    snackbar.show();
-                                }
+                                requestLocation();
                             }
                             catch (SecurityException e){
                                 Log.e("LocationPermission", "Permission denied");
@@ -221,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements
                             break;
                         case Activity.RESULT_CANCELED:
                             // The user was asked to change settings, but chose not to
-                            loadingFragmentTransaction();
+                            permissionsFragmentTransaction();
                             break;
                         default:
                             break;
@@ -242,6 +248,16 @@ public class MainActivity extends AppCompatActivity implements
         //City block accuracy
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return locationRequest;
+    }
+
+    /**
+     * Starts intent service to display address.
+     */
+    protected void startIntentService() {
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, resultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, lastLocation);
+        startService(intent);
     }
 
     /**
@@ -268,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements
                         case LocationSettingsStatusCodes.SUCCESS:
                             //All location requirements are satisfied, request location
                             try{
-                                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                                lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                                 if(lastLocation != null){
                                     //Get latitude and longitude for DarkSky API
                                     latitude = String.valueOf(lastLocation.getLatitude());
@@ -277,9 +293,22 @@ public class MainActivity extends AppCompatActivity implements
                                     Log.i("Longitude", longitude);
                                     Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
                                     snackbar.show();
-                                    mainFragmentTransaction();//this is only for testing! remove soon
-                                    //Call API
+                                    //Determine if a geocoder is available
+                                    if(!Geocoder.isPresent()){
+                                        Log.i("Geocoder", "Unavailable");
+                                        Toast.makeText(MainActivity.this, "Geocoder unavailable.", Toast.LENGTH_SHORT).show();
+                                    }
+                                    //Retrieve address
+                                    startIntentService();
+                                    //this is only for testing! remove soon
+                                    mainFragmentTransaction();
+                                    //Call DarkSkyAPI
 //                                    pullForecast();
+                                }
+                                else{
+                                    //Show a fragment telling the user the location is unavailable
+                                    locationUnavailableFragmentTransaction();
+                                    Log.i("Location", "Location unavailable");
                                 }
                             }
                             catch (SecurityException e){
@@ -306,8 +335,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         else{
             //Tell the user to enable location services
-            //TODO - SHOW A FRAGMENT TELLING THE USER TO ENABLE LOCATIONS AND IMPLEMENT LOGIC
-            loadingFragmentTransaction();
+            permissionsFragmentTransaction();
         }
     }
 
@@ -480,6 +508,24 @@ public class MainActivity extends AppCompatActivity implements
         mainFragmentTransaction.commit();
     }
 
+    private void locationUnavailableFragmentTransaction(){
+        FragmentManager mainFragmentManager = getFragmentManager();
+        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        LocationUnavailableFragment locationUnavailableFragment = new LocationUnavailableFragment();
+        mainFragmentTransaction.add(R.id.mainContentView, locationUnavailableFragment);
+        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        mainFragmentTransaction.commit();
+    }
+
+    private void permissionsFragmentTransaction(){
+        FragmentManager mainFragmentManager = getFragmentManager();
+        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        PermissionsFragment permissionsFragment = new PermissionsFragment();
+        mainFragmentTransaction.add(R.id.mainContentView, permissionsFragment);
+        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        mainFragmentTransaction.commit();
+    }
+
     /**
      * Conducts loadingFragment transaction, and begins pulling location and data(called from PermissionsFragment).
      */
@@ -497,4 +543,41 @@ public class MainActivity extends AppCompatActivity implements
         loadingFragmentTransaction();
         requestLocation();
     }
+
+    /**
+     * Conducts loadingFragment transaction, and begins pulling location and data(called from LocationUnavailableFragment).
+     */
+    @Override
+    public void retryDataFetch() {
+        loadingFragmentTransaction();
+        requestLocation();
+    }
+
+    /**
+     * Receives results of FetchAddressIntentService.
+     */
+    private class AddressResultReceiver extends ResultReceiver{
+
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            Log.i("Receive result", "called");
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            Log.i("FetchAddressResults", resultData.getString(Constants.RESULT_DATA_KEY));
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                receivedAddress = resultData.getString(Constants.RESULT_DATA_KEY);
+                Snackbar snackbar = Snackbar.make(mainActivityLayout, receivedAddress, Snackbar.LENGTH_LONG);
+                snackbar.show();
+                Log.i("Address", receivedAddress);
+            }
+        }
+    }
+
 }
