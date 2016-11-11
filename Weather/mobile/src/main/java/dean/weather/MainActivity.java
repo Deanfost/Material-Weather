@@ -5,20 +5,17 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Handler;
-import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -49,8 +46,13 @@ import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -68,14 +70,12 @@ public class MainActivity extends AppCompatActivity implements
     final int REQUEST_CHANGE_SETTINGS = 15;
 
     //Address receiver
-    protected  Location lastLocation;
-    private AddressResultReceiver resultReceiver;
-    String receivedAddress;
+    protected Location lastLocation;//Location to pass to the intent service
 
     //Google APIs
     GoogleApiClient googleApiClient;
-    public String latitude;
-    public String longitude;
+    public double latitude;
+    public double longitude;
 
     //Hourly
     public List<Integer> pulledHours;
@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements
     private List<Integer> pulledPrecip;
 
     //Current
+    private String currentLocation;
+    private String currentDate;
     private int currentTemp;
     private String currentConditions;
     private String todaysHI;
@@ -104,8 +106,7 @@ public class MainActivity extends AppCompatActivity implements
     private int currentCloudCover;
     private int sunriseTime;
     private int sunsetTime;
-    private String updateTime;
-
+    private int updateTime;
     public static int setID;
 
     @Override
@@ -128,8 +129,6 @@ public class MainActivity extends AppCompatActivity implements
         //Connect to the Google API
         googleApiClient.connect();
 
-        //Initialize resultReceiver
-        resultReceiver = new AddressResultReceiver(new android.os.Handler());
 
         //Set content view
         setContentView(R.layout.activity_main);
@@ -194,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onConnected(@Nullable Bundle bundle) {
         //Get current location
         requestLocation();
+
     }
 
     @Override
@@ -251,13 +251,29 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Starts intent service to display address.
+     * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
      */
-    protected void startIntentService() {
-        Intent intent = new Intent(this, FetchAddressIntentService.class);
-        intent.putExtra(Constants.RECEIVER, resultReceiver);
-        intent.putExtra(Constants.LOCATION_DATA_EXTRA, lastLocation);
-        startService(intent);
+    private void getAddresses(){
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addressList = null;
+        try {
+            addressList = geocoder.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addressList.size() > 0) {
+            if(addressList.get(0).getLocality()!= null){
+                currentLocation = addressList.get(0).getLocality();//Assign locality if available
+                Log.i("getLocality", addressList.get(0).getLocality());
+            }
+            else{
+                currentLocation = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
+                Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+            }
+        }
+        else{
+            Log.i("getLocality", "No localities found.");
+        }
     }
 
     /**
@@ -287,23 +303,26 @@ public class MainActivity extends AppCompatActivity implements
                                 lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                                 if(lastLocation != null){
                                     //Get latitude and longitude for DarkSky API
-                                    latitude = String.valueOf(lastLocation.getLatitude());
-                                    longitude = String.valueOf(lastLocation.getLongitude());
-                                    Log.i("Latitude", latitude);
-                                    Log.i("Longitude", longitude);
-                                    Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
-                                    snackbar.show();
+                                    latitude = lastLocation.getLatitude();
+                                    longitude = lastLocation.getLongitude();
+                                    Log.i("Latitude", String.valueOf(latitude));
+                                    Log.i("Longitude", String.valueOf(longitude));
+//                                    Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
+//                                    snackbar.show();
                                     //Determine if a geocoder is available
                                     if(!Geocoder.isPresent()){
                                         Log.i("Geocoder", "Unavailable");
                                         Toast.makeText(MainActivity.this, "Geocoder unavailable.", Toast.LENGTH_SHORT).show();
                                     }
-                                    //Retrieve address
-                                    startIntentService();
-                                    //this is only for testing! remove soon
-                                    mainFragmentTransaction();
+                                    //Get and parse data for mainFragment
+                                    //Parse and format data not related to weather
+                                    retrieveAndFormatNonWeatherData();
                                     //Call DarkSkyAPI
 //                                    pullForecast();
+                                    //TODO - REMOVE THIS AFTER YOU HAVE PARSED DATA
+                                    MainFragment.passViewData(currentLocation, currentDate, currentTemp, todaysHILO, currentWind, currentHumidity, currentDewpoint,
+                                            currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
+                                    mainFragmentTransaction();
                                 }
                                 else{
                                     //Show a fragment telling the user the location is unavailable
@@ -437,8 +456,8 @@ public class MainActivity extends AppCompatActivity implements
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();
         Request request = new Request();
-        request.setLat(latitude);
-        request.setLng(longitude);
+        request.setLat(String.valueOf(latitude));
+        request.setLng(String.valueOf(longitude));
         request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
 
@@ -553,31 +572,25 @@ public class MainActivity extends AppCompatActivity implements
         requestLocation();
     }
 
+    //View data parsing and formatting
+
     /**
-     * Receives results of FetchAddressIntentService.
+     * Parses and formats non-weather related data.
      */
-    private class AddressResultReceiver extends ResultReceiver{
-
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            Log.i("Receive result", "called");
-
-            // Display the address string
-            // or an error message sent from the intent service.
-            Log.i("FetchAddressResults", resultData.getString(Constants.RESULT_DATA_KEY));
-
-            // Show a toast message if an address was found.
-            if (resultCode == Constants.SUCCESS_RESULT) {
-                receivedAddress = resultData.getString(Constants.RESULT_DATA_KEY);
-                Snackbar snackbar = Snackbar.make(mainActivityLayout, receivedAddress, Snackbar.LENGTH_LONG);
-                snackbar.show();
-                Log.i("Address", receivedAddress);
-            }
-        }
+    private void retrieveAndFormatNonWeatherData(){
+        getAddresses();
+        getDate();
     }
 
+    /**
+     * Gets today's date to pass to mainFragment.
+     */
+    private void getDate(){
+//        currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//        Log.i("CurrentDate", currentDate);
+        //Reformat to October 1, 2016 format
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("MMMM d, yyyy");
+        currentDate = format.format(calendar.getTime());
+    }
 }

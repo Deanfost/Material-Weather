@@ -11,10 +11,6 @@
         android:supportsRtl="true"
         tools:node="replace">
 
-        <service
-            android:name=".FetchAddressIntentService"
-            android:exported="false"/>
-
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 

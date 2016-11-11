@@ -46,13 +46,13 @@ public class MainFragment extends Fragment{
 
     private static String passedLocationValue;
     private static String passedDateValue;
-    private static String passedTempValue;
+    private static int passedTempValue;
     private static String passedHILOValue;
     private static String passedWindValue;
     private static int passedHumidityValue;
     private static int passedDewpointValue;
-    private static String passedPressureValue;
-    private static String passedVisibilityValue;
+    private static int passedPressureValue;
+    private static int passedVisibilityValue;
     private static int passedCloudCoverValue;
     private static int passedSunriseTimeValue;
     private static int passedSunsetTimeValue;
@@ -241,6 +241,8 @@ public class MainFragment extends Fragment{
 
         //Update views
         //TODO - SET VIEWS TO "--" IN XML TO SIGNIFY NO DATA IF IT IS NOT CHANGED
+        currentLocation.setText(passedLocationValue);
+        currentDate.setText(passedDateValue);
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
@@ -274,8 +276,8 @@ public class MainFragment extends Fragment{
     /**
      * Saves passed values from mainActivity to current variables.
      */
-    public static void passViewData(String passedLocation, String passedDate, String passedTemp, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
-    String passedPressure, String passedVisibility, int passedCloudCover, int passedSunriseTime, int passedSunsetTime, int passedUpdateTime ){
+    public static void passViewData(String passedLocation, String passedDate, int passedTemp, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
+    int passedPressure, int passedVisibility, int passedCloudCover, int passedSunriseTime, int passedSunsetTime, int passedUpdateTime ){
 
         passedLocationValue = passedLocation;
         passedDateValue = passedDate;
@@ -351,4 +353,5 @@ public class MainFragment extends Fragment{
                 break;
         }
     }
+
 }
