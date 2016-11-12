@@ -3,6 +3,7 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -60,7 +63,7 @@ import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer,
-        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher {
+        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher, changeLocationSettingsFragment.Initializer{
 
     //Layout
     Toolbar toolbar;
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements
     protected Location lastLocation;//Location to pass to the intent service
 
     //Google APIs
-    GoogleApiClient googleApiClient;
+    public static GoogleApiClient googleApiClient;
     public double latitude;
     public double longitude;
 
@@ -125,10 +128,10 @@ public class MainActivity extends AppCompatActivity implements
         PermissionsFragment.setInitializer(this);
         NoConnectionFragment.setConnectionRefresher(this);
         LocationUnavailableFragment.setDataFetcher(this);
+        changeLocationSettingsFragment.setInitializer(this);
 
         //Connect to the Google API
         googleApiClient.connect();
-
 
         //Set content view
         setContentView(R.layout.activity_main);
@@ -227,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements
                             break;
                         case Activity.RESULT_CANCELED:
                             // The user was asked to change settings, but chose not to
-                            permissionsFragmentTransaction();
+                            changeLocationFragmentTransaction();
                             break;
                         default:
                             break;
@@ -307,12 +310,10 @@ public class MainActivity extends AppCompatActivity implements
                                     longitude = lastLocation.getLongitude();
                                     Log.i("Latitude", String.valueOf(latitude));
                                     Log.i("Longitude", String.valueOf(longitude));
-//                                    Snackbar snackbar = Snackbar.make(mainActivityLayout, latitude + ", " + longitude, Snackbar.LENGTH_LONG);
-//                                    snackbar.show();
                                     //Determine if a geocoder is available
                                     if(!Geocoder.isPresent()){
                                         Log.i("Geocoder", "Unavailable");
-                                        Toast.makeText(MainActivity.this, "Geocoder unavailable.", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(MainActivity.this, "Geocoder unavailable.", Toast.LENGTH_LONG).show();
                                     }
                                     //Get and parse data for mainFragment
                                     //Parse and format data not related to weather
@@ -338,22 +339,21 @@ public class MainActivity extends AppCompatActivity implements
                             // Location settings are not satisfied, but this can be fixed
                             // by showing the user a dialog.
                             try {
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
                                 locationStatus.startResolutionForResult(MainActivity.this, REQUEST_CHANGE_SETTINGS);
                             } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
+                                e.printStackTrace();
                             }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
+                            changeLocationFragmentTransaction();
                             break;
                     }
                 }
             });
         }
         else{
-            //Tell the user to enable location services
+            //Tell the user to grant location permissions
             permissionsFragmentTransaction();
         }
     }
@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //Fragments
     /**
-     * Create new mainFragment transaction.
+     * Creates new mainFragment transaction.
      */
     private void mainFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
@@ -504,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements
         mainFragmentTransaction.commit();
     }
     /**
-     * Create new loadingFragment transaction.
+     * Creates new loadingFragment transaction.
      */
     private void loadingFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
@@ -516,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Create new noConnectionFragment transaction.
+     * Creates new noConnectionFragment transaction.
      */
     private void noConnectionFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
@@ -527,6 +527,9 @@ public class MainActivity extends AppCompatActivity implements
         mainFragmentTransaction.commit();
     }
 
+    /**
+     * Creates new locationUnavailableFragment transaction.
+     */
     private void locationUnavailableFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
@@ -536,6 +539,9 @@ public class MainActivity extends AppCompatActivity implements
         mainFragmentTransaction.commit();
     }
 
+    /**
+     * Creates new permissionsFragment transaction.
+     */
     private void permissionsFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
@@ -546,10 +552,31 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
+     * Creates new changeLocationFragment transaction.
+     */
+    private void changeLocationFragmentTransaction(){
+        FragmentManager mainFragmentManager = getFragmentManager();
+        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        changeLocationSettingsFragment changeLocationSettingsFragment = new changeLocationSettingsFragment();
+        mainFragmentTransaction.add(R.id.mainContentView, changeLocationSettingsFragment);
+        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        mainFragmentTransaction.commit();
+    }
+
+    /**
      * Conducts loadingFragment transaction, and begins pulling location and data(called from PermissionsFragment).
      */
     @Override
     public void beginNormalOperations() {
+        loadingFragmentTransaction();
+        requestLocation();
+    }
+
+    /**
+     * Conducts loadingFragment transaction, and begins pulling location and data(called from changeLocationSettingsFragment).
+     */
+    @Override
+    public void beginNormalOperations1() {
         loadingFragmentTransaction();
         requestLocation();
     }
@@ -586,9 +613,7 @@ public class MainActivity extends AppCompatActivity implements
      * Gets today's date to pass to mainFragment.
      */
     private void getDate(){
-//        currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//        Log.i("CurrentDate", currentDate);
-        //Reformat to October 1, 2016 format
+        //Format to "October 1, 2016" format, and set date
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMMM d, yyyy");
         currentDate = format.format(calendar.getTime());
