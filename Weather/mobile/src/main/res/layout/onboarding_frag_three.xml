@@ -12,16 +12,17 @@
         android:layout_height="@dimen/_150sdp"
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_sunny_color"
+        android:src="@drawable/ic_tap_color"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_35sdp"
         app:layout_parallaxFactor="1"
-        android:elevation="2dp"/>
+        android:elevation="2dp"
+        android:tint="@color/colorWhiteDark"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="The week ahead"
+        android:text="Fingertip forecasting"
         android:textSize="24sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
@@ -31,7 +32,7 @@
     <TextView
         android:layout_width="@dimen/_140sdp"
         android:layout_height="wrap_content"
-        android:text="Tap on the days in the week to see a detailed summary of each one."
+        android:text="Tap and scroll on data sets to see hourly and daily forecasts."
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"

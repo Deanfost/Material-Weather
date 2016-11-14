@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Quick, and accurate"
+        android:text="Quick and accurate"
         android:textSize="24sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"

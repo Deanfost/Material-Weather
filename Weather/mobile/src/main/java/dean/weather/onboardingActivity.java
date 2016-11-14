@@ -3,7 +3,6 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,6 +24,8 @@ public class OnboardingActivity extends IntroActivity{
     private Fragment onBoardingFragPermissions;
     private Class onBoardingFragThreeClass;
     public static Activity currentActivity;
+    private android.app.Fragment OnboardingFragStartMain;
+    private Class OnboardingFragStartMainClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class OnboardingActivity extends IntroActivity{
         try {
             onBoardingFragThreeClass = OnboardingFragThree.class;
             onBoardingFragPermissions = (Fragment) onBoardingFragThreeClass.newInstance();
+            OnboardingFragStartMainClass = OnboardingFragStartMain.class;
+            OnboardingFragStartMain = (Fragment) OnboardingFragStartMainClass.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -53,18 +56,32 @@ public class OnboardingActivity extends IntroActivity{
                 .fragment(R.layout.onboarding_frag_two)
                 .build());
 
-//        //Create slide 3
-//        addSlide(new FragmentSlide.Builder()
-//                .backgroundDark(R.color.colorBlue)
-//                .background(R.color.colorBlueLight)
-//                .fragment(R.layout.onboarding_frag_three)
-//                .build());
-
         //Create slide 3
         addSlide(new FragmentSlide.Builder()
                 .backgroundDark(R.color.colorBlue)
                 .background(R.color.colorBlueLight)
+                .fragment(R.layout.onboarding_frag_three)
+                .build());
+
+        //Create slide 4
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
                 .fragment(onBoardingFragPermissions)
+                .build());
+
+        //Create slide 5
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(R.layout.onboarding_frag_done)
+                .build());
+
+        //Create slide 6 to create intent to start main
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(OnboardingFragStartMain)
                 .build());
 
         setSkipEnabled(false);
@@ -79,8 +96,10 @@ public class OnboardingActivity extends IntroActivity{
                         return true;
                     case 2:
                         return true;
-//                    case 3:
-//                        return false;
+                    case 3:
+                        return false;
+                    case 4:
+                        return true;
                 }
                 return true;
             }
@@ -94,8 +113,8 @@ public class OnboardingActivity extends IntroActivity{
                         return true;
                     case 2:
                         return true;
-//                    case 3:
-//                        return true;
+                    case 3:
+                        return true;
                 }
                 return false;
             }
@@ -117,9 +136,18 @@ public class OnboardingActivity extends IntroActivity{
                 editor.putString(getString(R.string.first_launch_key), "1");
                 editor.apply();
 
-                Intent startMain = new Intent(this, MainActivity.class);
-                startActivity(startMain);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                setNavigationPolicy(new NavigationPolicy() {
+                    @Override
+                    public boolean canGoForward(int i) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean canGoBackward(int i) {
+                        return false;
+                    }
+                });
+                nextSlide();
             }
         }
     }
