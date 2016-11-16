@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,8 +18,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -28,8 +31,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements
     //Layout
     Toolbar toolbar;
     LinearLayout mainActivityLayout;
+    Button btnResetLaunch;//Only for testing
 
     //Location settings change
     final int REQUEST_CHANGE_SETTINGS = 15;
@@ -168,6 +174,14 @@ public class MainActivity extends AppCompatActivity implements
             //Refresh data
             case R.id.action_refresh:
                 //TODO - REFRESH DATA
+                //for now, it will be used to reset the 1st launch key-value pair
+                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = mySPrefs.edit();
+                editor.putString(getString(R.string.first_launch_key), "0");
+                editor.commit();
+                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
+                        .show();
+                Log.i("Editor", "Updated 1st launch");
                 return true;
             //User action not recognized
             default:

@@ -22,7 +22,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="You're all set"
+        android:text="You're all set up"
         android:textSize="24sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="@dimen/_140sdp"
         android:layout_height="wrap_content"
-        android:text="Hit the checkmark to begin."
+        android:text="Tap the checkmark to begin!"
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"

@@ -3,6 +3,7 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.NavigationPolicy;
@@ -24,8 +26,6 @@ public class OnboardingActivity extends IntroActivity{
     private Fragment onBoardingFragPermissions;
     private Class onBoardingFragThreeClass;
     public static Activity currentActivity;
-    private android.app.Fragment OnboardingFragStartMain;
-    private Class OnboardingFragStartMainClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,6 @@ public class OnboardingActivity extends IntroActivity{
         try {
             onBoardingFragThreeClass = OnboardingFragThree.class;
             onBoardingFragPermissions = (Fragment) onBoardingFragThreeClass.newInstance();
-            OnboardingFragStartMainClass = OnboardingFragStartMain.class;
-            OnboardingFragStartMain = (Fragment) OnboardingFragStartMainClass.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -75,13 +73,6 @@ public class OnboardingActivity extends IntroActivity{
                 .backgroundDark(R.color.colorBlue)
                 .background(R.color.colorBlueLight)
                 .fragment(R.layout.onboarding_frag_done)
-                .build());
-
-        //Create slide 6 to create intent to start main
-        addSlide(new FragmentSlide.Builder()
-                .backgroundDark(R.color.colorBlue)
-                .background(R.color.colorBlueLight)
-                .fragment(OnboardingFragStartMain)
                 .build());
 
         setSkipEnabled(false);
