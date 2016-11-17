@@ -271,25 +271,34 @@ public class MainActivity extends AppCompatActivity implements
      * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
      */
     private void getAddresses(){
+        Boolean serviceAvailable = true;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         List<Address> addressList = null;
         try {
             addressList = geocoder.getFromLocation(latitude, longitude, 1);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.i("IO Exception", "getAdresses");
+            serviceAvailable = false;
         }
-        if (addressList.size() > 0) {
-            if(addressList.get(0).getLocality()!= null){
-                currentLocation = addressList.get(0).getLocality();//Assign locality if available
-                Log.i("getLocality", addressList.get(0).getLocality());
+        if(serviceAvailable){
+            if (addressList.size() > 0) {
+                if(addressList.get(0).getLocality()!= null){
+                    currentLocation = addressList.get(0).getLocality();//Assign locality if available
+                    Log.i("getLocality", addressList.get(0).getLocality());
+                }
+                else{
+                    currentLocation = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
+                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+                }
             }
             else{
-                currentLocation = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
-                Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+                Log.i("getLocality", "No localities found.");
             }
         }
         else{
-            Log.i("getLocality", "No localities found.");
+            Log.i("Geocoder", "Service unavailable.");
+            currentLocation = "---";
         }
     }
 
