@@ -23,5 +23,4 @@
         android:id="@+id/mainContentView">
     </FrameLayout>
 
-
 </LinearLayout>
