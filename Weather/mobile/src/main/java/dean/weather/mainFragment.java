@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,9 @@ public class MainFragment extends Fragment{
 
     private static String passedLocationValue;
     private static String passedDateValue;
+    private static String passedIconValue;
     private static int passedTempValue;
+    private static String passedConditionValue;
     private static String passedHILOValue;
     private static String passedWindValue;
     private static int passedHumidityValue;
@@ -56,7 +59,7 @@ public class MainFragment extends Fragment{
     private static int passedCloudCoverValue;
     private static int passedSunriseTimeValue;
     private static int passedSunsetTimeValue;
-    private static int passedUpdateTimeValue;
+    private static String passedUpdateTimeValue;
 
     Typeface robotoLight;
     LinearLayout topLayout;
@@ -102,6 +105,7 @@ public class MainFragment extends Fragment{
         topLayout = (LinearLayout) getView().findViewById(R.id.topContentLayout);
         currentLocation = (TextView) getView().findViewById(R.id.currentLocation);
         currentDate = (TextView) getView().findViewById(R.id.currentDate);
+        currentConditionsIcon = (ImageView) getView().findViewById(R.id.iconCurrentConditions);
         currentTemp = (TextView) getView().findViewById(R.id.currentTemp);
         currentConditions = (TextView) getView().findViewById(R.id.currentConditions);
         todaysHiLo = (TextView) getView().findViewById(R.id.todaysHiLo);
@@ -240,9 +244,49 @@ public class MainFragment extends Fragment{
         dailyRecyclerView.setLayoutManager(dailyLayoutManager);
 
         //Update views
-        //TODO - SET VIEWS TO "--" IN XML TO SIGNIFY NO DATA IF IT IS NOT CHANGED
         currentLocation.setText(passedLocationValue);
         currentDate.setText(passedDateValue);
+        //TODO - GET NEW ICONS AND UPDATE
+        switch (passedIconValue) {
+            case "clear-day":
+                currentConditionsIcon.setImageResource(R.drawable.ic_sunny_color);
+                break;
+            case "clear-night":
+                currentConditionsIcon.setImageResource(R.drawable.ic_moon_color);
+
+                break;
+            case "rain":
+                currentConditionsIcon.setImageResource(R.drawable.ic_rain_color);
+                break;
+            case "snow":
+                currentConditionsIcon.setImageResource(R.drawable.ic_snow_color);
+                break;
+            case "sleet":
+                currentConditionsIcon.setImageResource(R.drawable.ic_sleet_color);
+                break;
+            case "wind":
+                currentConditionsIcon.setImageResource(R.drawable.ic_windrose_color);
+                break;
+            case "fog":
+
+                break;
+            case "cloudy":
+                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
+                break;
+            case "partly-cloudy-day":
+                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_color);
+                break;
+            case "partly-cloudy-night":
+
+                break;
+            default:
+                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
+                Log.i("CurrentConditions", "Unsupported condition.");
+                break;
+        }
+        currentTemp.setText(passedTempValue + "\u00B0");
+        currentConditions.setText(passedConditionValue);
+        updateTime.setText(passedUpdateTimeValue);
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
@@ -276,12 +320,14 @@ public class MainFragment extends Fragment{
     /**
      * Saves passed values from mainActivity to current variables.
      */
-    public static void passViewData(String passedLocation, String passedDate, int passedTemp, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
-    int passedPressure, int passedVisibility, int passedCloudCover, int passedSunriseTime, int passedSunsetTime, int passedUpdateTime ){
+    public static void passViewData(String passedLocation, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
+    int passedPressure, int passedVisibility, int passedCloudCover, int passedSunriseTime, int passedSunsetTime, String passedUpdateTime ){
 
         passedLocationValue = passedLocation;
         passedDateValue = passedDate;
+        passedIconValue = passedIcon;
         passedTempValue = passedTemp;
+        passedConditionValue = passedCondition;
         passedHILOValue = passedHILO;
         passedWindValue = passedWind;
         passedHumidityValue = passedHumidity;

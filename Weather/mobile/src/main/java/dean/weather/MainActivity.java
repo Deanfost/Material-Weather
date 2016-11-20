@@ -24,6 +24,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +53,7 @@ import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements
     //Layout
     Toolbar toolbar;
     LinearLayout mainActivityLayout;
-    Button btnResetLaunch;//Only for testing
 
     //Location settings change
     final int REQUEST_CHANGE_SETTINGS = 15;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements
     //Current
     private String currentLocation;
     private String currentDate;
+    private String currentIcon;
     private int currentTemp;
     private String currentConditions;
     private String todaysHI;
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements
     private int currentCloudCover;
     private int sunriseTime;
     private int sunsetTime;
-    private int updateTime;
+    private String updateTime;
     public static int setID;
 
     @Override
@@ -332,14 +334,11 @@ public class MainActivity extends AppCompatActivity implements
 //                                        Toast.makeText(MainActivity.this, "Geocoder unavailable.", Toast.LENGTH_LONG).show();
                                     }
                                     //Get and parse data for mainFragment
-                                    //Parse and format data not related to weather
-                                    retrieveAndFormatNonWeatherData();
-                                    //Call DarkSkyAPI
-//                                    pullForecast();
-                                    //TODO - REMOVE THIS AFTER YOU HAVE PARSED DATA
-                                    MainFragment.passViewData(currentLocation, currentDate, currentTemp, todaysHILO, currentWind, currentHumidity, currentDewpoint,
-                                            currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
-                                    mainFragmentTransaction();
+                                        //Parse and format data not related to weather
+                                        retrieveAndFormatNonWeatherData();
+
+                                        //Call DarkSkyAPI
+                                        pullForecast();
                                 }
                                 else{
                                     //Show a fragment telling the user the location is unavailable
@@ -481,20 +480,63 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.i("DarkSky API", "Pull request successful");
-                //TODO - Parse JSON response
+                //Parse response
+                Double tempDouble = weatherResponse.getCurrently().getTemperature();
+                currentTemp = tempDouble.intValue();
+                currentIcon = weatherResponse.getCurrently().getIcon();
+                switch (currentIcon){
+                    case "clear-day":
+                        currentConditions = "Clear";
+                        break;
+                    case "clear-night":
+                        currentConditions = "Clear";
+                        break;
+                    case "rain":
+                        currentConditions = "Rain";
+                        break;
+                    case "snow":
+                        currentConditions = "Snow";
+                        break;
+                    case "sleet":
+                        currentConditions = "Sleet";
+                        break;
+                    case "wind":
+                        currentConditions = "Windy";
+                        break;
+                    case "fog":
+                        currentConditions = "Foggy";
+                        break;
+                    case "cloudy":
+                        currentConditions = "Cloudy";
+                        break;
+                    case "partly-cloudy-day":
+                        currentConditions = "Partly Cloudy";
+                        break;
+                    case "partly-cloudy-night":
+                        currentConditions = "Partly Cloudy";
+                        break;
+                    default:
+                        currentConditions = "Clear";
+                        Log.i("CurrentConditions", "Unsupported condition.");
+                        break;
+                }
+
 
                 //TODO - Convert units
 
                 //TODO - Populate data sets
 
-                //TODO - Update views
-                mainFragmentTransaction();//Create method in mainFragment to update views
+                //Update views
+                mainFragmentTransaction();
+                MainFragment.passViewData(currentLocation, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentHumidity, currentDewpoint,
+                        currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
 
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.e("DarkSky API", "Error while calling: " + retrofitError.getUrl());
+                Log.i("DarkSky API", retrofitError.getMessage());
                 noConnectionFragmentTransaction();
             }
         });
@@ -623,6 +665,7 @@ public class MainActivity extends AppCompatActivity implements
     private void retrieveAndFormatNonWeatherData(){
         getAddresses();
         getDate();
+        getUpdateTime();
     }
 
     /**
@@ -633,5 +676,17 @@ public class MainActivity extends AppCompatActivity implements
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMMM d, yyyy");
         currentDate = format.format(calendar.getTime());
+    }
+
+    /**
+     * Gets the time of the update call(current time).
+     */
+    private void getUpdateTime(){
+        //TODO - Make sure to account for the units the system has set(AM/PM or 24 hour time)
+        Date time = new Date();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+        updateTime = "Updated " + format.format(calendar.getTime()) + ", " + timeFormat.format(time.getTime());
     }
 }

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import static dean.weather.IntroActivity.LOCATION_PERMISSIONS_REQUEST;
+import static dean.weather.IntroActivity.PERMISSIONS_REQUEST;
 
 /**
  * Created by DeanF on 11/7/2016.
@@ -47,7 +47,8 @@ public class PermissionsFragment extends Fragment {
         btnAllowAccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
 
             }
         });
@@ -57,10 +58,10 @@ public class PermissionsFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         //If the user didn't cancel the dialog
         if (grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            //Location permission and internet permission
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
             {
                 //If the user granted permissions, begin normal operation in mainActivity
                 sInitializer.beginNormalOperations();

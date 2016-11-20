@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/currentDate"
-                    android:text="October 1, 2016"
+                    android:text="---"
                     android:textSize="16sp"
                     android:textColor="@color/colorWhite"
                     android:layout_marginTop="@dimen/_2sdp"
@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/currentTemp"
-                    android:text="75&#xb0;"
+                    android:text="---"
                     android:textSize="34sp"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"/>
@@ -63,7 +63,7 @@
                     android:layout_height="@dimen/_30sdp"
                     android:id="@+id/currentConditions"
                     android:gravity="center"
-                    android:text="Cloudy"
+                    android:text="---"
                     android:textSize="24sp"
                     android:textColor="@color/colorWhite" />
 
@@ -384,7 +384,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Updated October 1, 1:04PM"
+                    android:text="---"
                     android:textSize="12sp"
                     android:id="@+id/updateTime"
                     android:layout_alignParentBottom="true"

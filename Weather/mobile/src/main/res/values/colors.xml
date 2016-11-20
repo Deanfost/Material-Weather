@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorBlueExtraLight">#80D8FF</color>
     <color name="colorBlueLight">#2196F3</color>
     <color name="colorBlue">#1E88E5</color>
     <color name="colorBlueDark">#1976D2</color>

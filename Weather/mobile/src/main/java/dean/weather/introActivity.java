@@ -20,7 +20,7 @@ import android.widget.Button;
  */
 
 public class IntroActivity extends AppCompatActivity {
-    static int LOCATION_PERMISSIONS_REQUEST;
+    static int PERMISSIONS_REQUEST;
     Button btnNeedAccess;
 
     @Override
@@ -43,7 +43,7 @@ public class IntroActivity extends AppCompatActivity {
 
         //If the user didn't cancel the dialog
         if (grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
             {
                 Log.i("Permissions", "Permission granted");
                 //Launch main
@@ -58,11 +58,12 @@ public class IntroActivity extends AppCompatActivity {
      * Chooses which activity to launch, depending on permissions and first launch.
      */
     private void decideActivity(){
-        LOCATION_PERMISSIONS_REQUEST = 42;
+        PERMISSIONS_REQUEST = 42;
         //Make sure we can access the user's location
         int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
         //Launch main if we do
-        if(locationPermission == PackageManager.PERMISSION_GRANTED){
+        if(locationPermission == PackageManager.PERMISSION_GRANTED && locationPermission == PackageManager.PERMISSION_GRANTED){
             Intent startMain = new Intent(this, MainActivity.class);
             startActivity(startMain);
             overridePendingTransition(0, 0);
@@ -94,7 +95,8 @@ public class IntroActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //Request location permission
-                        ActivityCompat.requestPermissions(IntroActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
+                        ActivityCompat.requestPermissions(IntroActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
                     }
                 });
             }

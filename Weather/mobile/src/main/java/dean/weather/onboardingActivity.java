@@ -3,7 +3,6 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.NavigationPolicy;
@@ -22,7 +20,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
  */
 
 public class OnboardingActivity extends IntroActivity{
-    static int LOCATION_PERMISSIONS_REQUEST = 42;
+    static int PERMISSIONS_REQUEST = 42;
     private Fragment onBoardingFragPermissions;
     private Class onBoardingFragThreeClass;
     public static Activity currentActivity;
@@ -119,7 +117,7 @@ public class OnboardingActivity extends IntroActivity{
 
         //If the user didn't cancel the dialog
         if (grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)
             {
                 //Permission granted
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -144,6 +142,7 @@ public class OnboardingActivity extends IntroActivity{
     }
 
     public static void requestPermissions(){
-        ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSIONS_REQUEST);
+        ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
     }
 }
