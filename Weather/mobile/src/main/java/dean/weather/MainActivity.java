@@ -465,12 +465,13 @@ public class MainActivity extends AppCompatActivity implements
      * Initializes API Wrapper Lib, and forms pull request to receive weather data.
      */
     private void pullForecast(){
+        //TODO - CHECK FOR THE UNITS AND STUFF
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();
-        Request request = new Request();
+        final Request request = new Request();
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
         request.setUnits(Request.Units.US);
@@ -481,8 +482,11 @@ public class MainActivity extends AppCompatActivity implements
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.i("DarkSky API", "Pull request successful");
                 //Parse response
+                //Parse currentTemp
                 Double tempDouble = weatherResponse.getCurrently().getTemperature();
                 currentTemp = tempDouble.intValue();
+
+                //Set condition icon and condition statement
                 currentIcon = weatherResponse.getCurrently().getIcon();
                 switch (currentIcon){
                     case "clear-day":
@@ -521,10 +525,75 @@ public class MainActivity extends AppCompatActivity implements
                         break;
                 }
 
+                //Parse HI/LO
+                Double HiDouble;
+                Double LoDouble;
+                HiDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMax();
+                LoDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMin();
+                todaysHI = String.valueOf(HiDouble.intValue());
+                todaysLO = String.valueOf(LoDouble.intValue());
+                Log.i("HI", todaysHI);
+                Log.i("LO", todaysLO);
+                todaysHILO = todaysHI + "\u00B0" + "/" + todaysLO + "\u00B0";//76degrees/42degrees format
 
-                //TODO - Convert units
+                //Parse current wind speed and bearing
+                String currentWindSpeed = weatherResponse.getCurrently().getWindSpeed();
+                Double currentWindSpeedDouble = Double.valueOf(currentWindSpeed);
+                int currentWindSpeedInt = currentWindSpeedDouble.intValue();
+                String currentWindBearing = weatherResponse.getCurrently().getWindBearing();
+                int currentWindBearingValue = Integer.valueOf(currentWindBearing);
+                Log.i("WindSpeed", weatherResponse.getCurrently().getWindSpeed());
+                Log.i("WindBearing", weatherResponse.getCurrently().getWindBearing());
+                //TODO - BE SURE TO CHECK FOR THE UNITS!
+                if(currentWindBearingValue >= 0 || currentWindBearingValue < 45){
+                    currentWind = "↑" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 45 || currentWindBearingValue < 90){
+                    currentWind = "↗" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 90 || currentWindBearingValue < 135){
+                    currentWind = "→" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 135 || currentWindBearingValue < 180){
+                    currentWind = "↘" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 180 || currentWindBearingValue < 225){
+                    currentWind = "↓" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 225 || currentWindBearingValue < 270){
+                    currentWind = "↙" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 270 || currentWindBearingValue < 315){
+                    currentWind = "←" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 315 || currentWindBearingValue < 360){
+                    currentWind = "↖" + currentWindSpeedInt + "MPH";
+                }
 
-                //TODO - Populate data sets
+                //Parse Humidity
+                String currentHumidityString = weatherResponse.getCurrently().getHumidity();
+                currentHumidity = Integer.valueOf(currentHumidityString.substring(2));
+
+                //Parse Dew Point
+                String currentDewPointString = weatherResponse.getCurrently().getDewPoint();
+                Double currentDewPointDouble = Double.valueOf(currentDewPointString);
+                currentDewpoint = currentDewPointDouble.intValue();
+
+                //Parse Pressure
+                String currentPressureString = weatherResponse.getCurrently().getPressure();
+                Double currentPressureDouble = Double.valueOf(currentPressureString);
+                Double currentPressureDoubleConverted = currentPressureDouble * 0.0295301;//Convert Millibars to inHg
+                currentPressure = currentPressureDoubleConverted.intValue();
+
+                //Parse Visibility
+                String currentVisibilityString = weatherResponse.getCurrently().getVisibility();
+                Double currentVisibilityDouble = Double.valueOf(currentVisibilityString);
+                currentVisibilty = currentVisibilityDouble.intValue();
+
+                //Parse cloud cover
+                String currentCloudCoverString = weatherResponse.getCurrently().getCloudClover();
+                Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverString);
+                currentCloudCover = currentCloudCoverDouble.intValue();//TODO - HANDLE THE CLOUD COVER DECIMAL
 
                 //Update views
                 mainFragmentTransaction();

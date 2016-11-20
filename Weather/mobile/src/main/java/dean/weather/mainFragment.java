@@ -286,6 +286,13 @@ public class MainFragment extends Fragment{
         }
         currentTemp.setText(passedTempValue + "\u00B0");
         currentConditions.setText(passedConditionValue);
+        todaysHiLo.setText(passedHILOValue);
+        currentWindValue.setText(passedWindValue);
+        currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
+        currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
+        currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
+        currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) +  "mi");
+        currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
         updateTime.setText(passedUpdateTimeValue);
 
         //Setup adapters and load in data for recyclerViews

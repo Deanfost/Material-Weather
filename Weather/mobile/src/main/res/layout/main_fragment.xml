@@ -71,7 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/todaysHiLo"
-                    android:text="76&#xb0;/42&#xb0;"
+                    android:text="---/---"
                     android:textSize="20sp"
                     android:textColor="@color/colorWhite"
                     android:gravity="right"
@@ -259,7 +259,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="NE3MPH"
+                    android:text="---"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsWindValue"
                     android:layout_marginBottom="@dimen/_2sdp"
@@ -271,7 +271,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="34%"
+                    android:text="---"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsHumidityValue"
                     android:layout_marginBottom="@dimen/_2sdp"
@@ -283,7 +283,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="45&#xb0;"
+                    android:text="---"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsDewPointValue"
                     android:layout_marginBottom="@dimen/_2sdp"
@@ -295,7 +295,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="27inHg"
+                    android:text="---"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsPressureValue"
                     android:layout_marginBottom="@dimen/_2sdp"
