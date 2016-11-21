@@ -307,7 +307,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8mi"
+                    android:text="---"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsVisibilityValue"
                     android:layout_marginBottom="@dimen/_2sdp"
@@ -319,7 +319,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="87%"
+                    android:text="---"
                     android:textSize="14sp"
                     android:id="@+id/currentDetailsCloudCoverValue"
                     android:layout_marginBottom="@dimen/_2sdp"
@@ -356,7 +356,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="7:01AM"
+                    android:text="---"
                     android:textSize="22sp"
                     android:id="@+id/sunriseTime"
                     android:layout_marginBottom="@dimen/_19sdp"
@@ -374,7 +374,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6:24PM"
+                    android:text="---"
                     android:textSize="22sp"
                     android:id="@+id/sunsetTime"
                     android:layout_marginBottom="@dimen/_19sdp"

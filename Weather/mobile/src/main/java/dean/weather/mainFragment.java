@@ -57,8 +57,8 @@ public class MainFragment extends Fragment{
     private static int passedPressureValue;
     private static int passedVisibilityValue;
     private static int passedCloudCoverValue;
-    private static int passedSunriseTimeValue;
-    private static int passedSunsetTimeValue;
+    private static String passedSunriseTimeValue;
+    private static String passedSunsetTimeValue;
     private static String passedUpdateTimeValue;
 
     Typeface robotoLight;
@@ -293,6 +293,8 @@ public class MainFragment extends Fragment{
         currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
         currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) +  "mi");
         currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
+        sunriseTime.setText(passedSunriseTimeValue);
+        sunsetTime.setText(passedSunsetTimeValue);
         updateTime.setText(passedUpdateTimeValue);
 
         //Setup adapters and load in data for recyclerViews
@@ -328,7 +330,7 @@ public class MainFragment extends Fragment{
      * Saves passed values from mainActivity to current variables.
      */
     public static void passViewData(String passedLocation, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
-    int passedPressure, int passedVisibility, int passedCloudCover, int passedSunriseTime, int passedSunsetTime, String passedUpdateTime ){
+    int passedPressure, int passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime ){
 
         passedLocationValue = passedLocation;
         passedDateValue = passedDate;

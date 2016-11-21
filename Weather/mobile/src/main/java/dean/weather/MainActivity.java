@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements
     private int currentPressure;//Be sure to add units on the end when updating views!
     private int currentVisibilty;
     private int currentCloudCover;
-    private int sunriseTime;
-    private int sunsetTime;
+    private String sunriseTime;
+    private String sunsetTime;
     private String updateTime;
     public static int setID;
 
@@ -152,10 +152,8 @@ public class MainActivity extends AppCompatActivity implements
         //Initialize loading fragment at start
         loadingFragmentTransaction();
 
-        //Get the time of day and determine which setID to use
-        //TODO - Finish determineLayoutColor
-        setID = 1;
-        setMainLayoutColor(setID);
+        //Set default layout color(blue)
+        setMainLayoutColor(1);
     }
 
     //Action bar events
@@ -374,17 +372,94 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //Layout customizations and updates
-    /**
-     * Gets the time of day, and determines which color set(colorPurple/colorPurpleDark) should be used.
-     * @return colorSet
-     */
-    private int determineLayoutColor() {
-        int setID = 0;
-        Calendar c = Calendar.getInstance();
-//        int hour =
-        //TODO - FIND OUT WHEN THE SUNRISE/SUNSET IS AND IF TIME IS WITHIN 30 MINS OF IT, SET COLOR TO YELLOW
 
-        return setID;
+    /**
+     * Determines layout color based on current time.
+     * @return
+     */
+    private int determineLayoutColor(String sunriseTime, String sunsetTime){
+        //TODO - HANDLE 24 HOUR TIME!
+        //Compare currentTime to sunrise and sunset times to determine layout color
+        String currentTime = getCurrentTime();
+        Log.i("currentTime", currentTime);
+        Log.i("sunriseTime", sunriseTime);
+        Log.i("sunsetTime", sunsetTime);
+        //Parse the times into hours and minutes
+        //Get lengths of the times
+        int currentTimeLength = currentTime.length();
+        int sunriseTimeLength = sunriseTime.length();
+        int sunsetTimeLength = sunsetTime.length();
+
+        Log.i("currentTimeLength", String.valueOf(currentTimeLength));
+        Log.i("sunriseTimeLength", String.valueOf(sunriseTimeLength));
+        Log.i("sunsetTimeLength", String.valueOf(sunsetTimeLength));
+
+        //Values of minutes and hours
+        int currentTimeHoursValue;
+        int currentTimeMinsValue;
+        int sunriseTimeHoursValue;
+        int sunriseTimeMinsValue;
+        int sunsetTimeHoursValue;
+        int sunsetTimeMinsValue;
+
+        //Current time
+        if(currentTimeLength == 7){
+            //Format 4:45 PM
+            String currentTimeHours = currentTime.substring(0, 1);
+            String currentTimeMins = currentTime.substring(2, 4);
+            currentTimeHoursValue = Integer.valueOf(currentTimeHours);
+            currentTimeMinsValue = Integer.valueOf(currentTimeMins);
+        }
+        else{
+            //Format 10:45 PM
+            String currentTimeHours = currentTime.substring(0, 2);
+            String currentTimeMins = currentTime.substring(3, 5);
+            currentTimeHoursValue = Integer.valueOf(currentTimeHours);
+            currentTimeMinsValue = Integer.valueOf(currentTimeMins);
+        }
+
+        //Sunrise time
+        if(sunriseTimeLength == 7){
+            //Format 4:45 PM
+            String sunriseTimeHours = sunriseTime.substring(0, 1);
+            String sunriseTimeMins = sunriseTime.substring(2, 4);
+            sunriseTimeHoursValue = Integer.valueOf(sunriseTimeHours);
+            sunriseTimeMinsValue = Integer.valueOf(sunriseTimeMins);
+        }
+        else{
+            //Format 10:45 PM
+            String sunriseTimeHours = sunriseTime.substring(0, 2);
+            String sunriseTimeMins = sunriseTime.substring(3, 5);
+            sunriseTimeHoursValue = Integer.valueOf(sunriseTimeHours);
+            sunriseTimeMinsValue = Integer.valueOf(sunriseTimeMins);
+        }
+
+        //Sunset time
+        if(sunsetTimeLength == 7){
+            //Format 4:45 PM
+            String sunsetTimeHours = sunriseTime.substring(0, 1);
+            String sunsetTimeMins = sunriseTime.substring(2, 4);
+            sunsetTimeHoursValue = Integer.valueOf(sunsetTimeHours);
+            sunsetTimeMinsValue = Integer.valueOf(sunsetTimeMins);
+        }
+        else{
+            //Format 10:45 PM
+            String sunsetTimeHours = sunriseTime.substring(0, 2);
+            String sunsetTimeMins = sunriseTime.substring(3, 5);
+            sunsetTimeHoursValue = Integer.valueOf(sunsetTimeHours);
+            sunsetTimeMinsValue = Integer.valueOf(sunsetTimeMins);
+        }
+
+        //Combine the values into just minutes
+        int currentTimeTotal = (currentTimeHoursValue * 60) + currentTimeMinsValue;
+        int sunriseTimeTotal = (sunriseTimeHoursValue * 60) + sunriseTimeMinsValue;
+        int sunsetTimeTotal = (sunsetTimeHoursValue * 60) + sunsetTimeMinsValue;
+        Log.i("currentTimeTotal", String.valueOf(currentTimeTotal));
+        Log.i("sunriseTimeTotal", String.valueOf(sunriseTimeTotal));
+        Log.i("sunsetTimeTotal", String.valueOf(sunsetTimeTotal));
+
+        return 1;
+
     }
 
     /**
@@ -544,30 +619,31 @@ public class MainActivity extends AppCompatActivity implements
                 int currentWindBearingValue = Integer.valueOf(currentWindBearing);
                 Log.i("WindSpeed", weatherResponse.getCurrently().getWindSpeed());
                 Log.i("WindBearing", weatherResponse.getCurrently().getWindBearing());
+                Log.i("WindBearingValue", String.valueOf(currentWindBearingValue));
                 //TODO - BE SURE TO CHECK FOR THE UNITS!
-                if(currentWindBearingValue >= 0 || currentWindBearingValue < 45){
-                    currentWind = "↑" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 45 || currentWindBearingValue < 90){
-                    currentWind = "↗" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 90 || currentWindBearingValue < 135){
-                    currentWind = "→" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 135 || currentWindBearingValue < 180){
-                    currentWind = "↘" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 180 || currentWindBearingValue < 225){
+                if(currentWindBearingValue >= 0 && currentWindBearingValue < 45){
                     currentWind = "↓" + currentWindSpeedInt + "MPH";
                 }
-                else if(currentWindBearingValue >= 225 || currentWindBearingValue < 270){
+                else if(currentWindBearingValue >= 45 && currentWindBearingValue < 90){
                     currentWind = "↙" + currentWindSpeedInt + "MPH";
                 }
-                else if(currentWindBearingValue >= 270 || currentWindBearingValue < 315){
+                else if(currentWindBearingValue >= 90 && currentWindBearingValue < 135){
                     currentWind = "←" + currentWindSpeedInt + "MPH";
                 }
-                else if(currentWindBearingValue >= 315 || currentWindBearingValue < 360){
+                else if(currentWindBearingValue >= 135 && currentWindBearingValue < 180){
                     currentWind = "↖" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 180 && currentWindBearingValue < 225){
+                    currentWind = "↑" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 225 && currentWindBearingValue < 270){
+                    currentWind = "↗" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 270 && currentWindBearingValue < 315){
+                    currentWind = "→" + currentWindSpeedInt + "MPH";
+                }
+                else if(currentWindBearingValue >= 315 && currentWindBearingValue < 360){
+                    currentWind = "↘" + currentWindSpeedInt + "MPH";
                 }
 
                 //Parse Humidity
@@ -592,8 +668,31 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Parse cloud cover
                 String currentCloudCoverString = weatherResponse.getCurrently().getCloudClover();
-                Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverString);
-                currentCloudCover = currentCloudCoverDouble.intValue();//TODO - HANDLE THE CLOUD COVER DECIMAL
+                String currentCloudCoverStringConverted = currentCloudCoverString.substring(2);//Chop off the 0. from the front
+                Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverStringConverted);
+                currentCloudCover = currentCloudCoverDouble.intValue();
+
+                //Parse sunrise time
+                String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();
+                Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+                Date sunriseDateObject = new Date(sunriseTimeInMili);
+                //TODO - CHECK FOR TIME SETTINGS!
+                SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa ");
+                sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+                Log.i("sunriseTime", sunriseTime);
+
+                //Parse sunset time
+                String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();
+                Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+                Date sunsetDateObject = new Date(sunsetTimeInMili);
+                //TODO - CHECK FOR TIME SETTINGS!
+                SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
+                sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+                Log.i("sunsetTime", sunsetTime);
+
+                //Set main layout color
+                setID = determineLayoutColor(sunriseTime, sunsetTime);
+//                setMainLayoutColor(setID);
 
                 //Update views
                 mainFragmentTransaction();
@@ -753,9 +852,19 @@ public class MainActivity extends AppCompatActivity implements
     private void getUpdateTime(){
         //TODO - Make sure to account for the units the system has set(AM/PM or 24 hour time)
         Date time = new Date();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMMM d");
         updateTime = "Updated " + format.format(calendar.getTime()) + ", " + timeFormat.format(time.getTime());
+    }
+
+    /**
+     * Gets current time and formats it.
+     * @return
+     */
+    private String getCurrentTime(){
+        Date time = new Date();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
+        return timeFormat.format(time.getTime());
     }
 }
