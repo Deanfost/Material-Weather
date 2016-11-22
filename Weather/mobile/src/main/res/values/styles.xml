@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorBlue</item>
+        <item name="colorPrimary">@color/colorFakePrimary</item>
         <item name="colorPrimaryDark">@color/colorBlueDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@android:color/white</item>
@@ -15,6 +15,7 @@
     </style>
 
     <style name="MaterialTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/colorFakePrimary</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorAccent">@color/colorAccent</item>

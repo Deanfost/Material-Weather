@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -80,10 +81,13 @@ public class MainActivity extends AppCompatActivity implements
     public double latitude;
     public double longitude;
 
+    //WeatherResponse
+    public static WeatherResponse pulledWeatherResponse;
+
     //Hourly
     public List<Integer> pulledHours;
+    public List<String> pulledIcon;
     public List<Integer> pulledTemps;
-    public List<String> pulledConditions;
     public List<Integer> pulledWind;
 
     //Daily
@@ -145,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements
         assert toolbar != null;
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlue)));
 
         //Reference to mainLayout
         mainActivityLayout = (LinearLayout) findViewById(R.id.mainActivityLayout);
@@ -379,87 +384,38 @@ public class MainActivity extends AppCompatActivity implements
      */
     private int determineLayoutColor(String sunriseTime, String sunsetTime){
         //TODO - HANDLE 24 HOUR TIME!
-        //Compare currentTime to sunrise and sunset times to determine layout color
+        //Compare currentTime UNIX timestamp to sunriseTime and sunsetTime UNIX timestamp
         String currentTime = getCurrentTime();
+        Long currentTimeLong = Long.valueOf(currentTime);
+        Long sunriseTimeLong = Long.valueOf(sunriseTime);
+        Long sunsetTimeLong = Long.valueOf(sunsetTime);
+        int setID = 4;
         Log.i("currentTime", currentTime);
         Log.i("sunriseTime", sunriseTime);
         Log.i("sunsetTime", sunsetTime);
-        //Parse the times into hours and minutes
-        //Get lengths of the times
-        int currentTimeLength = currentTime.length();
-        int sunriseTimeLength = sunriseTime.length();
-        int sunsetTimeLength = sunsetTime.length();
 
-        Log.i("currentTimeLength", String.valueOf(currentTimeLength));
-        Log.i("sunriseTimeLength", String.valueOf(sunriseTimeLength));
-        Log.i("sunsetTimeLength", String.valueOf(sunsetTimeLength));
-
-        //Values of minutes and hours
-        int currentTimeHoursValue;
-        int currentTimeMinsValue;
-        int sunriseTimeHoursValue;
-        int sunriseTimeMinsValue;
-        int sunsetTimeHoursValue;
-        int sunsetTimeMinsValue;
-
-        //Current time
-        if(currentTimeLength == 7){
-            //Format 4:45 PM
-            String currentTimeHours = currentTime.substring(0, 1);
-            String currentTimeMins = currentTime.substring(2, 4);
-            currentTimeHoursValue = Integer.valueOf(currentTimeHours);
-            currentTimeMinsValue = Integer.valueOf(currentTimeMins);
+        //If it is sunrise or sunset time
+        if(currentTimeLong.equals(sunriseTimeLong)){
+            setID = 0;
         }
-        else{
-            //Format 10:45 PM
-            String currentTimeHours = currentTime.substring(0, 2);
-            String currentTimeMins = currentTime.substring(3, 5);
-            currentTimeHoursValue = Integer.valueOf(currentTimeHours);
-            currentTimeMinsValue = Integer.valueOf(currentTimeMins);
+        else if(currentTimeLong.equals(sunsetTimeLong)){
+            setID = 2;
         }
-
-        //Sunrise time
-        if(sunriseTimeLength == 7){
-            //Format 4:45 PM
-            String sunriseTimeHours = sunriseTime.substring(0, 1);
-            String sunriseTimeMins = sunriseTime.substring(2, 4);
-            sunriseTimeHoursValue = Integer.valueOf(sunriseTimeHours);
-            sunriseTimeMinsValue = Integer.valueOf(sunriseTimeMins);
+        //If it is within 30 mins of sunrise or sunset time
+        else if(currentTimeLong > (sunriseTimeLong - 1800) && currentTimeLong < (sunriseTimeLong + 1800)){
+            setID = 0;
         }
-        else{
-            //Format 10:45 PM
-            String sunriseTimeHours = sunriseTime.substring(0, 2);
-            String sunriseTimeMins = sunriseTime.substring(3, 5);
-            sunriseTimeHoursValue = Integer.valueOf(sunriseTimeHours);
-            sunriseTimeMinsValue = Integer.valueOf(sunriseTimeMins);
+        else if(currentTimeLong > (sunsetTimeLong - 1800) && currentTimeLong < (sunsetTimeLong + 1800)){
+            setID = 2;
         }
-
-        //Sunset time
-        if(sunsetTimeLength == 7){
-            //Format 4:45 PM
-            String sunsetTimeHours = sunriseTime.substring(0, 1);
-            String sunsetTimeMins = sunriseTime.substring(2, 4);
-            sunsetTimeHoursValue = Integer.valueOf(sunsetTimeHours);
-            sunsetTimeMinsValue = Integer.valueOf(sunsetTimeMins);
+        //If it is day time
+        else if(currentTimeLong > (sunsetTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
+            setID = 1;
         }
-        else{
-            //Format 10:45 PM
-            String sunsetTimeHours = sunriseTime.substring(0, 2);
-            String sunsetTimeMins = sunriseTime.substring(3, 5);
-            sunsetTimeHoursValue = Integer.valueOf(sunsetTimeHours);
-            sunsetTimeMinsValue = Integer.valueOf(sunsetTimeMins);
+        else if(currentTimeLong > (sunsetTimeLong + 1800)){
+            setID = 3;
         }
-
-        //Combine the values into just minutes
-        int currentTimeTotal = (currentTimeHoursValue * 60) + currentTimeMinsValue;
-        int sunriseTimeTotal = (sunriseTimeHoursValue * 60) + sunriseTimeMinsValue;
-        int sunsetTimeTotal = (sunsetTimeHoursValue * 60) + sunsetTimeMinsValue;
-        Log.i("currentTimeTotal", String.valueOf(currentTimeTotal));
-        Log.i("sunriseTimeTotal", String.valueOf(sunriseTimeTotal));
-        Log.i("sunsetTimeTotal", String.valueOf(sunsetTimeTotal));
-
-        return 1;
-
+        return setID;
     }
 
     /**
@@ -485,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements
                 window.setStatusBarColor(this.getResources().getColor(R.color.colorYellowDark));
 
                 //Customize app bar
-                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorYellowDark));
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrangeDark)));
 
                 window = null;
                 break;
@@ -500,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements
                 window.setStatusBarColor(this.getResources().getColor(R.color.colorBlueDark));
 
                 //Customize app bar
-                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlueDark));
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlueDark)));
 
                 window = null;
                 break;
@@ -514,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements
                 window.setStatusBarColor(this.getResources().getColor(R.color.colorOrangeDark));
 
                 //Customize app bar
-                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorOrangeDark));
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrangeDark)));
 
                 window = null;
                 break;
@@ -528,10 +484,12 @@ public class MainActivity extends AppCompatActivity implements
                 window.setStatusBarColor(this.getResources().getColor(R.color.colorPurpleDark));
 
                 //Customize app bar
-                toolbar.setBackgroundColor(this.getResources().getColor(R.color.colorPurpleDark));
+                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurpleDark)));
 
                 window = null;
                 break;
+            default:
+                Log.i("SetLayoutColor", "defaultCondition");
         }
     }
 
@@ -556,6 +514,9 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.i("DarkSky API", "Pull request successful");
+                //Setup a static reference to the response for other activities
+                pulledWeatherResponse = weatherResponse;
+
                 //Parse response
                 //Parse currentTemp
                 Double tempDouble = weatherResponse.getCurrently().getTemperature();
@@ -648,41 +609,53 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Parse Humidity
                 String currentHumidityString = weatherResponse.getCurrently().getHumidity();
+                Log.i("currentHumidStr", currentHumidityString);
                 currentHumidity = Integer.valueOf(currentHumidityString.substring(2));
 
                 //Parse Dew Point
                 String currentDewPointString = weatherResponse.getCurrently().getDewPoint();
+                Log.i("currentDPointStr", currentDewPointString);
                 Double currentDewPointDouble = Double.valueOf(currentDewPointString);
                 currentDewpoint = currentDewPointDouble.intValue();
 
                 //Parse Pressure
                 String currentPressureString = weatherResponse.getCurrently().getPressure();
+                Log.i("currentPresString", currentPressureString);
                 Double currentPressureDouble = Double.valueOf(currentPressureString);
                 Double currentPressureDoubleConverted = currentPressureDouble * 0.0295301;//Convert Millibars to inHg
                 currentPressure = currentPressureDoubleConverted.intValue();
 
                 //Parse Visibility
                 String currentVisibilityString = weatherResponse.getCurrently().getVisibility();
+                Log.i("currentVisString", currentVisibilityString);
                 Double currentVisibilityDouble = Double.valueOf(currentVisibilityString);
                 currentVisibilty = currentVisibilityDouble.intValue();
 
                 //Parse cloud cover
                 String currentCloudCoverString = weatherResponse.getCurrently().getCloudClover();
-                String currentCloudCoverStringConverted = currentCloudCoverString.substring(2);//Chop off the 0. from the front
-                Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverStringConverted);
-                currentCloudCover = currentCloudCoverDouble.intValue();
+                Log.i("currentCloudCover", currentCloudCoverString);
+                if(currentCloudCoverString.length() != 1){
+                    String currentCloudCoverStringConverted = currentCloudCoverString.substring(2);//Chop off the 0. from the front
+                    Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverStringConverted);
+                    currentCloudCover = currentCloudCoverDouble.intValue();
+                }
+                else{
+                    currentCloudCover = 0;
+                }
 
                 //Parse sunrise time
-                String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();
+                String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
+                Log.i("sunriseTimeUNIX", sunriseTimeString);
                 Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
                 Date sunriseDateObject = new Date(sunriseTimeInMili);
                 //TODO - CHECK FOR TIME SETTINGS!
-                SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa ");
+                SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
                 sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
                 Log.i("sunriseTime", sunriseTime);
 
                 //Parse sunset time
-                String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();
+                String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
+                Log.i("sunsetTimeUNIX", sunsetTimeString);
                 Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
                 Date sunsetDateObject = new Date(sunsetTimeInMili);
                 //TODO - CHECK FOR TIME SETTINGS!
@@ -690,9 +663,36 @@ public class MainActivity extends AppCompatActivity implements
                 sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
                 Log.i("sunsetTime", sunsetTime);
 
+                //Get hourly data
+                //Load in the next 24 hours
+//                for(int i = 0; i < 24; i++){
+//
+//                }
+//
+//                //Get icon for next 24 hours
+//                for(int i = 0; i <24; i++){
+//                    pulledIcon.add(weatherResponse.getHourly().getData().get(i).getIcon());
+//                }
+//
+//                //Get temps for the next 24 hours
+//                for(int i = 0; i < 24; i++){
+//                    Double pulledTempDouble = weatherResponse.getHourly().getData().get(i).getTemperature();
+//                    pulledTemps.add(pulledTempDouble.intValue());
+//                }
+//
+//                //Get winds for the next 24 hours
+//                for(int i = 0; i < 24; i++){
+//                    String pulledWindString = weatherResponse.getHourly().getData().get(i).getWindSpeed();
+//                    Double pulledWindDouble = Double.valueOf(pulledWindString);
+//                    pulledWind.add(pulledWindDouble.intValue());
+//                }
+
+                //Get daily data
+
+
                 //Set main layout color
-                setID = determineLayoutColor(sunriseTime, sunsetTime);
-//                setMainLayoutColor(setID);
+                setID = determineLayoutColor(sunriseTimeString, sunsetTimeString);
+                setMainLayoutColor(setID);
 
                 //Update views
                 mainFragmentTransaction();
@@ -859,12 +859,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Gets current time and formats it.
+     * Gets current UNIX timestamp.
      * @return
      */
     private String getCurrentTime(){
-        Date time = new Date();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
-        return timeFormat.format(time.getTime());
+//        Date time = new Date();
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
+        long currentTime = System.currentTimeMillis() /1000;
+        String currentTimeString = String.valueOf(currentTime);
+        return currentTimeString;
     }
 }

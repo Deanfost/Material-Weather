@@ -350,7 +350,7 @@ public class MainFragment extends Fragment{
     }
 
     /**
-     * Sets color of fragment layout depending on time of day.
+     * Sets of fragment layout depending on time of day.
      */
     private void setFragmentLayoutColor(){
         switch (MainActivity.setID){
