@@ -678,7 +678,7 @@ public class MainActivity extends AppCompatActivity implements
                 //Gather only the next 24 hours
                 if(weatherResponse.getHourly().getData().size() >= 24){
                     int iteratedHour = Integer.valueOf(getCurrentHour()) % 24;
-                    Log.i("currentHour", String.valueOf(iteratedHour));
+                    Log.i("iteratedHour", String.valueOf(iteratedHour));
                     for(int i = 0; i < 24; i++){
                         if(iteratedHour < 12 && iteratedHour > 0){
                             pulledHours.add(iteratedHour + "AM");
@@ -700,9 +700,25 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 else{
                     //Use the data available
+                    int iteratedHour = Integer.valueOf(getCurrentHour()) % 24;
+                    Log.i("iteratedHour", String.valueOf(iteratedHour));
                     for(int i = 0; i < weatherResponse.getHourly().getData().size(); i++){
-
-
+                        if(iteratedHour < 12 && iteratedHour > 0){
+                            pulledHours.add(iteratedHour + "AM");
+                            iteratedHour ++;
+                        }
+                        else if(iteratedHour == 12){
+                            pulledHours.add("12PM");
+                            iteratedHour++;
+                        }
+                        else if(iteratedHour > 12 && iteratedHour < 24){
+                            pulledHours.add((iteratedHour % 12) + "PM");
+                            iteratedHour++;
+                        }
+                        else if(iteratedHour == 0){
+                            pulledHours.add("12AM");
+                            iteratedHour++;
+                        }
                     }
                 }
 
@@ -724,21 +740,16 @@ public class MainActivity extends AppCompatActivity implements
 //                    pulledWind.add(pulledWindDouble.intValue());
 //                }
 
-                //Get daily data
-
-
                 //Set main layout color
                 setID = determineLayoutColor(sunriseTimeString, sunsetTimeString);
                 setMainLayoutColor(setID);
 
                 //Update views
-
                 Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
                 mainFragmentTransaction();
                 MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcon, pulledWind, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecip);
                 MainFragment.passViewData(currentLocation, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
-
             }
 
             @Override

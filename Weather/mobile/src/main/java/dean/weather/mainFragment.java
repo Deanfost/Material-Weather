@@ -153,16 +153,10 @@ public class MainFragment extends Fragment{
         updateTime.setTypeface(robotoLight);
 
         //Setup example hourly data sets
-//        passedHoursValues = new ArrayList<>();
         passedTempsValues = new ArrayList<>();
         passedConditionsValues = new ArrayList<>();
         passedWindValues = new ArrayList<>();
-        //passedHoursValues
-//        int hour = 1;
-//        for (int i = 0; i < 12; i++) {
-//            passedHoursValues.add(hour);
-//            hour++;
-//        }
+
         //passedTempsValues
         int temp = 65;
         for (int i = 0; i < 24; i++) {
