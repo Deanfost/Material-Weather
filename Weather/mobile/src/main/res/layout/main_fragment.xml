@@ -154,9 +154,30 @@
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_humidity_white"
+                    android:src="@drawable/ic_raingauge_black"
                     android:tint="@color/colorLightBlack"
                     android:layout_below="@id/currentDetailsWindLabel"
+                    android:id="@+id/currentPrecipIcon"
+                    android:layout_marginRight="@dimen/_6sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Precip"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsPrecipLabel"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_145sdp"
+                    android:layout_below="@id/currentDetailsWindLabel"
+                    android:layout_toRightOf="@id/currentWindIcon"/>
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_humidity_white"
+                    android:tint="@color/colorLightBlack"
+                    android:layout_below="@id/currentDetailsPrecipLabel"
                     android:id="@+id/currentHumidityIcon"
                     android:layout_marginRight="@dimen/_6sdp"/>
 
@@ -168,7 +189,7 @@
                     android:id="@+id/currentDetailsHumidityLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsWindLabel"
+                    android:layout_below="@id/currentDetailsPrecipLabel"
                     android:layout_toRightOf="@+id/currentHumidityIcon"/>
 
                 <ImageView
@@ -273,10 +294,22 @@
                     android:layout_height="wrap_content"
                     android:text="---"
                     android:textSize="14sp"
-                    android:id="@+id/currentDetailsHumidityValue"
+                    android:id="@+id/currentDetailsPrecipValue"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginRight="@dimen/_2sdp"
                     android:layout_below="@id/currentDetailsWindLabel"
+                    android:layout_toRightOf="@id/currentDetailsWindLabel"
+                    android:textColor="@color/colorBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---"
+                    android:textSize="14sp"
+                    android:id="@+id/currentDetailsHumidityValue"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:layout_marginRight="@dimen/_2sdp"
+                    android:layout_below="@id/currentDetailsPrecipLabel"
                     android:layout_toRightOf="@id/currentDetailsWindLabel"
                     android:textColor="@color/colorBlue"/>
 

@@ -52,6 +52,7 @@ public class MainFragment extends Fragment{
     private static String passedConditionValue;
     private static String passedHILOValue;
     private static String passedWindValue;
+    private static int passedPrecipValue;
     private static int passedHumidityValue;
     private static int passedDewpointValue;
     private static int passedPressureValue;
@@ -70,12 +71,14 @@ public class MainFragment extends Fragment{
     TextView currentConditions;
     TextView todaysHiLo;
     TextView currentWind;
+    TextView currentPrecip;
     TextView currentHumidity;
     TextView currentDewpoint;
     TextView currentPressure;
     TextView currentVisibility;
     TextView currentCloudCover;
     TextView currentWindValue;
+    TextView currentPrecipValue;
     TextView currentHumidityValue;
     TextView currentDewPointValue;
     TextView currentPressureValue;
@@ -110,12 +113,14 @@ public class MainFragment extends Fragment{
         currentConditions = (TextView) getView().findViewById(R.id.currentConditions);
         todaysHiLo = (TextView) getView().findViewById(R.id.todaysHiLo);
         currentWind = (TextView) getView().findViewById(R.id.currentDetailsWindLabel);
+        currentPrecip = (TextView) getView().findViewById(R.id.currentDetailsPrecipLabel);
         currentHumidity = (TextView) getView().findViewById(R.id.currentDetailsHumidityLabel);
         currentDewpoint = (TextView) getView().findViewById(R.id.currentDetailsDewpointLabel);
         currentPressure = (TextView) getView().findViewById(R.id.currentDetailsPressureLabel);
         currentVisibility = (TextView) getView().findViewById(R.id.currentDetailsVisibilityLabel);
         currentCloudCover = (TextView) getView().findViewById(R.id.currentDetailsCloudCoverLabel);
         currentWindValue = (TextView) getView().findViewById(R.id.currentDetailsWindValue);
+        currentPrecipValue = (TextView) getView().findViewById(R.id.currentDetailsPrecipValue);
         currentHumidityValue = (TextView) getView().findViewById(R.id.currentDetailsHumidityValue);
         currentDewPointValue = (TextView) getView().findViewById(R.id.currentDetailsDewPointValue);
         currentPressureValue = (TextView) getView().findViewById(R.id.currentDetailsPressureValue);
@@ -130,12 +135,14 @@ public class MainFragment extends Fragment{
         currentConditions.setTypeface(robotoLight);
         todaysHiLo.setTypeface(robotoLight);
         currentWind.setTypeface(robotoLight);
+        currentPrecip.setTypeface(robotoLight);
         currentHumidity.setTypeface(robotoLight);
         currentDewpoint.setTypeface(robotoLight);
         currentPressure.setTypeface(robotoLight);
         currentVisibility.setTypeface(robotoLight);
         currentCloudCover.setTypeface(robotoLight);
         currentWindValue.setTypeface(robotoLight);
+        currentPrecipValue.setTypeface(robotoLight);
         currentHumidityValue.setTypeface(robotoLight);
         currentDewPointValue.setTypeface(robotoLight);
         currentPressureValue.setTypeface(robotoLight);
@@ -288,6 +295,7 @@ public class MainFragment extends Fragment{
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
         currentWindValue.setText(passedWindValue);
+        currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
         currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
         currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
         currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
@@ -329,8 +337,8 @@ public class MainFragment extends Fragment{
     /**
      * Saves passed values from mainActivity to current variables.
      */
-    public static void passViewData(String passedLocation, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedHumidity, int passedDewpoint,
-    int passedPressure, int passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime ){
+    public static void passViewData(String passedLocation, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
+                                    int passedDewpoint, int passedPressure, int passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime ){
 
         passedLocationValue = passedLocation;
         passedDateValue = passedDate;
@@ -339,6 +347,7 @@ public class MainFragment extends Fragment{
         passedConditionValue = passedCondition;
         passedHILOValue = passedHILO;
         passedWindValue = passedWind;
+        passedPrecipValue = passedPrecip;
         passedHumidityValue = passedHumidity;
         passedDewpointValue = passedDewpoint;
         passedPressureValue = passedPressure;
@@ -361,6 +370,7 @@ public class MainFragment extends Fragment{
 
                 //Views
                 currentWindValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                currentPrecipValue.setTextColor(getResources().getColor(R.color.colorYellow));
                 currentHumidityValue.setTextColor(getResources().getColor(R.color.colorYellow));
                 currentDewPointValue.setTextColor(getResources().getColor(R.color.colorYellow));
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorYellow));
@@ -374,6 +384,7 @@ public class MainFragment extends Fragment{
 
                 //Views
                 currentWindValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                currentPrecipValue.setTextColor(getResources().getColor(R.color.colorBlue));
                 currentHumidityValue.setTextColor(getResources().getColor(R.color.colorBlue));
                 currentDewPointValue.setTextColor(getResources().getColor(R.color.colorBlue));
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorBlue));
@@ -387,6 +398,7 @@ public class MainFragment extends Fragment{
 
                 //Views
                 currentWindValue.setTextColor(getResources().getColor(R.color.colorOrange));
+                currentPrecipValue.setTextColor(getResources().getColor(R.color.colorOrange));
                 currentHumidityValue.setTextColor(getResources().getColor(R.color.colorOrange));
                 currentDewPointValue.setTextColor(getResources().getColor(R.color.colorOrange));
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorOrange));
@@ -400,6 +412,7 @@ public class MainFragment extends Fragment{
 
                 //Views
                 currentWindValue.setTextColor(getResources().getColor(R.color.colorPurple));
+                currentPrecipValue.setTextColor(getResources().getColor(R.color.colorPurple));
                 currentHumidityValue.setTextColor(getResources().getColor(R.color.colorPurple));
                 currentDewPointValue.setTextColor(getResources().getColor(R.color.colorPurple));
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorPurple));

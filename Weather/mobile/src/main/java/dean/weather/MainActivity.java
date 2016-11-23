@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements
     private String todaysLO;
     private String todaysHILO;//Concatenate the two variables above to this format - HI/LO
     private String currentWind;
+    private int currentPrecip;
     private int currentHumidity;
     private int currentDewpoint;
     private int currentPressure;//Be sure to add units on the end when updating views!
@@ -409,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements
             setID = 2;
         }
         //If it is day time
-        else if(currentTimeLong > (sunsetTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
+        else if(currentTimeLong > (sunriseTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
             setID = 1;
         }
         else if(currentTimeLong > (sunsetTimeLong + 1800)){
@@ -524,6 +525,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Set condition icon and condition statement
                 currentIcon = weatherResponse.getCurrently().getIcon();
+                Log.i("currentIcon", currentIcon);
                 switch (currentIcon){
                     case "clear-day":
                         currentConditions = "Clear";
@@ -607,10 +609,17 @@ public class MainActivity extends AppCompatActivity implements
                     currentWind = "↘" + currentWindSpeedInt + "MPH";
                 }
 
+                //Parse Precip
+                String currentPrecipProb = weatherResponse.getCurrently().getPrecipProbability();
+                Log.i("currentPrecipString", currentPrecipProb);
+                Double currentPrecipDouble = Double.valueOf(currentPrecipProb) * 100;
+                currentPrecip = currentPrecipDouble.intValue();
+
                 //Parse Humidity
                 String currentHumidityString = weatherResponse.getCurrently().getHumidity();
                 Log.i("currentHumidStr", currentHumidityString);
-                currentHumidity = Integer.valueOf(currentHumidityString.substring(2));
+                Double currentHumidityDouble = Double.valueOf(currentHumidityString) * 100;
+                currentHumidity = currentHumidityDouble.intValue();
 
                 //Parse Dew Point
                 String currentDewPointString = weatherResponse.getCurrently().getDewPoint();
@@ -634,14 +643,8 @@ public class MainActivity extends AppCompatActivity implements
                 //Parse cloud cover
                 String currentCloudCoverString = weatherResponse.getCurrently().getCloudClover();
                 Log.i("currentCloudCover", currentCloudCoverString);
-                if(currentCloudCoverString.length() != 1){
-                    String currentCloudCoverStringConverted = currentCloudCoverString.substring(2);//Chop off the 0. from the front
-                    Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverStringConverted);
-                    currentCloudCover = currentCloudCoverDouble.intValue();
-                }
-                else{
-                    currentCloudCover = 0;
-                }
+                Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverString) * 100;
+                currentCloudCover = currentCloudCoverDouble.intValue();
 
                 //Parse sunrise time
                 String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
@@ -696,7 +699,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Update views
                 mainFragmentTransaction();
-                MainFragment.passViewData(currentLocation, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentHumidity, currentDewpoint,
+                MainFragment.passViewData(currentLocation, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
 
             }

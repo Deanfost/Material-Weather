@@ -197,7 +197,6 @@
                 <ImageView
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:src="@drawable/ic_jacket_white"
                     android:scaleType="fitCenter"
                     android:id="@+id/clothingIcon"
                     android:layout_below="@id/clothingTitle"/>
