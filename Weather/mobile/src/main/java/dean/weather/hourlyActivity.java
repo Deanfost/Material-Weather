@@ -24,10 +24,10 @@ import java.util.List;
 //    private RecyclerView.Adapter hourlyRecyclerAdapter;
 //    private RecyclerView.LayoutManager hourlyLayoutManager;
 //    //Example data sets for testing
-//    private List<Integer> passedHours;
-//    private List<Integer> passedTemps;
+//    private List<Integer> passedHoursValues;
+//    private List<Integer> passedTempsValues;
 //    private List<String> passedConditions;
-//    private List<String> passedWind;
+//    private List<String> passedWindValues;
 //    Context pulledContext;
 //
 //    @Override
@@ -55,30 +55,30 @@ import java.util.List;
 //        window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
 //
 //        //Setup example datasets
-//        passedHours = new ArrayList<>();
-//        passedTemps = new ArrayList<>();
+//        passedHoursValues = new ArrayList<>();
+//        passedTempsValues = new ArrayList<>();
 //        passedConditions = new ArrayList<>();
-//        passedWind = new ArrayList<>();
-//        //passedHours
+//        passedWindValues = new ArrayList<>();
+//        //passedHoursValues
 //        int hour = 1;
 //        for(int i = 0; i < 12; i++){
-//            passedHours.add(hour);
+//            passedHoursValues.add(hour);
 //            hour++;
 //        }
-//        //passedTemps
+//        //passedTempsValues
 //        int temp = 65;
 //        for(int i = 0; i < 12; i++){
-//            passedTemps.add(temp);
+//            passedTempsValues.add(temp);
 //            temp+= 2;
 //        }
 //        //passedConditions
 //        for(int i = 0; i < 12; i++){
 //            passedConditions.add("Overcast");
 //        }
-//        //passedWind
+//        //passedWindValues
 //        int precip = 4;
 //        for(int i = 0; i < 12; i++){
-//            passedWind.add(String.valueOf(precip) + "%");
+//            passedWindValues.add(String.valueOf(precip) + "%");
 //            precip+= 3;
 //        }
 //
@@ -92,7 +92,7 @@ import java.util.List;
 //
 //        //Setup adapter
 //        pulledContext = this;
-//        hourlyRecyclerAdapter = new hourlyAdapter(pulledContext, passedHours, passedTemps, passedConditions, passedWind);
+//        hourlyRecyclerAdapter = new hourlyAdapter(pulledContext, passedHoursValues, passedTempsValues, passedConditions, passedWindValues);
 //        hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 //    }
 //

@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder> {
-    private List<Integer> hourSet;
+    private List<String> hourSet;
     private List<Integer> tempSet;
     private List<String> conditionSet;
     private List<Integer> windSet;
@@ -41,7 +41,7 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
     }
 
     //Pass pulled data from API
-    public HourlyAdapter(Context pulledContext, List<Integer> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
+    public HourlyAdapter(Context pulledContext, List<String> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
         context = pulledContext;
         hourSet = pulledHours;
         tempSet = pulledTemps;
@@ -69,20 +69,20 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         //Setup typeface
         robotoLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         //Get the data based on position
-        int pulledHour = hourSet.get(position);
+        String pulledHour = hourSet.get(position);
         int pulledTemp = tempSet.get(position);
         String pulledCond = conditionSet.get(position);
         int pulledWind = windSet.get(position);
 
         //Set item views to pulled data values
         TextView hourView = holder.hourlyHour;
-        hourView.setText(String.valueOf(pulledHour)+ "PM");
+        hourView.setText(String.valueOf(pulledHour));
         TextView tempView = holder.hourlyTemp;
         tempView.setText(String.valueOf(pulledTemp) + (char) 0x00B0);
         TextView windView = holder.hourlyWind;
         windView.setText(pulledWind + "MPH");
         ImageView condView = holder.hourlyIcon;
-        //TODO - IMPLEMENT LOGIC TO HANDLE ICON SELECTION
+        //TODO - IMPLEMENT LOGIC TO HANDLE ICON SELECTION AND UNITS
         condView.setImageResource(R.drawable.ic_cloudy_color);
 
         //Customize fonts

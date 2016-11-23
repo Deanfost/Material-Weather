@@ -53,6 +53,7 @@ import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -85,17 +86,17 @@ public class MainActivity extends AppCompatActivity implements
     public static WeatherResponse pulledWeatherResponse;
 
     //Hourly
-    public List<Integer> pulledHours;
-    public List<String> pulledIcon;
-    public List<Integer> pulledTemps;
-    public List<Integer> pulledWind;
+    public List<String> pulledHours = new ArrayList<>();
+    public List<String> pulledIcon = new ArrayList<>();
+    public List<Integer> pulledTemps = new ArrayList<>();
+    public List<Integer> pulledWind = new ArrayList<>();
 
     //Daily
-    private List<String> pulledDays;
-    private List<String> pulledDailyCond;
-    private List<Integer> pulledHIs;
-    private List<Integer> pulledLOs;
-    private List<Integer> pulledPrecip;
+    private List<String> pulledDays = new ArrayList<>();
+    private List<String> pulledDailyCond = new ArrayList<>();
+    private List<Integer> pulledHIs = new ArrayList<>();
+    private List<Integer> pulledLOs = new ArrayList<>();
+    private List<Integer> pulledPrecip = new ArrayList<>();
 
     //Current
     private String currentLocation;
@@ -413,7 +414,12 @@ public class MainActivity extends AppCompatActivity implements
         else if(currentTimeLong > (sunriseTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
             setID = 1;
         }
+        //If it is night time
         else if(currentTimeLong > (sunsetTimeLong + 1800)){
+            setID = 3;
+        }
+        //If it is early morning time
+        else{
             setID = 3;
         }
         return setID;
@@ -668,11 +674,39 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Get hourly data
                 //Load in the next 24 hours
-//                for(int i = 0; i < 24; i++){
-//
-//                }
-//
-//                //Get icon for next 24 hours
+                Log.i("hourlyIndexSize", String.valueOf(weatherResponse.getHourly().getData().size()));
+                //Gather only the next 24 hours
+                if(weatherResponse.getHourly().getData().size() >= 24){
+                    int iteratedHour = Integer.valueOf(getCurrentHour()) % 24;
+                    Log.i("currentHour", String.valueOf(iteratedHour));
+                    for(int i = 0; i < 24; i++){
+                        if(iteratedHour < 12 && iteratedHour > 0){
+                            pulledHours.add(iteratedHour + "AM");
+                            iteratedHour ++;
+                        }
+                        else if(iteratedHour == 12){
+                            pulledHours.add("12PM");
+                            iteratedHour++;
+                        }
+                        else if(iteratedHour > 12 && iteratedHour < 24){
+                            pulledHours.add((iteratedHour % 12) + "PM");
+                            iteratedHour++;
+                        }
+                        else if(iteratedHour == 0){
+                            pulledHours.add("12AM");
+                            iteratedHour++;
+                        }
+                    }
+                }
+                else{
+                    //Use the data available
+                    for(int i = 0; i < weatherResponse.getHourly().getData().size(); i++){
+
+
+                    }
+                }
+
+                //Get icon for next 24 hours
 //                for(int i = 0; i <24; i++){
 //                    pulledIcon.add(weatherResponse.getHourly().getData().get(i).getIcon());
 //                }
@@ -698,7 +732,10 @@ public class MainActivity extends AppCompatActivity implements
                 setMainLayoutColor(setID);
 
                 //Update views
+
+                Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
                 mainFragmentTransaction();
+                MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcon, pulledWind, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecip);
                 MainFragment.passViewData(currentLocation, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
 
@@ -866,10 +903,18 @@ public class MainActivity extends AppCompatActivity implements
      * @return
      */
     private String getCurrentTime(){
-//        Date time = new Date();
-//        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
+
         long currentTime = System.currentTimeMillis() /1000;
         String currentTimeString = String.valueOf(currentTime);
         return currentTimeString;
+    }
+
+    /**
+     * Gets current hour in 24 format.
+     */
+    private String getCurrentHour(){
+        Date time = new Date();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("k");
+        return timeFormat.format(time.getTime());
     }
 }

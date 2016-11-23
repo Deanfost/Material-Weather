@@ -24,17 +24,17 @@ import java.util.List;
 public class MainFragment extends Fragment{
 
     //Hourly
-    public static List<Integer> passedHours;
-    public static List<Integer> passedTemps;
-    public static List<String> passedConditions;
-    public static List<Integer> passedWind;
+    public static List<String> passedHoursValues;
+    public static List<Integer> passedTempsValues;
+    public static List<String> passedConditionsValues;
+    public static List<Integer> passedWindValues;
 
     //Daily
-    private static List<String> passedDays;
-    private static List<String> passedDailyCond;
-    private static List<Integer> passedHIs;
-    private static List<Integer> passedLOs;
-    private static List<Integer> passedPrecip;
+    private static List<String> passedDaysValues;
+    private static List<String> passedDailyCondValues;
+    private static List<Integer> passedHIsValues;
+    private static List<Integer> passedLOsValues;
+    private static List<Integer> passedPrecipValues;
 
     //Setup recyclerViews
     private RecyclerView hourlyRecyclerView;
@@ -153,77 +153,82 @@ public class MainFragment extends Fragment{
         updateTime.setTypeface(robotoLight);
 
         //Setup example hourly data sets
-        passedHours = new ArrayList<>();
-        passedTemps = new ArrayList<>();
-        passedConditions = new ArrayList<>();
-        passedWind = new ArrayList<>();
-        //passedHours
-        int hour = 1;
-        for (int i = 0; i < 12; i++) {
-            passedHours.add(hour);
-            hour++;
-        }
-        //passedTemps
+//        passedHoursValues = new ArrayList<>();
+        passedTempsValues = new ArrayList<>();
+        passedConditionsValues = new ArrayList<>();
+        passedWindValues = new ArrayList<>();
+        //passedHoursValues
+//        int hour = 1;
+//        for (int i = 0; i < 12; i++) {
+//            passedHoursValues.add(hour);
+//            hour++;
+//        }
+        //passedTempsValues
         int temp = 65;
-        for (int i = 0; i < 12; i++) {
-            passedTemps.add(temp);
+        for (int i = 0; i < 24; i++) {
+            passedTempsValues.add(temp);
             temp += 2;
         }
         //passedConditions
-        for (int i = 0; i < 12; i++) {
-            passedConditions.add("Overcast");
+        for (int i = 0; i < 24; i++) {
+            passedConditionsValues.add("Overcast");
         }
-        //passedWind
+        //passedWindValues
         int wind = 4;
-        for (int i = 0; i < 12; i++) {
-            passedWind.add(wind);
+        for (int i = 0; i < 24; i++) {
+            passedWindValues.add(wind);
             wind += 3;
         }
 
         //Setup example daily datasets
-        passedDays = new ArrayList<>();
-        passedDailyCond = new ArrayList<>();
-        passedHIs = new ArrayList<>();
-        passedLOs = new ArrayList<>();
-        passedPrecip = new ArrayList<>();
+        passedDaysValues = new ArrayList<>();
+        passedDailyCondValues = new ArrayList<>();
+        passedHIsValues = new ArrayList<>();
+        passedLOsValues = new ArrayList<>();
+        passedPrecipValues = new ArrayList<>();
 
         //Days
         int dateInt = 1;
         for(int i = 0; i < 8; i ++){
             String dates = "Sat";
-            passedDays.add(dates);
+            passedDaysValues.add(dates);
             dateInt ++;
         }
 
         //Conditions
         for(int i = 0; i < 8; i++){
             String condition = "clear";
-            passedDailyCond.add(condition);
+            passedDailyCondValues.add(condition);
         }
 
         //HIs
         int HI = 70;
         for(int i = 0; i < 10; i++){
-            passedHIs.add(HI);
+            passedHIsValues.add(HI);
             HI += 3;
         }
 
         //LOs
         int LO = 50;
         for(int i = 0; i < 10; i++){
-            passedLOs.add(LO);
+            passedLOsValues.add(LO);
             LO += 2;
         }
 
         //Precipitation
         int dailyPrecip = 3;
         for(int i = 0; i < 10; i++){
-            passedPrecip.add(dailyPrecip);
+            passedPrecipValues.add(dailyPrecip);
             dailyPrecip+= 3;
         }
 
         //Set color
         setFragmentLayoutColor();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         //Display data
         setViews();
@@ -291,6 +296,7 @@ public class MainFragment extends Fragment{
                 Log.i("CurrentConditions", "Unsupported condition.");
                 break;
         }
+
         currentTemp.setText(passedTempValue + "\u00B0");
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
@@ -307,11 +313,11 @@ public class MainFragment extends Fragment{
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
-        hourlyRecyclerAdapter = new HourlyAdapter(getActivity(), passedHours, passedTemps, passedConditions, passedWind);
+        hourlyRecyclerAdapter = new HourlyAdapter(getActivity(), passedHoursValues, passedTempsValues, passedConditionsValues, passedWindValues);
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 
         //Daily adapter
-        dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDays, passedConditions, passedHIs, passedLOs, passedPrecip);
+        dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDaysValues, passedConditionsValues, passedHIsValues, passedLOsValues, passedPrecipValues);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
 
     }
@@ -319,18 +325,21 @@ public class MainFragment extends Fragment{
     /**
      * Saves passed values from mainActivity to fragment lists.
      */
-    public static void passRecyclerDataSets(List<Integer> passedHours, List<Integer> passedTemps, List<String> passedConditions, List<Integer> passedWind,
+    public static void passRecyclerDataSets(List<String> passedHours, List<Integer> passedTemps, List<String> passedConditions, List<Integer> passedWind,
                                             List<String> passedDays, List<String> passedDailyCond, List<Integer> passedHis, List<Integer> passedLos, List<Integer> passedPrecip){
+        Log.i("passDataSets", "called");
 
-        MainFragment.passedHours = new ArrayList<>(passedHours);
-        MainFragment.passedTemps = new ArrayList<>(passedTemps);
-        MainFragment.passedConditions = new ArrayList<>(passedConditions);
-        MainFragment.passedWind = new ArrayList<>(passedWind);
-        MainFragment.passedDays = new ArrayList<>(passedDays);
-        MainFragment.passedDailyCond = new ArrayList<>(passedDailyCond);
-        MainFragment.passedHIs = new ArrayList<>(passedHis);
-        MainFragment.passedLOs = new ArrayList<>(passedLos);
-        MainFragment.passedPrecip = new ArrayList<>(passedPrecip);
+        //Hourly
+        passedHoursValues = passedHours;
+        passedTempsValues = passedTemps;
+        passedConditionsValues = passedConditions;
+        passedWindValues = passedWind;
+        //Daily
+        passedDaysValues = new ArrayList<>(passedDays);
+        passedDailyCondValues = new ArrayList<>(passedDailyCond);
+        passedHIsValues = new ArrayList<>(passedHis);
+        passedLOsValues = new ArrayList<>(passedLos);
+        passedPrecipValues = new ArrayList<>(passedPrecip);
 
     }
 
