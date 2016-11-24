@@ -853,7 +853,6 @@ public class MainActivity extends AppCompatActivity implements
      * @return
      */
     private String getCurrentTime(){
-
         long currentTime = System.currentTimeMillis() /1000;
         String currentTimeString = String.valueOf(currentTime);
         return currentTimeString;
@@ -973,6 +972,29 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         //Get HIs/LOs
-        
+        for(int i = 0; i < dailySetSize; i++){
+            Double tempMin = pulledWeatherResponse.getDaily().getData().get(i).getTemperatureMin();
+            Double tempMax = pulledWeatherResponse.getDaily().getData().get(i).getTemperatureMax();
+            pulledLOs.add(tempMin.intValue());
+            pulledHIs.add(tempMax.intValue());
+            Log.i("tempMin", String.valueOf(tempMin.intValue()));
+            Log.i("tempMax", String.valueOf(tempMax.intValue()));
+        }
+
+        //Get Precips
+        for(int i = 0; i < dailySetSize; i++){
+            String pulledPrecipString = pulledWeatherResponse.getDaily().getData().get(i).getPrecipProbability();
+            Log.i("pulledPrecip", pulledPrecipString);
+            Double pulledPrecipDouble = Double.valueOf(pulledPrecipString) * 100;
+            Integer pulledPrecipInt = pulledPrecipDouble.intValue();
+            pulledPrecip.add(pulledPrecipInt);
+        }
+
+        //Get Icons
+        for(int i = 0; i < dailySetSize; i++){
+            String pulledIconString = pulledWeatherResponse.getDaily().getData().get(i).getIcon();
+            Log.i("pulledIconString", pulledIconString);
+            pulledDailyCond.add(pulledIconString);
+        }
     }
 }

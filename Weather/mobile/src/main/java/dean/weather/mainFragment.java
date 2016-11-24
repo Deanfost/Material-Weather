@@ -152,48 +152,6 @@ public class MainFragment extends Fragment{
         sunsetTime.setTypeface(robotoLight);
         updateTime.setTypeface(robotoLight);
 
-        //Setup example daily datasets
-//        passedDaysValues = new ArrayList<>();
-        passedDailyCondValues = new ArrayList<>();
-        passedHIsValues = new ArrayList<>();
-        passedLOsValues = new ArrayList<>();
-        passedPrecipValues = new ArrayList<>();
-
-//        //Days
-//        int dateInt = 1;
-//        for(int i = 0; i < 8; i ++){
-//            String dates = "Sat";
-//            passedDaysValues.add(dates);
-//            dateInt ++;
-//        }
-
-        //Conditions
-        for(int i = 0; i < 8; i++){
-            String condition = "clear";
-            passedDailyCondValues.add(condition);
-        }
-
-        //HIs
-        int HI = 70;
-        for(int i = 0; i < 10; i++){
-            passedHIsValues.add(HI);
-            HI += 3;
-        }
-
-        //LOs
-        int LO = 50;
-        for(int i = 0; i < 10; i++){
-            passedLOsValues.add(LO);
-            LO += 2;
-        }
-
-        //Precipitation
-        int dailyPrecip = 3;
-        for(int i = 0; i < 10; i++){
-            passedPrecipValues.add(dailyPrecip);
-            dailyPrecip+= 3;
-        }
-
         //Set color
         setFragmentLayoutColor();
     }
@@ -289,7 +247,7 @@ public class MainFragment extends Fragment{
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 
         //Daily adapter
-        dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDaysValues, passedConditionsValues, passedHIsValues, passedLOsValues, passedPrecipValues);
+        dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDaysValues, passedDailyCondValues, passedHIsValues, passedLOsValues, passedPrecipValues);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
 
     }
