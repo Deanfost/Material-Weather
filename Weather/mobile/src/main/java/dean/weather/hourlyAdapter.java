@@ -3,6 +3,7 @@ package dean.weather;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
 
     //Populate the data into the item through the holder
     @Override
-    public void onBindViewHolder(HourlyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         //Setup typeface
         robotoLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         //Get the data based on position
@@ -83,7 +84,44 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         windView.setText(pulledWind + "MPH");
         ImageView condView = holder.hourlyIcon;
         //TODO - IMPLEMENT LOGIC TO HANDLE ICON SELECTION AND UNITS
-        condView.setImageResource(R.drawable.ic_cloudy_color);
+        switch (pulledCond){
+            case "clear-day":
+                condView.setImageResource(R.drawable.ic_sunny_color);
+                break;
+            case "clear-night":
+                condView.setImageResource(R.drawable.ic_moon_color);
+                break;
+            case "rain":
+                condView.setImageResource(R.drawable.ic_rain_color);
+//                condView.setImageResource(R.drawable.ic_rain_white);
+                break;
+            case "snow":
+                condView.setImageResource(R.drawable.ic_snow_color);
+                break;
+            case "sleet":
+                condView.setImageResource(R.drawable.ic_sleet_color);
+                break;
+            case "wind":
+                condView.setImageResource(R.drawable.ic_windrose_color);
+                break;
+            case "fog":
+                condView.setImageResource(R.drawable.ic_fogday_color);
+                break;
+            case "cloudy":
+                condView.setImageResource(R.drawable.ic_cloudy_color);
+//                condView.setImageResource(R.drawable.ic_cloudy_white);
+                break;
+            case "partly-cloudy-day":
+                condView.setImageResource(R.drawable.ic_partlycloudy_color);
+                break;
+            case "partly-cloudy-night":
+                condView.setImageResource(R.drawable.ic_cloudfilled_black);
+                break;
+            default:
+                condView.setImageResource(R.drawable.ic_cloudy_color);
+                Log.i("CurrentConditions", "Unsupported condition.");
+                break;
+        }
 
         //Customize fonts
         hourView.setTypeface(robotoLight);

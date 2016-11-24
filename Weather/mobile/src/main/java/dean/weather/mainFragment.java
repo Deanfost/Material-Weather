@@ -152,42 +152,20 @@ public class MainFragment extends Fragment{
         sunsetTime.setTypeface(robotoLight);
         updateTime.setTypeface(robotoLight);
 
-        //Setup example hourly data sets
-        passedTempsValues = new ArrayList<>();
-        passedConditionsValues = new ArrayList<>();
-        passedWindValues = new ArrayList<>();
-
-        //passedTempsValues
-        int temp = 65;
-        for (int i = 0; i < 24; i++) {
-            passedTempsValues.add(temp);
-            temp += 2;
-        }
-        //passedConditions
-        for (int i = 0; i < 24; i++) {
-            passedConditionsValues.add("Overcast");
-        }
-        //passedWindValues
-        int wind = 4;
-        for (int i = 0; i < 24; i++) {
-            passedWindValues.add(wind);
-            wind += 3;
-        }
-
         //Setup example daily datasets
-        passedDaysValues = new ArrayList<>();
+//        passedDaysValues = new ArrayList<>();
         passedDailyCondValues = new ArrayList<>();
         passedHIsValues = new ArrayList<>();
         passedLOsValues = new ArrayList<>();
         passedPrecipValues = new ArrayList<>();
 
-        //Days
-        int dateInt = 1;
-        for(int i = 0; i < 8; i ++){
-            String dates = "Sat";
-            passedDaysValues.add(dates);
-            dateInt ++;
-        }
+//        //Days
+//        int dateInt = 1;
+//        for(int i = 0; i < 8; i ++){
+//            String dates = "Sat";
+//            passedDaysValues.add(dates);
+//            dateInt ++;
+//        }
 
         //Conditions
         for(int i = 0; i < 8; i++){
@@ -259,7 +237,6 @@ public class MainFragment extends Fragment{
                 break;
             case "clear-night":
                 currentConditionsIcon.setImageResource(R.drawable.ic_moon_color);
-
                 break;
             case "rain":
                 currentConditionsIcon.setImageResource(R.drawable.ic_rain_color);
@@ -274,7 +251,7 @@ public class MainFragment extends Fragment{
                 currentConditionsIcon.setImageResource(R.drawable.ic_windrose_color);
                 break;
             case "fog":
-
+                currentConditionsIcon.setImageResource(R.drawable.ic_fogday_color);
                 break;
             case "cloudy":
                 currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
@@ -283,7 +260,8 @@ public class MainFragment extends Fragment{
                 currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_color);
                 break;
             case "partly-cloudy-night":
-
+//                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudynight_white);
+                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
                 break;
             default:
                 currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);

@@ -52,6 +52,7 @@ import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -673,72 +674,10 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("sunsetTime", sunsetTime);
 
                 //Get hourly data
-                //Load in the next 24 hours
-                Log.i("hourlyIndexSize", String.valueOf(weatherResponse.getHourly().getData().size()));
-                //Gather only the next 24 hours
-                if(weatherResponse.getHourly().getData().size() >= 24){
-                    int iteratedHour = Integer.valueOf(getCurrentHour()) % 24;
-                    Log.i("iteratedHour", String.valueOf(iteratedHour));
-                    for(int i = 0; i < 24; i++){
-                        if(iteratedHour < 12 && iteratedHour > 0){
-                            pulledHours.add(iteratedHour + "AM");
-                            iteratedHour ++;
-                        }
-                        else if(iteratedHour == 12){
-                            pulledHours.add("12PM");
-                            iteratedHour++;
-                        }
-                        else if(iteratedHour > 12 && iteratedHour < 24){
-                            pulledHours.add((iteratedHour % 12) + "PM");
-                            iteratedHour++;
-                        }
-                        else if(iteratedHour == 0){
-                            pulledHours.add("12AM");
-                            iteratedHour++;
-                        }
-                    }
-                }
-                else{
-                    //Use the data available
-                    int iteratedHour = Integer.valueOf(getCurrentHour()) % 24;
-                    Log.i("iteratedHour", String.valueOf(iteratedHour));
-                    for(int i = 0; i < weatherResponse.getHourly().getData().size(); i++){
-                        if(iteratedHour < 12 && iteratedHour > 0){
-                            pulledHours.add(iteratedHour + "AM");
-                            iteratedHour ++;
-                        }
-                        else if(iteratedHour == 12){
-                            pulledHours.add("12PM");
-                            iteratedHour++;
-                        }
-                        else if(iteratedHour > 12 && iteratedHour < 24){
-                            pulledHours.add((iteratedHour % 12) + "PM");
-                            iteratedHour++;
-                        }
-                        else if(iteratedHour == 0){
-                            pulledHours.add("12AM");
-                            iteratedHour++;
-                        }
-                    }
-                }
+                parseHourly();
 
-                //Get icon for next 24 hours
-//                for(int i = 0; i <24; i++){
-//                    pulledIcon.add(weatherResponse.getHourly().getData().get(i).getIcon());
-//                }
-//
-//                //Get temps for the next 24 hours
-//                for(int i = 0; i < 24; i++){
-//                    Double pulledTempDouble = weatherResponse.getHourly().getData().get(i).getTemperature();
-//                    pulledTemps.add(pulledTempDouble.intValue());
-//                }
-//
-//                //Get winds for the next 24 hours
-//                for(int i = 0; i < 24; i++){
-//                    String pulledWindString = weatherResponse.getHourly().getData().get(i).getWindSpeed();
-//                    Double pulledWindDouble = Double.valueOf(pulledWindString);
-//                    pulledWind.add(pulledWindDouble.intValue());
-//                }
+                //Get daily data
+                parseDaily();
 
                 //Set main layout color
                 setID = determineLayoutColor(sunriseTimeString, sunsetTimeString);
@@ -927,5 +866,113 @@ public class MainActivity extends AppCompatActivity implements
         Date time = new Date();
         SimpleDateFormat timeFormat = new SimpleDateFormat("k");
         return timeFormat.format(time.getTime());
+    }
+
+    /**
+     * Parses hourly info for hourly datasets.
+     */
+    private void parseHourly(){
+        //Load in the next 24 hours
+        int hourlySetSize = pulledWeatherResponse.getHourly().getData().size();
+        Log.i("hourlySetSize", String.valueOf(hourlySetSize));
+        //Gather only the next 24 hours
+        if(hourlySetSize >= 24){
+            int iteratedHour = Integer.valueOf(getCurrentHour());
+            Log.i("iteratedHourStart", String.valueOf(iteratedHour));
+            for(int i = 0; i < 24; i++){
+                iteratedHour = iteratedHour % 24;
+                Log.i("iteratedHour", String.valueOf(iteratedHour));
+                if(iteratedHour < 12 && iteratedHour > 0){
+                    pulledHours.add(iteratedHour + "AM");
+                    iteratedHour ++;
+                }
+                else if(iteratedHour == 12){
+                    pulledHours.add("12PM");
+                    iteratedHour++;
+                }
+                else if(iteratedHour > 12 && iteratedHour < 24){
+                    pulledHours.add((iteratedHour % 12) + "PM");
+                    iteratedHour++;
+                }
+                else if(iteratedHour == 0){
+                    pulledHours.add("12AM");
+                    iteratedHour++;
+                }
+            }
+        }
+        else{
+            //Use the data available
+            int iteratedHour = Integer.valueOf(getCurrentHour());
+            Log.i("iteratedHour", String.valueOf(iteratedHour));
+            for(int i = 0; i < pulledWeatherResponse.getHourly().getData().size(); i++){
+                iteratedHour = iteratedHour % 24;
+                Log.i("iteratedHourStart", String.valueOf(iteratedHour));
+                if(iteratedHour < 12 && iteratedHour > 0){
+                    pulledHours.add(iteratedHour + "AM");
+                    iteratedHour ++;
+                }
+                else if(iteratedHour == 12){
+                    pulledHours.add("12PM");
+                    iteratedHour++;
+                }
+                else if(iteratedHour > 12 && iteratedHour < 24){
+                    pulledHours.add((iteratedHour % 12) + "PM");
+                    iteratedHour++;
+                }
+                else if(iteratedHour == 0){
+                    pulledHours.add("12AM");
+                    iteratedHour++;
+                }
+            }
+        }
+
+        //Get icon for next 24 hours
+        for(int i = 0; i < pulledHours.size(); i++){
+            pulledIcon.add(pulledWeatherResponse.getHourly().getData().get(i).getIcon());
+        }
+
+        //Get temps for the next 24 hours
+        for(int i = 0; i < pulledHours.size(); i++){
+            Double pulledTempDouble = pulledWeatherResponse.getHourly().getData().get(i).getTemperature();
+            pulledTemps.add(pulledTempDouble.intValue());
+        }
+
+        //Get winds for the next 24 hours
+        for(int i = 0; i < pulledHours.size(); i++){
+            String pulledWindString = pulledWeatherResponse.getHourly().getData().get(i).getWindSpeed();
+            Double pulledWindDouble = Double.valueOf(pulledWindString);
+            pulledWind.add(pulledWindDouble.intValue());
+        }
+    }
+
+    /**
+     * Parses daily info for daily datasets.
+     */
+    private void parseDaily(){
+        //Get next 7 days
+        int dailySetSize = pulledWeatherResponse.getDaily().getData().size();
+        Log.i("dailySetSize", String.valueOf(dailySetSize));
+        //Get current date
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        String today = simpleDateFormat.format(calendar.getTime());
+        Log.i("today", today);
+
+        //Get next 7 days
+        Calendar calendar1 = Calendar.getInstance();
+        SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEE");
+        try {
+            calendar1.setTime(simpleDateFormat.parse(today));
+            for(int i = 0; i < dailySetSize - 1; i ++){
+                calendar1.add(Calendar.DAY_OF_WEEK, i);
+                pulledDays.add(dayOfWeekFormat.format(calendar1.getTime()));
+                Log.i("pulledDay", dayOfWeekFormat.format(calendar1.getTime()));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //Get HIs/LOs
+        
     }
 }
