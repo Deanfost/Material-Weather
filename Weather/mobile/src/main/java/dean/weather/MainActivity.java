@@ -963,6 +963,7 @@ public class MainActivity extends AppCompatActivity implements
         try {
             calendar1.setTime(simpleDateFormat.parse(today));
             for(int i = 0; i < dailySetSize - 1; i ++){
+                calendar1.setTime(simpleDateFormat.parse(today));
                 calendar1.add(Calendar.DAY_OF_WEEK, i);
                 pulledDays.add(dayOfWeekFormat.format(calendar1.getTime()));
                 Log.i("pulledDay", dayOfWeekFormat.format(calendar1.getTime()));

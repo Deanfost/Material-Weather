@@ -109,7 +109,6 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 break;
             case "cloudy":
                 condView.setImageResource(R.drawable.ic_cloudy_color);
-//                condView.setImageResource(R.drawable.ic_cloudy_white);
                 break;
             case "partly-cloudy-day":
                 condView.setImageResource(R.drawable.ic_partlycloudy_color);
