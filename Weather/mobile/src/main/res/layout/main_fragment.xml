@@ -15,73 +15,83 @@
             android:background="@color/colorWhiteDark"
             android:id="@+id/mainFragmentWrapperContainer">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_265sdp"
-                    android:id="@+id/topContentLayout"
-                    android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                android:id="@+id/topContentLayout"
+                android:padding="@dimen/_12sdp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/currentLocation"
-                        android:text="---"
-                        android:textSize="24sp"
-                        android:textColor="@color/colorWhite"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_gravity="left|top"
-                        android:layout_marginLeft="@dimen/_16sdp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currentDate"
+                    android:text="---"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_gravity="left|top"
+                    android:layout_marginLeft="@dimen/_4sdp"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/currentDate"
-                        android:text="---"
-                        android:textSize="16sp"
-                        android:textColor="@color/colorWhite"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:layout_gravity="left|top"
-                        android:layout_marginLeft="@dimen/_16sdp"/>
+                <ImageView
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:id="@+id/iconCurrentConditions"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_partlycloudy_color"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:elevation="@dimen/_4sdp"
+                    android:layout_marginBottom="@dimen/_30sdp"/>
 
-                    <ImageView
-                        android:layout_width="@dimen/_85sdp"
-                        android:layout_height="@dimen/_85sdp"
-                        android:id="@+id/iconCurrentConditions"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_moon_color"
-                        android:layout_marginTop="@dimen/_10sdp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currentLocation"
+                    android:text="---"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_gravity="left|top"
+                    android:layout_toRightOf="@id/iconCurrentConditions"
+                    android:layout_marginTop="@dimen/_55sdp"
+                    android:layout_marginLeft="@dimen/_60sdp"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/currentTemp"
-                        android:text="---"
-                        android:textSize="30sp"
-                        android:textColor="@color/colorWhite"
-                        android:gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/currentTemp"
+                    android:text="---"
+                    android:textSize="30sp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:layout_below="@+id/currentLocation"
+                    android:layout_toRightOf="@id/iconCurrentConditions"
+                    android:layout_marginLeft="@dimen/_60sdp"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_25sdp"
-                        android:id="@+id/currentConditions"
-                        android:gravity="center"
-                        android:text="---"
-                        android:textSize="20sp"
-                        android:textColor="@color/colorWhite" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/todaysHiLo"
+                    android:text="---/---"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="right"
+                    android:layout_marginLeft="@dimen/_60sdp"
+                    android:layout_below="@+id/currentTemp"
+                    android:layout_toRightOf="@id/iconCurrentConditions"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/todaysHiLo"
-                        android:text="---/---"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorWhite"
-                        android:gravity="right"
-                        android:layout_gravity="bottom"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_16sdp" />
+                <TextView
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:id="@+id/currentConditions"
+                    android:gravity="center_horizontal"
+                    android:text="---"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_marginTop="@dimen/_140sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"/>
 
-                </LinearLayout>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

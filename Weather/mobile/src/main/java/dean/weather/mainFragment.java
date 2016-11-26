@@ -18,6 +18,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class MainFragment extends Fragment{
 
     Typeface robotoLight;
     LinearLayout wrapperLayout;
-    LinearLayout topLayout;
+    RelativeLayout topLayout;
     TextView currentLocation;
     TextView currentDate;
     ImageView currentConditionsIcon;
@@ -113,7 +114,7 @@ public class MainFragment extends Fragment{
         //Setup references
         robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         wrapperLayout = (LinearLayout) getView().findViewById(R.id.mainFragmentWrapperContainer);
-        topLayout = (LinearLayout) getView().findViewById(R.id.topContentLayout);
+        topLayout = (RelativeLayout) getView().findViewById(R.id.topContentLayout);
         currentLocation = (TextView) getView().findViewById(R.id.currentLocation);
         currentDate = (TextView) getView().findViewById(R.id.currentDate);
         currentConditionsIcon = (ImageView) getView().findViewById(R.id.iconCurrentConditions);
