@@ -7,6 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +27,8 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
     private List<Integer> windSet;
     private Context context;
     Typeface robotoLight;
+    //Set duration for fade anim
+    private final int FADE_DURATION = 650;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //Make references to each view in the row
@@ -102,10 +108,10 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 condView.setImageResource(R.drawable.ic_sleet_color);
                 break;
             case "wind":
-                condView.setImageResource(R.drawable.ic_windrose_color);
+                condView.setImageResource(R.drawable.ic_windy_color);
                 break;
             case "fog":
-                condView.setImageResource(R.drawable.ic_fogday_color);
+                condView.setImageResource(R.drawable.ic_foggy_color);
                 break;
             case "cloudy":
                 condView.setImageResource(R.drawable.ic_cloudy_color);
@@ -114,7 +120,7 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 condView.setImageResource(R.drawable.ic_partlycloudy_color);
                 break;
             case "partly-cloudy-night":
-                condView.setImageResource(R.drawable.ic_cloudfilled_black);
+                condView.setImageResource(R.drawable.ic_partlycloudynight_color);
                 break;
             default:
                 condView.setImageResource(R.drawable.ic_cloudy_color);
@@ -126,7 +132,18 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         hourView.setTypeface(robotoLight);
         tempView.setTypeface(robotoLight);
         windView.setTypeface(robotoLight);
-        windView.setTypeface(robotoLight);
+
+        //Set view animations
+        setFadeAnimation(hourView);
+        setFadeAnimation(tempView);
+        setFadeAnimation(windView);
+        setFadeAnimation(condView);
+    }
+
+    private void setFadeAnimation(View view) {
+        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(FADE_DURATION);
+        view.startAnimation(anim);
     }
 
     @Override
@@ -138,4 +155,5 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
     private Context getContext(){
         return context;
     }
+
 }

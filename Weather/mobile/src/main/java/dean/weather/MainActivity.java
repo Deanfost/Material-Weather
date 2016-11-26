@@ -719,6 +719,7 @@ public class MainActivity extends AppCompatActivity implements
         mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
+
     /**
      * Creates new loadingFragment transaction.
      */

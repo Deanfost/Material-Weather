@@ -206,10 +206,10 @@ public class MainFragment extends Fragment{
                 currentConditionsIcon.setImageResource(R.drawable.ic_sleet_color);
                 break;
             case "wind":
-                currentConditionsIcon.setImageResource(R.drawable.ic_windrose_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_windy_color);
                 break;
             case "fog":
-                currentConditionsIcon.setImageResource(R.drawable.ic_fogday_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_foggy_color);
                 break;
             case "cloudy":
                 currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
@@ -218,8 +218,7 @@ public class MainFragment extends Fragment{
                 currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_color);
                 break;
             case "partly-cloudy-night":
-//                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudynight_white);
-                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudynight_color);
                 break;
             default:
                 currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);

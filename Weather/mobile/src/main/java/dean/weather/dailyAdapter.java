@@ -106,10 +106,10 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
                 condIcon.setImageResource(R.drawable.ic_snow_color);
                 break;
             case "wind":
-                condIcon.setImageResource(R.drawable.ic_windrose_color);
+                condIcon.setImageResource(R.drawable.ic_windy_color);
                 break;
             case "fog":
-                condIcon.setImageResource(R.drawable.ic_fogday_color);
+                condIcon.setImageResource(R.drawable.ic_foggy_color);
                 break;
             case "cloudy":
                 condIcon.setImageResource(R.drawable.ic_cloudy_color);
