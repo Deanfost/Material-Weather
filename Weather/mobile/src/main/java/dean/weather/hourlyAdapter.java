@@ -28,7 +28,9 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
     private Context context;
     Typeface robotoLight;
     //Set duration for fade anim
-    private final int FADE_DURATION = 650;
+    private final int FADE_DURATION = 500;
+    //Animate only first 5 items
+    int animCount = 0;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //Make references to each view in the row
@@ -99,7 +101,6 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 break;
             case "rain":
                 condView.setImageResource(R.drawable.ic_rain_color);
-//                condView.setImageResource(R.drawable.ic_rain_white);
                 break;
             case "snow":
                 condView.setImageResource(R.drawable.ic_snow_color);
@@ -133,15 +134,19 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         tempView.setTypeface(robotoLight);
         windView.setTypeface(robotoLight);
 
-        //Set view animations
-        setFadeAnimation(hourView);
-        setFadeAnimation(tempView);
-        setFadeAnimation(windView);
-        setFadeAnimation(condView);
+        if(animCount < 5) {
+            //Set view animations
+            setFadeAnimation(hourView);
+            setFadeAnimation(tempView);
+            setFadeAnimation(windView);
+            setFadeAnimation(condView);
+            animCount++;
+        }
     }
 
     private void setFadeAnimation(View view) {
         AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setStartOffset(200);
         anim.setDuration(FADE_DURATION);
         view.startAnimation(anim);
     }

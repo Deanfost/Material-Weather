@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,10 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
     private List<Integer> precipSet;
     private Context context;
     Typeface robotoLight;
+    //Set duration for fade anim
+    private final int FADE_DURATION = 500;
+    //Animate only first 5 items
+    int animCount = 0;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //Make references to each view in the row
@@ -130,6 +135,22 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
         dayView.setTypeface(robotoLight);
         precipView.setTypeface(robotoLight);
         HILOView.setTypeface(robotoLight);
+
+        if(animCount < 5) {
+            //Set animations
+            setFadeAnimation(dayView);
+            setFadeAnimation(HILOView);
+            setFadeAnimation(precipView);
+            setFadeAnimation(condIcon);
+            animCount++;
+        }
+    }
+
+    private void setFadeAnimation(View view) {
+        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setStartOffset(300);
+        anim.setDuration(FADE_DURATION);
+        view.startAnimation(anim);
     }
 
     @Override

@@ -1,5 +1,8 @@
 package dean.weather;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,6 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,6 +69,7 @@ public class MainFragment extends Fragment{
     private static String passedUpdateTimeValue;
 
     Typeface robotoLight;
+    LinearLayout wrapperLayout;
     LinearLayout topLayout;
     TextView currentLocation;
     TextView currentDate;
@@ -105,6 +112,7 @@ public class MainFragment extends Fragment{
 
         //Setup references
         robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+        wrapperLayout = (LinearLayout) getView().findViewById(R.id.mainFragmentWrapperContainer);
         topLayout = (LinearLayout) getView().findViewById(R.id.topContentLayout);
         currentLocation = (TextView) getView().findViewById(R.id.currentLocation);
         currentDate = (TextView) getView().findViewById(R.id.currentDate);
@@ -248,6 +256,11 @@ public class MainFragment extends Fragment{
         //Daily adapter
         dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDaysValues, passedDailyCondValues, passedHIsValues, passedLOsValues, passedPrecipValues);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
+
+        //Set layout slide in anim
+        Animator slideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in);
+        slideIn.setTarget(wrapperLayout);
+        slideIn.start();
 
     }
 
