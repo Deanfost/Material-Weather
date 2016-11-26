@@ -11,15 +11,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/colorWhiteDark"
-            android:id="@+id/mainFragmentWrapperContainer">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_200sdp"
                 android:id="@+id/topContentLayout"
-                android:padding="@dimen/_12sdp">
+                android:padding="@dimen/_12sdp"
+                android:elevation="@dimen/_3sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -40,7 +39,6 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:elevation="@dimen/_4sdp"
                     android:layout_marginBottom="@dimen/_30sdp"/>
 
                 <TextView
@@ -90,8 +88,14 @@
                     android:layout_marginTop="@dimen/_140sdp"
                     android:layout_marginLeft="@dimen/_10sdp"/>
 
-
             </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/colorWhiteDark"
+            android:id="@+id/lowerFragmentWrapperContainer">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -436,6 +440,6 @@
 
             </RelativeLayout>
         </LinearLayout>
+        </LinearLayout>
     </ScrollView>
-
 </LinearLayout>
