@@ -159,11 +159,6 @@ public class MainFragment extends Fragment{
 
         //Set color
         setFragmentLayoutColor();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         //Display data
         setViews();
@@ -377,19 +372,8 @@ public class MainFragment extends Fragment{
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
     }
 
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-    }
 }

@@ -1,6 +1,7 @@
 package dean.weather;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -135,6 +137,23 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
         dayView.setTypeface(robotoLight);
         precipView.setTypeface(robotoLight);
         HILOView.setTypeface(robotoLight);
+
+        //Set the background of the item
+        int setID = MainActivity.setID;
+        switch (setID){
+            case 0:
+                holder.itemView.setBackground(getContext().getResources().getDrawable(R.drawable.background_ripple_yellow));
+                break;
+            case 1:
+                holder.itemView.setBackground(getContext().getResources().getDrawable(R.drawable.background_ripple_blue));
+                break;
+            case 2:
+                holder.itemView.setBackground(getContext().getResources().getDrawable(R.drawable.background_ripple_orange));
+                break;
+            case 3:
+                holder.itemView.setBackground(getContext().getResources().getDrawable(R.drawable.background_ripple_purple));
+                break;
+        }
 
         if(animCount < 5) {
             //Set animations

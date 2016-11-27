@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "366476215958",
+    "firebase_url": "https://material-weather-e7631.firebaseio.com",
+    "project_id": "material-weather-e7631",
+    "storage_bucket": "material-weather-e7631.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366476215958:android:3345912c51705731",
+        "android_client_info": {
+          "package_name": "dean.weather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366476215958-oubkvcobdbm1nlgtgg4k0j644g4g7ro6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dean.weather",
+            "certificate_hash": "262D9B349FC3D54ADC6BA79617EB1AA35BAD4379"
+          }
+        },
+        {
+          "client_id": "366476215958-0sn24e4i6k3upvuoajsts4v3d6emvjjn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcrSBiUI2Audmlpz4QA0K9pY-Lz8y5J8c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366476215958-0sn24e4i6k3upvuoajsts4v3d6emvjjn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
