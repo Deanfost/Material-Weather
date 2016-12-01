@@ -25,14 +25,12 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -47,7 +45,6 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.crash.FirebaseCrash;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.Request;
@@ -115,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements
     private int currentHumidity;
     private int currentDewpoint;
     private int currentPressure;//Be sure to add units on the end when updating views!
-    private int currentVisibilty;
+    private String currentVisibilty;
     private int currentCloudCover;
     private String sunriseTime;
     private String sunsetTime;
@@ -175,11 +172,7 @@ public class MainActivity extends AppCompatActivity implements
             //Settings
             case R.id.action_settings:
                 //TODO - GO TO SETTINGS ACTIVITY
-                return true;
-            //Refresh data
-            case R.id.action_refresh:
-                //TODO - REFRESH DATA
-                //for now, it will be used to reset the 1st launch key-value pair
+                //For now, reset keyvalue pair, and go back to intro
                 SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = mySPrefs.edit();
                 editor.putString(getString(R.string.first_launch_key), "0");
@@ -187,6 +180,12 @@ public class MainActivity extends AppCompatActivity implements
                 Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
                         .show();
                 Log.i("Editor", "Updated 1st launch");
+                return true;
+            //Refresh data
+            case R.id.action_refresh:
+                clearDataSets();
+                loadingFragmentTransaction();
+                requestLocationAndData();
                 return true;
             //User action not recognized
             default:
@@ -214,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         //Get current location
-        requestLocation();
+        requestLocationAndData();
 
     }
 
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements
                         case Activity.RESULT_OK:
                             // All required changes were successfully made, so request location
                             try{
-                                requestLocation();
+                                requestLocationAndData();
                             }
                             catch (SecurityException e){
                                 Log.e("LocationPermission", "Permission denied");
@@ -310,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Checks for location permissions, location settings, and pulls location from Google Location API.
      */
-    private void requestLocation(){
+    private void requestLocationAndData(){
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
             //Create location request
@@ -649,7 +648,15 @@ public class MainActivity extends AppCompatActivity implements
                 String currentVisibilityString = weatherResponse.getCurrently().getVisibility();
                 Log.i("currentVisString", currentVisibilityString);
                 Double currentVisibilityDouble = Double.valueOf(currentVisibilityString);
-                currentVisibilty = currentVisibilityDouble.intValue();
+                Integer currentVisibiltiyInt = Double.valueOf(currentVisibilityDouble).intValue();
+                //If it is above 1, parse to just an integer
+                if(currentVisibilityDouble > 1){
+                    currentVisibilty = String.valueOf(currentVisibiltiyInt);
+                }
+                //Else, pass something like 0.45
+                else{
+                    currentVisibilty = currentVisibilityDouble.toString();
+                }
 
                 //Parse cloud cover
                 String currentCloudCoverString = weatherResponse.getCurrently().getCloudClover();
@@ -790,7 +797,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void beginNormalOperations() {
         loadingFragmentTransaction();
-        requestLocation();
+        requestLocationAndData();
     }
 
     /**
@@ -799,7 +806,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void beginNormalOperations1() {
         loadingFragmentTransaction();
-        requestLocation();
+        requestLocationAndData();
     }
 
     /**
@@ -808,7 +815,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void retryConnection() {
         loadingFragmentTransaction();
-        requestLocation();
+        requestLocationAndData();
     }
 
     /**
@@ -817,7 +824,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void retryDataFetch() {
         loadingFragmentTransaction();
-        requestLocation();
+        requestLocationAndData();
     }
 
     //View data parsing and formatting
@@ -882,6 +889,7 @@ public class MainActivity extends AppCompatActivity implements
         //Gather only the next 24 hours
         if(hourlySetSize >= 24){
             int iteratedHour = Integer.valueOf(getCurrentHour());
+            Log.i("hourlySetSize", "greaterThan24");
             Log.i("iteratedHourStart", String.valueOf(iteratedHour));
             for(int i = 0; i < 24; i++){
                 iteratedHour = iteratedHour % 24;
@@ -903,6 +911,7 @@ public class MainActivity extends AppCompatActivity implements
                     iteratedHour++;
                 }
             }
+            Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
         }
         else{
             //Use the data available
@@ -928,6 +937,7 @@ public class MainActivity extends AppCompatActivity implements
                     iteratedHour++;
                 }
             }
+            Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
         }
 
         //Get icon for next 24 hours
@@ -1002,5 +1012,21 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("pulledIconString", pulledIconString);
             pulledDailyCond.add(pulledIconString);
         }
+    }
+
+    /**
+     * Clears values from hourly and daily datasets.
+     */
+    private void clearDataSets(){
+        pulledHours.clear();
+        pulledIcon.clear();
+        pulledTemps.clear();
+        pulledWind.clear();
+
+        pulledDays.clear();
+        pulledDailyCond.clear();
+        pulledHIs.clear();
+        pulledLOs.clear();
+        pulledPrecip.clear();
     }
 }

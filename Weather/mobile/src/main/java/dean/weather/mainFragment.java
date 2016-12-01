@@ -59,7 +59,7 @@ public class MainFragment extends Fragment{
     private static int passedHumidityValue;
     private static int passedDewpointValue;
     private static int passedPressureValue;
-    private static int passedVisibilityValue;
+    private static String passedVisibilityValue;
     private static int passedCloudCoverValue;
     private static String passedSunriseTimeValue;
     private static String passedSunsetTimeValue;
@@ -182,7 +182,13 @@ public class MainFragment extends Fragment{
         dailyRecyclerView.setHasFixedSize(true);
 
         //Daily Linear Layout Manager
-        dailyLayoutManager = new LinearLayoutManager(getActivity());
+        dailyLayoutManager = new LinearLayoutManager(getActivity()){
+            //Disable scrolling
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         dailyRecyclerView.setLayoutManager(dailyLayoutManager);
 
         //Update views
@@ -287,7 +293,7 @@ public class MainFragment extends Fragment{
      * Saves passed values from mainActivity to current variables.
      */
     public static void passViewData(String passedLocation, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
-                                    int passedDewpoint, int passedPressure, int passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime ){
+                                    int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime ){
 
         passedLocationValue = passedLocation;
         passedDateValue = passedDate;
