@@ -6,7 +6,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbarThumbVertical="@drawable/layout_scroll_bar"
+        android:scrollbarSize="@dimen/_3sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +41,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_32sdp"/>
+                    android:layout_marginBottom="@dimen/_32sdp"
+                    android:scaleType="fitXY"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,8 +114,10 @@
                     android:layout_height="@dimen/_100sdp"
                     android:id="@+id/hourlyRecyclerView"
                     android:scrollbars="horizontal"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:fadeScrollbars="true" />
+                    android:fadeScrollbars="true"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbarThumbHorizontal="@drawable/hourly_scrollbar"
+                    android:scrollbarSize="@dimen/_3sdp"/>
             </LinearLayout>
 
             <LinearLayout
