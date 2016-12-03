@@ -88,6 +88,8 @@ public class MainFragment extends Fragment{
     TextView currentPressureValue;
     TextView currentVisibilityValue;
     TextView currentCloudCoverValue;
+    ImageView sunriseIcon;
+    ImageView sunsetIcon;
     TextView sunriseTime;
     TextView sunsetTime;
     TextView updateTime;
@@ -131,6 +133,8 @@ public class MainFragment extends Fragment{
         currentPressureValue = (TextView) getView().findViewById(R.id.currentDetailsPressureValue);
         currentVisibilityValue = (TextView) getView().findViewById(R.id.currentDetailsVisibilityValue);
         currentCloudCoverValue = (TextView) getView().findViewById(R.id.currentDetailsCloudCoverValue);
+        sunriseIcon = (ImageView) getView().findViewById(R.id.sunriseIcon);
+        sunsetIcon = (ImageView) getView().findViewById(R.id.sunsetIcon);
         sunriseTime = (TextView) getView().findViewById(R.id.sunriseTime);
         sunsetTime = (TextView) getView().findViewById(R.id.sunsetTime);
         updateTime = (TextView) getView().findViewById(R.id.updateTime);
@@ -197,38 +201,62 @@ public class MainFragment extends Fragment{
         //TODO - GET NEW ICONS AND UPDATE
         switch (passedIconValue) {
             case "clear-day":
-                currentConditionsIcon.setImageResource(R.drawable.ic_sunny_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_sunny_white);
                 break;
             case "clear-night":
-                currentConditionsIcon.setImageResource(R.drawable.ic_moon_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_clear_night_white);
                 break;
             case "rain":
-                currentConditionsIcon.setImageResource(R.drawable.ic_rain_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_rain_white);
                 break;
             case "snow":
-                currentConditionsIcon.setImageResource(R.drawable.ic_snow_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_snow_white);
                 break;
             case "sleet":
-                currentConditionsIcon.setImageResource(R.drawable.ic_sleet_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_sleet_white);
                 break;
             case "wind":
-                currentConditionsIcon.setImageResource(R.drawable.ic_windy_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                currentConditionsIcon.setImageResource(R.drawable.ic_foggy_color);
+                if(MainActivity.setID != 3){
+                    currentConditionsIcon.setImageResource(R.drawable.ic_foggyday_white);
+                }
+                else{
+                    currentConditionsIcon.setImageResource(R.drawable.ic_foggynight_white);
+                }
                 break;
             case "cloudy":
-                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_white);
                 break;
             case "partly-cloudy-day":
-                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             case "partly-cloudy-night":
-                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudynight_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudynight_white);
                 break;
             default:
-                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_color);
+                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_white);
                 Log.i("CurrentConditions", "Unsupported condition.");
+                break;
+        }
+
+        switch (MainActivity.setID){
+            case 0:
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
+                break;
+            case 1:
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorBlue));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorBlue));
+                break;
+            case 2:
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorOrange));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorOrange));
+                break;
+            case 3:
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorPurple));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorPurple));
                 break;
         }
 

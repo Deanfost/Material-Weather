@@ -310,8 +310,10 @@ public class MainActivity extends AppCompatActivity implements
      * Checks for location permissions, location settings, and pulls location from Google Location API.
      */
     private void requestLocationAndData(){
+        Log.i("RequestData", "called");
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
+            Log.i("Permission", "Location access granted");
             //Create location request
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                     .addLocationRequest(createLocationRequest());
@@ -323,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements
             locationSettingsResultPendingResult.setResultCallback(new ResultCallback<LocationSettingsResult>() {
                 @Override
                 public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+                    Log.i("LocationSettings", "Agreeable");
                     final Status locationStatus = locationSettingsResult.getStatus();
                     final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
 
@@ -330,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements
                         case LocationSettingsStatusCodes.SUCCESS:
                             //All location requirements are satisfied, request location
                             try{
+                                Log.i("requestLocation", "pulling");
                                 lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
                                 if(lastLocation != null){
                                     //Get latitude and longitude for DarkSky API
@@ -340,7 +344,6 @@ public class MainActivity extends AppCompatActivity implements
                                     //Determine if a geocoder is available
                                     if(!Geocoder.isPresent()){
                                         Log.i("Geocoder", "Unavailable");
-//                                        Toast.makeText(MainActivity.this, "Geocoder unavailable.", Toast.LENGTH_LONG).show();
                                     }
                                     //Get and parse data for mainFragment
                                         //Parse and format data not related to weather
@@ -379,6 +382,7 @@ public class MainActivity extends AppCompatActivity implements
         else{
             //Tell the user to grant location permissions
             permissionsFragmentTransaction();
+            Log.i("LocationSettings", "Incompatible");
         }
     }
 
@@ -509,6 +513,7 @@ public class MainActivity extends AppCompatActivity implements
      * Initializes API Wrapper Lib, and forms pull request to receive weather data.
      */
     private void pullForecast(){
+        Log.i("forecastRequest", "pullingForecast");
         //TODO - CHECK FOR THE UNITS AND STUFF
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
@@ -726,7 +731,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         MainFragment MainFragment = new MainFragment();
-        mainFragmentTransaction.add(R.id.mainContentView, MainFragment);
+        mainFragmentTransaction.replace(R.id.mainContentView, MainFragment);
         mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
@@ -738,7 +743,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         LoadingFragment LoadingFragment = new LoadingFragment();
-        mainFragmentTransaction.add(R.id.mainContentView, LoadingFragment);
+        mainFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
         mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
@@ -750,7 +755,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         NoConnectionFragment noConnectionFragment = new NoConnectionFragment();
-        mainFragmentTransaction.add(R.id.mainContentView, noConnectionFragment);
+        mainFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
         mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
@@ -762,7 +767,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         LocationUnavailableFragment locationUnavailableFragment = new LocationUnavailableFragment();
-        mainFragmentTransaction.add(R.id.mainContentView, locationUnavailableFragment);
+        mainFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
         mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
@@ -774,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         PermissionsFragment permissionsFragment = new PermissionsFragment();
-        mainFragmentTransaction.add(R.id.mainContentView, permissionsFragment);
+        mainFragmentTransaction.replace(R.id.mainContentView, permissionsFragment);
         mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
@@ -786,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         changeLocationSettingsFragment changeLocationSettingsFragment = new changeLocationSettingsFragment();
-        mainFragmentTransaction.add(R.id.mainContentView, changeLocationSettingsFragment);
+        mainFragmentTransaction.replace(R.id.mainContentView, changeLocationSettingsFragment);
         mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         mainFragmentTransaction.commit();
     }
@@ -1018,6 +1023,7 @@ public class MainActivity extends AppCompatActivity implements
      * Clears values from hourly and daily datasets.
      */
     private void clearDataSets(){
+
         pulledHours.clear();
         pulledIcon.clear();
         pulledTemps.clear();
@@ -1028,5 +1034,25 @@ public class MainActivity extends AppCompatActivity implements
         pulledHIs.clear();
         pulledLOs.clear();
         pulledPrecip.clear();
+
+        currentLocation = null;
+        currentDate = null;
+        currentIcon = null;
+        currentTemp = 0;
+        currentConditions = null;
+        todaysHI = null;
+        todaysLO = null;
+        todaysHILO = null;
+        currentWind = null;
+        currentPrecip = 0;
+        currentHumidity = 0;
+        currentDewpoint = 0;
+        currentPressure = 0;
+        currentVisibilty = null;
+        currentCloudCover = 0;
+        sunriseTime = null;
+        sunsetTime = null;
+        updateTime = null;
+        setID = -1;
     }
 }

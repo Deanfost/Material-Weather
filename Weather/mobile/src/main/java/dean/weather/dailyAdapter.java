@@ -97,38 +97,57 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
         //Determine which condition and icon to set
         switch (pulledCond){
             case "clear-day":
-                condIcon.setImageResource(R.drawable.ic_sunny_color);
+                condIcon.setImageResource(R.drawable.ic_sunny_white);
                 break;
             case "clear-night":
-                condIcon.setImageResource(R.drawable.ic_sunny_color);
+                condIcon.setImageResource(R.drawable.ic_clear_night_white);
                 break;
             case "rain":
-                condIcon.setImageResource(R.drawable.ic_rain_color);
+                condIcon.setImageResource(R.drawable.ic_rain_white);
                 break;
             case "snow":
-                condIcon.setImageResource(R.drawable.ic_snow_color);
+                condIcon.setImageResource(R.drawable.ic_snow_white);
                 break;
             case "sleet":
-                condIcon.setImageResource(R.drawable.ic_snow_color);
+                condIcon.setImageResource(R.drawable.ic_sleet_white);
                 break;
             case "wind":
-                condIcon.setImageResource(R.drawable.ic_windy_color);
+                condIcon.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                condIcon.setImageResource(R.drawable.ic_foggy_color);
+                if(MainActivity.setID != 3){
+                    condIcon.setImageResource(R.drawable.ic_foggyday_white);
+                }
+                else{
+                    condIcon.setImageResource(R.drawable.ic_foggynight_white);
+                }
                 break;
             case "cloudy":
-                condIcon.setImageResource(R.drawable.ic_cloudy_color);
+                condIcon.setImageResource(R.drawable.ic_cloudy_white);
                 break;
             case "partly-cloudy-day":
-                condIcon.setImageResource(R.drawable.ic_partlycloudy_color);
+                condIcon.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             case "partly-cloudy-night":
-                condIcon.setImageResource(R.drawable.ic_partlycloudy_color);
+                condIcon.setImageResource(R.drawable.ic_partlycloudynight_white);
                 break;
             default:
-                condIcon.setImageResource(R.drawable.ic_cloudy_color);
+                condIcon.setImageResource(R.drawable.ic_cloudy_white);
                 Log.i("CurrentConditions", "Unsupported condition.");
+                break;
+        }
+        switch (MainActivity.setID){
+            case 0:
+                condIcon.setColorFilter(getContext().getResources().getColor(R.color.colorYellow));
+                break;
+            case 1:
+                condIcon.setColorFilter(getContext().getResources().getColor(R.color.colorBlue));
+                break;
+            case 2:
+                condIcon.setColorFilter(getContext().getResources().getColor(R.color.colorOrange));
+                break;
+            case 3:
+                condIcon.setColorFilter(getContext().getResources().getColor(R.color.colorPurple));
                 break;
         }
         //Customize fonts

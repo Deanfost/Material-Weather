@@ -55,13 +55,14 @@
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_18sdp"
             android:src="@drawable/ic_cloudy_color"
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
             android:id="@+id/dailyListItem4"
             android:layout_row="0"
             android:layout_column="3"
             android:layout_columnWeight="1"
             android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="@dimen/_2sdp" />
+            android:layout_marginRight="@dimen/_2sdp"
+            android:tint="@color/colorLightBlack" />
 
     </GridLayout>
 </FrameLayout>

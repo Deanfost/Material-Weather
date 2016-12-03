@@ -12,12 +12,13 @@
         android:layout_height="@dimen/_150sdp"
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_check_color"
+        android:src="@drawable/ic_check_black"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_35sdp"
         app:layout_parallaxFactor="1"
         android:elevation="2dp"
-        android:tint="@color/check_mark_green"/>
+        android:tint="@color/check_mark_green"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:layout_width="match_parent"

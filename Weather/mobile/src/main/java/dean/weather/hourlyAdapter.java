@@ -94,38 +94,58 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         //TODO - IMPLEMENT LOGIC TO HANDLE ICON SELECTION AND UNITS
         switch (pulledCond){
             case "clear-day":
-                condView.setImageResource(R.drawable.ic_sunny_color);
+                condView.setImageResource(R.drawable.ic_sunny_white);
                 break;
             case "clear-night":
-                condView.setImageResource(R.drawable.ic_moon_color);
+                condView.setImageResource(R.drawable.ic_clear_night_white);
                 break;
             case "rain":
-                condView.setImageResource(R.drawable.ic_rain_color);
+                condView.setImageResource(R.drawable.ic_rain_white);
                 break;
             case "snow":
-                condView.setImageResource(R.drawable.ic_snow_color);
+                condView.setImageResource(R.drawable.ic_snow_white);
                 break;
             case "sleet":
-                condView.setImageResource(R.drawable.ic_sleet_color);
+                condView.setImageResource(R.drawable.ic_sleet_white);
                 break;
             case "wind":
-                condView.setImageResource(R.drawable.ic_windy_color);
+                condView.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                condView.setImageResource(R.drawable.ic_foggy_color);
+                if(MainActivity.setID != 3){
+                    condView.setImageResource(R.drawable.ic_foggyday_white);
+                }
+                else{
+                    condView.setImageResource(R.drawable.ic_foggynight_white);
+                }
                 break;
             case "cloudy":
-                condView.setImageResource(R.drawable.ic_cloudy_color);
+                condView.setImageResource(R.drawable.ic_cloudy_white);
                 break;
             case "partly-cloudy-day":
-                condView.setImageResource(R.drawable.ic_partlycloudy_color);
+                condView.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             case "partly-cloudy-night":
-                condView.setImageResource(R.drawable.ic_partlycloudynight_color);
+                condView.setImageResource(R.drawable.ic_partlycloudynight_white);
                 break;
             default:
-                condView.setImageResource(R.drawable.ic_cloudy_color);
+                condView.setImageResource(R.drawable.ic_cloudy_white);
                 Log.i("CurrentConditions", "Unsupported condition.");
+                break;
+        }
+
+        switch (MainActivity.setID){
+            case 0:
+                condView.setColorFilter(getContext().getResources().getColor(R.color.colorYellow));
+                break;
+            case 1:
+                condView.setColorFilter(getContext().getResources().getColor(R.color.colorBlue));
+                break;
+            case 2:
+                condView.setColorFilter(getContext().getResources().getColor(R.color.colorOrange));
+                break;
+            case 3:
+                condView.setColorFilter(getContext().getResources().getColor(R.color.colorPurple));
                 break;
         }
 
