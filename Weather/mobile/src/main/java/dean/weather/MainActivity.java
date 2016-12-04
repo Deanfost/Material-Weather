@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -16,10 +19,13 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
     final int REQUEST_CHANGE_SETTINGS = 15;
 
     //Address receiver
-    protected Location lastLocation;//Location to pass to the intent service
+    protected Location lastLocation;//Location to pass to the address method
 
     //Google APIs
     public static GoogleApiClient googleApiClient;
@@ -106,18 +112,21 @@ public class MainActivity extends AppCompatActivity implements
     private String currentConditions;
     private String todaysHI;
     private String todaysLO;
-    private String todaysHILO;//Concatenate the two variables above to this format - HI/LO
+    private String todaysHILO;
     private String currentWind;
     private int currentPrecip;
     private int currentHumidity;
     private int currentDewpoint;
-    private int currentPressure;//Be sure to add units on the end when updating views!
+    private int currentPressure;
     private String currentVisibilty;
     private int currentCloudCover;
     private String sunriseTime;
     private String sunsetTime;
     private String updateTime;
     public static int setID;
+
+    //Notification
+    public static final int NOTIF_ID = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,13 +182,16 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_settings:
                 //TODO - GO TO SETTINGS ACTIVITY
                 //For now, reset keyvalue pair, and go back to intro
-                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = mySPrefs.edit();
-                editor.putString(getString(R.string.first_launch_key), "0");
-                editor.commit();
-                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
-                        .show();
-                Log.i("Editor", "Updated 1st launch");
+//                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                SharedPreferences.Editor editor = mySPrefs.edit();
+//                editor.putString(getString(R.string.first_launch_key), "0");
+//                editor.commit();
+//                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
+//                        .show();
+//                Log.i("Editor", "Updated 1st launch");
+
+                //For now, send a test notification
+                createNotification();
                 return true;
             //Refresh data
             case R.id.action_refresh:
@@ -325,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements
             locationSettingsResultPendingResult.setResultCallback(new ResultCallback<LocationSettingsResult>() {
                 @Override
                 public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
-                    Log.i("LocationSettings", "Agreeable");
+                    Log.i("LocationSettings", "Callback received");
                     final Status locationStatus = locationSettingsResult.getStatus();
                     final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
 
@@ -1054,5 +1066,36 @@ public class MainActivity extends AppCompatActivity implements
         sunsetTime = null;
         updateTime = null;
         setID = -1;
+    }
+
+    //Notifications
+    /**
+     * Creates notification containing weather information.
+     */
+    private void createNotification(){
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_cloudy_white)
+                        .setContentTitle(currentConditions + " " + String.valueOf(currentTemp)+ "\u00b0")
+                        .setContentText(currentLocation);
+        //Intent to go to main activity
+        Intent mainIntent = new Intent(this, MainActivity.class);
+
+        //Create backstack for intent
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                stackBuilder.addParentStack(MainActivity.class);
+        //Add activit to the top of stack
+        stackBuilder.addNextIntent(mainIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setAutoCancel(true);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        notificationManager.notify(NOTIF_ID, notificationBuilder.build());
     }
 }
