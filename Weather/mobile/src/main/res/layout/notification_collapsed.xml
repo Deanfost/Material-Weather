@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="@dimen/_64sdp"
+    android:background="@color/colorBlack"
+    android:paddingLeft="@dimen/_16sdp"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingBottom="@dimen/_10sdp"
+    android:paddingRight="@dimen/_16sdp">
+
+    <ImageView
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:id="@+id/notifCondIcon"
+        android:src="@drawable/ic_snow_white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/notifCondIcon"
+        android:text="34&#xb0; - Snow"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:id="@+id/notifCondition"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hi - 49&#xb0; Lo - 22&#xb0;"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        android:id="@+id/notifBody"
+        android:layout_alignBaseline="@+id/notifCondition"
+        android:layout_alignBottom="@+id/notifCondition"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_14sdp"
+        android:text="Boston"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:id="@+id/notifLocation"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_below="@+id/notifCondition"
+        android:layout_toEndOf="@+id/notifCondIcon" />
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toRightOf="@+id/notifCondIcon"-->
+        <!--android:text="34&#xb0;"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textColor="@color/colorWhite"-->
+        <!--android:textSize="38sp"-->
+        <!--android:layout_marginLeft="@dimen/_140sdp"-->
+        <!--android:id="@+id/notifTemp"-->
+        <!--android:layout_marginTop="@dimen/_3sdp"/>-->
+
+</RelativeLayout>

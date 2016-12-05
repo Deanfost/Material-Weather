@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("onCreate", "started");
         FirebaseApp.initializeApp(this);
 
         // Create an instance of GoogleAPIClient
@@ -735,6 +737,18 @@ public class MainActivity extends AppCompatActivity implements
         super.onStop();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Check to see the passed intent's extras, and if it is not null, then the intent was sent from the notification.
+        //Refresh the data.
+        if(getIntent() != null){
+            if(getIntent().getExtras() != null){
+                requestLocationAndData();
+            }
+        }
+    }
+
     //Fragments
     /**
      * Creates new mainFragment transaction.
@@ -743,9 +757,11 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         MainFragment MainFragment = new MainFragment();
-        mainFragmentTransaction.replace(R.id.mainContentView, MainFragment);
-        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        mainFragmentTransaction.commit();
+        if(!isFinishing()){
+            mainFragmentTransaction.replace(R.id.mainContentView, MainFragment);
+            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            mainFragmentTransaction.commit();
+        }
     }
 
     /**
@@ -755,9 +771,11 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         LoadingFragment LoadingFragment = new LoadingFragment();
-        mainFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
-        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        mainFragmentTransaction.commit();
+        if(!isFinishing()){
+            mainFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
+            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            mainFragmentTransaction.commit();
+        }
     }
 
     /**
@@ -767,9 +785,11 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         NoConnectionFragment noConnectionFragment = new NoConnectionFragment();
-        mainFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
-        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        mainFragmentTransaction.commit();
+        if(!isFinishing()){
+            mainFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
+            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            mainFragmentTransaction.commit();
+        }
     }
 
     /**
@@ -779,9 +799,11 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         LocationUnavailableFragment locationUnavailableFragment = new LocationUnavailableFragment();
-        mainFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
-        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        mainFragmentTransaction.commit();
+        if(!isFinishing()){
+            mainFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
+            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            mainFragmentTransaction.commit();
+        }
     }
 
     /**
@@ -791,9 +813,11 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         PermissionsFragment permissionsFragment = new PermissionsFragment();
-        mainFragmentTransaction.replace(R.id.mainContentView, permissionsFragment);
-        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        mainFragmentTransaction.commit();
+        if(!isFinishing()){
+            mainFragmentTransaction.replace(R.id.mainContentView, permissionsFragment);
+            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            mainFragmentTransaction.commit();
+        }
     }
 
     /**
@@ -803,9 +827,11 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         changeLocationSettingsFragment changeLocationSettingsFragment = new changeLocationSettingsFragment();
-        mainFragmentTransaction.replace(R.id.mainContentView, changeLocationSettingsFragment);
-        mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        mainFragmentTransaction.commit();
+        if(!isFinishing()){
+            mainFragmentTransaction.replace(R.id.mainContentView, changeLocationSettingsFragment);
+            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            mainFragmentTransaction.commit();
+        }
     }
 
     /**
@@ -1073,28 +1099,26 @@ public class MainActivity extends AppCompatActivity implements
      * Creates notification containing weather information.
      */
     private void createNotification(){
+        RemoteViews notificationView = new RemoteViews("dean.weather", R.layout.notification_collapsed);
+        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
+        notificationView.setTextViewText(R.id.notifCondition, "44\u00B0 - Cloudy");
+        notificationView.setTextViewText(R.id.notifLocation, "Boston");
+        notificationView.setTextViewText(R.id.notifBody, "Hi - 40° Lo - 22°");
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_cloudy_white)
-                        .setContentTitle(currentConditions + " " + String.valueOf(currentTemp)+ "\u00b0")
-                        .setContentText(currentLocation);
+                        .setContent(notificationView)
+                        .setSmallIcon(R.drawable.ic_cloudy_white);
         //Intent to go to main activity
         Intent mainIntent = new Intent(this, MainActivity.class);
-
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        mainIntent.putExtra("NotificationMsg", "Clicked");//Let onResume know to refresh data
         //Create backstack for intent
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-                stackBuilder.addParentStack(MainActivity.class);
-        //Add activit to the top of stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        //Add activity to the top of stack
         stackBuilder.addNextIntent(mainIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder.setContentIntent(resultPendingIntent);
-        notificationBuilder.setAutoCancel(true);
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
         notificationManager.notify(NOTIF_ID, notificationBuilder.build());
     }
