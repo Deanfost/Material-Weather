@@ -10,7 +10,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,11 +18,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.PersistableBundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -1099,7 +1095,7 @@ public class MainActivity extends AppCompatActivity implements
      * Creates notification containing weather information.
      */
     private void createNotification(){
-        RemoteViews notificationView = new RemoteViews("dean.weather", R.layout.notification_collapsed);
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_collapsed);
         notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
         notificationView.setTextViewText(R.id.notifCondition, "44\u00B0 - Cloudy");
         notificationView.setTextViewText(R.id.notifLocation, "Boston");
@@ -1110,7 +1106,7 @@ public class MainActivity extends AppCompatActivity implements
                         .setSmallIcon(R.drawable.ic_cloudy_white);
         //Intent to go to main activity
         Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         mainIntent.putExtra("NotificationMsg", "Clicked");//Let onResume know to refresh data
         //Create backstack for intent
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="@dimen/_64sdp"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
     android:background="@color/colorBlack"
-    android:paddingLeft="@dimen/_16sdp"
-    android:paddingTop="@dimen/_10sdp"
-    android:paddingBottom="@dimen/_10sdp"
-    android:paddingRight="@dimen/_16sdp">
+    android:paddingLeft="@dimen/_8sdp"
+    android:paddingTop="@dimen/_4sdp"
+    android:paddingBottom="@dimen/_4sdp"
+    android:paddingRight="@dimen/_8sdp">
 
     <ImageView
         android:layout_width="@dimen/_50sdp"
@@ -23,7 +23,7 @@
         android:text="34&#xb0; - Snow"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_marginLeft="@dimen/_10sdp"
         android:id="@+id/notifCondition"
         android:layout_marginTop="@dimen/_6sdp"
@@ -47,22 +47,10 @@
         android:text="Boston"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:id="@+id/notifLocation"
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_below="@+id/notifCondition"
         android:layout_toEndOf="@+id/notifCondIcon" />
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_toRightOf="@+id/notifCondIcon"-->
-        <!--android:text="34&#xb0;"-->
-        <!--android:textAllCaps="false"-->
-        <!--android:textColor="@color/colorWhite"-->
-        <!--android:textSize="38sp"-->
-        <!--android:layout_marginLeft="@dimen/_140sdp"-->
-        <!--android:id="@+id/notifTemp"-->
-        <!--android:layout_marginTop="@dimen/_3sdp"/>-->
 
 </RelativeLayout>
