@@ -320,79 +320,87 @@ public class MainActivity extends AppCompatActivity implements
      * Checks for location permissions, location settings, and pulls location from Google Location API.
      */
     private void requestLocationAndData(){
-        Log.i("RequestData", "called");
-        int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
-            Log.i("Permission", "Location access granted");
-            //Create location request
-            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                    .addLocationRequest(createLocationRequest());
+        //Make sure the Google API client is connected
+        if(googleApiClient.isConnected()) {
+            Log.i("RequestData", "called");
+            int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+            if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
+                Log.i("Permission", "Location access granted");
+                //Create location request
+                LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                        .addLocationRequest(createLocationRequest());
 
-            //Create location settings request to make sure the request is permitted
-            PendingResult<LocationSettingsResult> locationSettingsResultPendingResult = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+                //Create location settings request to make sure the request is permitted
+                PendingResult<LocationSettingsResult> locationSettingsResultPendingResult = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
 
-            //Check location settings
-            locationSettingsResultPendingResult.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                @Override
-                public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
-                    Log.i("LocationSettings", "Callback received");
-                    final Status locationStatus = locationSettingsResult.getStatus();
-                    final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
+                //Check location settings
+                locationSettingsResultPendingResult.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                    @Override
+                    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+                        Log.i("LocationSettings", "Callback received");
+                        final Status locationStatus = locationSettingsResult.getStatus();
+                        final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
 
-                    switch (locationStatus.getStatusCode()){
-                        case LocationSettingsStatusCodes.SUCCESS:
-                            //All location requirements are satisfied, request location
-                            try{
-                                Log.i("requestLocation", "pulling");
-                                lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                                if(lastLocation != null){
-                                    //Get latitude and longitude for DarkSky API
-                                    latitude = lastLocation.getLatitude();
-                                    longitude = lastLocation.getLongitude();
-                                    Log.i("Latitude", String.valueOf(latitude));
-                                    Log.i("Longitude", String.valueOf(longitude));
-                                    //Determine if a geocoder is available
-                                    if(!Geocoder.isPresent()){
-                                        Log.i("Geocoder", "Unavailable");
-                                    }
-                                    //Get and parse data for mainFragment
+                        switch (locationStatus.getStatusCode()){
+                            case LocationSettingsStatusCodes.SUCCESS:
+                                //All location requirements are satisfied, request location
+                                try{
+                                    Log.i("requestLocation", "pulling");
+                                    lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                                    if(lastLocation != null){
+                                        //Get latitude and longitude for DarkSky API
+                                        latitude = lastLocation.getLatitude();
+                                        longitude = lastLocation.getLongitude();
+                                        Log.i("Latitude", String.valueOf(latitude));
+                                        Log.i("Longitude", String.valueOf(longitude));
+                                        //Determine if a geocoder is available
+                                        if(!Geocoder.isPresent()){
+                                            Log.i("Geocoder", "Unavailable");
+                                        }
+                                        //Get and parse data for mainFragment
                                         //Parse and format data not related to weather
                                         retrieveAndFormatNonWeatherData();
 
                                         //Call DarkSkyAPI
                                         pullForecast();
+                                    }
+                                    else{
+                                        //Show a fragment telling the user the location is unavailable
+                                        locationUnavailableFragmentTransaction();
+                                        Log.i("Location", "Location unavailable");
+                                    }
                                 }
-                                else{
-                                    //Show a fragment telling the user the location is unavailable
-                                    locationUnavailableFragmentTransaction();
-                                    Log.i("Location", "Location unavailable");
+                                catch (SecurityException e){
+                                    Log.e("LocationPermission", "Permission denied");
                                 }
-                            }
-                            catch (SecurityException e){
-                                Log.e("LocationPermission", "Permission denied");
-                            }
-                            break;
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            // Location settings are not satisfied, but this can be fixed
-                            // by showing the user a dialog.
-                            try {
-                                locationStatus.startResolutionForResult(MainActivity.this, REQUEST_CHANGE_SETTINGS);
-                            } catch (IntentSender.SendIntentException e) {
-                                e.printStackTrace();
-                            }
-                            break;
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
-                            changeLocationFragmentTransaction();
-                            break;
+                                break;
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                // Location settings are not satisfied, but this can be fixed
+                                // by showing the user a dialog.
+                                try {
+                                    locationStatus.startResolutionForResult(MainActivity.this, REQUEST_CHANGE_SETTINGS);
+                                } catch (IntentSender.SendIntentException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
+                                changeLocationFragmentTransaction();
+                                break;
+                        }
                     }
-                }
-            });
+                });
+            }
+            else{
+                //Tell the user to grant location permissions
+                permissionsFragmentTransaction();
+                Log.i("LocationSettings", "Incompatible");
+            }
         }
+        //If there is no connection to the Google API client
         else{
-            //Tell the user to grant location permissions
-            permissionsFragmentTransaction();
-            Log.i("LocationSettings", "Incompatible");
+            Log.i("requestLocAndData", "No connection to Google API client");
+            noConnectionFragmentTransaction();
         }
     }
 
@@ -772,6 +780,7 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        setMainLayoutColor(1);
     }
 
     /**
@@ -786,6 +795,7 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        setMainLayoutColor(1);
     }
 
     /**
@@ -800,6 +810,7 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        setMainLayoutColor(1);
     }
 
     /**
@@ -814,10 +825,11 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        setMainLayoutColor(1);
     }
 
     /**
-     * Creates new changeLocationFragment transaction.
+     * Creates new changeLocationSettingsFragment transaction.
      */
     private void changeLocationFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
@@ -828,6 +840,7 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        setMainLayoutColor(1);
     }
 
     /**

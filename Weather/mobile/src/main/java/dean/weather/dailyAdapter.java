@@ -61,7 +61,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
 
     //Inflate the layout and return the holder
     @Override
-    public DailyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DailyAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
@@ -180,6 +180,14 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
             setFadeAnimation(condIcon);
             animCount++;
         }
+
+        //Setup OnClickListener
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("dailyRecycler", "clicked");
+            }
+        });
     }
 
     private void setFadeAnimation(View view) {
