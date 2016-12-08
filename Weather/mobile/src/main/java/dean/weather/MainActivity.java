@@ -229,13 +229,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.i("GoogleAPI", "Connection susupended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         //Show fragment to show the user that the connection failed
-        Log.i("APIConnection", "Failed");
+        Log.i("GoogleAPI", "Failed");
         noConnectionFragmentTransaction();
     }
 
@@ -867,7 +867,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void retryConnection() {
         loadingFragmentTransaction();
-        requestLocationAndData();
+        googleApiClient.connect();
     }
 
     /**
@@ -887,7 +887,7 @@ public class MainActivity extends AppCompatActivity implements
     private void retrieveAndFormatNonWeatherData(){
         getAddresses();
         getDate();
-        getUpdateTime();
+//        getUpdateTime();
     }
 
     /**
@@ -903,14 +903,14 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Gets the time of the update call(current time).
      */
-    private void getUpdateTime(){
-        //TODO - Make sure to account for the units the system has set(AM/PM or 24 hour time)
-        Date time = new Date();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
-        updateTime = "Updated " + format.format(calendar.getTime()) + ", " + timeFormat.format(time.getTime());
-    }
+//    private void getUpdateTime(){
+//        //TODO - Make sure to account for the units the system has set(AM/PM or 24 hour time)
+//        Date time = new Date();
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
+//        Calendar calendar = Calendar.getInstance();
+//        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+//        updateTime = "Updated " + format.format(calendar.getTime()) + ", " + timeFormat.format(time.getTime());
+//    }
 
     /**
      * Gets current UNIX timestamp.

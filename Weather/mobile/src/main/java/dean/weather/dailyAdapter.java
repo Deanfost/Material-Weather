@@ -1,6 +1,7 @@
 package dean.weather;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
@@ -75,7 +76,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
 
     //Populate the data into the item through the holder
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         //Setup typeface
         robotoLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         //Get the data based on position
@@ -185,7 +186,8 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("dailyRecycler", "clicked");
+                Log.i("dailyRecycler", "Clicked" + daySet.get(position));
+
             }
         });
     }

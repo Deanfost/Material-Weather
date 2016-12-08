@@ -93,7 +93,8 @@ public class MainFragment extends Fragment{
     ImageView sunsetIcon;
     TextView sunriseTime;
     TextView sunsetTime;
-    TextView updateTime;
+//    TextView updateTime;
+    TextView poweredLabel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,7 +139,8 @@ public class MainFragment extends Fragment{
         sunsetIcon = (ImageView) getView().findViewById(R.id.sunsetIcon);
         sunriseTime = (TextView) getView().findViewById(R.id.sunriseTime);
         sunsetTime = (TextView) getView().findViewById(R.id.sunsetTime);
-        updateTime = (TextView) getView().findViewById(R.id.updateTime);
+//        updateTime = (TextView) getView().findViewById(R.id.updateTime);
+        poweredLabel = (TextView) getView().findViewById(R.id.poweredByForecast);
 
         //Typeface
         currentTemp.setTypeface(robotoLight);
@@ -160,7 +162,8 @@ public class MainFragment extends Fragment{
         currentCloudCoverValue.setTypeface(robotoLight);
         sunriseTime.setTypeface(robotoLight);
         sunsetTime.setTypeface(robotoLight);
-        updateTime.setTypeface(robotoLight);
+//        updateTime.setTypeface(robotoLight);
+        poweredLabel.setTypeface(robotoLight);
 
         //Set color
         setFragmentLayoutColor();
@@ -172,7 +175,7 @@ public class MainFragment extends Fragment{
     /**
      * Updates views with data from API.
      */
-    private void setViews(){
+    private void setViews() {
 
         //Setup hourlyRecycler view
         hourlyRecyclerView = (RecyclerView) getView().findViewById(R.id.hourlyRecyclerView);
@@ -187,7 +190,7 @@ public class MainFragment extends Fragment{
         dailyRecyclerView.setHasFixedSize(true);
 
         //Daily Linear Layout Manager
-        dailyLayoutManager = new LinearLayoutManager(getActivity()){
+        dailyLayoutManager = new LinearLayoutManager(getActivity()) {
             //Disable scrolling
             @Override
             public boolean canScrollVertically() {
@@ -220,10 +223,9 @@ public class MainFragment extends Fragment{
                 currentConditionsIcon.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                if(MainActivity.setID != 3){
+                if (MainActivity.setID != 3) {
                     currentConditionsIcon.setImageResource(R.drawable.ic_foggyday_white);
-                }
-                else{
+                } else {
                     currentConditionsIcon.setImageResource(R.drawable.ic_foggynight_white);
                 }
                 break;
@@ -242,7 +244,7 @@ public class MainFragment extends Fragment{
                 break;
         }
 
-        switch (MainActivity.setID){
+        switch (MainActivity.setID) {
             case 0:
                 sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
                 sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
@@ -269,11 +271,11 @@ public class MainFragment extends Fragment{
         currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
         currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
         currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
-        currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) +  "mi");
+        currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "mi");
         currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
         sunriseTime.setText(passedSunriseTimeValue);
         sunsetTime.setText(passedSunsetTimeValue);
-        updateTime.setText(passedUpdateTimeValue);
+//        updateTime.setText(passedUpdateTimeValue);
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
@@ -294,12 +296,14 @@ public class MainFragment extends Fragment{
         slideIn.setTarget(wrapperLayout);
         slideIn.setStartDelay(100);
         slideIn.start();
+    }
 
-    /**
-     * Saves passed values from mainActivity to fragment lists.
-     */
+        /**
+         * Saves passed values from mainActivity to fragment lists.
+         */
+
     public static void passRecyclerDataSets(List<String> passedHours, List<Integer> passedTemps, List<String> passedConditions, List<Integer> passedWind,
-                                            List<String> passedDays, List<String> passedDailyCond, List<Integer> passedHis, List<Integer> passedLos, List<Integer> passedPrecip){
+                                            List<String> passedDays, List<String> passedDailyCond, List<Integer> passedHis, List<Integer> passedLos, List<Integer> passedPrecip) {
         Log.i("passDataSets", "called");
 
         //Hourly
@@ -320,7 +324,7 @@ public class MainFragment extends Fragment{
      * Saves passed values from mainActivity to current variables.
      */
     public static void passViewData(String passedLocation, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
-                                    int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime ){
+                                    int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime) {
 
         passedLocationValue = passedLocation;
         passedDateValue = passedDate;
@@ -343,8 +347,8 @@ public class MainFragment extends Fragment{
     /**
      * Sets of fragment layout depending on time of day.
      */
-    private void setFragmentLayoutColor(){
-        switch (MainActivity.setID){
+    private void setFragmentLayoutColor() {
+        switch (MainActivity.setID) {
             //Sunrise
             case 0:
                 //Top layout
@@ -408,5 +412,5 @@ public class MainFragment extends Fragment{
     public void onResume() {
         super.onResume();
     }
-
 }
+
