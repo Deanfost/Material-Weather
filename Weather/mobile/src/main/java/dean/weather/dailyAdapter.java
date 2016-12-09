@@ -187,7 +187,11 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Log.i("dailyRecycler", "Clicked" + daySet.get(position));
-
+                Intent dayIntent = new Intent(getContext(), DailyActivity.class);
+                //Pass values to activity
+                dayIntent.putExtra("day", daySet.get(position));
+                dayIntent.putExtra("dayInt", position);
+                getContext().startActivity(dayIntent);
             }
         });
     }

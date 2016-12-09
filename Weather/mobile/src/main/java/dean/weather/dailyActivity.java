@@ -20,19 +20,27 @@ import java.util.List;
  */
 
 public class DailyActivity extends AppCompatActivity {
-    private RecyclerView dailyRecyclerView;
-    private RecyclerView.Adapter dailyRecyclerAdapter;
-    private RecyclerView.LayoutManager dailyLayoutManager;
-    //Example data sets for testing
-    private List<String> pulledDates;
-    private List<String> pulledDescriptions;
-    private List<String> pulledConditions;
-    private List<Integer> pulledHIs;
-    private List<Integer> pulledLOs;
-    private List<Integer> pulledPrecips;
-    private List<String> pulledWind;
-    Context pulledContext;
+    private RecyclerView hourlyRecyclerView;
+    private RecyclerView.Adapter hourlyRecyclerAdapter;
+    private RecyclerView.LayoutManager hourlyLayoutManager;
 
+    //This day's hourly data sets
+    private List<String> pulledHours;
+    private List<String> pulledConditions;
+    private List<Integer> pulledIcons;
+    private List<String> pulledWind;
+
+    //View data
+    Context pulledContext;
+    private Integer passedDayInt;
+    private String passedDay;
+    private String pulledDescription;
+    private String pulledLocation;
+    private Integer pulledHi;
+    private Integer pulledLo;
+    private String pulledIcon;
+    private String pulledCondition;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +53,7 @@ public class DailyActivity extends AppCompatActivity {
         //Customize the app bar
         assert dailyToolbar != null;
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("Daily");
+        getSupportActionBar().setTitle("IS THE DAY");
         dailyToolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
         //Enable up functions
         ActionBar actionBar = getSupportActionBar();
@@ -57,19 +65,18 @@ public class DailyActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(this.getResources().getColor(R.color.colorBlue));
 
-
         //Setup recycler view
-        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
-        dailyRecyclerView.setHasFixedSize(true);
-
-        //Linear Layout Manager
-        dailyLayoutManager = new LinearLayoutManager(this);
-        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
-
-        //Setup adapter
-        pulledContext = this;
-        dailyRecyclerAdapter = new DailyAdapter(pulledContext, pulledDates, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
-        dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
+//        dailyRecyclerView = (RecyclerView) findViewById(R.id.dailyRecyclerView);
+//        dailyRecyclerView.setHasFixedSize(true);
+//
+//        //Linear Layout Manager
+//        dailyLayoutManager = new LinearLayoutManager(this);
+//        dailyRecyclerView.setLayoutManager(dailyLayoutManager);
+//
+//        //Setup adapter
+//        pulledContext = this;
+//        dailyRecyclerAdapter = new DailyAdapter(pulledContext, pulledDates, pulledConditions, pulledHIs, pulledLOs, pulledPrecips);
+//        dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
     }
 
     //Action bar events
@@ -78,7 +85,7 @@ public class DailyActivity extends AppCompatActivity {
         switch(item.getItemId()){
             //Up button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
             //User action not recognized
             default:
