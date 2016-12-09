@@ -195,7 +195,8 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_refresh:
                 clearDataSets();
                 loadingFragmentTransaction();
-                requestLocationAndData();
+                //Reconnect to Google services, and onConnect, requestDataAndLocation will be called.
+                googleApiClient.connect();
                 return true;
             //User action not recognized
             default:
@@ -224,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onConnected(@Nullable Bundle bundle) {
         //Get current location
         requestLocationAndData();
-
     }
 
     @Override
@@ -723,6 +723,11 @@ public class MainActivity extends AppCompatActivity implements
                 MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcon, pulledWind, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecip);
                 MainFragment.passViewData(currentLocation, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
+
+                //Terminate Google API Connection
+                if(googleApiClient.isConnected()){
+                    googleApiClient.disconnect();
+                }
             }
 
             @Override
@@ -730,6 +735,9 @@ public class MainActivity extends AppCompatActivity implements
                 Log.e("DarkSky API", "Error while calling: " + retrofitError.getUrl());
                 Log.i("DarkSky API", retrofitError.getMessage());
                 noConnectionFragmentTransaction();
+                if(googleApiClient.isConnected()){
+                    googleApiClient.disconnect();
+                }
             }
         });
     }
@@ -737,7 +745,9 @@ public class MainActivity extends AppCompatActivity implements
     //Lifecycle events
     @Override
     protected void onStop() {
-        googleApiClient.disconnect();
+        if(googleApiClient.isConnected()){
+            googleApiClient.disconnect();
+        }
         super.onStop();
     }
 

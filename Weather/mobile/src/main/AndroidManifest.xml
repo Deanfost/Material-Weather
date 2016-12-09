@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-sdk android:minSdkVersion="21"/>
 
     <application
         android:allowBackup="true"
@@ -48,11 +49,10 @@
             <!--android:theme="@style/ActivityTheme">-->
         <!--</activity>-->
         //Daily activity
-        <!--<activity android:name=".dailyActivity"-->
-            <!--android:configChanges="orientation"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:parentActivityName=".MainActivity"-->
-            <!--android:theme="@style/ActivityTheme">-->
-        <!--</activity>-->
+        <activity android:name=".DailyActivity"
+            android:theme="@style/ActivityTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation">
+        </activity>
     </application>
 </manifest>

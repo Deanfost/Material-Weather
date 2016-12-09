@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="@dimen/_165sdp"
         android:layout_height="wrap_content"
-        android:text="Connection failed"
+        android:text="No connection"
         android:textSize="18sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
