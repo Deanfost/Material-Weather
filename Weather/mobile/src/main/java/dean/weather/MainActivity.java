@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements
     private List<Integer> pulledPrecip = new ArrayList<>();
 
     //Current
-    private String currentLocation;
+    public static String currentLocation;
     private String currentDate;
     private String currentIcon;
     private int currentTemp;

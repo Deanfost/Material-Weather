@@ -113,26 +113,6 @@
                 android:background="@color/colorWhiteDark"
                 android:id="@+id/dayLowerLayoutWrapper">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_110sdp"
-                    android:orientation="vertical"
-                    android:background="@color/colorWhite"
-                    android:id="@+id/DayHourlyContentView"
-                    android:gravity="center_vertical">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:background="@color/colorWhite"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_100sdp"
-                        android:id="@+id/hourlyRecyclerView"
-                        android:scrollbars="horizontal"
-                        android:fadeScrollbars="true"
-                        android:scrollbarStyle="insideInset"
-                        android:scrollbarThumbHorizontal="@drawable/hourly_scrollbar"
-                        android:scrollbarSize="@dimen/_3sdp"/>
-                </LinearLayout>
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -144,7 +124,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Current details"
+                        android:text="Details"
                         android:textSize="16sp"
                         android:id="@+id/dayDetailsLabel"
                         android:layout_marginBottom="@dimen/_16sdp"/>
