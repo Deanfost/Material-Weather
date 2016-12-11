@@ -244,25 +244,6 @@ public class MainFragment extends Fragment{
                 break;
         }
 
-        switch (MainActivity.setID) {
-            case 0:
-                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
-                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
-                break;
-            case 1:
-                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorBlue));
-                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorBlue));
-                break;
-            case 2:
-                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorOrange));
-                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorOrange));
-                break;
-            case 3:
-                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorPurple));
-                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorPurple));
-                break;
-        }
-
         currentTemp.setText(passedTempValue + "\u00B0");
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
@@ -362,6 +343,8 @@ public class MainFragment extends Fragment{
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorYellow));
                 currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorYellow));
                 currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorYellow));
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorYellow));
                 break;
             //Daytime
             case 1:
@@ -376,6 +359,8 @@ public class MainFragment extends Fragment{
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorBlue));
                 currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorBlue));
                 currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorBlue));
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorBlue));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorBlue));
                 break;
             //Sunset
             case 2:
@@ -390,6 +375,8 @@ public class MainFragment extends Fragment{
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorOrange));
                 currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorOrange));
                 currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorOrange));
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorOrange));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorOrange));
                 break;
             //Nighttime
             case 3:
@@ -404,6 +391,8 @@ public class MainFragment extends Fragment{
                 currentPressureValue.setTextColor(getResources().getColor(R.color.colorPurple));
                 currentVisibilityValue.setTextColor(getResources().getColor(R.color.colorPurple));
                 currentCloudCoverValue.setTextColor(getResources().getColor(R.color.colorPurple));
+                sunriseIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorPurple));
+                sunsetIcon.setColorFilter(getActivity().getResources().getColor(R.color.colorPurple));
                 break;
         }
     }

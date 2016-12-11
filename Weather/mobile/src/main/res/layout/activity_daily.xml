@@ -240,30 +240,9 @@
                         android:layout_width="@dimen/_15sdp"
                         android:layout_height="@dimen/_15sdp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_visibility_black"
-                        android:tint="@color/colorLightBlack"
-                        android:layout_below="@id/dayDetailsPressureLabel"
-                        android:id="@+id/dayVisibilityIcon"
-                        android:layout_marginRight="@dimen/_6sdp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Visibility"
-                        android:textSize="14sp"
-                        android:id="@+id/dayDetailsVisibilityLabel"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:layout_marginRight="@dimen/_145sdp"
-                        android:layout_below="@id/dayDetailsPressureLabel"
-                        android:layout_toRightOf="@id/dayVisibilityIcon"/>
-
-                    <ImageView
-                        android:layout_width="@dimen/_15sdp"
-                        android:layout_height="@dimen/_15sdp"
-                        android:layout_gravity="center_horizontal"
                         android:src="@drawable/ic_cloudfilled_black"
                         android:tint="@color/colorLightBlack"
-                        android:layout_below="@id/dayDetailsVisibilityLabel"
+                        android:layout_below="@id/dayDetailsPressureLabel"
                         android:id="@+id/dayCloudCoverIcon"
                         android:layout_marginRight="@dimen/_6sdp"/>
 
@@ -275,7 +254,7 @@
                         android:id="@+id/dayDetailsCloudCoverLabel"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginRight="@dimen/_145sdp"
-                        android:layout_below="@id/dayDetailsVisibilityLabel"
+                        android:layout_below="@id/dayDetailsPressureLabel"
                         android:layout_toRightOf="@id/dayCloudCoverIcon"/>
 
                     <!-- Right side of details -->
@@ -344,22 +323,10 @@
                         android:layout_height="wrap_content"
                         android:text="---"
                         android:textSize="14sp"
-                        android:id="@+id/dayDetailsVisibilityValue"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:layout_marginRight="@dimen/_2sdp"
-                        android:layout_below="@id/dayDetailsPressureLabel"
-                        android:layout_toRightOf="@id/dayDetailsWindLabel"
-                        android:textColor="@color/colorBlue"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="---"
-                        android:textSize="14sp"
                         android:id="@+id/dayDetailsCloudCoverValue"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginRight="@dimen/_2sdp"
-                        android:layout_below="@id/dayDetailsVisibilityLabel"
+                        android:layout_below="@id/dayDetailsPressureValue"
                         android:layout_toRightOf="@id/dayDetailsWindLabel"
                         android:textColor="@color/colorBlue"/>
                 </RelativeLayout>
