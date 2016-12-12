@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-sdk android:minSdkVersion="21"/>
 
     <application
@@ -41,13 +42,6 @@
             android:theme="@style/MaterialTheme">
         </activity>
 
-        //Hourly Activity
-        <!--<activity android:name=".hourlyActivity"-->
-            <!--android:configChanges="orientation"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:parentActivityName=".MainActivity"-->
-            <!--android:theme="@style/ActivityTheme">-->
-        <!--</activity>-->
         //Day Activity
         <activity android:name=".DailyActivity"
             android:theme="@style/ActivityTheme"
@@ -55,5 +49,20 @@
             android:configChanges="orientation"
             android:parentActivityName=".MainActivity">
         </activity>
+
+        //Active notification service
+        <service android:name=".notificationService"
+            android:exported="false">
+        </service>
+
+        //Boot receiver
+        <receiver
+            android:name=".bootReceiver"
+            android:label="bootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

@@ -5,9 +5,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -20,8 +17,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +29,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -187,9 +182,11 @@ public class MainActivity extends AppCompatActivity implements
 //                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
 //                        .show();
 //                Log.i("Editor", "Updated 1st launch");
+                Intent notificationService = new Intent(this, notificationService.class);
+                startService(notificationService);
 
                 //For now, send a test notification
-                createNotification();
+                Toast.makeText(this, "Settings coming up soon", Toast.LENGTH_SHORT).show();
                 return true;
             //Refresh data
             case R.id.action_refresh:
@@ -1113,32 +1110,4 @@ public class MainActivity extends AppCompatActivity implements
         setID = -1;
     }
 
-    //Notifications
-    /**
-     * Creates notification containing weather information.
-     */
-    private void createNotification(){
-        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_collapsed);
-        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
-        notificationView.setTextViewText(R.id.notifCondition, "44\u00B0 - Cloudy");
-        notificationView.setTextViewText(R.id.notifLocation, "Boston");
-        notificationView.setTextViewText(R.id.notifBody, "Hi - 40° Lo - 22°");
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this)
-                        .setContent(notificationView)
-                        .setSmallIcon(R.drawable.ic_cloudy_white);
-        //Intent to go to main activity
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        mainIntent.putExtra("NotificationMsg", "Clicked");//Let onResume know to refresh data
-        //Create backstack for intent
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        //Add activity to the top of stack
-        stackBuilder.addNextIntent(mainIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        notificationManager.notify(NOTIF_ID, notificationBuilder.build());
-    }
 }
