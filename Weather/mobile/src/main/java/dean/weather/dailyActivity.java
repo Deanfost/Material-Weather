@@ -496,7 +496,7 @@ public class DailyActivity extends AppCompatActivity {
                 viewConditionsIcon.setImageResource(R.drawable.ic_sunny_white);
                 break;
             case "clear-night":
-                viewConditionsIcon.setImageResource(R.drawable.ic_clear_night_white);
+                viewConditionsIcon.setImageResource(R.drawable.ic_sunny_white);
                 break;
             case "rain":
                 viewConditionsIcon.setImageResource(R.drawable.ic_rain_white);
@@ -511,11 +511,7 @@ public class DailyActivity extends AppCompatActivity {
                 viewConditionsIcon.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                if (MainActivity.setID != 3) {
                     viewConditionsIcon.setImageResource(R.drawable.ic_foggyday_white);
-                } else {
-                    viewConditionsIcon.setImageResource(R.drawable.ic_foggynight_white);
-                }
                 break;
             case "cloudy":
                 viewConditionsIcon.setImageResource(R.drawable.ic_cloudy_white);
@@ -524,7 +520,7 @@ public class DailyActivity extends AppCompatActivity {
                 viewConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             case "partly-cloudy-night":
-                viewConditionsIcon.setImageResource(R.drawable.ic_partlycloudynight_white);
+                viewConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             default:
                 viewConditionsIcon.setImageResource(R.drawable.ic_cloudy_white);

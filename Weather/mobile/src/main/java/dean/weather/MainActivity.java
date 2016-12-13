@@ -320,14 +320,14 @@ public class MainActivity extends AppCompatActivity implements
         //Make sure the Google API client is connected
         if(googleApiClient.isConnected()) {
             Log.i("RequestData", "called");
-            int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+            int locationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
             if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
                 Log.i("Permission", "Location access granted");
-                //Create location request
+                //Create location settings request
                 LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                         .addLocationRequest(createLocationRequest());
 
-                //Create location settings request to make sure the request is permitted
+                //Create location request to make sure the request is permitted
                 PendingResult<LocationSettingsResult> locationSettingsResultPendingResult = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
 
                 //Check location settings

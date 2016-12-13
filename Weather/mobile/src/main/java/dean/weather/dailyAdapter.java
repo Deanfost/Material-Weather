@@ -116,12 +116,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
                 condIcon.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                if(MainActivity.setID != 3){
                     condIcon.setImageResource(R.drawable.ic_foggyday_white);
-                }
-                else{
-                    condIcon.setImageResource(R.drawable.ic_foggynight_white);
-                }
                 break;
             case "cloudy":
                 condIcon.setImageResource(R.drawable.ic_cloudy_white);
