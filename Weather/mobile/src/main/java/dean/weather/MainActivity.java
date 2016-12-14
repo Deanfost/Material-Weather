@@ -874,6 +874,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void retryConnection() {
         loadingFragmentTransaction();
+        clearDataSets();
         googleApiClient.connect();
     }
 
