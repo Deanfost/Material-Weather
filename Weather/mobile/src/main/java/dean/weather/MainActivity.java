@@ -1111,4 +1111,12 @@ public class MainActivity extends AppCompatActivity implements
         setID = -1;
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.i("newIntent", "Received");
+        if(intent.getExtras().containsKey("Restart")){
+            finish();
+        }
+    }
 }

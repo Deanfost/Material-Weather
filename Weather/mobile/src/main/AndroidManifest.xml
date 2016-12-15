@@ -28,7 +28,8 @@
         <activity android:name=".IntroActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,7 +40,8 @@
         <activity android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/MaterialTheme">
+            android:theme="@style/MaterialTheme"
+            android:launchMode="singleTask">
         </activity>
 
         //Day Activity
@@ -52,6 +54,11 @@
 
         //Active notification service
         <service android:name=".notificationService"
+            android:exported="false">
+        </service>
+
+        //Notification intent receiver
+        <service android:name=".notificationIntentHandler"
             android:exported="false">
         </service>
 

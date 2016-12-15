@@ -321,14 +321,12 @@ public class notificationService extends IntentService implements GoogleApiClien
                         .setContent(notificationView)
                         .setSmallIcon(iconID);
         //Intent to go to main activity
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        mainIntent.putExtra("NotificationMsg", "Clicked");//Let onResume know to refresh data
+        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         //Create backstack for intent
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        //Add activity to the top of stack
-        stackBuilder.addNextIntent(mainIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//        //Add activity to the top of stack
+//        stackBuilder.addNextIntent(mainIntent);
+        PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder.setContentIntent(resultPendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
