@@ -186,6 +186,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
                 //Pass values to activity
                 dayIntent.putExtra("day", daySet.get(position));
                 dayIntent.putExtra("dayInt", position);
+                dayIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 getContext().startActivity(dayIntent);
             }
         });

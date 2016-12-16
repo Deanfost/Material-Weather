@@ -176,6 +176,7 @@ public class MainFragment extends Fragment{
      * Updates views with data from API.
      */
     private void setViews() {
+        Log.i("MainFragment", "setViews called");
 
         //Setup hourlyRecycler view
         hourlyRecyclerView = (RecyclerView) getView().findViewById(R.id.hourlyRecyclerView);
@@ -277,6 +278,8 @@ public class MainFragment extends Fragment{
         slideIn.setTarget(wrapperLayout);
         slideIn.setStartDelay(100);
         slideIn.start();
+
+        ((MainActivity)getActivity()).clearDataSets();
     }
 
         /**
@@ -288,10 +291,10 @@ public class MainFragment extends Fragment{
         Log.i("passDataSets", "called");
 
         //Hourly
-        passedHoursValues = passedHours;
-        passedTempsValues = passedTemps;
-        passedConditionsValues = passedConditions;
-        passedWindValues = passedWind;
+        passedHoursValues = new ArrayList<>(passedHours);
+        passedTempsValues = new ArrayList<>(passedTemps);
+        passedConditionsValues = new ArrayList<>(passedConditions);
+        passedWindValues = new ArrayList<>(passedWind);
         //Daily
         passedDaysValues = new ArrayList<>(passedDays);
         passedDailyCondValues = new ArrayList<>(passedDailyCond);

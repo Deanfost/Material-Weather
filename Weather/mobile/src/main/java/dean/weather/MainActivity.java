@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -124,47 +125,62 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("onCreate", "started");
-        FirebaseApp.initializeApp(this);
+//      If we need to restart the activity(started from notification)
+//        if(getIntent()!= null){
+//            if(getIntent().getExtras()!= null){
+//                if(getIntent().getExtras().containsKey("Restart"));
+//                {
+//                    Log.i("MainActivity", "Called from intent");
+//                    getIntent().removeExtra("Restart");
+//                    finish();
+//                    Intent restart = new Intent(getBaseContext(), MainActivity.class);
+//                    startActivity(restart);
+//                }
+//            }
+//        }
+//            Log.i("MainActivity", "First start");
+            FirebaseApp.initializeApp(this);
 
-        // Create an instance of GoogleAPIClient
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+            // Create an instance of GoogleAPIClient
+            if (googleApiClient == null) {
+                googleApiClient = new GoogleApiClient.Builder(this)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .addApi(LocationServices.API)
+                        .build();
+                Log.i("GoogleAPIClient", "Creating new instance");
+            }
 
-        //Give fragment interfaces reference to mainActivity
-        PermissionsFragment.setInitializer(this);
-        NoConnectionFragment.setConnectionRefresher(this);
-        LocationUnavailableFragment.setDataFetcher(this);
-        changeLocationSettingsFragment.setInitializer(this);
+            //Give fragment interfaces reference to mainActivity
+            PermissionsFragment.setInitializer(this);
+            NoConnectionFragment.setConnectionRefresher(this);
+            LocationUnavailableFragment.setDataFetcher(this);
+            changeLocationSettingsFragment.setInitializer(this);
 
-        //Connect to the Google API
-        googleApiClient.connect();
+            //Connect to the Google API
+            googleApiClient.connect();
 
-        //Set content view
-        setContentView(R.layout.activity_main);
+            //Set content view
+            setContentView(R.layout.activity_main);
 
-        //Customize toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            //Customize toolbar
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        //Customize the app bar
-        assert toolbar != null;
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlue)));
+            //Customize the app bar
+            assert toolbar != null;
+            assert getSupportActionBar() != null;
+            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlue)));
 
-        //Reference to mainLayout
-        mainActivityLayout = (LinearLayout) findViewById(R.id.mainActivityLayout);
+            //Reference to mainLayout
+            mainActivityLayout = (LinearLayout) findViewById(R.id.mainActivityLayout);
 
-        //Initialize loading fragment at start
-        loadingFragmentTransaction();
+            //Initialize loading fragment at start
+            loadingFragmentTransaction();
 
-        //Set default layout color(blue)
-        setMainLayoutColor(1);
+            //Set default layout color(blue)
+            setMainLayoutColor(1);
     }
 
     //Action bar events
@@ -221,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         //Get current location
+        Log.i("GoogleAPI", "Connected");
+        clearDataSets();
         requestLocationAndData();
     }
 
@@ -749,15 +767,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //Check to see the passed intent's extras, and if it is not null, then the intent was sent from the notification.
-        //Refresh the data.
-        if(getIntent() != null){
-            if(getIntent().getExtras() != null){
-                requestLocationAndData();
-            }
-        }
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("MainActivity", "Being destroyed");
     }
 
     //Fragments
@@ -773,6 +785,9 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        else{
+            Log.i("MainActivity", "Finishing");
+        }
     }
 
     /**
@@ -786,6 +801,9 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
+        }
+        else{
+            Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
     }
@@ -802,6 +820,9 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        else{
+            Log.i("MainActivity", "Finishing");
+        }
         setMainLayoutColor(1);
     }
 
@@ -816,6 +837,9 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
+        }
+        else{
+            Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
     }
@@ -832,6 +856,9 @@ public class MainActivity extends AppCompatActivity implements
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
+        else{
+            Log.i("MainActivity", "Finishing");
+        }
         setMainLayoutColor(1);
     }
 
@@ -842,10 +869,13 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         changeLocationSettingsFragment changeLocationSettingsFragment = new changeLocationSettingsFragment();
-        if(!isFinishing()){
+        if (!isFinishing()) {
             mainFragmentTransaction.replace(R.id.mainContentView, changeLocationSettingsFragment);
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
+        }
+        else{
+            Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
     }
@@ -1077,7 +1107,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Clears values from hourly and daily datasets.
      */
-    private void clearDataSets(){
+    public void clearDataSets(){
 
         pulledHours.clear();
         pulledIcon.clear();
@@ -1090,7 +1120,6 @@ public class MainActivity extends AppCompatActivity implements
         pulledLOs.clear();
         pulledPrecip.clear();
 
-        currentLocation = null;
         currentDate = null;
         currentIcon = null;
         currentTemp = 0;
@@ -1108,15 +1137,5 @@ public class MainActivity extends AppCompatActivity implements
         sunriseTime = null;
         sunsetTime = null;
         updateTime = null;
-        setID = -1;
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Log.i("newIntent", "Received");
-        if(intent.getExtras().containsKey("Restart")){
-            finish();
-        }
     }
 }

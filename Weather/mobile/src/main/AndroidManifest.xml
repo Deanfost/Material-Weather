@@ -28,8 +28,7 @@
         <activity android:name=".IntroActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"
-            android:launchMode="singleTask">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -41,7 +40,7 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/MaterialTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleInstance">
         </activity>
 
         //Day Activity

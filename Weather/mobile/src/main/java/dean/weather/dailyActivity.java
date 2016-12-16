@@ -326,6 +326,9 @@ public class DailyActivity extends AppCompatActivity {
 
         //Set view values
         setViews();
+
+        //Override the transition
+        overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
     }
 
     //Action bar events

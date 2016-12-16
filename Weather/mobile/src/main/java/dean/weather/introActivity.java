@@ -48,6 +48,7 @@ public class IntroActivity extends AppCompatActivity {
                 Log.i("Permissions", "Permission granted");
                 //Launch main
                 Intent startMain = new Intent(this, MainActivity.class);
+                startMain.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(startMain);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
@@ -61,10 +62,11 @@ public class IntroActivity extends AppCompatActivity {
         PERMISSIONS_REQUEST = 42;
         //Make sure we can access the user's location
         int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
         //Launch main if we do
         if(locationPermission == PackageManager.PERMISSION_GRANTED && locationPermission == PackageManager.PERMISSION_GRANTED){
+            Log.i("IntroActivity", "Launching main");
             Intent startMain = new Intent(this, MainActivity.class);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(startMain);
             overridePendingTransition(0, 0);
         }

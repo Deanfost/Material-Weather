@@ -316,17 +316,14 @@ public class notificationService extends IntentService implements GoogleApiClien
         notificationView.setTextViewText(R.id.notifLocation, currentAddress);
         //Set high and low
         notificationView.setTextViewText(R.id.notifBody, "Hi - " + currentHi + "° Lo - " + currentLo + "°");
+        //Build the notification
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
                         .setContent(notificationView)
                         .setSmallIcon(iconID);
         //Intent to go to main activity
-        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
-        //Create backstack for intent
-//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-//        //Add activity to the top of stack
-//        stackBuilder.addNextIntent(mainIntent);
-        PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent mainIntent = new Intent(this, notificationIntentHandler.class);
+        PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
         notificationBuilder.setContentIntent(resultPendingIntent);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
