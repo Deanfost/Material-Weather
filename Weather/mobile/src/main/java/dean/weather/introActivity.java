@@ -27,13 +27,8 @@ public class IntroActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //Decide on which activity to launch
+        Log.i("IntroActivity", "Instantiated");
         decideActivity();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     //Handle request results
@@ -51,6 +46,7 @@ public class IntroActivity extends AppCompatActivity {
                 startMain.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(startMain);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             }
         }
     }
@@ -69,6 +65,7 @@ public class IntroActivity extends AppCompatActivity {
             startMain.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(startMain);
             overridePendingTransition(0, 0);
+            finish();
         }
         else{
             //If we don't have permission, it may be first start
@@ -80,7 +77,7 @@ public class IntroActivity extends AppCompatActivity {
                 startActivity(onboardingIntent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 Log.i("Intent", "Onboarding");
-
+                finish();
             }
             else{
                 //It isn't first start, but we need to request permission for location

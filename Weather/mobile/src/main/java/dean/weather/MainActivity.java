@@ -766,12 +766,6 @@ public class MainActivity extends AppCompatActivity implements
         super.onStop();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i("MainActivity", "Being destroyed");
-    }
-
     //Fragments
     /**
      * Creates new mainFragment transaction.
@@ -1147,17 +1141,10 @@ public class MainActivity extends AppCompatActivity implements
     public void launchDailyActivity(Intent dailyIntent){
         Log.i("launchDaily", "Launching dailyActivity");
         startActivity(dailyIntent);
-        overridePendingTransition(R.animator.slide_in_right, R.animator.slide_out_left);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        overridePendingTransition(R.animator.slide_in_left, R.animator.slide_out_right);
     }
 
     @Override
     public void onBackPressed() {
-        //Disable the back button on this activity
+        //Block back button for now
     }
 }

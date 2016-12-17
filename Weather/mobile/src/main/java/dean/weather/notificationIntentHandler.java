@@ -21,8 +21,8 @@ public class notificationIntentHandler extends IntentService{
     protected void onHandleIntent(Intent intent) {
         Log.i("NotifIntentHndlr", "Started");
         //When instantiated, clear the back stack if there is one, and then start a new instance of introActivity
-        Intent mainIntent = new Intent(this, IntroActivity.class);
-        mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(mainIntent);
         stopSelf();
     }
