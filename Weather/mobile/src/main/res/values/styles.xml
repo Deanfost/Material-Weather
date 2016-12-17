@@ -32,6 +32,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">#FFFFFF</item>
+        <!-- Specify transitions -->
+        <!--<item name="android:windowEnterTransition">@transition/slide_in_left</item>-->
+        <!--<item name="android:windowExitTransition">@transition/slide_out_right</item>-->
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 
     <!-- Splash theme -->

@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,7 +27,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
     private List<Integer> HISet;
     private List<Integer> LOSet;
     private List<Integer> precipSet;
-    private Context context;
+    private Context context;//Activity context passed from mainFragment
     Typeface robotoLight;
     //Set duration for fade anim
     private final int FADE_DURATION = 500;
@@ -71,6 +72,8 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
 
         //Return a new holder instance
         DailyAdapter.ViewHolder viewHolder = new DailyAdapter.ViewHolder(rowView);
+
+        //Set the context
         return viewHolder;
     }
 
@@ -183,11 +186,11 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
             public void onClick(View view) {
                 Log.i("dailyRecycler", "Clicked" + daySet.get(position));
                 Intent dayIntent = new Intent(getContext(), DailyActivity.class);
-                //Pass values to activity
                 dayIntent.putExtra("day", daySet.get(position));
                 dayIntent.putExtra("dayInt", position);
-                dayIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                getContext().startActivity(dayIntent);
+                //Tell the activity to launch the daily activity
+                MainActivity mainActivity = (MainActivity) context;
+                mainActivity.launchDailyActivity(dayIntent);
             }
         });
     }

@@ -19,6 +19,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,8 +39,6 @@ import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,9 +50,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class notificationService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
-    //Location settings change
-    private final int REQUEST_CHANGE_SETTINGS = 15;
+public class notificationService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -106,11 +103,6 @@ public class notificationService extends IntentService implements GoogleApiClien
         return locationRequest;
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
     //GoogleAPI
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -157,21 +149,9 @@ public class notificationService extends IntentService implements GoogleApiClien
                                     getAddresses();
                                     //Pull initial data
                                     pullForecast();
-
-
-                                    //Receive location updates
-                                    LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, new LocationListener() {
-                                        @Override
-                                        public void onLocationChanged(Location location) {
-                                            lastLocation = location;
-                                            //Pull new data
-                                            pullForecast();
-                                        }
-                                    });
                                 }
                                 else{
-                                    //TODO - Wait 10 mins, and check for location again
-
+                                    Log.i("notifService", "Unable to gather location");
                                 }
                             }
                             catch (SecurityException e){
@@ -235,16 +215,17 @@ public class notificationService extends IntentService implements GoogleApiClien
 
     @Override
     public void onConnectionSuspended(int i) {
-        //For now, kill service when connection is lost
-        Log.i("notifService", "Stopping");
-        stopSelf();
+        //TODO - GET RID OF THIS AFTER TESTING
+        Log.i("notifService", "API connection suspended");
+        Toast.makeText(this, "GoogleAPI connection suspended", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        //For now, kill service when connection is lost
-        Log.i("notifService", "Stopping");
-        stopSelf();
+        Log.i("notifService", "GoogleAPI connection suspended");
+        Toast.makeText(this, "GoogleAPI connection failed", Toast.LENGTH_SHORT).show();
+
     }
 
     //Notification
@@ -325,9 +306,10 @@ public class notificationService extends IntentService implements GoogleApiClien
         Intent mainIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
         notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setOngoing(true);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
-        googleApiClient.disconnect();
+        stopSelf();
     }
 
     //Dark Sky
@@ -409,22 +391,19 @@ public class notificationService extends IntentService implements GoogleApiClien
 
                 //Parse sunrise and sunset times to determine current layout color
                 //Parse sunrise time
-                String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
+                sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
                 Log.i("sunriseTimeUNIX", sunriseTimeString);
 
                 //Parse sunset time
-                String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
+                sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
                 Log.i("sunsetTimeUNIX", sunsetTimeString);
 
                 //Create/update notification
                 createNotification();
 
-                //Terminate Google API Connection
+                //Kill the connection
                 if(googleApiClient.isConnected()){
-                    Log.i("notifService", "Stopping");
                     googleApiClient.disconnect();
-                    //For now, kill self when notif is created
-                    stopSelf();
                 }
             }
 
@@ -432,9 +411,7 @@ public class notificationService extends IntentService implements GoogleApiClien
             public void failure(RetrofitError retrofitError) {
                 Log.e("DarkSky API", "Error while calling: " + retrofitError.getUrl());
                 Log.i("DarkSky API", retrofitError.getMessage());
-                if(googleApiClient.isConnected()){
-                    googleApiClient.disconnect();
-                }
+
             }
         });
     }
@@ -489,9 +466,8 @@ public class notificationService extends IntentService implements GoogleApiClien
      * Gets current UNIX timestamp.
      * @return
      */
+    @NonNull
     private String getCurrentTime(){
-        long currentTime = System.currentTimeMillis() /1000;
-        String currentTimeString = String.valueOf(currentTime);
-        return currentTimeString;
+        return String.valueOf(System.currentTimeMillis() /1000);
     }
 }

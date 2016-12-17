@@ -198,11 +198,11 @@ public class MainActivity extends AppCompatActivity implements
 //                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
 //                        .show();
 //                Log.i("Editor", "Updated 1st launch");
-                Intent notificationService = new Intent(this, notificationService.class);
-                startService(notificationService);
-
-                //For now, send a test notification
-                Toast.makeText(this, "Settings coming up soon", Toast.LENGTH_SHORT).show();
+//                Intent notificationService = new Intent(this, notificationService.class);
+//                startService(notificationService);
+//
+//                //For now, send a test notification
+//                Toast.makeText(this, "Settings coming up soon", Toast.LENGTH_SHORT).show();\
                 return true;
             //Refresh data
             case R.id.action_refresh:
@@ -1137,5 +1137,27 @@ public class MainActivity extends AppCompatActivity implements
         sunriseTime = null;
         sunsetTime = null;
         updateTime = null;
+    }
+
+    //Activities
+
+    /**
+     * Launches dailyActivity with data parameters passed from dailyAdapter.
+     */
+    public void launchDailyActivity(Intent dailyIntent){
+        Log.i("launchDaily", "Launching dailyActivity");
+        startActivity(dailyIntent);
+        overridePendingTransition(R.animator.slide_in_right, R.animator.slide_out_left);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        overridePendingTransition(R.animator.slide_in_left, R.animator.slide_out_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Disable the back button on this activity
     }
 }

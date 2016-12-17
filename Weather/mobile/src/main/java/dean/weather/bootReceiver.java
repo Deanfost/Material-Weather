@@ -1,8 +1,11 @@
 package dean.weather;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 /**
@@ -15,8 +18,18 @@ public class bootReceiver extends BroadcastReceiver {
         if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
             Log.i("bootReceiver", "Starting service");
             //Start the notification service
-            Intent notificationIntent = new Intent(context, notificationService.class);
-            context.startService(notificationIntent);
+//            Intent notificationIntent = new Intent(context, notificationService.class);
+//            context.startService(notificationIntent);
+
+            //Setup an alarm to schedule forecast pull tasks
+            AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+            Intent serviceIntent = new Intent(context, notificationService.class);
+            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, serviceIntent, 0);
+
+            //TODO - ENABLE/DISABLE THIS IN SETTINGS
+            //Setup an alarm to fire immediately, and then every hour after that
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() - 60,
+                    AlarmManager.INTERVAL_HOUR, alarmIntent);
         }
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
@@ -326,9 +327,6 @@ public class DailyActivity extends AppCompatActivity {
 
         //Set view values
         setViews();
-
-        //Override the transition
-        overridePendingTransition(R.transition.slide_in_left, R.transition.slide_out_right);
     }
 
     //Action bar events
@@ -545,4 +543,8 @@ public class DailyActivity extends AppCompatActivity {
         viewSunsetTime.setText(daySunsetTime);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
