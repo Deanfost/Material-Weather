@@ -3,8 +3,11 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -16,6 +19,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.PersistableBundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -120,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements
 
     //Notification
     public static final int NOTIF_ID = 23;
+    private PendingIntent alarmIntent;
+    private AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,14 +208,28 @@ public class MainActivity extends AppCompatActivity implements
 //                startService(notificationService);
 //
 //                //For now, send a test notification
-//                Toast.makeText(this, "Settings coming up soon", Toast.LENGTH_SHORT).show();\
+//                Toast.makeText(this, "Settings coming up soon", Toast.LENGTH_SHORT).show();
+
+                //Setup an alarm to schedule forecast pull tasks
+                alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+                Intent serviceIntent = new Intent("dean.weather.alarm");
+                alarmIntent = PendingIntent.getBroadcast(this, 0, serviceIntent, 0);
+
+                //TODO - ENABLE/DISABLE THIS IN SETTINGS
+                //Setup an alarm to fire immediately, and then every hour after that
+                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() - 60000,
+                        60000, alarmIntent);
+
                 return true;
             //Refresh data
             case R.id.action_refresh:
-                clearDataSets();
-                loadingFragmentTransaction();
-                //Reconnect to Google services, and onConnect, requestDataAndLocation will be called.
-                googleApiClient.connect();
+//                clearDataSets();
+//                loadingFragmentTransaction();
+//                //Reconnect to Google services, and onConnect, requestDataAndLocation will be called.
+//                googleApiClient.connect();
+                //For now, cancel the alarm for notification
+                alarmManager.cancel(alarmIntent);
+
                 return true;
             //User action not recognized
             default:

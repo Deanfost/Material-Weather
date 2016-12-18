@@ -70,5 +70,13 @@
             </intent-filter>
         </receiver>
 
+        //Alarm receiver
+        <receiver android:name=".alarmReceiver"
+            android:label="alarmReceiver">
+            <intent-filter>
+                <action android:name="dean.weather.alarm"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

@@ -217,99 +217,115 @@ public class notificationService extends IntentService implements GoogleApiClien
     public void onConnectionSuspended(int i) {
         //TODO - GET RID OF THIS AFTER TESTING
         Log.i("notifService", "API connection suspended");
-        Toast.makeText(this, "GoogleAPI connection suspended", Toast.LENGTH_SHORT).show();
-
+        createNotification(false);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("notifService", "GoogleAPI connection suspended");
-        Toast.makeText(this, "GoogleAPI connection failed", Toast.LENGTH_SHORT).show();
-
+        createNotification(false);
     }
 
     //Notification
     /**
      * Creates notification with current weather data.
      */
-    private void createNotification(){
-        int iconID;
-        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_collapsed);
-        //Set icon
-        switch (currentIcon){
-            case "clear-day":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sunny_white);
-                iconID = R.drawable.ic_sunny_white;
-                break;
-            case "clear-night":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_clear_night_white);
-                iconID = R.drawable.ic_clear_night_white;
-                break;
-            case "rain":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_rain_white);
-                iconID = R.drawable.ic_rain_white;
-                break;
-            case "snow":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_snow_white);
-                iconID = R.drawable.ic_snow_white;
-                break;
-            case "sleet":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sleet_white);
-                iconID = R.drawable.ic_sleet_white;
-                break;
-            case "wind":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_windrose_white);
-                iconID = R.drawable.ic_windrose_white;
-                break;
-            case "fog":
-                //If it is daytime
-                if(determineLayoutColor(sunriseTimeString, sunsetTimeString)!= 3){
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggyday_white);
-                    iconID = R.drawable.ic_foggyday_white;
-                }
-                else{
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggynight_white);
-                    iconID = R.drawable.ic_foggynight_white;
-                }
-                break;
-            case "cloudy":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
-                iconID = R.drawable.ic_cloudy_white;
-                break;
-            case "partly-cloudy-day":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudy_white);
-                iconID = R.drawable.ic_partlycloudy_white;
+    private void createNotification(boolean successful){
+        if(successful){
+            //Create the weather notification
+            int iconID;
+            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_collapsed);
+            //Set icon
+            switch (currentIcon){
+                case "clear-day":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sunny_white);
+                    iconID = R.drawable.ic_sunny_white;
+                    break;
+                case "clear-night":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_clear_night_white);
+                    iconID = R.drawable.ic_clear_night_white;
+                    break;
+                case "rain":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_rain_white);
+                    iconID = R.drawable.ic_rain_white;
+                    break;
+                case "snow":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_snow_white);
+                    iconID = R.drawable.ic_snow_white;
+                    break;
+                case "sleet":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sleet_white);
+                    iconID = R.drawable.ic_sleet_white;
+                    break;
+                case "wind":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_windrose_white);
+                    iconID = R.drawable.ic_windrose_white;
+                    break;
+                case "fog":
+                    //If it is daytime
+                    if(determineLayoutColor(sunriseTimeString, sunsetTimeString)!= 3){
+                        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggyday_white);
+                        iconID = R.drawable.ic_foggyday_white;
+                    }
+                    else{
+                        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggynight_white);
+                        iconID = R.drawable.ic_foggynight_white;
+                    }
+                    break;
+                case "cloudy":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
+                    iconID = R.drawable.ic_cloudy_white;
+                    break;
+                case "partly-cloudy-day":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudy_white);
+                    iconID = R.drawable.ic_partlycloudy_white;
 
-                break;
-            case "partly-cloudy-night":
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudynight_white);
-                iconID = R.drawable.ic_partlycloudynight_white;
-                break;
-            default:
-                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
-                iconID = R.drawable.ic_cloudy_white;
-                Log.i("CurrentConditions", "Unsupported condition.");
-                break;
+                    break;
+                case "partly-cloudy-night":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudynight_white);
+                    iconID = R.drawable.ic_partlycloudynight_white;
+                    break;
+                default:
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
+                    iconID = R.drawable.ic_cloudy_white;
+                    Log.i("CurrentConditions", "Unsupported condition.");
+                    break;
+            }
+            //Set temp and condition
+            notificationView.setTextViewText(R.id.notifCondition, currentTemp.toString() + "° - " + currentCondition);
+            //Set location
+            notificationView.setTextViewText(R.id.notifLocation, currentAddress);
+            //Set high and low
+            notificationView.setTextViewText(R.id.notifBody, "Hi - " + currentHi + "° Lo - " + currentLo + "°");
+            //Build the notification
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setContent(notificationView)
+                            .setSmallIcon(iconID);
+            //Intent to go to main activity
+            Intent mainIntent = new Intent(this, notificationIntentHandler.class);
+            PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
+            notificationBuilder.setContentIntent(resultPendingIntent);
+            notificationBuilder.setOngoing(true);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
+            stopSelf();
         }
-        //Set temp and condition
-        notificationView.setTextViewText(R.id.notifCondition, currentTemp.toString() + "° - " + currentCondition);
-        //Set location
-        notificationView.setTextViewText(R.id.notifLocation, currentAddress);
-        //Set high and low
-        notificationView.setTextViewText(R.id.notifBody, "Hi - " + currentHi + "° Lo - " + currentLo + "°");
-        //Build the notification
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this)
-                        .setContent(notificationView)
-                        .setSmallIcon(iconID);
-        //Intent to go to main activity
-        Intent mainIntent = new Intent(this, notificationIntentHandler.class);
-        PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
-        notificationBuilder.setContentIntent(resultPendingIntent);
-        notificationBuilder.setOngoing(true);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
-        stopSelf();
+        else{
+            //Create notification asking the user to try again
+            NotificationCompat.Builder notifBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("Unable to sync weather")
+                            .setContentText("Tap to try again.");
+            Intent serviceIntent = new Intent(this, notificationService.class);
+            PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
+            notifBuilder.setContentIntent(servicePendingIntent);
+            notifBuilder.setAutoCancel(true);
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
+            stopSelf();
+        }
     }
 
     //Dark Sky
@@ -399,7 +415,7 @@ public class notificationService extends IntentService implements GoogleApiClien
                 Log.i("sunsetTimeUNIX", sunsetTimeString);
 
                 //Create/update notification
-                createNotification();
+                createNotification(true);
 
                 //Kill the connection
                 if(googleApiClient.isConnected()){
