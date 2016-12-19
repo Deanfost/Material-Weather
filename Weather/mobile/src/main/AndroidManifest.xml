@@ -64,17 +64,20 @@
         //Boot receiver
         <receiver
             android:name=".bootReceiver"
-            android:label="bootReceiver">
+            android:label="bootReceiver"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.REBOOT"/>
             </intent-filter>
         </receiver>
 
         //Alarm receiver
         <receiver android:name=".alarmReceiver"
-            android:label="alarmReceiver">
+            android:label="alarmReceiver"
+            android:enabled="true">
             <intent-filter>
-                <action android:name="dean.weather.alarm"/>
+                <action android:name="dean.weather.alarm.receiver"/>
             </intent-filter>
         </receiver>
 

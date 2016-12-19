@@ -3,6 +3,7 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.NavigationPolicy;
@@ -138,11 +141,18 @@ public class OnboardingActivity extends IntroActivity{
                 });
                 nextSlide();
             }
+
         }
     }
 
     public static void requestPermissions(){
         ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 }

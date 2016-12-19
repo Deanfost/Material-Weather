@@ -77,7 +77,6 @@ public class IntroActivity extends AppCompatActivity {
                 startActivity(onboardingIntent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 Log.i("Intent", "Onboarding");
-                finish();
             }
             else{
                 //It isn't first start, but we need to request permission for location

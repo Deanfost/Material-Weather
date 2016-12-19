@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,10 +19,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.PersistableBundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +36,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -124,27 +125,11 @@ public class MainActivity extends AppCompatActivity implements
 
     //Notification
     public static final int NOTIF_ID = 23;
-    private PendingIntent alarmIntent;
-    private AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("onCreate", "started");
-//      If we need to restart the activity(started from notification)
-//        if(getIntent()!= null){
-//            if(getIntent().getExtras()!= null){
-//                if(getIntent().getExtras().containsKey("Restart"));
-//                {
-//                    Log.i("MainActivity", "Called from intent");
-//                    getIntent().removeExtra("Restart");
-//                    finish();
-//                    Intent restart = new Intent(getBaseContext(), MainActivity.class);
-//                    startActivity(restart);
-//                }
-//            }
-//        }
-//            Log.i("MainActivity", "First start");
             FirebaseApp.initializeApp(this);
 
             // Create an instance of GoogleAPIClient
@@ -200,36 +185,32 @@ public class MainActivity extends AppCompatActivity implements
 //                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                SharedPreferences.Editor editor = mySPrefs.edit();
 //                editor.putString(getString(R.string.first_launch_key), "0");
-//                editor.commit();
+//                editor.apply();
 //                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
 //                        .show();
 //                Log.i("Editor", "Updated 1st launch");
 //                Intent notificationService = new Intent(this, notificationService.class);
 //                startService(notificationService);
 //
-//                //For now, send a test notification
-//                Toast.makeText(this, "Settings coming up soon", Toast.LENGTH_SHORT).show();
-
+                Snackbar.make(findViewById(R.id.mainActivityLayout), "Settings coming soon.", Snackbar.LENGTH_LONG)
+                        .show();
                 //Setup an alarm to schedule forecast pull tasks
-                alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-                Intent serviceIntent = new Intent("dean.weather.alarm");
-                alarmIntent = PendingIntent.getBroadcast(this, 0, serviceIntent, 0);
-
-                //TODO - ENABLE/DISABLE THIS IN SETTINGS
-                //Setup an alarm to fire immediately, and then every hour after that
-                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() - 60000,
-                        60000, alarmIntent);
+//                AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+//                Intent serviceIntent = new Intent("dean.weather.alarm.receiver");
+//                PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, serviceIntent, 0);
+//
+//                //TODO - ENABLE/DISABLE THIS IN SETTINGS
+//                //Setup an alarm to fire immediately, and then every hour after that
+//                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() - 60000,
+//                        AlarmManager.INTERVAL_HOUR, alarmIntent);
 
                 return true;
             //Refresh data
             case R.id.action_refresh:
-//                clearDataSets();
-//                loadingFragmentTransaction();
-//                //Reconnect to Google services, and onConnect, requestDataAndLocation will be called.
-//                googleApiClient.connect();
-                //For now, cancel the alarm for notification
-                alarmManager.cancel(alarmIntent);
-
+                clearDataSets();
+                loadingFragmentTransaction();
+                //Reconnect to Google services, and onConnect, requestDataAndLocation will be called.
+                googleApiClient.connect();
                 return true;
             //User action not recognized
             default:
