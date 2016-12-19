@@ -4,6 +4,7 @@ import android.*;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -12,6 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -50,7 +52,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class notificationService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class notificationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -72,12 +74,15 @@ public class notificationService extends IntentService implements GoogleApiClien
     private String sunriseTimeString;
     private String sunsetTimeString;
 
-    public notificationService() {
-        super(null);
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public void onCreate() {
+        super.onCreate();
         Log.i("notifService", "Started");
         //Setup GoogleAPIClient
         if (googleApiClient == null) {

@@ -15,31 +15,19 @@ import android.util.Log;
 public class bootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED )){
             Log.i("bootReceiver", "Starting service");
 
             //Setup an alarm to schedule forecast pull tasks
             AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
             Intent serviceIntent = new Intent(context, notificationService.class);
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, serviceIntent, 0);
+            PendingIntent alarmIntent = PendingIntent.getService(context, 0, serviceIntent, 0);
 
             //TODO - ENABLE/DISABLE THIS IN SETTINGS
             //Setup an alarm to fire immediately, and then every hour after that
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() - 60000,
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_HOUR,
                     AlarmManager.INTERVAL_HOUR, alarmIntent);
-        }
-        else if(intent.getAction().equals(Intent.ACTION_REBOOT)){
-            Log.i("bootReceiver", "Starting service");
 
-            //Setup an alarm to schedule forecast pull tasks
-            AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-            Intent serviceIntent = new Intent(context, notificationService.class);
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, serviceIntent, 0);
-
-            //TODO - ENABLE/DISABLE THIS IN SETTINGS
-            //Setup an alarm to fire immediately, and then every hour after that
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() - 60000,
-                    AlarmManager.INTERVAL_HOUR, alarmIntent);
-        }
+        //Start the first pull
+        context.startService(serviceIntent);
     }
 }
