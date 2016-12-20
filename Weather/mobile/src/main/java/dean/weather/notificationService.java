@@ -499,7 +499,14 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                 Log.i("sunsetTimeUNIX", sunsetTimeString);
 
                 //Create/update notification
-                createNotification(true);
+                //Test to ses which one to make
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    //Create notification for Lollipop through Marshmallow
+                    createNotification(true);
+                }
+                else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                    createNewNotification(true);
+                }
 
                 //Kill the connection
                 if(googleApiClient.isConnected()){
