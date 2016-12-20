@@ -1,34 +1,29 @@
 package dean.weather;
 
-import android.*;
-import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -239,7 +234,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
         if(successful){
             //Create the weather notification
             int iconID;
-            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_collapsed);
+            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_older);
             //Set icon
             switch (currentIcon){
                 case "clear-day":
@@ -306,6 +301,90 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
                             .setContent(notificationView)
+                            .setSmallIcon(iconID);
+            //Intent to go to main activity
+            Intent mainIntent = new Intent(this, notificationIntentHandler.class);
+            PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
+            notificationBuilder.setContentIntent(resultPendingIntent);
+            notificationBuilder.setOngoing(true);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
+            stopSelf();
+        }
+        else{
+            //Create notification asking the user to try again
+            NotificationCompat.Builder notifBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle("Unable to sync weather")
+                            .setContentText("Tap to try again.");
+            Intent serviceIntent = new Intent(this, notificationService.class);
+            PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
+            notifBuilder.setContentIntent(servicePendingIntent);
+            notifBuilder.setAutoCancel(true);
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
+            stopSelf();
+        }
+    }
+
+    /**
+     * Creates a notification for Android Nougat notification style.
+     * @param successful
+     */
+    private void createNewNotification(boolean successful){
+        if(successful){
+            //Create the weather notification
+            int iconID;
+            //Set icon
+            switch (currentIcon){
+                case "clear-day":
+                    iconID = R.drawable.ic_sunny_white;
+                    break;
+                case "clear-night":
+                    iconID = R.drawable.ic_clear_night_white;
+                    break;
+                case "rain":
+                    iconID = R.drawable.ic_rain_white;
+                    break;
+                case "snow":
+                    iconID = R.drawable.ic_snow_white;
+                    break;
+                case "sleet":
+                    iconID = R.drawable.ic_sleet_white;
+                    break;
+                case "wind":
+                    iconID = R.drawable.ic_windrose_white;
+                    break;
+                case "fog":
+                    //If it is daytime
+                    if(determineLayoutColor(sunriseTimeString, sunsetTimeString)!= 3){
+                        iconID = R.drawable.ic_foggyday_white;
+                    }
+                    else{
+                        iconID = R.drawable.ic_foggynight_white;
+                    }
+                    break;
+                case "cloudy":
+                    iconID = R.drawable.ic_cloudy_white;
+                    break;
+                case "partly-cloudy-day":
+                    iconID = R.drawable.ic_partlycloudy_white;
+
+                    break;
+                case "partly-cloudy-night":
+                    iconID = R.drawable.ic_partlycloudynight_white;
+                    break;
+                default:
+                    iconID = R.drawable.ic_cloudy_white;
+                    Log.i("CurrentConditions", "Unsupported condition.");
+                    break;
+            }
+            //Build the notification
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setContentTitle(currentTemp.toString() + "° - " + currentCondition)
+                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress )
                             .setSmallIcon(iconID);
             //Intent to go to main activity
             Intent mainIntent = new Intent(this, notificationIntentHandler.class);

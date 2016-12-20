@@ -3,14 +3,13 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,11 +18,10 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +34,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -194,16 +193,16 @@ public class MainActivity extends AppCompatActivity implements
 //
                 Snackbar.make(findViewById(R.id.mainActivityLayout), "Settings coming soon.", Snackbar.LENGTH_LONG)
                         .show();
-                //Setup an alarm to schedule forecast pull tasks
-//                AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-//                Intent serviceIntent = new Intent("dean.weather.alarm.receiver");
-//                PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, serviceIntent, 0);
-//
-//                //TODO - ENABLE/DISABLE THIS IN SETTINGS
-//                //Setup an alarm to fire immediately, and then every hour after that
-//                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() - 60000,
-//                        AlarmManager.INTERVAL_HOUR, alarmIntent);
 
+                //Build the notification
+//                NotificationCompat.Builder notificationBuilder =
+//                        new NotificationCompat.Builder(this)
+//                                .setContentTitle(43 + "° - " + "Cloudy")
+//                                .setContentTitle(45 + "°/" + 23 + "° · " + "Frederick")
+//                                .setSmallIcon(R.drawable.ic_cloudy_white);
+//                notificationBuilder.setOngoing(false);
+//                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
                 return true;
             //Refresh data
             case R.id.action_refresh:
