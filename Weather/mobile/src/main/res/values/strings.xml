@@ -8,5 +8,6 @@
 
     <!-- Key-value pairs -->
     <string name="first_launch_key">key_first_launch</string>
+    <string name="last_location_key">key_last_location</string>
 
 </resources>

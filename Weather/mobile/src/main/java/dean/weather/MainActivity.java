@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i("GoogleAPI", "Connection susupended");
+        Log.i("GoogleAPI", "Connection suspended");
     }
 
     @Override

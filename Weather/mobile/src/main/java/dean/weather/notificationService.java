@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,6 +13,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -60,6 +62,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
     //Google APIs
     private GoogleApiClient googleApiClient;
     private String currentAddress;
+    private boolean hasLocation;
 
     private Integer currentTemp;
     private String currentIcon;
@@ -211,6 +214,17 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             Log.i("Geocoder", "Service unavailable.");
             currentAddress = "---";
         }
+        if(!currentAddress.equals("---")){
+            //Store the pulled location for future reference
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = mySPrefs.edit();
+            editor.putString(getString(R.string.last_location_key), currentAddress);
+            editor.apply();
+            hasLocation = true;
+        }
+        else{
+            hasLocation = false;
+        }
     }
 
     @Override
@@ -294,7 +308,15 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             //Set temp and condition
             notificationView.setTextViewText(R.id.notifCondition, currentTemp.toString() + "° - " + currentCondition);
             //Set location
-            notificationView.setTextViewText(R.id.notifLocation, currentAddress);
+            if(hasLocation){
+                notificationView.setTextViewText(R.id.notifLocation, currentAddress);
+            }
+            else{
+                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String savedLocation = mySPrefs.getString(getString(R.string.last_location_key), "---");
+                notificationView.setTextViewText(R.id.notifLocation, savedLocation);
+            }
+
             //Set high and low
             notificationView.setTextViewText(R.id.notifBody, "Hi - " + currentHi + "° Lo - " + currentLo + "°");
             //Build the notification
@@ -505,6 +527,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                     createNotification(true);
                 }
                 else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                    //Create notification for Nougat and above
                     createNewNotification(true);
                 }
 
