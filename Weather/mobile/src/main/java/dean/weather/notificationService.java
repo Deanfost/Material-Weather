@@ -541,7 +541,6 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             public void failure(RetrofitError retrofitError) {
                 Log.e("DarkSky API", "Error while calling: " + retrofitError.getUrl());
                 Log.i("DarkSky API", retrofitError.getMessage());
-
             }
         });
     }
