@@ -3,7 +3,7 @@
     <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
         android:propertyName="y"
         android:valueType="floatType"
-        android:valueFrom="1000"
+        android:valueFrom="@dimen/_500sdp"
         android:valueTo="@dimen/_200sdp"
         android:duration="300"
         android:interpolator="@android:anim/decelerate_interpolator"/>

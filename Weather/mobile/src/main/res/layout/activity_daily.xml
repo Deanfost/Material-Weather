@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/dayDate"
                     android:text="---"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:textColor="@color/colorWhite"
                     android:layout_gravity="left|top"
                     android:layout_marginLeft="@dimen/_4sdp"/>

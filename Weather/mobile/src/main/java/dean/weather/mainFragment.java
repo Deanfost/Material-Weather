@@ -3,6 +3,7 @@ package dean.weather;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.app.Fragment;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -268,18 +269,19 @@ public class MainFragment extends Fragment{
         dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDaysValues, passedDailyCondValues, passedHIsValues, passedLOsValues, passedPrecipValues);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
 
-        //Set top layout slide in anim
+        //Reset data sets
+        ((MainActivity)getActivity()).clearDataSets();
+
+        //Top layout anim
         Animator topSlideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in);
         topSlideIn.setTarget(topLayout);
         topSlideIn.start();
 
-        //Set lower layout slide in anim
+        //Lower layout anim
         Animator slideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_lower);
         slideIn.setTarget(wrapperLayout);
         slideIn.setStartDelay(100);
         slideIn.start();
-
-        ((MainActivity)getActivity()).clearDataSets();
     }
 
         /**
@@ -401,4 +403,3 @@ public class MainFragment extends Fragment{
     }
 
 }
-

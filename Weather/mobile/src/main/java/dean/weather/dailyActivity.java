@@ -30,6 +30,7 @@ public class DailyActivity extends AppCompatActivity {
     //View data for top layout
     private Integer passedDayInt;
     private String passedDay;
+    private String passedDate;
     private String pulledDescription;
     private String pulledLocation;
     private Integer pulledHi;
@@ -85,6 +86,7 @@ public class DailyActivity extends AppCompatActivity {
         //Pull this day's data
         //Get the selected day
         passedDay = getIntent().getExtras().getString("day");
+        passedDate = getIntent().getExtras().getString("selectedDate");
         Log.i("selectedDay", passedDay);
         switch (passedDay){
             case "Mon":
@@ -490,7 +492,7 @@ public class DailyActivity extends AppCompatActivity {
      */
     private void setViews(){
         viewLocation.setText(pulledLocation);
-        viewDate.setText(passedDay);
+        viewDate.setText(passedDate);
         //TODO - GET NEW ICONS AND UPDATE
         switch (pulledIcon) {
             case "clear-day":
@@ -541,10 +543,5 @@ public class DailyActivity extends AppCompatActivity {
         viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
         viewSunriseTime.setText(daySunriseTime);
         viewSunsetTime.setText(daySunsetTime);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

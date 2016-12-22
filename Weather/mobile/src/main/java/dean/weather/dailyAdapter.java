@@ -15,6 +15,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -104,7 +107,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
                 condIcon.setImageResource(R.drawable.ic_sunny_white);
                 break;
             case "clear-night":
-                condIcon.setImageResource(R.drawable.ic_clear_night_white);
+                condIcon.setImageResource(R.drawable.ic_sunny_white);
                 break;
             case "rain":
                 condIcon.setImageResource(R.drawable.ic_rain_white);
@@ -128,7 +131,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
                 condIcon.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             case "partly-cloudy-night":
-                condIcon.setImageResource(R.drawable.ic_partlycloudynight_white);
+                condIcon.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             default:
                 condIcon.setImageResource(R.drawable.ic_cloudy_white);
@@ -184,12 +187,34 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MainActivity mainActivity = (MainActivity) context;
                 Log.i("dailyRecycler", "Clicked" + daySet.get(position));
                 Intent dayIntent = new Intent(getContext(), DailyActivity.class);
                 dayIntent.putExtra("day", daySet.get(position));
                 dayIntent.putExtra("dayInt", position);
+
+                //Get the date of the selected day
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar = Calendar.getInstance();
+                String today = simpleDateFormat.format(calendar.getTime());
+                Log.i("today", today);
+
+                Calendar calendar1 = Calendar.getInstance();
+                SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("MMMM d, yyyy");
+
+                try {
+                    calendar1.setTime(simpleDateFormat.parse(today));
+                    calendar1.setTime(simpleDateFormat.parse(today));
+                    calendar1.add(Calendar.DAY_OF_WEEK, position);
+                    String selectedDate = dayOfWeekFormat.format(calendar1.getTime());
+                    Log.i("selectedDate", dayOfWeekFormat.format(calendar1.getTime()));
+                    dayIntent.putExtra("selectedDate", selectedDate);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 //Tell the activity to launch the daily activity
-                MainActivity mainActivity = (MainActivity) context;
                 mainActivity.launchDailyActivity(dayIntent);
             }
         });
