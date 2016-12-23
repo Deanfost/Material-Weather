@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -49,7 +50,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class notificationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class notificationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -93,14 +94,22 @@ public class notificationService extends Service implements GoogleApiClient.Conn
         googleApiClient.connect();
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        //Refresh data when a new intent is received
+        Log.i("notifService", "new intent received, updating");
+        googleApiClient.connect();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     //Location
     /**
      * Creates location request.
      */
     private LocationRequest createLocationRequest(){
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(600000);//10 Minutes
-        locationRequest.setFastestInterval(60000);//One minute
+        locationRequest.setInterval(600000);//10 minutes
+        locationRequest.setFastestInterval(300000);//5 minutes
         //City block accuracy
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return locationRequest;
@@ -163,21 +172,27 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied
-                            Log.i("notifService", "Stopping");
-                            stopSelf();
+                            Log.i("notifService", "Location settings not satisfied");
+                            if(googleApiClient.isConnected()){
+                                googleApiClient.disconnect();
+                            }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
-                            Log.i("notifService", "Stopping");
-                            stopSelf();
+                            Log.i("notifService", "Location settings not satisfied");
+                            if(googleApiClient.isConnected()){
+                                googleApiClient.disconnect();
+                            }
                             break;
                     }
                 }
             });
         }
         else{
-            Log.i("notifService", "Stopping");
-            stopSelf();
+            Log.i("notifService", "Location permission missing");
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
         }
     }
 
@@ -238,6 +253,16 @@ public class notificationService extends Service implements GoogleApiClient.Conn
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("notifService", "GoogleAPI connection suspended");
         createNotification(false);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i("notifService", "Location changed, updating notification");
+        //Reset the connection, and pull data
+        if(googleApiClient.isConnected()){
+            googleApiClient.disconnect();
+        }
+        googleApiClient.connect();
     }
 
     //Notification
@@ -331,7 +356,6 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
-            stopSelf();
         }
         else{
             //Create notification asking the user to try again
@@ -346,7 +370,10 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
-            stopSelf();
+
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
         }
     }
 
@@ -415,7 +442,6 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
-            stopSelf();
         }
         else{
             //Create notification asking the user to try again
@@ -430,7 +456,10 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
-            stopSelf();
+        }
+
+        if(googleApiClient.isConnected()){
+            googleApiClient.disconnect();
         }
     }
 

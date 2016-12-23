@@ -61,6 +61,8 @@
             android:exported="false">
         </service>
 
+        //Location changed service
+
         //Boot receiver
         <receiver
             android:name=".bootReceiver"
@@ -71,15 +73,6 @@
                 <action android:name="android.intent.action.REBOOT"/>
             </intent-filter>
         </receiver>
-
-        //Alarm receiver
-        <!--<receiver android:name=".alarmReceiver"-->
-            <!--android:label="alarmReceiver"-->
-            <!--android:enabled="true">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="dean.weather.alarm.receiver"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
 
     </application>
 </manifest>
