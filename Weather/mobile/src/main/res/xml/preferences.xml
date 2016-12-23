@@ -64,17 +64,15 @@
         <!-- Opens WebView to display the info about the app, including library attrs-->
         <Preference
             android:title="About this app"
-            android:key="pref_about_key"
-            android:summary=""/>
+            android:key="pref_about_key" />
 
         <Preference
             android:title="Tutorial"
             android:key="pref_tutorial_key">
 
-            <!-- Intent opens tutorial activity -->
+            <!-- Intent opens special tutorial activity -->
             <intent android:targetPackage="dean.weather"
-                android:targetClass="dean.weather.OnboardingActivity" >
-                <extra android:name="requestPermissions" android:value="false"/>
+                android:targetClass="dean.weather.tutorialActivity" >
             </intent>
         </Preference>
 

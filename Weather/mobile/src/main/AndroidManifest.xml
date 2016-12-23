@@ -59,6 +59,13 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
+        //Settings tutorial activity
+        <activity android:name=".tutorialActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/OnboardingTheme">
+        </activity>
+
         //Active notification service
         <service android:name="dean.weather.notificationService"
             android:exported="false">
