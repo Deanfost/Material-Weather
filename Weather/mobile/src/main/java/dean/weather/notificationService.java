@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -50,7 +51,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class notificationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
+public class notificationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -103,10 +104,11 @@ public class notificationService extends Service implements GoogleApiClient.Conn
     }
 
     //Location
+
     /**
      * Creates location request.
      */
-    private LocationRequest createLocationRequest(){
+    private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(600000);//10 minutes
         locationRequest.setFastestInterval(300000);//5 minutes
@@ -122,7 +124,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
         //TODO - CHECK TO SEE IF THE USER HAS A DEFAULT LOCATION SET/IF THE USER WANTS A LOCATION REPORT
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         //If we have location permissions, check for location settings, if not, then end the service
-        if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
+        if (locationPermissionCheck == PackageManager.PERMISSION_GRANTED) {
             Log.i("Permission", "Location access granted");
             //Create location request
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -142,61 +144,54 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                     final Status locationStatus = locationSettingsResult.getStatus();
                     final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
 
-                    switch (locationStatus.getStatusCode()){
+                    switch (locationStatus.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
                             //All location requirements are satisfied, request location
-                            try{
+                            try {
                                 Log.i("requestLocation", "pulling");
                                 lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                                if(lastLocation != null){
+                                if (lastLocation != null) {
                                     //Get latitude and longitude of last known location
                                     latitude = lastLocation.getLatitude();
                                     longitude = lastLocation.getLongitude();
                                     Log.i("Latitude", String.valueOf(latitude));
                                     Log.i("Longitude", String.valueOf(longitude));
                                     //Determine if a geocoder is available
-                                    if(!Geocoder.isPresent()){
+                                    if (!Geocoder.isPresent()) {
                                         Log.i("Geocoder", "Unavailable");
                                     }
                                     //Get the current address
                                     getAddresses();
 
-                                    //Setup location change requests
-                                    LocationServices.FusedLocationApi.requestLocationUpdates(
-                                            googleApiClient, locationRequest, (LocationListener) getApplicationContext());
-
                                     //Pull initial data
                                     pullForecast();
-                                }
-                                else{
+                                } else {
                                     Log.i("notifService", "Unable to gather location");
                                 }
-                            }
-                            catch (SecurityException e){
+                            } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");
                             }
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied
                             Log.i("notifService", "Location settings not satisfied");
-                            if(googleApiClient.isConnected()){
+                            if (googleApiClient.isConnected()) {
                                 googleApiClient.disconnect();
                             }
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
                             Log.i("notifService", "Location settings not satisfied");
-                            if(googleApiClient.isConnected()){
+                            if (googleApiClient.isConnected()) {
                                 googleApiClient.disconnect();
                             }
                             break;
                     }
                 }
             });
-        }
-        else{
+        } else {
             Log.i("notifService", "Location permission missing");
-            if(googleApiClient.isConnected()){
+            if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();
             }
         }
@@ -205,7 +200,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
     /**
      * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
      */
-    private void getAddresses(){
+    private void getAddresses() {
         Boolean serviceAvailable = true;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         List<Address> addressList = null;
@@ -216,34 +211,30 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             Log.i("IO Exception", "getAdresses");
             serviceAvailable = false;
         }
-        if(serviceAvailable){
+        if (serviceAvailable) {
             if (addressList.size() > 0) {
-                if(addressList.get(0).getLocality()!= null){
+                if (addressList.get(0).getLocality() != null) {
                     currentAddress = addressList.get(0).getLocality();//Assign locality if available
                     Log.i("getLocality", addressList.get(0).getLocality());
-                }
-                else{
+                } else {
                     currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
                     Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
                 }
-            }
-            else{
+            } else {
                 Log.i("getLocality", "No localities found.");
             }
-        }
-        else{
+        } else {
             Log.i("Geocoder", "Service unavailable.");
             currentAddress = "---";
         }
-        if(!currentAddress.equals("---")){
+        if (!currentAddress.equals("---")) {
             //Store the pulled location for future reference
             SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = mySPrefs.edit();
             editor.putString(getString(R.string.last_location_key), currentAddress);
             editor.apply();
             hasLocation = true;
-        }
-        else{
+        } else {
             hasLocation = false;
         }
     }
@@ -265,23 +256,24 @@ public class notificationService extends Service implements GoogleApiClient.Conn
     public void onLocationChanged(Location location) {
         Log.i("notifService", "Location changed, updating notification");
         //Reset the connection, and pull data
-        if(googleApiClient.isConnected()){
+        if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
         googleApiClient.connect();
     }
 
     //Notification
+
     /**
      * Creates notification with current weather data.
      */
-    private void createNotification(boolean successful){
-        if(successful){
+    private void createNotification(boolean successful) {
+        if (successful) {
             //Create the weather notification
             int iconID;
             RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_older);
             //Set icon
-            switch (currentIcon){
+            switch (currentIcon) {
                 case "clear-day":
                     notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sunny_white);
                     iconID = R.drawable.ic_sunny_white;
@@ -308,11 +300,10 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                     break;
                 case "fog":
                     //If it is daytime
-                    if(determineLayoutColor(sunriseTimeString, sunsetTimeString)!= 3){
+                    if (determineLayoutColor(sunriseTimeString, sunsetTimeString) != 3) {
                         notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggyday_white);
                         iconID = R.drawable.ic_foggyday_white;
-                    }
-                    else{
+                    } else {
                         notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggynight_white);
                         iconID = R.drawable.ic_foggynight_white;
                     }
@@ -339,10 +330,9 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             //Set temp and condition
             notificationView.setTextViewText(R.id.notifCondition, currentTemp.toString() + "° - " + currentCondition);
             //Set location
-            if(hasLocation){
+            if (hasLocation) {
                 notificationView.setTextViewText(R.id.notifLocation, currentAddress);
-            }
-            else{
+            } else {
                 SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String savedLocation = mySPrefs.getString(getString(R.string.last_location_key), "---");
                 notificationView.setTextViewText(R.id.notifLocation, savedLocation);
@@ -362,8 +352,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
-        }
-        else{
+        } else {
             //Create notification asking the user to try again
             NotificationCompat.Builder notifBuilder =
                     new NotificationCompat.Builder(this)
@@ -377,7 +366,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
 
-            if(googleApiClient.isConnected()){
+            if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();
             }
         }
@@ -387,12 +376,12 @@ public class notificationService extends Service implements GoogleApiClient.Conn
      * Creates a notification for Android Nougat notification style.
      * @param successful
      */
-    private void createNewNotification(boolean successful){
-        if(successful){
+    private void createNewNotification(boolean successful) {
+        if (successful) {
             //Create the weather notification
             int iconID;
             //Set icon
-            switch (currentIcon){
+            switch (currentIcon) {
                 case "clear-day":
                     iconID = R.drawable.ic_sunny_white;
                     break;
@@ -413,10 +402,9 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                     break;
                 case "fog":
                     //If it is daytime
-                    if(determineLayoutColor(sunriseTimeString, sunsetTimeString)!= 3){
+                    if (determineLayoutColor(sunriseTimeString, sunsetTimeString) != 3) {
                         iconID = R.drawable.ic_foggyday_white;
-                    }
-                    else{
+                    } else {
                         iconID = R.drawable.ic_foggynight_white;
                     }
                     break;
@@ -439,7 +427,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
                             .setContentTitle(currentTemp.toString() + "° - " + currentCondition)
-                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress )
+                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
             Intent mainIntent = new Intent(this, notificationIntentHandler.class);
@@ -448,8 +436,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
-        }
-        else{
+        } else {
             //Create notification asking the user to try again
             NotificationCompat.Builder notifBuilder =
                     new NotificationCompat.Builder(this)
@@ -464,20 +451,27 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
         }
 
-        if(googleApiClient.isConnected()){
+        if (googleApiClient.isConnected()) {
             googleApiClient.disconnect();
         }
     }
 
     //Dark Sky
+
     /**
      * Initializes API Wrapper Lib, and forms pull request to receive weather data.
      */
-    private void pullForecast(){
+    private void pullForecast() {
         Log.i("forecastRequest", "pullingForecast");
-        //TODO - CHECK FOR THE UNITS AND STUFF
+        //TODO - CHECK FOR THE UNITS AND STUFF, AS WELL AS WHEN THE PREFERENCES CHANGE
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
+
+        //Setup location change requests
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient, locationRequest, this);
+        }
 
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();

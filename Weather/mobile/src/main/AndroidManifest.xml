@@ -51,13 +51,21 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
+        //Settings activity
+        <activity android:name=".settingsActivity"
+            android:theme="@style/SettingsTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
         //Active notification service
-        <service android:name=".notificationService"
+        <service android:name="dean.weather.notificationService"
             android:exported="false">
         </service>
 
         //Notification intent receiver
-        <service android:name=".notificationIntentHandler"
+        <service android:name="dean.weather.notificationIntentHandler"
             android:exported="false">
         </service>
 
@@ -65,12 +73,13 @@
 
         //Boot receiver
         <receiver
-            android:name=".bootReceiver"
+            android:name="dean.weather.bootReceiver"
             android:label="bootReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.REBOOT"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
 

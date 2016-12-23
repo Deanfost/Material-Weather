@@ -45,11 +45,19 @@
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
+
     <!-- Onboarding theme -->
     <style name="OnboardingTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowBackground">@color/colorWhite</item>
         <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <!-- Settings theme -->
+    <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowTranslucentStatus">false</item>
     </style>
 </resources>

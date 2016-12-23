@@ -191,8 +191,8 @@ public class MainActivity extends AppCompatActivity implements
 //                Intent notificationService = new Intent(this, notificationService.class);
 //                startService(notificationService);
 //
-                Snackbar.make(findViewById(R.id.mainActivityLayout), "Settings coming soon.", Snackbar.LENGTH_LONG)
-                        .show();
+//                Snackbar.make(findViewById(R.id.mainActivityLayout), "Settings coming soon.", Snackbar.LENGTH_LONG)
+//                        .show();
 
                 //Build the notification
 //                NotificationCompat.Builder notificationBuilder =
@@ -203,6 +203,10 @@ public class MainActivity extends AppCompatActivity implements
 //                notificationBuilder.setOngoing(false);
 //                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //                notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
+
+                //Open the settings activity
+                Intent settingsIntent = new Intent(this, settingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             //Refresh data
             case R.id.action_refresh:

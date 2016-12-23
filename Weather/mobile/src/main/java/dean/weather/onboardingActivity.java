@@ -27,11 +27,13 @@ public class OnboardingActivity extends IntroActivity{
     private Fragment onBoardingFragPermissions;
     private Class onBoardingFragThreeClass;
     public static Activity currentActivity;
+    private String requestPermissions;//If started normally, request permissions, but if started from settings, don't
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentActivity = this;
+
         try {
             onBoardingFragThreeClass = OnboardingFragThree.class;
             onBoardingFragPermissions = (Fragment) onBoardingFragThreeClass.newInstance();
