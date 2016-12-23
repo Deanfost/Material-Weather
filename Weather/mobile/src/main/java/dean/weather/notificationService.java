@@ -158,7 +158,13 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                                     if(!Geocoder.isPresent()){
                                         Log.i("Geocoder", "Unavailable");
                                     }
+                                    //Get the current address
                                     getAddresses();
+
+                                    //Setup location change requests
+                                    LocationServices.FusedLocationApi.requestLocationUpdates(
+                                            googleApiClient, locationRequest, (LocationListener) getApplicationContext());
+
                                     //Pull initial data
                                     pullForecast();
                                 }
