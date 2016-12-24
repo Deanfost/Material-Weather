@@ -59,5 +59,6 @@
         <item name="windowActionBar">true</item>
         <item name="android:windowBackground">@color/colorWhite</item>
         <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 </resources>
