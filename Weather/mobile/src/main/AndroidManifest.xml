@@ -71,6 +71,11 @@
             android:exported="false">
         </service>
 
+        //Summary notification service
+        <service android:name="dean.weather.summaryService"
+            android:exported="false">
+        </service>
+
         //Notification intent receiver
         <service android:name="dean.weather.notificationIntentHandler"
             android:exported="false">

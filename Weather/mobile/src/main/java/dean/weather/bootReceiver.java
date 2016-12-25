@@ -5,7 +5,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -15,10 +17,11 @@ import android.util.Log;
 public class bootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Log.i("bootReceiver", "broadcastReceived");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if(prefs.getBoolean("key_notif_follow", false)){
             Log.i("bootReceiver", "Starting service");
-
-            //TODO - ENABLE/DISABLE THIS IN SETTINGS
-
             //Setup an alarm to schedule forecast pull tasks
             AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
             Intent serviceIntent = new Intent(context, notificationService.class);
@@ -28,7 +31,11 @@ public class bootReceiver extends BroadcastReceiver {
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_HOUR,
                     AlarmManager.INTERVAL_HOUR, alarmIntent);
 
-        //Start the first pull
-        context.startService(serviceIntent);
+            //Start the first pull
+            context.startService(serviceIntent);
+        }
+        else{
+            Log.i("bootReceiver", "serviceDisabled");
+        }
     }
 }

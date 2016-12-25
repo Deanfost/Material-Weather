@@ -6,29 +6,33 @@
         android:key="pref_key_notification_group">
 
         <PreferenceScreen
-            android:key="pref_notif_category_key"
+            android:key="@string/notif_category_key"
             android:title="Weather updates"
             android:persistent="false"
             android:summary="Enable on-going weather notifications">
 
             <SwitchPreference
-                android:key="pref_follow_notif_key"
+                android:key="@string/follow_notif_key"
                 android:title="Follow me"
                 android:summary="Display weather for my current location"
                 android:defaultValue="false" />
 
-            <!-- Selectable locations will be added to the screen, from the list of saved locations -->
+            <PreferenceCategory
+                android:title="Saved locations">
+                <!-- Selectable locations will be added to the screen, from the list of saved locations -->
+
+            </PreferenceCategory>
 
         </PreferenceScreen>
 
         <SwitchPreference
-            android:key="pref_alert_notif_key"
+            android:key="@string/alert_notif_key"
             android:title="Show weather alerts"
             android:summary="Create a push notification for weather alerts and warnings"
             android:defaultValue="false" />
 
         <SwitchPreference
-            android:key="pref_summary_notif_key"
+            android:key="@string/summary_notif_key"
             android:title="Show weather summary"
             android:summary="Create a push notification containing a summary of the day's weather forecast"
             android:defaultValue="false" />
@@ -37,20 +41,20 @@
 
     <PreferenceCategory
         android:title="Units"
-        android:key="pref_key_units_group">
+        android:key="@string/units_group_key">
 
         <ListPreference
-            android:key="pref_units_key"
+            android:key="@string/units_list_key"
             android:title="Units of measure"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Theme"
-        android:key="pref_key_theme_group">
+        android:key="@string/theme_group_key">
 
         <SwitchPreference
-            android:key="pref_theme_change_key"
+            android:key="@string/theme_change_key"
             android:title="Enable color theme updates"
             android:summary="If enabled, the color theme will change according to current time of day"
             android:defaultValue="true"/>
@@ -59,16 +63,16 @@
 
     <PreferenceCategory
         android:title="Support"
-        android:key="pref_key_support_group">
+        android:key="@string/support_group_key">
 
         <!-- Opens WebView to display the info about the app, including library attrs-->
         <Preference
             android:title="About this app"
-            android:key="pref_about_key" />
+            android:key="@string/support_about_key" />
 
         <Preference
             android:title="Tutorial"
-            android:key="pref_tutorial_key">
+            android:key="@string/support_tutorial_key">
 
             <!-- Intent opens special tutorial activity -->
             <intent android:targetPackage="dean.weather"
@@ -78,8 +82,8 @@
 
         <!-- Shows modal that is connected with Google Merchant API, shows IAPs to donate-->
         <Preference
-            android:title="Support development"
-            android:key="pref_donate_key" />
+            android:title="Support developer"
+            android:key="@string/support_donate_key" />
 
     </PreferenceCategory>
 </PreferenceScreen>
