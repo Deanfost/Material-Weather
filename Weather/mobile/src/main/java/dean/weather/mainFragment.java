@@ -51,6 +51,7 @@ public class MainFragment extends Fragment{
     private RecyclerView.LayoutManager dailyLayoutManager;
 
     private static String passedLocationValue;
+    private static String passedDayValue;
     private static String passedDateValue;
     private static String passedIconValue;
     private static int passedTempValue;
@@ -71,6 +72,7 @@ public class MainFragment extends Fragment{
     LinearLayout wrapperLayout;
     RelativeLayout topLayout;
     TextView currentLocation;
+    TextView currentDay;
     TextView currentDate;
     ImageView currentConditionsIcon;
     TextView currentTemp;
@@ -117,6 +119,7 @@ public class MainFragment extends Fragment{
         wrapperLayout = (LinearLayout) getView().findViewById(R.id.lowerFragmentWrapperContainer);
         topLayout = (RelativeLayout) getView().findViewById(R.id.topContentLayout);
         currentLocation = (TextView) getView().findViewById(R.id.currentLocation);
+        currentDay = (TextView) getView().findViewById(R.id.currentDay);
         currentDate = (TextView) getView().findViewById(R.id.currentDate);
         currentConditionsIcon = (ImageView) getView().findViewById(R.id.iconCurrentConditions);
         currentTemp = (TextView) getView().findViewById(R.id.currentTemp);
@@ -203,6 +206,7 @@ public class MainFragment extends Fragment{
 
         //Update views
         currentLocation.setText(passedLocationValue);
+        currentDay.setText(passedDayValue);
         currentDate.setText(passedDateValue);
         //TODO - GET NEW ICONS AND UPDATE
         switch (passedIconValue) {
@@ -309,10 +313,11 @@ public class MainFragment extends Fragment{
     /**
      * Saves passed values from mainActivity to current variables.
      */
-    public static void passViewData(String passedLocation, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
+    public static void passViewData(String passedLocation, String passedDay, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
                                     int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime) {
 
         passedLocationValue = passedLocation;
+        passedDayValue = passedDay;
         passedDateValue = passedDate;
         passedIconValue = passedIcon;
         passedTempValue = passedTemp;

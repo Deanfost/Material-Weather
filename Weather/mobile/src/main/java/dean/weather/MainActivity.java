@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //Current
     public static String currentLocation;
+    private String currentDay;
     private String currentDate;
     private String currentIcon;
     private int currentTemp;
@@ -740,7 +741,7 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
                 mainFragmentTransaction();
                 MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcon, pulledWind, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecip);
-                MainFragment.passViewData(currentLocation, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
+                MainFragment.passViewData(currentLocation, currentDay, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
 
                 //Terminate Google API Connection
@@ -922,8 +923,29 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void retrieveAndFormatNonWeatherData(){
         getAddresses();
+        getDay();
         getDate();
 //        getUpdateTime();
+    }
+
+    /**
+     * Gets today's day to pass to mainFragment.
+     */
+    private void getDay(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        String today = simpleDateFormat.format(calendar.getTime());
+
+        Calendar calendar1 = Calendar.getInstance();
+        SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEEE");
+
+        try {
+            calendar1.setTime(simpleDateFormat.parse(today));
+            currentDay = dayOfWeekFormat.format(calendar1.getTime());
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -1064,7 +1086,6 @@ public class MainActivity extends AppCompatActivity implements
         Calendar calendar1 = Calendar.getInstance();
         SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEE");
         try {
-            calendar1.setTime(simpleDateFormat.parse(today));
             for(int i = 0; i < dailySetSize - 1; i ++){
                 calendar1.setTime(simpleDateFormat.parse(today));
                 calendar1.add(Calendar.DAY_OF_WEEK, i);
@@ -1118,6 +1139,7 @@ public class MainActivity extends AppCompatActivity implements
         pulledLOs.clear();
         pulledPrecip.clear();
 
+        currentDay = null;
         currentDate = null;
         currentIcon = null;
         currentTemp = 0;
