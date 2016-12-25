@@ -1,9 +1,7 @@
 package dean.weather;
 
-import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by Dean on 12/23/2016.
  */
@@ -31,6 +31,7 @@ public class settingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -45,37 +46,30 @@ public class settingsActivity extends PreferenceActivity implements SharedPrefer
             case "key_notif_follow":
                 Log.i("preferenceActivity", "follow_notif_key changed");
                 if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("key_notif_follow", false)){
-                    //Setup an alarm to schedule forecast pull tasks
-                    AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-                    Intent serviceIntent = new Intent(this, notificationService.class);
-                    PendingIntent alarmIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-
-                    //Setup an alarm to fire in one hour, and then every hour after that
-                    alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_HOUR,
-                            AlarmManager.INTERVAL_HOUR, alarmIntent);
-
-                    //Start the first pull
-                    this.startService(serviceIntent);
+                    //Tell the alarmInterface class to start the repeatNotif
+                    Intent alarmInterface = new Intent(this, alarmInterface.class);
+                    alarmInterface.putExtra("repeatNotif", true);
+                    startService(alarmInterface);
                 }
                 else{
-                    //Cancel the alarms
-                    Log.i("preferenceActivity", "Cancelling repeat notif");
-                    AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-                    Intent serviceIntent = new Intent(this, notificationService.class);
-                    PendingIntent alarmIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-                    alarmManager.cancel(alarmIntent);
+                    //Tell the alarmInterface class to stop the repeatNotif alarms
+                    Intent alarmInterface = new Intent(this, alarmInterface.class);
+                    alarmInterface.putExtra("repeatNotif", false);
+                    startService(alarmInterface);
+
 
                     //Clear the notif
                     NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(MainActivity.NOTIF_ID);
-
                 }
                 break;
+
             //The weather alert notif pref was changed
             case "key_notif_alert":
                 Log.i("preferenceActivity", "alert_notif_key changed");
                 Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
+
             //The weather summary notif pref was changed
             case "key_notif_summary":
                 Log.i("preferenceActivity", "summary_notif_key changed");

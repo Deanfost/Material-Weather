@@ -94,14 +94,19 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                     .addApi(LocationServices.API)
                     .build();
         }
-        googleApiClient.connect();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Refresh data when a new intent is received
-        Log.i("notifService", "new intent received, updating");
-        googleApiClient.connect();
+        if(intent != null){
+            if(intent.getExtras() != null){
+                if(intent.getExtras().getBoolean("pull", false)){
+                    Log.i("notifService", "new intent received, updating");
+                    googleApiClient.connect();
+                }
+            }
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -552,7 +557,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                 Log.i("sunsetTimeUNIX", sunsetTimeString);
 
                 //Create/update notification
-                //Test to ses which one to make
+                //Test to see which one to make
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                     //Create notification for Lollipop through Marshmallow
                     createNotification(true);
@@ -566,6 +571,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
                 }
+                clearData();
             }
 
             @Override
@@ -629,5 +635,22 @@ public class notificationService extends Service implements GoogleApiClient.Conn
     @NonNull
     private String getCurrentTime(){
         return String.valueOf(System.currentTimeMillis() /1000);
+    }
+
+    /**
+     * Clears data stored in variables after notif update/creation.
+     */
+    private void clearData(){
+        lastLocation = null;
+        latitude = 0;
+        longitude = 0;
+        locationRequest = null;
+        currentTemp = null;
+        currentIcon = null;
+        currentCondition = null;
+        currentHi = null;
+        currentLo = null;
+        sunriseTimeString = null;
+        sunsetTimeString = null;
     }
 }

@@ -17,14 +17,14 @@
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        //Onboarding activity
+        <!--Onboarding activity-->
         <activity android:name=".OnboardingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/OnboardingTheme">
         </activity>
 
-        //Intro activity
+        <!--Intro activity-->
         <activity android:name=".IntroActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
 
-        //Main Activity
+        <!--Main Activity-->
         <activity android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
@@ -43,7 +43,7 @@
             android:launchMode="singleTop">
         </activity>
 
-        //Day Activity
+        <!--Day Activity-->
         <activity android:name=".DailyActivity"
             android:theme="@style/ActivityTheme"
             android:screenOrientation="portrait"
@@ -51,7 +51,7 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
-        //Settings activity
+        <!--Settings activity-->
         <activity android:name=".settingsActivity"
             android:theme="@style/SettingsTheme"
             android:screenOrientation="portrait"
@@ -59,29 +59,34 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
-        //Settings tutorial activity
+        <!--Settings tutorial activity-->
         <activity android:name=".tutorialActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/OnboardingTheme">
         </activity>
 
-        //Active notification service
+        <!--Active notification service-->
         <service android:name="dean.weather.notificationService"
             android:exported="false">
         </service>
 
-        //Summary notification service
+        <!--Summary notification service-->
         <service android:name="dean.weather.summaryService"
             android:exported="false">
         </service>
 
-        //Notification intent receiver
+        <!--Alarm interface service-->
+        <service android:name=".alarmInterface"
+            android:exported="false">
+        </service>
+
+        <!--Notification intent receiver-->
         <service android:name="dean.weather.notificationIntentHandler"
             android:exported="false">
         </service>
 
-        //Boot receiver
+        <!--Boot receiver-->
         <receiver
             android:name="dean.weather.bootReceiver"
             android:label="bootReceiver"
