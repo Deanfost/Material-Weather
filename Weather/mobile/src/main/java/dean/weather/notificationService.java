@@ -185,6 +185,18 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             if (googleApiClient.isConnected()) {
                                 googleApiClient.disconnect();
                             }
+                            //Change the preference to reflect the service being disabled
+                            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = mySPrefs.edit();
+                            editor.putBoolean(getString(R.string.follow_notif_key), false);
+                            editor.apply();
+
+                            //End the repeating preference alarm
+                            Intent stopAlarm = new Intent(getApplicationContext(), alarmInterface.class);
+                            stopAlarm.putExtra("repeatNotif", false);
+                            startService(stopAlarm);
+
+                            stopSelf();
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
@@ -192,6 +204,19 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             if (googleApiClient.isConnected()) {
                                 googleApiClient.disconnect();
                             }
+                            //Change the preference to reflect the service being disabled
+                            SharedPreferences mySPrefs1 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor1 = mySPrefs1.edit();
+                            editor1.putBoolean(getString(R.string.follow_notif_key), false);
+                            editor1.apply();
+
+                            //End the repeating preference alarm
+                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterface.class);
+                            stopAlarm1.putExtra("repeatNotif", false);
+                            startService(stopAlarm1);
+
+                            stopSelf();
+
                             break;
                     }
                 }
@@ -201,6 +226,18 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();
             }
+            //Change the preference to reflect the service being disabled
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = mySPrefs.edit();
+            editor.putBoolean(getString(R.string.follow_notif_key), false);
+            editor.apply();
+
+            //End the repeating preference alarm
+            Intent stopAlarm = new Intent(this, alarmInterface.class);
+            stopAlarm.putExtra("repeatNotif", false);
+            startService(stopAlarm);
+
+            stopSelf();
         }
     }
 
@@ -463,7 +500,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
         }
     }
 
-    //Dark Sky
+    //Dark Sky API
 
     /**
      * Initializes API Wrapper Lib, and forms pull request to receive weather data.

@@ -1,16 +1,23 @@
 package dean.weather;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -21,13 +28,27 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 
 /**
  * Created by Dean on 12/23/2016.
  */
 
-public class settingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class settingsActivity extends PreferenceActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    GoogleApiClient googleApiClient;
+    boolean permissionGranted;
+    boolean servicesEnabled;
+    Preference followNotif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,53 +56,19 @@ public class settingsActivity extends PreferenceActivity implements SharedPrefer
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        //Setup preference change listener
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
+        //Setup GoogleAPIClient to check is location services are enabled
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        //Preferences
+        followNotif = findPreference(getString(R.string.follow_notif_key));
+
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        switch (key){
-            //The follow notification pref was changed
-            case "key_notif_follow":
-                Log.i("preferenceActivity", "follow_notif_key changed");
-                if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("key_notif_follow", false)){
-                    //Tell the alarmInterface class to start the repeatNotif
-                    Intent alarmInterface = new Intent(this, alarmInterface.class);
-                    alarmInterface.putExtra("repeatNotif", true);
-                    startService(alarmInterface);
-                }
-                else{
-                    //Tell the alarmInterface class to stop the repeatNotif alarms
-                    Intent alarmInterface = new Intent(this, alarmInterface.class);
-                    alarmInterface.putExtra("repeatNotif", false);
-                    startService(alarmInterface);
-
-
-                    //Clear the notif
-                    NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(MainActivity.NOTIF_ID);
-                }
-                break;
-
-            //The weather alert notif pref was changed
-            case "key_notif_alert":
-                Log.i("preferenceActivity", "alert_notif_key changed");
-                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
-                break;
-
-            //The weather summary notif pref was changed
-            case "key_notif_summary":
-                Log.i("preferenceActivity", "summary_notif_key changed");
-                //TODO - CREATE CUSTOM PREF(TIME SELECTOR), AND SETUP ALARM TO TRIGGER IT
-                if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("key_notif_summary", false)) {
-                    Intent summaryIntent = new Intent(this, summaryService.class);
-                    startService(summaryIntent);
-                }
-                break;
-        }
-    }
-
+    //Configurations
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -150,4 +137,81 @@ public class settingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
     }
+
+    //GoogleAPI
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    //Locations and callbacks
+    /**
+     * Creates location request.
+     */
+    private LocationRequest createLocationRequest(){
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(300000);//5 Minutes
+        locationRequest.setFastestInterval(60000);//One minute
+        //City block accuracy
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        return locationRequest;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+                    switch (resultCode) {
+                        case Activity.RESULT_OK:
+                            // All required changes were successfully made, so allow the service to be activated
+                            try{
+
+                            }
+                            catch (SecurityException e){
+                                Log.e("LocationPermission", "Permission denied");
+                            }
+                            break;
+                        case Activity.RESULT_CANCELED:
+                            // The user was asked to change settings, but chose not to
+
+                            break;
+                        default:
+                            break;
+                    }
+        }
+    }
+
+    //Lifecycle and click listeners
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Register preference listeners
+
+        //Follow notification pref
+        followNotif.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                //Check to see if location permissions and services are enabled
+                
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Un-register click listeners
+        followNotif.setOnPreferenceClickListener(null);
+    }
+
 }

@@ -22,6 +22,7 @@ public class alarmInterface extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //Initialize intents for later use
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         Intent serviceIntent = new Intent(this, notificationService.class);
         serviceIntent.putExtra("pull", true);
@@ -30,34 +31,40 @@ public class alarmInterface extends Service {
         if(intent != null){
             if(intent.getExtras() != null){
 
-                //Start the repeating notification
-                if(intent.getExtras().getBoolean("repeatNotif")){
-                    Log.i("alarmInterface", "Starting repeatNotif");
+                if(intent.getExtras().containsKey("repeatNotif")){
+                    //Start the repeating notification
+                    if(intent.getExtras().getBoolean("repeatNotif")){
+                        Log.i("alarmInterface", "Starting repeatNotif");
 
-                    //Setup an alarm to fire in one hour, and then every hour after that
-                    alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_HOUR,
-                            AlarmManager.INTERVAL_HOUR, alarmIntent);
+                        //Setup an alarm to fire in one hour, and then every hour after that
+                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_HOUR,
+                                AlarmManager.INTERVAL_HOUR, alarmIntent);
 
-                    //Start the first pull
-                    this.startService(serviceIntent);
-                }
-                //Cancel the repeating notification
-                else{
-                    Log.i("alarmInterface", "Cancelling repeatNotif");
-                    //Cancel the alarm
-                    alarmManager.cancel(alarmIntent);
-                    //Kill the notification service
-                    this.stopService(new Intent(this, notificationService.class));
-                }
-
-                //Start the summary notification
-                if(intent.getExtras().getBoolean("summaryNotif")){
-                    Log.i("alarmInterface", "Starting repeatNotif");
+                        //Start the first pull
+                        this.startService(serviceIntent);
+                    }
+                    //Cancel the repeating notification
+                    else{
+                        Log.i("alarmInterface", "Cancelling repeatNotif");
+                        //Cancel the alarm
+                        alarmManager.cancel(alarmIntent);
+                        //Kill the notification service
+                        this.stopService(new Intent(this, notificationService.class));
+                    }
                 }
 
-                //Start the alert notification
-                if(intent.getExtras().getBoolean("alertNotif")){
-                    Log.i("alarmInterface", "Starting alertNotif");
+                if(intent.getExtras().containsKey("summaryNotif")){
+                    //Start the summary notification
+                    if(intent.getExtras().getBoolean("summaryNotif")){
+                        Log.i("alarmInterface", "Starting repeatNotif");
+                    }
+                }
+
+                if(intent.getExtras().containsKey("alertNotif")){
+                    //Start the alert notification
+                    if(intent.getExtras().getBoolean("alertNotif")){
+                        Log.i("alarmInterface", "Starting alertNotif");
+                    }
                 }
             }
         }
