@@ -47,9 +47,7 @@ public class PermissionsFragment extends Fragment {
         btnAllowAccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
-
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST);
             }
         });
     }

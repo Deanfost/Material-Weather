@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements
     public static int setID;
 
     //Notification
-    public static final int NOTIF_ID = 23;
+    public static final int FOLLOW_NOTIF_ID = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements
 //                                .setSmallIcon(R.drawable.ic_cloudy_white);
 //                notificationBuilder.setOngoing(false);
 //                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//                notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
+//                notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
                 //Open the settings activity
                 Intent settingsIntent = new Intent(this, settingsActivity.class);

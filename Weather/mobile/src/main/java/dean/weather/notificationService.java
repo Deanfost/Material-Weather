@@ -105,6 +105,11 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                     Log.i("notifService", "new intent received, updating");
                     googleApiClient.connect();
                 }
+                //Intent specifies the service to stop
+                else if(intent.getExtras().containsKey("notSticky")){
+                    Log.i("notifService", "notStickyReceived");
+                    return START_NOT_STICKY;
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -395,7 +400,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
+            notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
         } else {
             //Create notification asking the user to try again
             NotificationCompat.Builder notifBuilder =
@@ -408,7 +413,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
+            mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notifBuilder.build());
 
             if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();
@@ -479,7 +484,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(MainActivity.NOTIF_ID, notificationBuilder.build());
+            notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
         } else {
             //Create notification asking the user to try again
             NotificationCompat.Builder notifBuilder =
@@ -492,7 +497,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(MainActivity.NOTIF_ID, notifBuilder.build());
+            mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notifBuilder.build());
         }
 
         if (googleApiClient.isConnected()) {
