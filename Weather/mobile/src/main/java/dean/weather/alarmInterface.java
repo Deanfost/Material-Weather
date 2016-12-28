@@ -44,7 +44,7 @@ public class alarmInterface extends Service {
                         this.startService(serviceIntent);
                     }
                     //Cancel the repeating notification
-                    else{
+                    else if (!intent.getExtras().getBoolean("repeatNotif")){
                         Log.i("alarmInterface", "Cancelling repeatNotif");
                         //Cancel the alarm
                         alarmManager.cancel(alarmIntent);

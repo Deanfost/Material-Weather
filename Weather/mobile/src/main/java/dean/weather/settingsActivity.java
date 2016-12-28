@@ -259,6 +259,7 @@ public class settingsActivity extends PreferenceActivity implements  GoogleApiCl
                                     case LocationSettingsStatusCodes.SUCCESS:
                                         Log.i("locationServices", "Running");
                                         //Location services are running, launch the service
+                                        Log.i("followNotifPref", "Looks good, starting service");
                                         Intent serviceIntent = new Intent(settingsActivity.this, alarmInterface.class);
                                         serviceIntent.putExtra("repeatNotif", true);
                                         startService(serviceIntent);
@@ -272,6 +273,7 @@ public class settingsActivity extends PreferenceActivity implements  GoogleApiCl
                                         } catch (IntentSender.SendIntentException e) {
                                             e.printStackTrace();
                                         }
+                                        saveFollowNotifValue = false;
                                         break;
                                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                                         //Display a snackbar telling the user to enable location services
@@ -296,7 +298,7 @@ public class settingsActivity extends PreferenceActivity implements  GoogleApiCl
                                     public void onClick(View view) {
                                         //Display a dialogue
                                         ActivityCompat.requestPermissions(settingsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 22);
-
+                                        saveFollowNotifValue = false;
                                     }
                                 });
 
@@ -307,7 +309,7 @@ public class settingsActivity extends PreferenceActivity implements  GoogleApiCl
                     //Stop the notif service
                     Log.i("followNotifPref", "stoppingService");
                     Intent stopService = new Intent(settingsActivity.this, alarmInterface.class);
-                    stopService.putExtra(getString(R.string.follow_notif_key), false);
+                    stopService.putExtra("repeatNotif", false);
                     startService(stopService);
 
                     NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
@@ -315,16 +317,10 @@ public class settingsActivity extends PreferenceActivity implements  GoogleApiCl
                     saveFollowNotifValue = true;
                 }
                 //Persist the new value?
-                if(saveFollowNotifValue){
-                    return true;
-                }
-                else{
-                    return false;
-                }
+                Log.i("saveFollowNotif", saveFollowNotifValue + "");
+                return saveFollowNotifValue;
             }
         });
-
-
     }
 
     @Override

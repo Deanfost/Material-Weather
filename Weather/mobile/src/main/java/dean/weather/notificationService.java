@@ -108,6 +108,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                 //Intent specifies the service to stop
                 else if(intent.getExtras().containsKey("notSticky")){
                     Log.i("notifService", "notStickyReceived");
+                    stopSelf();
                     return START_NOT_STICKY;
                 }
             }
