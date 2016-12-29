@@ -12,8 +12,9 @@
 
     <!-- Preferences -->
     <string name="notif_category_key">key_notif_category</string>
-    <string name="follow_notif_key">key_notif_follow</string>
-    <string name="alert_notif_key">key_notif_alert</string>
+    <string name="follow_me_key">key_follow_me</string>
+    <string name="ongoing_notif_key">key_notif_follow</string>
+    <!--<string name="alert_notif_key">key_notif_alert</string>-->
     <string name="summary_notif_key">key_notif_summary</string>
     <string name="units_group_key">key_units_group</string>
     <string name="units_list_key">key_units_list</string>

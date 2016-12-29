@@ -73,12 +73,12 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/dayLocation"
                     android:text="---"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textColor="@color/colorWhite"
                     android:layout_gravity="left|top"
                     android:layout_toRightOf="@id/iconDayConditions"
-                    android:layout_marginTop="@dimen/_14sdp"
-                    android:layout_marginLeft="@dimen/_60sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginLeft="@dimen/_45sdp"
                     android:layout_below="@+id/dayDesc"/>
 
                 <TextView
@@ -86,11 +86,11 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/dayHiLo"
                     android:text="---"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textColor="@color/colorWhite"
                     android:layout_gravity="left|top"
                     android:layout_toRightOf="@id/iconDayConditions"
-                    android:layout_marginLeft="@dimen/_60sdp"
+                    android:layout_marginLeft="@dimen/_45sdp"
                     android:layout_below="@+id/dayLocation"/>
 
                 <TextView

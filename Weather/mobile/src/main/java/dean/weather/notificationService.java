@@ -194,7 +194,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             //Change the preference to reflect the service being disabled
                             SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = mySPrefs.edit();
-                            editor.putBoolean(getString(R.string.follow_notif_key), false);
+                            editor.putBoolean(getString(R.string.ongoing_notif_key), false);
                             editor.apply();
 
                             //End the repeating preference alarm
@@ -213,7 +213,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             //Change the preference to reflect the service being disabled
                             SharedPreferences mySPrefs1 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor1 = mySPrefs1.edit();
-                            editor1.putBoolean(getString(R.string.follow_notif_key), false);
+                            editor1.putBoolean(getString(R.string.ongoing_notif_key), false);
                             editor1.apply();
 
                             //End the repeating preference alarm
@@ -235,7 +235,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             //Change the preference to reflect the service being disabled
             SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = mySPrefs.edit();
-            editor.putBoolean(getString(R.string.follow_notif_key), false);
+            editor.putBoolean(getString(R.string.ongoing_notif_key), false);
             editor.apply();
 
             //End the repeating preference alarm

@@ -34,7 +34,9 @@ import com.google.firebase.FirebaseApp;
 
 public class settingsActivity extends PreferenceActivity {
     SharedPreferences prefs;
-    Preference followNotif;
+    Preference followMePref;
+    Preference ongoingNotif;
+    Preference summaryNotif;
     boolean performChecksReturn;
 
     //Lifecycle and click listeners
@@ -46,7 +48,9 @@ public class settingsActivity extends PreferenceActivity {
 
         //Preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(settingsActivity.this);
-        followNotif = findPreference(getString(R.string.follow_notif_key));
+        followMePref = findPreference(getString(R.string.follow_me_key));
+        ongoingNotif = findPreference(getString(R.string.ongoing_notif_key));
+        summaryNotif = findPreference(getString(R.string.summary_notif_key));
 
     }
 
@@ -56,32 +60,41 @@ public class settingsActivity extends PreferenceActivity {
         //Register preference listeners
 
         //Follow notification pref
-        followNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        ongoingNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             boolean saveFollowNotifValue;
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Log.i("followNotif", "Pref clicked");
-                Boolean followNotifValue = (Boolean) newValue;
-                Log.i("followNotif", followNotifValue.toString());
+                Log.i("ongoingNotif", "Pref clicked");
+                Boolean ongoingNotifValue = (Boolean) newValue;
+                Log.i("ongoingNotif", ongoingNotifValue.toString());
                 //Start the notif service
-                if(followNotifValue){
-                    //Check if we are able to
-                    if(performChecks()){
-                        //Start it, everything is looking good
-                        Log.i("followNotifPref", "Looks good, starting service");
-                        Intent serviceIntent = new Intent(settingsActivity.this, alarmInterface.class);
-                        serviceIntent.putExtra("repeatNotif", true);
-                        startService(serviceIntent);
-                        saveFollowNotifValue = true;
+                if(ongoingNotifValue){
+                    //Check to see if the user selected "follow me"
+                    if(prefs.getBoolean(getString(R.string.follow_me_key),false)){
+                        //Check if we are able to use current location
+                        if(performChecks()){
+                            //Start it, everything is looking good
+                            Log.i("ongoingNotifPref", "Looks good, starting service");
+                            Intent serviceIntent = new Intent(settingsActivity.this, alarmInterface.class);
+                            serviceIntent.putExtra("repeatNotif", true);
+                            startService(serviceIntent);
+                            saveFollowNotifValue = true;
+                        }
+                        else{
+                            //Don't save the value, conditions not met
+                            saveFollowNotifValue = false;
+                        }
                     }
+                    //The user selected a location
                     else{
-                        //Don't save the value, conditions not met
+                        //TODO - FINISH THIS
+                        Log.i("ongoingNotif", "location selected");
                         saveFollowNotifValue = false;
                     }
                 }
                 else{
                     //Stop the notif service
-                    Log.i("followNotifPref", "stoppingService");
+                    Log.i("ongoingNotifPref", "stoppingService");
                     Intent stopService = new Intent(settingsActivity.this, alarmInterface.class);
                     stopService.putExtra("repeatNotif", false);
                     startService(stopService);
@@ -91,17 +104,30 @@ public class settingsActivity extends PreferenceActivity {
                     saveFollowNotifValue = true;
                 }
                 //Persist the new value?
-                Log.i("saveFollowNotif", saveFollowNotifValue + "");
+                Log.i("ongoingFollowNotif", saveFollowNotifValue + "");
                 return saveFollowNotifValue;
             }
         });
+
+        //TODO - CREATE A LISTENER FOR THE LIST ITEMS CONTAINING THE LOCATIONS
+
+        //Summary notification pref
+        summaryNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                return false;
+            }
+        });
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //Un-register click listeners
-        followNotif.setOnPreferenceClickListener(null);
+        ongoingNotif.setOnPreferenceClickListener(null);
+        summaryNotif.setOnPreferenceChangeListener(null);
     }
 
     //Checks and callbacks
