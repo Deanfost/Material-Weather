@@ -13,6 +13,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
+import android.preference.TwoStatePreference;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,14 +34,14 @@ import com.google.firebase.FirebaseApp;
  * Created by Dean on 12/23/2016.
  */
 
-public class settingsActivity extends PreferenceActivity {
+public class settingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     SharedPreferences prefs;
     Preference followMePref;
-    Preference ongoingNotif;
+    SwitchPreference ongoingNotif;
     Preference summaryNotif;
     boolean performChecksReturn;
 
-    //Lifecycle and click listeners
+    //Lifecycle and preference listeners
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FirebaseApp.initializeApp(this);
@@ -47,9 +49,9 @@ public class settingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences);
 
         //Preferences
-        prefs = PreferenceManager.getDefaultSharedPreferences(settingsActivity.this);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         followMePref = findPreference(getString(R.string.follow_me_key));
-        ongoingNotif = findPreference(getString(R.string.ongoing_notif_key));
+        ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
         summaryNotif = findPreference(getString(R.string.summary_notif_key));
 
     }
@@ -59,12 +61,39 @@ public class settingsActivity extends PreferenceActivity {
         super.onStart();
         //Register preference listeners
 
-        //Follow notification pref
+        //Follow me pref
+        followMePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Log.i("followMePref", "Value changed");
+                if(!(boolean) newValue){
+                    Log.i("followMePref", "Changed to false, turning off services");
+                    //For now, kill the ongoing notif if running
+                    if(prefs.getBoolean(getString(R.string.ongoing_notif_key), false)){
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
+                        editor.commit();
+                        ongoingNotif.setChecked(false);
+
+                        //Kill the service if running
+                        Intent stopService = new Intent(settingsActivity.this, alarmInterface.class);
+                        stopService.putExtra("repeatNotif", false);
+                        startService(stopService);
+
+                        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                    }
+                }
+                return true;
+            }
+        });
+
+        //Ongoing notification pref
         ongoingNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             boolean saveFollowNotifValue;
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Log.i("ongoingNotif", "Pref clicked");
+                Log.i("ongoingNotif", "Pref changed");
                 Boolean ongoingNotifValue = (Boolean) newValue;
                 Log.i("ongoingNotif", ongoingNotifValue.toString());
                 //Start the notif service
@@ -128,6 +157,15 @@ public class settingsActivity extends PreferenceActivity {
         //Un-register click listeners
         ongoingNotif.setOnPreferenceClickListener(null);
         summaryNotif.setOnPreferenceChangeListener(null);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch (key){
+            case "key_follow_me":
+
+                break;
+        }
     }
 
     //Checks and callbacks
