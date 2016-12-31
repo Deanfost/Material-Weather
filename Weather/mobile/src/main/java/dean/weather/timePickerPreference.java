@@ -3,46 +3,52 @@ package dean.weather;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.TimePicker;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Dean on 12/29/2016.
  */
 
 public class timePickerPreference extends DialogPreference {
-    private int lastHour = 0;
-    private int lastMinute = 0;
-    private TimePicker picker;
+    private Calendar calendar;
+    private TimePicker picker = null;
 
-    public static int getHour(String time) {
-        String[] pieces=time.split(":");
-        return(Integer.parseInt(pieces[0]));
+    public timePickerPreference(Context ctxt) {
+        this(ctxt, null);
     }
 
-    public static int getMinute(String time) {
-        String[] pieces=time.split(":");
-        return(Integer.parseInt(pieces[1]));
+    public timePickerPreference(Context ctxt, AttributeSet attrs) {
+        this(ctxt, attrs, android.R.attr.dialogPreferenceStyle);
     }
 
-    public timePickerPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+    public timePickerPreference(Context ctxt, AttributeSet attrs, int defStyle) {
+        super(ctxt, attrs, defStyle);
+
         setPositiveButtonText("Set");
         setNegativeButtonText("Cancel");
+        setDialogTitle("");
+        calendar = new GregorianCalendar();
     }
 
     @Override
     protected View onCreateDialogView() {
         picker = new TimePicker(getContext());
-        return(picker);
+        return (picker);
     }
 
     @Override
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
-        picker.setCurrentHour(lastHour);
-        picker.setCurrentMinute(lastMinute);
+        picker.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
+        picker.setCurrentMinute(calendar.get(Calendar.MINUTE));
     }
 
     @Override
@@ -50,39 +56,48 @@ public class timePickerPreference extends DialogPreference {
         super.onDialogClosed(positiveResult);
 
         if (positiveResult) {
-            lastHour = picker.getCurrentHour();
-            lastMinute = picker.getCurrentMinute();
+            calendar.set(Calendar.HOUR_OF_DAY, picker.getCurrentHour());
+            calendar.set(Calendar.MINUTE, picker.getCurrentMinute());
 
-            String time = String.valueOf(lastHour)+ ":" +String.valueOf(lastMinute);
-
-            if (callChangeListener(time)) {
-                persistString(time);
+            setSummary(getSummary());
+            if (callChangeListener(calendar.getTimeInMillis())) {
+                persistLong(calendar.getTimeInMillis());
+                notifyChanged();
             }
         }
     }
 
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
-        return(a.getString(index));
+        return (a.getString(index));
     }
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        String time;
 
         if (restoreValue) {
             if (defaultValue == null) {
-                time = getPersistedString("00:00");
+                calendar.setTimeInMillis(getPersistedLong(System.currentTimeMillis()));
+            } else {
+                calendar.setTimeInMillis(Long.parseLong(getPersistedString((String) defaultValue)));
             }
-            else {
-                time = getPersistedString(defaultValue.toString());
+        } else {
+            if (defaultValue == null) {
+                calendar.setTimeInMillis(System.currentTimeMillis());
+            } else {
+                calendar.setTimeInMillis(Long.parseLong((String) defaultValue));
             }
         }
-        else {
-            time = defaultValue.toString();
-        }
-
-        lastHour = getHour(time);
-        lastMinute = getMinute(time);
+        setSummary(getSummary());
     }
+
+    @Override
+    public CharSequence getSummary() {
+        if (calendar == null) {
+            return null;
+        }
+        return DateFormat.getTimeFormat(getContext()).format(new Date(calendar.getTimeInMillis()));
+    }
+
+
 }

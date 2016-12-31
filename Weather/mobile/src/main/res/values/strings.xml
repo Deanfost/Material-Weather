@@ -16,6 +16,7 @@
     <string name="ongoing_notif_key">key_notif_follow</string>
     <!--<string name="alert_notif_key">key_notif_alert</string>-->
     <string name="summary_notif_key">key_notif_summary</string>
+    <string name="summary_time_key">key_summary_time</string>
     <string name="units_group_key">key_units_group</string>
     <string name="units_list_key">key_units_list</string>
     <string name="theme_group_key">key_theme_group</string>

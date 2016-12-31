@@ -61,4 +61,5 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:textColor">@color/colorBlack</item>
     </style>
+
 </resources>

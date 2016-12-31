@@ -43,6 +43,10 @@
                     android:summary="Create a push notification containing a summary of the day's weather forecast"
                     android:defaultValue="false" />
 
+                <dean.weather.timePickerPreference
+                    android:key="@string/summary_time_key"
+                    android:title="Summary time" />
+
             </PreferenceCategory>
 
         </PreferenceScreen>

@@ -34,7 +34,7 @@ import com.google.firebase.FirebaseApp;
  * Created by Dean on 12/23/2016.
  */
 
-public class settingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class settingsActivity extends PreferenceActivity{
     SharedPreferences prefs;
     Preference followMePref;
     SwitchPreference ongoingNotif;
@@ -157,15 +157,6 @@ public class settingsActivity extends PreferenceActivity implements SharedPrefer
         //Un-register click listeners
         ongoingNotif.setOnPreferenceClickListener(null);
         summaryNotif.setOnPreferenceChangeListener(null);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        switch (key){
-            case "key_follow_me":
-
-                break;
-        }
     }
 
     //Checks and callbacks
