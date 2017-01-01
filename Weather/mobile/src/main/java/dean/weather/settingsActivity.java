@@ -14,7 +14,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
-import android.preference.TwoStatePreference;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +29,10 @@ import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Dean on 12/23/2016.
  */
@@ -38,7 +41,8 @@ public class settingsActivity extends PreferenceActivity{
     SharedPreferences prefs;
     Preference followMePref;
     SwitchPreference ongoingNotif;
-    Preference summaryNotif;
+    SwitchPreference summaryNotif;
+    Preference timePickerPref;
     boolean performChecksReturn;
 
     //Lifecycle and preference listeners
@@ -52,8 +56,8 @@ public class settingsActivity extends PreferenceActivity{
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         followMePref = findPreference(getString(R.string.follow_me_key));
         ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
-        summaryNotif = findPreference(getString(R.string.summary_notif_key));
-
+        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
+        timePickerPref = findPreference(getString(R.string.summary_time_key));
     }
 
     @Override
@@ -68,20 +72,38 @@ public class settingsActivity extends PreferenceActivity{
                 Log.i("followMePref", "Value changed");
                 if(!(boolean) newValue){
                     Log.i("followMePref", "Changed to false, turning off services");
-                    //For now, kill the ongoing notif if running
+                    //Kill the ongoing notif if running
                     if(prefs.getBoolean(getString(R.string.ongoing_notif_key), false)){
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean(getString(R.string.ongoing_notif_key), false);
                         editor.commit();
                         ongoingNotif.setChecked(false);
 
-                        //Kill the service if running
-                        Intent stopService = new Intent(settingsActivity.this, alarmInterface.class);
+                        //Kill the ongoing service if running
+                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                         stopService.putExtra("repeatNotif", false);
                         startService(stopService);
 
+                        //Clear the notif
                         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
                         notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                    }
+                    //Kill the summary notif if running
+                    if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(getString(R.string.summary_notif_key), false);
+                        editor.commit();
+                        summaryNotif.setChecked(false);
+                        timePickerPref.setEnabled(false);
+
+                        //Kill the ongoing service if running
+                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                        stopService.putExtra("summaryNotif", false);
+                        startService(stopService);
+
+                        //Clear the notif
+                        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(MainActivity.SUMMARY_NOTIF_ID);
                     }
                 }
                 return true;
@@ -90,7 +112,6 @@ public class settingsActivity extends PreferenceActivity{
 
         //Ongoing notification pref
         ongoingNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            boolean saveFollowNotifValue;
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 Log.i("ongoingNotif", "Pref changed");
@@ -104,37 +125,34 @@ public class settingsActivity extends PreferenceActivity{
                         if(performChecks()){
                             //Start it, everything is looking good
                             Log.i("ongoingNotifPref", "Looks good, starting service");
-                            Intent serviceIntent = new Intent(settingsActivity.this, alarmInterface.class);
+                            Intent serviceIntent = new Intent(settingsActivity.this, alarmInterfaceService.class);
                             serviceIntent.putExtra("repeatNotif", true);
                             startService(serviceIntent);
-                            saveFollowNotifValue = true;
+                            return true;
                         }
                         else{
                             //Don't save the value, conditions not met
-                            saveFollowNotifValue = false;
+                            return false;
                         }
                     }
                     //The user selected a location
                     else{
                         //TODO - FINISH THIS
                         Log.i("ongoingNotif", "location selected");
-                        saveFollowNotifValue = false;
+                        return false;
                     }
                 }
                 else{
                     //Stop the notif service
                     Log.i("ongoingNotifPref", "stoppingService");
-                    Intent stopService = new Intent(settingsActivity.this, alarmInterface.class);
+                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("repeatNotif", false);
                     startService(stopService);
 
                     NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
-                    saveFollowNotifValue = true;
+                    return true;
                 }
-                //Persist the new value?
-                Log.i("ongoingFollowNotif", saveFollowNotifValue + "");
-                return saveFollowNotifValue;
             }
         });
 
@@ -144,19 +162,95 @@ public class settingsActivity extends PreferenceActivity{
         summaryNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Log.i("summaryNotif", newValue.toString());
+                //Start the summary service
+                if((Boolean) newValue){
+                    //Start with current location
+                    if(prefs.getBoolean(getString(R.string.follow_me_key),false)){
+                        //Check to see if we can do this
+                        Log.i("summaryNotif", "Follow me selected");
+                        if(performChecks()){
+                            //Start it, everything is looking good
+                            Log.i("ongoingNotifPref", "Looks good, starting service");
+                            Intent summaryService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                            summaryService.putExtra("summaryNotif", true);
+                            summaryService.putExtra("alarmTime", prefs.getLong(getString(R.string.summary_time_key), System.currentTimeMillis()));
+                            startService(summaryService);
+                            timePickerPref.setEnabled(true);
 
-                return false;
+                            //Notify the user
+                            Long alarmTime = prefs.getLong(getString(R.string.summary_time_key), System.currentTimeMillis());
+                            String dateFormatted = null;
+
+                            //Detect if the user is using 24 hour time or not
+                            //They aren't
+                            if(!android.text.format.DateFormat.is24HourFormat(settingsActivity.this)){
+                                Date date = new Date(alarmTime);
+                                DateFormat formatter = new SimpleDateFormat("HH:mm aa");
+                                dateFormatted = formatter.format(date);
+                                Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                            }
+                            //They are
+                            else{
+                                Date date = new Date(alarmTime);
+                                DateFormat formatter = new SimpleDateFormat("HH:mm");
+                                dateFormatted = formatter.format(date);
+                                Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                            }
+                            Log.i("alarmTime", dateFormatted);
+                            return true;
+                        }
+                        else{
+                            //Don't save the value, conditions not met
+                            return false;
+                        }
+                    }
+                    //Start with a selected location
+                    else{
+                        Log.i("summaryNotif", "Location selected");
+                        return false;
+                    }
+                }
+                //Stop the summary service
+                else{
+                    Log.i("summaryNotifPref", "stoppingService");
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean(getString(R.string.summary_notif_key), false);
+                    editor.commit();
+                    summaryNotif.setChecked(false);
+                    timePickerPref.setEnabled(false);
+
+                    //Kill the ongoing service if running
+                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                    stopService.putExtra("summaryNotif", false);
+                    startService(stopService);
+
+                    //Clear the notif
+                    NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(MainActivity.SUMMARY_NOTIF_ID);
+                    return true;
+                }
             }
         });
 
+        //Summary time picker pref
+        timePickerPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Log.i("timePicker", "Changed");
+                return true;
+            }
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //Un-register click listeners
+        followMePref.setOnPreferenceChangeListener(null);
         ongoingNotif.setOnPreferenceClickListener(null);
         summaryNotif.setOnPreferenceChangeListener(null);
+        timePickerPref.setOnPreferenceChangeListener(null);
     }
 
     //Checks and callbacks

@@ -45,7 +45,8 @@
 
                 <dean.weather.timePickerPreference
                     android:key="@string/summary_time_key"
-                    android:title="Summary time" />
+                    android:title="Summary time"
+                    android:enabled="false"/>
 
             </PreferenceCategory>
 

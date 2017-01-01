@@ -15,7 +15,7 @@ public class alarmReceiver extends BroadcastReceiver {
 //        if(intent.getAction().equals("dean.weather.alarm.receiver")){
 //            Log.i("alarmReceiver", "Received");
 //            //Launch the notification service
-//            Intent notifService = new Intent(context, notificationService.class);
+//            Intent notifService = new Intent(context, ongoingNotifService.class);
 //            context.startService(notifService);
 //        }
     }

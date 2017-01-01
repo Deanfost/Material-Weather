@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //Notification
     public static final int FOLLOW_NOTIF_ID = 23;
+    public static final int SUMMARY_NOTIF_ID = 32;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,8 +185,8 @@ public class MainActivity extends AppCompatActivity implements
 //                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
 //                        .show();
 //                Log.i("Editor", "Updated 1st launch");
-//                Intent notificationService = new Intent(this, notificationService.class);
-//                startService(notificationService);
+//                Intent ongoingNotifService = new Intent(this, ongoingNotifService.class);
+//                startService(ongoingNotifService);
 //
 //                Snackbar.make(findViewById(R.id.mainActivityLayout), "Settings coming soon.", Snackbar.LENGTH_LONG)
 //                        .show();

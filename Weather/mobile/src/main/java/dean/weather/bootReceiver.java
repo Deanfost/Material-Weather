@@ -19,9 +19,9 @@ public class bootReceiver extends BroadcastReceiver {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         //If either the repeat notif, summary notif, or alert notif is enabled
         if(prefs.getBoolean("key_notif_follow", false) || prefs.getBoolean("key_notif_summary", false) || prefs.getBoolean("key_notif_alert", false)) {
-            //Tell the alarmInterface class to start the notifService, and to setup an alarm
-            Log.i("bootReceiver", "Starting alarmInterface");
-            Intent interfaceIntent = new Intent(context, alarmInterface.class);
+            //Tell the alarmInterfaceService class to start the notifService, and to setup an alarm
+            Log.i("bootReceiver", "Starting alarmInterfaceService");
+            Intent interfaceIntent = new Intent(context, alarmInterfaceService.class);
             //Put the appropriate extras
             //Repeating notif
             if(prefs.getBoolean("key_notif_follow", false)){

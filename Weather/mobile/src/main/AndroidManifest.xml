@@ -67,17 +67,17 @@
         </activity>
 
         <!--Active notification service-->
-        <service android:name="dean.weather.notificationService"
+        <service android:name="dean.weather.ongoingNotifService"
             android:exported="false">
         </service>
 
         <!--Summary notification service-->
-        <service android:name="dean.weather.summaryService"
+        <service android:name="dean.weather.summaryNotifService"
             android:exported="false">
         </service>
 
         <!--Alarm interface service-->
-        <service android:name=".alarmInterface"
+        <service android:name=".alarmInterfaceService"
             android:exported="false">
         </service>
 

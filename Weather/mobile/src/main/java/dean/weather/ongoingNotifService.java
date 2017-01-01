@@ -52,7 +52,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class notificationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class ongoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -198,7 +198,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             editor.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm = new Intent(getApplicationContext(), alarmInterface.class);
+                            Intent stopAlarm = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm.putExtra("repeatNotif", false);
                             startService(stopAlarm);
 
@@ -217,7 +217,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             editor1.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterface.class);
+                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm1.putExtra("repeatNotif", false);
                             startService(stopAlarm1);
 
@@ -239,7 +239,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
             editor.apply();
 
             //End the repeating preference alarm
-            Intent stopAlarm = new Intent(this, alarmInterface.class);
+            Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
             stopAlarm.putExtra("repeatNotif", false);
             startService(stopAlarm);
 
@@ -409,7 +409,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again.");
-            Intent serviceIntent = new Intent(this, notificationService.class);
+            Intent serviceIntent = new Intent(this, ongoingNotifService.class);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
@@ -493,7 +493,7 @@ public class notificationService extends Service implements GoogleApiClient.Conn
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again.");
-            Intent serviceIntent = new Intent(this, notificationService.class);
+            Intent serviceIntent = new Intent(this, ongoingNotifService.class);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
