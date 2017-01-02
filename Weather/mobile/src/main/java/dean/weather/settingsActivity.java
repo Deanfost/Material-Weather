@@ -171,7 +171,7 @@ public class settingsActivity extends PreferenceActivity{
                         Log.i("summaryNotif", "Follow me selected");
                         if(performChecks()){
                             //Start it, everything is looking good
-                            Log.i("ongoingNotifPref", "Looks good, starting service");
+                            Log.i("summaryNotifPref", "Looks good, starting service");
                             Intent summaryService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                             summaryService.putExtra("summaryNotif", true);
                             summaryService.putExtra("alarmTime", prefs.getLong(getString(R.string.summary_time_key), System.currentTimeMillis()));
@@ -191,12 +191,15 @@ public class settingsActivity extends PreferenceActivity{
                                 Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
                                 String restOfString = dateFormatted.substring(2);
                                 //TODO - FIX THIS
-                                if(hh % 12 > 0){
+                                if(hh > 12){
                                     hh -= 12;
                                     Toast.makeText(settingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
                                 }
-                                else{
+                                else if (hh < 12 && hh > 0){
                                     Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(settingsActivity.this, "Alarm set for " + 12 + restOfString, Toast.LENGTH_SHORT).show();
                                 }
                             }
                             //They are
@@ -253,7 +256,7 @@ public class settingsActivity extends PreferenceActivity{
                     Log.i("summaryNotif", "Follow me selected");
                     if(performChecks()){
                         //Start it, everything is looking good
-                        Log.i("ongoingNotifPref", "Looks good, starting service");
+                        Log.i("timePickerPref", "Looks good, starting service");
                         Intent summaryService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                         summaryService.putExtra("summaryNotif", true);
                         summaryService.putExtra("alarmTime", (Long) newValue);
@@ -273,12 +276,15 @@ public class settingsActivity extends PreferenceActivity{
                             Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
                             String restOfString = dateFormatted.substring(2);
                             //TODO - FIX THIS
-                            if(hh % 12 > 0){
+                            if(hh > 12){
                                 hh -= 12;
                                 Toast.makeText(settingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
                             }
-                            else{
+                            else if(hh < 12 && hh > 0   ){
                                 Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(settingsActivity.this, "Alarm set for " + 12 + restOfString, Toast.LENGTH_SHORT).show();
                             }
                         }
                         //They are

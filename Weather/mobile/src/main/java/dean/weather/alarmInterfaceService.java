@@ -80,15 +80,18 @@ public class alarmInterfaceService extends Service {
                         Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
                         Log.i("hh", hh.toString());
                         Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(alarmTime);
+                        calendar.setTimeInMillis(System.currentTimeMillis());
                         calendar.set(Calendar.HOUR_OF_DAY, hh);
-                        if(!(calendar.getTimeInMillis() < System.currentTimeMillis())){
-                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                        if(!(alarmTime < System.currentTimeMillis())){
+                            alarmManager.cancel(summaryAlarmIntent);
+                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmTime, AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
                             stopSelf();
                         }
                         else{
+                            Log.i("alarmIntService", "Time is in the past");
                             calendar.add(Calendar.DAY_OF_MONTH, 1);
-                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                            alarmManager.cancel(summaryAlarmIntent);
+                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, , AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
                             stopSelf();
                         }
                     }
