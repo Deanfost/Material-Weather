@@ -16,8 +16,10 @@ public class summaryNotifService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        //Creates a summary weather summary notification at a certain time everyday
+        //Creates a summary weather summary notification at a set time everyday
         Log.i("summaryNotifService", "started");
+
+
         stopSelf();
     }
 }

@@ -188,7 +188,16 @@ public class settingsActivity extends PreferenceActivity{
                                 Date date = new Date(alarmTime);
                                 DateFormat formatter = new SimpleDateFormat("HH:mm aa");
                                 dateFormatted = formatter.format(date);
-                                Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                                Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
+                                String restOfString = dateFormatted.substring(2);
+                                //TODO - FIX THIS
+                                if(hh % 12 > 0){
+                                    hh -= 12;
+                                    Toast.makeText(settingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                                }
                             }
                             //They are
                             else{
@@ -207,20 +216,21 @@ public class settingsActivity extends PreferenceActivity{
                     }
                     //Start with a selected location
                     else{
+                        //TODO - FINISH THIS
                         Log.i("summaryNotif", "Location selected");
                         return false;
                     }
                 }
-                //Stop the summary service
+                //Stop the summary notifs
                 else{
                     Log.i("summaryNotifPref", "stoppingService");
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean(getString(R.string.summary_notif_key), false);
+                    editor.putBoolean("summaryNotif", false);
                     editor.commit();
                     summaryNotif.setChecked(false);
                     timePickerPref.setEnabled(false);
 
-                    //Kill the ongoing service if running
+                    //Kill the alarm
                     Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("summaryNotif", false);
                     startService(stopService);
@@ -238,7 +248,70 @@ public class settingsActivity extends PreferenceActivity{
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 Log.i("timePicker", "Changed");
-                return true;
+                if(prefs.getBoolean(getString(R.string.follow_me_key),false)){
+                    //Check to see if we can do this
+                    Log.i("summaryNotif", "Follow me selected");
+                    if(performChecks()){
+                        //Start it, everything is looking good
+                        Log.i("ongoingNotifPref", "Looks good, starting service");
+                        Intent summaryService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                        summaryService.putExtra("summaryNotif", true);
+                        summaryService.putExtra("alarmTime", (Long) newValue);
+                        startService(summaryService);
+                        timePickerPref.setEnabled(true);
+
+                        //Notify the user
+                        Long alarmTime = (Long) newValue;
+                        String dateFormatted;
+
+                        //Detect if the user is using 24 hour time or not
+                        //They aren't
+                        if(!android.text.format.DateFormat.is24HourFormat(settingsActivity.this)){
+                            Date date = new Date(alarmTime);
+                            DateFormat formatter = new SimpleDateFormat("HH:mm aa");
+                            dateFormatted = formatter.format(date);
+                            Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
+                            String restOfString = dateFormatted.substring(2);
+                            //TODO - FIX THIS
+                            if(hh % 12 > 0){
+                                hh -= 12;
+                                Toast.makeText(settingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        //They are
+                        else{
+                            Date date = new Date(alarmTime);
+                            DateFormat formatter = new SimpleDateFormat("HH:mm");
+                            dateFormatted = formatter.format(date);
+                            Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+                        }
+                        Log.i("alarmTime", dateFormatted);
+                        return true;
+                    }
+                    else{
+                        //Turn off the pref, and change the value
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(getString(R.string.summary_notif_key), false);
+                        editor.commit();
+                        summaryNotif.setChecked(false);
+                        timePickerPref.setEnabled(false);
+
+                        //Kill the alarm
+                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                        stopService.putExtra("summaryNotif", false);
+                        startService(stopService);
+                        return true;
+                    }
+                }
+                //Start with a selected location
+                else{
+                    //TODO - FINISH THIS
+                    Log.i("summaryNotif", "Location selected");
+                    return true;
+                }
             }
         });
     }

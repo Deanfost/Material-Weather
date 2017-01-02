@@ -291,7 +291,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
 
     @Override
     public void onConnectionSuspended(int i) {
-        //TODO - GET RID OF THIS AFTER TESTING
         Log.i("notifService", "API connection suspended");
         createNotification(false);
     }

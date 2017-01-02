@@ -11,6 +11,7 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -70,26 +71,33 @@ public class alarmInterfaceService extends Service {
                 if(intent.getExtras().containsKey("summaryNotif")){
                     //Start the summary notification
                     if(intent.getExtras().getBoolean("summaryNotif")){
-                        Log.i("alarmInterfaceService", "Starting summaryNotif");
+                        Log.i("alarmInterfaceService", "Setting summaryNotif alarm");
                         //Setup an alarm to fire at the set time to start the service
                         Long alarmTime = intent.getExtras().getLong("alarmTime");
                         Date date = new Date(alarmTime);
                         DateFormat formatter = new SimpleDateFormat("HH:mm");
                         String dateFormatted = formatter.format(date);
-                        Log.i("alarmTime", dateFormatted);
-
-
-
-                        stopSelf();
-
+                        Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
+                        Log.i("hh", hh.toString());
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(alarmTime);
+                        calendar.set(Calendar.HOUR_OF_DAY, hh);
+                        if(!(calendar.getTimeInMillis() < System.currentTimeMillis())){
+                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                            stopSelf();
+                        }
+                        else{
+                            calendar.add(Calendar.DAY_OF_MONTH, 1);
+                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                            stopSelf();
+                        }
                     }
                     //Stop the summary notification
                     else{
                         Log.i("alarmInterfaceService", "Cancelling summaryNotif");
                         //Cancel the alarm
-
+                        alarmManager.cancel(summaryAlarmIntent);
                         stopSelf();
-
                     }
                 }
 
@@ -101,6 +109,7 @@ public class alarmInterfaceService extends Service {
 //                }
             }
         }
+        stopSelf();
         return super.onStartCommand(intent, flags, startId);
     }
 }
