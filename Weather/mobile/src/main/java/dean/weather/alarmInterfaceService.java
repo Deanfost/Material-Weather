@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -78,20 +79,23 @@ public class alarmInterfaceService extends Service {
                         DateFormat formatter = new SimpleDateFormat("HH:mm");
                         String dateFormatted = formatter.format(date);
                         Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
+                        Integer mm = Integer.valueOf(dateFormatted.substring(3));
                         Log.i("hh", hh.toString());
+                        Log.i("mm", mm.toString());
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTimeInMillis(System.currentTimeMillis());
                         calendar.set(Calendar.HOUR_OF_DAY, hh);
-                        if(!(alarmTime < System.currentTimeMillis())){
+                        calendar.set(Calendar.MINUTE, mm);
+                        if(!(calendar.getTimeInMillis() < System.currentTimeMillis())){
                             alarmManager.cancel(summaryAlarmIntent);
-                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, alarmTime, AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
                             stopSelf();
                         }
                         else{
                             Log.i("alarmIntService", "Time is in the past");
                             calendar.add(Calendar.DAY_OF_MONTH, 1);
                             alarmManager.cancel(summaryAlarmIntent);
-                            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, , AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
                             stopSelf();
                         }
                     }

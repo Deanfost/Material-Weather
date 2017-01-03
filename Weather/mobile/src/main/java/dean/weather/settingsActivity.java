@@ -58,6 +58,11 @@ public class settingsActivity extends PreferenceActivity{
         ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
         summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
         timePickerPref = findPreference(getString(R.string.summary_time_key));
+
+        //Enable the timePickerPref?
+        if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
+            timePickerPref.setEnabled(true);
+        }
     }
 
     @Override
@@ -261,7 +266,6 @@ public class settingsActivity extends PreferenceActivity{
                         summaryService.putExtra("summaryNotif", true);
                         summaryService.putExtra("alarmTime", (Long) newValue);
                         startService(summaryService);
-                        timePickerPref.setEnabled(true);
 
                         //Notify the user
                         Long alarmTime = (Long) newValue;
@@ -275,7 +279,6 @@ public class settingsActivity extends PreferenceActivity{
                             dateFormatted = formatter.format(date);
                             Integer hh = Integer.valueOf(dateFormatted.substring(0, 2));
                             String restOfString = dateFormatted.substring(2);
-                            //TODO - FIX THIS
                             if(hh > 12){
                                 hh -= 12;
                                 Toast.makeText(settingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
