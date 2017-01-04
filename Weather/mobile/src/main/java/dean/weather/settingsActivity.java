@@ -58,18 +58,17 @@ public class settingsActivity extends PreferenceActivity{
         ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
         summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
         timePickerPref = findPreference(getString(R.string.summary_time_key));
-
-        //Enable the timePickerPref?
-        if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
-            timePickerPref.setEnabled(true);
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        //Register preference listeners
+        //Enable the timePickerPref?
+        if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
+            timePickerPref.setEnabled(true);
+        }
 
+        //Register preference listeners
         //Follow me pref
         followMePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

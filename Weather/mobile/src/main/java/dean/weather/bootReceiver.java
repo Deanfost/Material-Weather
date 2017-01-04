@@ -32,6 +32,7 @@ public class bootReceiver extends BroadcastReceiver {
             if(prefs.getBoolean("key_notif_summary", false)){
                 interfaceIntent.putExtra("summaryNotif", true);
                 Log.i("bootReceiver", "summaryNotif enabled");
+                //TODO - CHECK TO SEE IF THE ALARM SHOULD HAVE BEEN FIRED, AND THEN HANDLE
             }
             //Alert notif
             if(prefs.getBoolean("key_notif_alert", false)){

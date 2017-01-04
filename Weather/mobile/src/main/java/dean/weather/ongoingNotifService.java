@@ -130,6 +130,48 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         return locationRequest;
     }
 
+    /**
+     * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
+     */
+    private void getAddresses() {
+        Boolean serviceAvailable = true;
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addressList = null;
+        try {
+            addressList = geocoder.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i("IO Exception", "getAdresses");
+            serviceAvailable = false;
+        }
+        if (serviceAvailable) {
+            if (addressList.size() > 0) {
+                if (addressList.get(0).getLocality() != null) {
+                    currentAddress = addressList.get(0).getLocality();//Assign locality if available
+                    Log.i("getLocality", addressList.get(0).getLocality());
+                } else {
+                    currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
+                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+                }
+            } else {
+                Log.i("getLocality", "No localities found.");
+            }
+        } else {
+            Log.i("Geocoder", "Service unavailable.");
+            currentAddress = "---";
+        }
+        if (!currentAddress.equals("---")) {
+            //Store the pulled location for future reference
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = mySPrefs.edit();
+            editor.putString(getString(R.string.last_location_key), currentAddress);
+            editor.apply();
+            hasLocation = true;
+        } else {
+            hasLocation = false;
+        }
+    }
+
     //GoogleAPI
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -247,52 +289,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         }
     }
 
-    /**
-     * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
-     */
-    private void getAddresses() {
-        Boolean serviceAvailable = true;
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List<Address> addressList = null;
-        try {
-            addressList = geocoder.getFromLocation(latitude, longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i("IO Exception", "getAdresses");
-            serviceAvailable = false;
-        }
-        if (serviceAvailable) {
-            if (addressList.size() > 0) {
-                if (addressList.get(0).getLocality() != null) {
-                    currentAddress = addressList.get(0).getLocality();//Assign locality if available
-                    Log.i("getLocality", addressList.get(0).getLocality());
-                } else {
-                    currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
-                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
-                }
-            } else {
-                Log.i("getLocality", "No localities found.");
-            }
-        } else {
-            Log.i("Geocoder", "Service unavailable.");
-            currentAddress = "---";
-        }
-        if (!currentAddress.equals("---")) {
-            //Store the pulled location for future reference
-            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = mySPrefs.edit();
-            editor.putString(getString(R.string.last_location_key), currentAddress);
-            editor.apply();
-            hasLocation = true;
-        } else {
-            hasLocation = false;
-        }
-    }
-
     @Override
     public void onConnectionSuspended(int i) {
         Log.i("notifService", "API connection suspended");
-        createNotification(false);
     }
 
     @Override
@@ -407,7 +406,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
-                            .setContentText("Tap to try again.");
+                            .setContentText("Tap to try again now.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
@@ -491,8 +490,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
-                            .setContentText("Tap to try again.");
+                            .setContentText("Tap to try again now.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
+            serviceIntent.putExtra("pull", true);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
@@ -620,6 +620,11 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             public void failure(RetrofitError retrofitError) {
                 Log.e("DarkSky API", "Error while calling: " + retrofitError.getUrl());
                 Log.i("DarkSky API", retrofitError.getMessage());
+                //Kill the connection
+                if(googleApiClient.isConnected()){
+                    googleApiClient.disconnect();
+                }
+                clearData();
             }
         });
     }
