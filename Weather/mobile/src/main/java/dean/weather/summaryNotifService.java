@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,9 +17,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -30,7 +30,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
@@ -55,7 +54,11 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
     private Double latitude;
     private Double longitude;
     private Location lastLocation;
+    private String currentAddress;
     private String todaySummary;
+    private String todaySunrise;
+    private String todaySunset;
+    private boolean hasLocation;
 
     public summaryNotifService() {
         super(null);
@@ -79,6 +82,48 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
     }
 
     //Location
+
+    /**
+     * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
+     */
+    private void getAddresses() {
+        Boolean serviceAvailable = true;
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addressList = null;
+        try {
+            addressList = geocoder.getFromLocation(latitude, longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i("IO Exception", "getAdresses");
+            serviceAvailable = false;
+        }
+        if (serviceAvailable) {
+            if (addressList.size() > 0) {
+                if (addressList.get(0).getLocality() != null) {
+                    currentAddress = addressList.get(0).getLocality();//Assign locality if available
+                    Log.i("getLocality", addressList.get(0).getLocality());
+                } else {
+                    currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
+                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+                }
+            } else {
+                Log.i("getLocality", "No localities found.");
+            }
+        } else {
+            Log.i("Geocoder", "Service unavailable.");
+            currentAddress = "---";
+        }
+        if (!currentAddress.equals("---")) {
+            //Store the pulled location for future reference
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = mySPrefs.edit();
+            editor.putString(getString(R.string.last_location_key), currentAddress);
+            editor.apply();
+            hasLocation = true;
+        } else {
+            hasLocation = false;
+        }
+    }
 
     /**
      * Creates location request.
@@ -130,7 +175,7 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                                     if (!Geocoder.isPresent()) {
                                         Log.i("Geocoder", "Unavailable");
                                     }
-
+                                    getAddresses();
                                     //Pull initial data
                                     pullForecast();
                                 } else {
@@ -229,7 +274,7 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
         //Form a pull request
-        RequestBuilder weather = new RequestBuilder();
+        final RequestBuilder weather = new RequestBuilder();
         final Request request = new Request();
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
@@ -241,10 +286,11 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.i("DarkSky API", "Pull request successful");
                 //Pull and parse weather summary
+                todaySunrise = weatherResponse.getDaily().getData().get(0).getSunriseTime();
+                todaySunset = weatherResponse.getDaily().getData().get(0).getSunsetTime();
                 todaySummary = weatherResponse.getDaily().getData().get(0).getSummary();
 
                 //Create/update notification
-                //Test to see which one to make
                 createNotification();
 
                 //Kill the connection
@@ -273,13 +319,13 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
     //Notifications
 
     /**
-     * Creates notification letting the user know that we were unable to get their summary.
+     * Creates notification letting the user know that we were unable to get their summary for Lollipop through Marshmallow.
      */
     private void createErrorNotif(){
         //Create notification asking the user to try again
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Unable to sync weather")
                         .setContentText("Tap to try again now.");
         Intent serviceIntent = new Intent(this, summaryNotifService.class);
@@ -291,20 +337,120 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
     }
 
     /**
+     * Creates notification letting the user know we were unable to pull summary for Nougat.
+     */
+    private void createNewErrorNotif(){
+
+    }
+
+    /**
      * Creates summary notification for Lollipop through Marshmallow.
      */
     private void createNotification(){
+        //Check to see if we were able to pull the current location, and adjust accordingly
+        if(!hasLocation){
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            //Get a previously stored location to display, in order to avoid showing "---"
+            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
+        }
+
+        //Determine which color to use for large icon background
+        int setID = determineLayoutColor(todaySunrise, todaySunset);
+        int color = -1;
+
+        switch (setID){
+            case 0:
+                color = getResources().getColor(R.color.colorOrange);
+                break;
+            case 1:
+                color = getResources().getColor(R.color.colorBlueLight);
+                break;
+            case 2:
+                color = getResources().getColor(R.color.colorYellow);
+                break;
+            case 3:
+                color = getResources().getColor(R.color.colorPurple);
+                break;
+        }
+
+        //Set the large icon
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Today's summary")
-                        .setContentText(todaySummary);
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle(currentAddress)
+                        .setContentText(todaySummary)
+                        .setLargeIcon(icon)
+                        .setColor(color);
         Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
+    }
+
+    /**
+     * Creates summary notification for Nougat.
+     */
+    private void createNewNotification(){
+
+    }
+
+    //Time
+    /**
+     * Determines layout color based on current time, ID used to determine fog icon.
+     * @return
+     */
+    private int determineLayoutColor(String sunriseTime, String sunsetTime){
+        //TODO - HANDLE 24 HOUR TIME!
+        //Compare currentTime UNIX timestamp to sunriseTime and sunsetTime UNIX timestamp
+        String currentTime = getCurrentTime();
+        Long currentTimeLong = Long.valueOf(currentTime);
+        Long sunriseTimeLong = Long.valueOf(sunriseTime);
+        Long sunsetTimeLong = Long.valueOf(sunsetTime);
+        int setID = 4;
+        Log.i("currentTime", currentTime);
+        Log.i("sunriseTime", sunriseTime);
+        Log.i("sunsetTime", sunsetTime);
+
+        //If it is sunrise or sunset time
+        if(currentTimeLong.equals(sunriseTimeLong)){
+            setID = 0;
+        }
+        else if(currentTimeLong.equals(sunsetTimeLong)){
+            setID = 2;
+        }
+        //If it is within 30 mins of sunrise or sunset time
+        else if(currentTimeLong > (sunriseTimeLong - 1800) && currentTimeLong < (sunriseTimeLong + 1800)){
+            setID = 0;
+        }
+        else if(currentTimeLong > (sunsetTimeLong - 1800) && currentTimeLong < (sunsetTimeLong + 1800)){
+            setID = 2;
+        }
+        //If it is day time
+        else if(currentTimeLong > (sunriseTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
+            setID = 1;
+        }
+        //If it is night time
+        else if(currentTimeLong > (sunsetTimeLong + 1800)){
+            setID = 3;
+        }
+        //If it is early morning time
+        else{
+            setID = 3;
+        }
+        return setID;
+    }
+
+    /**
+     * Gets current UNIX timestamp.
+     * @return
+     */
+    @NonNull
+    private String getCurrentTime(){
+        return String.valueOf(System.currentTimeMillis() /1000);
     }
 
     /**
@@ -316,4 +462,5 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         latitude = 0.0;
         longitude = 0.0;
     }
+
 }
