@@ -52,11 +52,10 @@ import retrofit.client.Response;
 
 public class summaryNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient googleApiClient;
-    private LocationRequest locationRequest;
     private Double latitude;
     private Double longitude;
-    private String currentAddress;
     private Location lastLocation;
+    private String todaySummary;
 
     public summaryNotifService() {
         super(null);
@@ -93,38 +92,6 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         return locationRequest;
     }
 
-    /**
-     * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
-     */
-    private void getAddresses() {
-        Boolean serviceAvailable = true;
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List<Address> addressList = null;
-        try {
-            addressList = geocoder.getFromLocation(latitude, longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i("IO Exception", "getAdresses");
-            serviceAvailable = false;
-        }
-        if (serviceAvailable) {
-            if (addressList.size() > 0) {
-                if (addressList.get(0).getLocality() != null) {
-                    currentAddress = addressList.get(0).getLocality();//Assign locality if available
-                    Log.i("getLocality", addressList.get(0).getLocality());
-                } else {
-                    currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
-                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
-                }
-            } else {
-                Log.i("getLocality", "No localities found.");
-            }
-        } else {
-            Log.i("Geocoder", "Service unavailable.");
-            currentAddress = "---";
-        }
-    }
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("NotifService", "GoogleAPIClient connected");
@@ -137,9 +104,6 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                     .addLocationRequest(createLocationRequest());
 
-            //Create location request
-            locationRequest = createLocationRequest();
-
             //Create location settings request to make sure the request is permitted
             final PendingResult<LocationSettingsResult> locationSettingsResultPendingResult = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
 
@@ -149,7 +113,6 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                 public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
                     Log.i("LocationSettings", "Callback received");
                     final Status locationStatus = locationSettingsResult.getStatus();
-                    final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
 
                     switch (locationStatus.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
@@ -167,8 +130,6 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                                     if (!Geocoder.isPresent()) {
                                         Log.i("Geocoder", "Unavailable");
                                     }
-                                    //Get the current address
-//                                    getAddresses();
 
                                     //Pull initial data
                                     pullForecast();
@@ -249,6 +210,9 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         //Let the user know the operation failed
+        if(googleApiClient.isConnected()){
+            googleApiClient.disconnect();
+        }
         createErrorNotif();
         Log.i("summaryNotif", "connectionSuspended");
         stopSelf();
@@ -264,12 +228,6 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
-        //Setup location change requests
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    googleApiClient, locationRequest, this);
-        }
-
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();
         final Request request = new Request();
@@ -282,86 +240,19 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.i("DarkSky API", "Pull request successful");
-                //Pull and parse data
-                //Parse currentTemp
-                Double tempDouble = weatherResponse.getCurrently().getTemperature();
-                currentTemp = tempDouble.intValue();
-
-                //Set condition icon and condition statement
-                currentIcon = weatherResponse.getCurrently().getIcon();
-                Log.i("currentIcon", currentIcon);
-                switch (currentIcon){
-                    case "clear-day":
-                        currentCondition = "Clear";
-                        break;
-                    case "clear-night":
-                        currentCondition = "Clear";
-                        break;
-                    case "rain":
-                        currentCondition = "Rain";
-                        break;
-                    case "snow":
-                        currentCondition = "Snow";
-                        break;
-                    case "sleet":
-                        currentCondition = "Sleet";
-                        break;
-                    case "wind":
-                        currentCondition = "Windy";
-                        break;
-                    case "fog":
-                        currentCondition = "Foggy";
-                        break;
-                    case "cloudy":
-                        currentCondition = "Cloudy";
-                        break;
-                    case "partly-cloudy-day":
-                        currentCondition = "Partly Cloudy";
-                        break;
-                    case "partly-cloudy-night":
-                        currentCondition = "Partly Cloudy";
-                        break;
-                    default:
-                        currentCondition = "Clear";
-                        Log.i("CurrentConditions", "Unsupported condition.");
-                        break;
-                }
-
-                //Parse HI/LO
-                Double HiDouble;
-                Double LoDouble;
-                HiDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMax();
-                LoDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMin();
-                currentHi = String.valueOf(HiDouble.intValue());
-                currentLo = String.valueOf(LoDouble.intValue());
-                Log.i("HI", currentHi);
-                Log.i("LO", currentLo);
-
-                //Parse sunrise and sunset times to determine current layout color
-                //Parse sunrise time
-                sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
-                Log.i("sunriseTimeUNIX", sunriseTimeString);
-
-                //Parse sunset time
-                sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
-                Log.i("sunsetTimeUNIX", sunsetTimeString);
+                //Pull and parse weather summary
+                todaySummary = weatherResponse.getDaily().getData().get(0).getSummary();
 
                 //Create/update notification
                 //Test to see which one to make
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                    //Create notification for Lollipop through Marshmallow
-                    createNotification(true);
-                }
-                else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-                    //Create notification for Nougat and above
-                    createNewNotification(true);
-                }
+                createNotification();
 
                 //Kill the connection
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
                 }
                 clearData();
+                stopSelf();
             }
 
             @Override
@@ -373,6 +264,8 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                     googleApiClient.disconnect();
                 }
                 clearData();
+                createErrorNotif();
+                stopSelf();
             }
         });
     }
@@ -395,10 +288,23 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
+    }
 
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-        }
+    /**
+     * Creates summary notification for Lollipop through Marshmallow.
+     */
+    private void createNotification(){
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Today's summary")
+                        .setContentText(todaySummary);
+        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
+        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
+        notifBuilder.setContentIntent(servicePendingIntent);
+        notifBuilder.setAutoCancel(true);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
     }
 
     /**
@@ -406,15 +312,8 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
      */
     private void clearData(){
         lastLocation = null;
-        latitude = 0;
-        longitude = 0;
-        locationRequest = null;
-        currentTemp = null;
-        currentIcon = null;
-        currentCondition = null;
-        currentHi = null;
-        currentLo = null;
-        sunriseTimeString = null;
-        sunsetTimeString = null;
+        todaySummary = null;
+        latitude = 0.0;
+        longitude = 0.0;
     }
 }
