@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 
 /**
@@ -32,7 +33,20 @@ public class bootReceiver extends BroadcastReceiver {
             if(prefs.getBoolean("key_notif_summary", false)){
                 interfaceIntent.putExtra("summaryNotif", true);
                 Log.i("bootReceiver", "summaryNotif enabled");
-                //TODO - CHECK TO SEE IF THE ALARM SHOULD HAVE BEEN FIRED, AND THEN HANDLE
+                //Look at key-value pairs to see if there is an alarm set, and determine if it was supposed to be fired already
+                Long alarmTime = prefs.getLong("key_summary_alarm", 0);
+                Log.i("alarmTime", alarmTime.toString());
+                if(alarmTime < System.currentTimeMillis() && alarmTime != 0){
+                    Log.i("bootReciever", "Alarm overdue");
+                    //Launch the service
+                    Intent summaryServiceIntent = new Intent(context, summaryNotifService.class);
+                    context.startService(summaryServiceIntent);
+                    //TODO - RESET ALARM?
+                }
+                else{
+                    Log.i("bootReceiver", "Alarm not overdue");
+                }
+
             }
             //Alert notif
             if(prefs.getBoolean("key_notif_alert", false)){

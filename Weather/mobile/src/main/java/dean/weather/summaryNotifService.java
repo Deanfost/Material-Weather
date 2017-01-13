@@ -59,6 +59,7 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
     private String todaySunrise;
     private String todaySunset;
     private boolean hasLocation;
+    private boolean createNewNotif;
 
     public summaryNotifService() {
         super(null);
@@ -79,6 +80,16 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                     .build();
         }
         googleApiClient.connect();
+
+        //Determine build version
+        //Lollipop to Marshmallow
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M){
+            createNewNotif = false;
+        }
+        //Nougat
+        else{
+            createNewNotif = true;
+        }
     }
 
     //Location
@@ -291,7 +302,12 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                 todaySummary = weatherResponse.getDaily().getData().get(0).getSummary();
 
                 //Create/update notification
-                createNotification();
+                if(createNewNotif){
+                    createNewNotification();
+                }
+                else{
+                    createNotification();
+                }
 
                 //Kill the connection
                 if(googleApiClient.isConnected()){
@@ -309,8 +325,13 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
                 }
+                if(createNewNotif){
+                    createNewErrorNotif();
+                }
+                else{
+                    createErrorNotif();
+                }
                 clearData();
-                createErrorNotif();
                 stopSelf();
             }
         });
@@ -322,12 +343,32 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
      * Creates notification letting the user know that we were unable to get their summary for Lollipop through Marshmallow.
      */
     private void createErrorNotif(){
+        //Determine which color to use for large icon background
+        int setID = determineLayoutColor(todaySunrise, todaySunset);
+        int color = -1;
+
+        switch (setID){
+            case 0:
+                color = getResources().getColor(R.color.colorOrange);
+                break;
+            case 1:
+                color = getResources().getColor(R.color.colorBlueLight);
+                break;
+            case 2:
+                color = getResources().getColor(R.color.colorYellow);
+                break;
+            case 3:
+                color = getResources().getColor(R.color.colorPurple);
+                break;
+        }
+
         //Create notification asking the user to try again
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Unable to sync weather")
-                        .setContentText("Tap to try again now.");
+                        .setContentText("Tap to try again now.")
+                        .setColor(color);
         Intent serviceIntent = new Intent(this, summaryNotifService.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
@@ -340,7 +381,18 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
      * Creates notification letting the user know we were unable to pull summary for Nougat.
      */
     private void createNewErrorNotif(){
-
+        //Create notification asking the user to try again
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Unable to sync weather")
+                        .setContentText("Tap to try again now.");
+        Intent serviceIntent = new Intent(this, summaryNotifService.class);
+        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
+        notifBuilder.setContentIntent(servicePendingIntent);
+        notifBuilder.setAutoCancel(true);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
     }
 
     /**
@@ -374,14 +426,14 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         }
 
         //Set the large icon
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+//        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(currentAddress)
                         .setContentText(todaySummary)
-                        .setLargeIcon(icon)
+//                        .setLargeIcon(icon)
                         .setColor(color);
         Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
@@ -395,7 +447,24 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
      * Creates summary notification for Nougat.
      */
     private void createNewNotification(){
+        //Check to see if we were able to pull the current location, and adjust accordingly
+        if(!hasLocation){
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            //Get a previously stored location to display, in order to avoid showing "---"
+            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
+        }
 
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle(currentAddress)
+                        .setContentText(todaySummary);
+        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
+        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
+        notifBuilder.setContentIntent(servicePendingIntent);
+        notifBuilder.setAutoCancel(true);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
     }
 
     //Time
@@ -462,5 +531,4 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         latitude = 0.0;
         longitude = 0.0;
     }
-
 }

@@ -9,6 +9,7 @@
     <!-- Key-value pairs -->
     <string name="first_launch_key">key_first_launch</string>
     <string name="last_location_key">key_last_location</string>
+    <string name="summary_alarm_key">key_summary_alarm</string>
 
     <!-- Preferences -->
     <string name="notif_category_key">key_notif_category</string>

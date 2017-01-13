@@ -5,7 +5,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -87,17 +89,30 @@ public class alarmInterfaceService extends Service {
                         calendar.set(Calendar.HOUR_OF_DAY, hh);
                         calendar.set(Calendar.MINUTE, mm);
                         if(!(calendar.getTimeInMillis() < System.currentTimeMillis())){
+                            //Start the alarm
                             alarmManager.cancel(summaryAlarmIntent);
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                            //Persist the alarm in sharedPreferences to be started again if the system were to restart
+                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putLong(getString(R.string.summary_alarm_key), alarmTime);
+                            editor.apply();
                             stopSelf();
                         }
                         else{
+                            //Start the alarm
                             Log.i("alarmIntService", "Time is in the past");
                             calendar.add(Calendar.DAY_OF_MONTH, 1);
                             alarmManager.cancel(summaryAlarmIntent);
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, summaryAlarmIntent);
+                            //Persist the alarm in sharedPreferences to be started again if the system were to restart
+                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putLong(getString(R.string.summary_alarm_key), alarmTime);
+                            editor.apply();
                             stopSelf();
                         }
+
                     }
                     //Stop the summary notification
                     else{
