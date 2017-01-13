@@ -21,7 +21,6 @@ public class bootReceiver extends BroadcastReceiver {
         //If either the repeat notif, summary notif, or alert notif is enabled
         if(prefs.getBoolean("key_notif_follow", false) || prefs.getBoolean("key_notif_summary", false) || prefs.getBoolean("key_notif_alert", false)) {
             //Tell the alarmInterfaceService class to start the notifService, and to setup an alarm
-            Log.i("bootReceiver", "Starting alarmInterfaceService");
             Intent interfaceIntent = new Intent(context, alarmInterfaceService.class);
             //Put the appropriate extras
             //Repeating notif
@@ -41,12 +40,19 @@ public class bootReceiver extends BroadcastReceiver {
                     //Launch the service
                     Intent summaryServiceIntent = new Intent(context, summaryNotifService.class);
                     context.startService(summaryServiceIntent);
-                    //TODO - RESET ALARM?
+                    //Reset the alarm
+                    Intent resetAlarmIntent = new Intent(context, alarmInterfaceService.class);
+                    resetAlarmIntent.putExtra("summaryNotif", true);
+                    resetAlarmIntent.putExtra("alarmTime", alarmTime);
+                    context.startService(resetAlarmIntent);
                 }
-                else{
+                else if(alarmTime > System.currentTimeMillis()){
                     Log.i("bootReceiver", "Alarm not overdue");
+                    //Reset the alarm
+                    Intent resetAlarmIntent = new Intent(context, alarmInterfaceService.class);
+                    resetAlarmIntent.putExtra("alarmTime", alarmTime);
+                    context.startService(resetAlarmIntent);
                 }
-
             }
             //Alert notif
             if(prefs.getBoolean("key_notif_alert", false)){
