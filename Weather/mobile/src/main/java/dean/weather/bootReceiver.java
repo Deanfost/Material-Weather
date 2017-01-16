@@ -30,38 +30,42 @@ public class bootReceiver extends BroadcastReceiver {
                 context.startService(interfaceIntent);
             }
 
-            //Summary notif
-            if(prefs.getBoolean("key_notif_summary", false)){
-                Log.i("bootReceiver", "summaryNotif enabled");
-                //Look at key-value pairs to see if there is an alarm set, and determine if it was supposed to be fired already
-                Long alarmTime = prefs.getLong("key_summary_alarm", 0);
-                Log.i("alarmTime", alarmTime.toString());
-                if(alarmTime < System.currentTimeMillis() && alarmTime != 0){
-                    Log.i("bootReciever", "Alarm overdue");
-                    //Launch the service
-                    Intent summaryServiceIntent = new Intent(context, summaryNotifService.class);
-                    context.startService(summaryServiceIntent);
-                    //Reset the alarm
-                    Intent resetAlarmIntent = new Intent(context, alarmInterfaceService.class);
-                    resetAlarmIntent.putExtra("summaryNotif", true);
-                    resetAlarmIntent.putExtra("alarmTime", alarmTime);
-                    context.startService(resetAlarmIntent);
-                }
-                else if(alarmTime > System.currentTimeMillis()){
-                    Log.i("bootReceiver", "Alarm not overdue");
-                    //Reset the alarm
-                    Intent resetAlarmIntent = new Intent(context, alarmInterfaceService.class);
-                    resetAlarmIntent.putExtra("alarmTime", alarmTime);
-                    resetAlarmIntent.putExtra("summaryNotif", true);
-                    context.startService(resetAlarmIntent);
-                }
-            }
+//            //Summary notif
+//            if(prefs.getBoolean("key_notif_summary", false)){
+//                Log.i("bootReceiver", "summaryNotif enabled");
+//                //Look at key-value pairs to see if there is an alarm set, and determine if it was supposed to be fired already
+//                Long alarmTime = prefs.getLong("key_summary_alarm", 0);
+//                Log.i("alarmTime", alarmTime.toString());
+//                if(alarmTime < System.currentTimeMillis() && alarmTime != 0){
+//                    Log.i("bootReciever", "Alarm overdue");
+//                    //Launch the service
+//                    Intent summaryServiceIntent = new Intent(context, alertNotifService.class);
+//                    context.startService(summaryServiceIntent);
+//                    //Reset the alarm
+//                    Intent resetAlarmIntent = new Intent(context, alarmInterfaceService.class);
+//                    resetAlarmIntent.putExtra("summaryNotif", true);
+//                    resetAlarmIntent.putExtra("alarmTime", alarmTime);
+//                    context.startService(resetAlarmIntent);
+//                }
+//                else if(alarmTime > System.currentTimeMillis()){
+//                    Log.i("bootReceiver", "Alarm not overdue");
+//                    //Reset the alarm
+//                    Intent resetAlarmIntent = new Intent(context, alarmInterfaceService.class);
+//                    resetAlarmIntent.putExtra("alarmTime", alarmTime);
+//                    resetAlarmIntent.putExtra("summaryNotif", true);
+//                    context.startService(resetAlarmIntent);
+//                }
+//                else if( alarmTime == 0){
+//                    Log.i("bootReceiver", "No time set");
+//                }
+//            }
             //Alert notif
 //            if(prefs.getBoolean("key_notif_alert", false)){
-//                interfaceIntent.putExtra("alertNotif", true);
+//                Intent serviceIntent = new Intent(context, alarmInterfaceService.class);
+//                serviceIntent.putExtra("alertNotif", true);
+//                context.startService(serviceIntent);
 //                Log.i("bootReceiver", "alertNotif enabled");
 //            }
-//            context.startService(interfaceIntent);
         }
         else{
             Log.i("bootReceiver", "All services disabled");

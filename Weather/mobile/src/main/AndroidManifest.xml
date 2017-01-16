@@ -73,7 +73,7 @@
         </service>
 
         <!--Summary notification service-->
-        <service android:name="dean.weather.summaryNotifService"
+        <service android:name="dean.weather.alertNotifService"
             android:exported="false">
         </service>
 
@@ -100,15 +100,15 @@
         </receiver>
 
         <!--Shutdown receiver -->
-        <receiver
-            android:name="dean.weather.shutdownReciever"
-            android:label="shutdownReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
-                <action android:name="android.intent.action.QUICKBOOT_POWEROFF"/>
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name="dean.weather.shutdownReciever"-->
+            <!--android:label="shutdownReceiver"-->
+            <!--android:enabled="false">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.ACTION_SHUTDOWN" />-->
+                <!--<action android:name="android.intent.action.QUICKBOOT_POWEROFF"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
     </application>
 </manifest>

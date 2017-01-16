@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -49,7 +47,7 @@ import retrofit.client.Response;
  * Created by Dean on 12/25/2016.
  */
 
-public class summaryNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class alertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient googleApiClient;
     private Double latitude;
     private Double longitude;
@@ -61,14 +59,14 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
     private boolean hasLocation;
     private boolean createNewNotif;
 
-    public summaryNotifService() {
+    public alertNotifService() {
         super(null);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        //Creates a summary weather summary notification at a set time everyday
-        Log.i("summaryNotifService", "started");
+        //Creates a weather alert notif if one is present
+        Log.i("alertNotifService", "started");
         FirebaseApp.initializeApp(this);
 
         //Instantiate GoogleAPIClient
@@ -92,10 +90,10 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         }
 
         //Update the summary alarm time key-value pair for comparison on phone shutdown
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(getString(R.string.summary_alarm_key), System.currentTimeMillis());
-        editor.apply();
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//        SharedPreferences.Editor editor = prefs.edit();
+//        editor.putLong(getString(R.string.summary_alarm_key), System.currentTimeMillis());
+//        editor.apply();
     }
 
     //Location
@@ -211,12 +209,12 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                             //Change the preference to reflect the service being disabled
                             SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = mySPrefs.edit();
-                            editor.putBoolean(getString(R.string.summary_notif_key), false);
+                            editor.putBoolean(getString(R.string.alert_notif_key), false);
                             editor.apply();
 
                             //End the repeating preference alarm
                             Intent stopAlarm = new Intent(getApplicationContext(), alarmInterfaceService.class);
-                            stopAlarm.putExtra("summaryNotif", false);
+                            stopAlarm.putExtra("alertNotif", false);
                             startService(stopAlarm);
 
                             stopSelf();
@@ -230,12 +228,12 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                             //Change the preference to reflect the service being disabled
                             SharedPreferences mySPrefs1 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor1 = mySPrefs1.edit();
-                            editor1.putBoolean(getString(R.string.summary_notif_key), false);
+                            editor1.putBoolean(getString(R.string.alert_notif_key), false);
                             editor1.apply();
 
                             //End the repeating preference alarm
                             Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
-                            stopAlarm1.putExtra("summaryNotif", false);
+                            stopAlarm1.putExtra("alertNotif", false);
                             startService(stopAlarm1);
 
                             stopSelf();
@@ -251,12 +249,12 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
             //Change the preference to reflect the service being disabled
             SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = mySPrefs.edit();
-            editor.putBoolean(getString(R.string.summary_notif_key), false);
+            editor.putBoolean(getString(R.string.alert_notif_key), false);
             editor.apply();
 
             //End the repeating preference alarm
             Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
-            stopAlarm.putExtra("summaryNotif", false);
+            stopAlarm.putExtra("alertNotif", false);
             startService(stopAlarm);
 
             stopSelf();
@@ -305,7 +303,7 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                 //Pull and parse weather summary
                 todaySunrise = weatherResponse.getDaily().getData().get(0).getSunriseTime();
                 todaySunset = weatherResponse.getDaily().getData().get(0).getSunsetTime();
-                todaySummary = weatherResponse.getDaily().getData().get(0).getSummary();
+
 
                 //Create/update notification
                 if(createNewNotif){
@@ -375,7 +373,7 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                         .setContentTitle("Unable to sync weather")
                         .setContentText("Tap to try again now.")
                         .setColor(color);
-        Intent serviceIntent = new Intent(this, summaryNotifService.class);
+        Intent serviceIntent = new Intent(this, alertNotifService.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
@@ -393,7 +391,7 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Unable to sync weather")
                         .setContentText("Tap to try again now.");
-        Intent serviceIntent = new Intent(this, summaryNotifService.class);
+        Intent serviceIntent = new Intent(this, alertNotifService.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);

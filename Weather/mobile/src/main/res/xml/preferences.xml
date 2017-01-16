@@ -5,30 +5,16 @@
         android:title="Notifications"
         android:key="pref_key_notification_group">
 
-        <PreferenceScreen
-            android:key="@string/notif_category_key"
-            android:title="Weather updates"
-            android:persistent="false">
-
-            <PreferenceCategory
-                android:title="Saved locations">
-
-                <SwitchPreference
-                    android:key="@string/follow_me_key"
-                    android:title="Follow me"
-                    android:summary="Use my current location for weather data"
-                    android:defaultValue="false" />
-
-                <!-- Selectable locations will be added to the screen, from the list of saved locations -->
-            </PreferenceCategory>
-
-            <PreferenceCategory
-                android:title="Notifications">
+                <!--<SwitchPreference-->
+                    <!--android:key="@string/follow_me_key"-->
+                    <!--android:title="Follow me"-->
+                    <!--android:summary="Use my current location for weather data"-->
+                    <!--android:defaultValue="false" />-->
 
             <SwitchPreference
                 android:key="@string/ongoing_notif_key"
                 android:title="Ongoing notification"
-                android:summary="Display weather data for the selected location"
+                android:summary="Display weather data for your current location"
                 android:defaultValue="false" />
 
                 <!--<SwitchPreference-->
@@ -37,20 +23,17 @@
                     <!--android:summary="Create a push notification for weather alerts and warnings"-->
                     <!--android:defaultValue="false" />-->
 
-                <SwitchPreference
-                    android:key="@string/summary_notif_key"
-                    android:title="Show weather summary"
-                    android:summary="Create a push notification containing a summary of the day's weather forecast"
-                    android:defaultValue="false" />
+                <!--<SwitchPreference-->
+                    <!--android:key="@string/summary_notif_key"-->
+                    <!--android:title="Show weather summary"-->
+                    <!--android:summary="Create a push notification containing a summary of the day's weather forecast"-->
+                    <!--android:defaultValue="false" />-->
 
-                <dean.weather.timePickerPreference
-                    android:key="@string/summary_time_key"
-                    android:title="Summary time"
-                    android:enabled="false" />
+                <!--<dean.weather.timePickerPreference-->
+                    <!--android:key="@string/summary_time_key"-->
+                    <!--android:title="Summary time"-->
+                    <!--android:enabled="false" />-->
 
-            </PreferenceCategory>
-
-        </PreferenceScreen>
 
     </PreferenceCategory>
 
