@@ -103,7 +103,7 @@ public class alarmInterfaceService extends Service {
                         else{
                             //Start the alarm
                             Log.i("alarmIntService", "Time is in the past");
-                            calendar.add(Calendar.DAY_OF_MONTH, 1);
+                            calendar.add(Calendar.MINUTE, 5);
                             alarmManager.cancel(summaryAlarmIntent);
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 300000, summaryAlarmIntent);
                             //Persist the alarm in sharedPreferences to be started again if the system were to restart

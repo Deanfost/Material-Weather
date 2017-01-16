@@ -90,6 +90,12 @@ public class summaryNotifService extends IntentService implements GoogleApiClien
         else{
             createNewNotif = true;
         }
+
+        //Update the summary alarm time key-value pair for comparison on phone shutdown
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(getString(R.string.summary_alarm_key), System.currentTimeMillis());
+        editor.apply();
     }
 
     //Location

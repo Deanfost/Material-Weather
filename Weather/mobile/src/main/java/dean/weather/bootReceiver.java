@@ -21,16 +21,17 @@ public class bootReceiver extends BroadcastReceiver {
         //If either the repeat notif, summary notif, or alert notif is enabled
         if(prefs.getBoolean("key_notif_follow", false) || prefs.getBoolean("key_notif_summary", false) || prefs.getBoolean("key_notif_alert", false)) {
             //Tell the alarmInterfaceService class to start the notifService, and to setup an alarm
-            Intent interfaceIntent = new Intent(context, alarmInterfaceService.class);
             //Put the appropriate extras
             //Repeating notif
             if(prefs.getBoolean("key_notif_follow", false)){
+                Intent interfaceIntent = new Intent(context, alarmInterfaceService.class);
                 interfaceIntent.putExtra("repeatNotif", true);
                 Log.i("bootReceiver", "repeatNotif enabled");
+                context.startService(interfaceIntent);
             }
+
             //Summary notif
             if(prefs.getBoolean("key_notif_summary", false)){
-                interfaceIntent.putExtra("summaryNotif", true);
                 Log.i("bootReceiver", "summaryNotif enabled");
                 //Look at key-value pairs to see if there is an alarm set, and determine if it was supposed to be fired already
                 Long alarmTime = prefs.getLong("key_summary_alarm", 0);
@@ -51,15 +52,16 @@ public class bootReceiver extends BroadcastReceiver {
                     //Reset the alarm
                     Intent resetAlarmIntent = new Intent(context, alarmInterfaceService.class);
                     resetAlarmIntent.putExtra("alarmTime", alarmTime);
+                    resetAlarmIntent.putExtra("summaryNotif", true);
                     context.startService(resetAlarmIntent);
                 }
             }
             //Alert notif
-            if(prefs.getBoolean("key_notif_alert", false)){
-                interfaceIntent.putExtra("alertNotif", true);
-                Log.i("bootReceiver", "alertNotif enabled");
-            }
-            context.startService(interfaceIntent);
+//            if(prefs.getBoolean("key_notif_alert", false)){
+//                interfaceIntent.putExtra("alertNotif", true);
+//                Log.i("bootReceiver", "alertNotif enabled");
+//            }
+//            context.startService(interfaceIntent);
         }
         else{
             Log.i("bootReceiver", "All services disabled");

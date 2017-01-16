@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <uses-sdk android:minSdkVersion="21"/>
 
     <application
@@ -95,6 +96,17 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.REBOOT"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <!--Shutdown receiver -->
+        <receiver
+            android:name="dean.weather.shutdownReciever"
+            android:label="shutdownReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.QUICKBOOT_POWEROFF"/>
             </intent-filter>
         </receiver>
 
