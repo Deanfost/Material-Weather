@@ -26,11 +26,10 @@ public class alarmInterfaceService extends Service {
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         //Ongoing notif
         Intent ongoingServiceIntent = new Intent(this, ongoingNotifService.class);
-        ongoingServiceIntent.putExtra("pull", true);
         PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
-        //Summary notif
-        Intent summaryNotifIntent = new Intent(this, alertNotifService.class);
-        PendingIntent summaryAlarmIntent = PendingIntent.getService(this, 0, summaryNotifIntent, 0);
+        //Alert notif
+        Intent alertNotifIntent = new Intent(this, alertNotifService.class);
+        PendingIntent alertAlarmIntent = PendingIntent.getService(this, 0, alertNotifIntent, 0);
 
         if(intent != null){
             if(intent.getExtras() != null){
@@ -40,6 +39,7 @@ public class alarmInterfaceService extends Service {
                     //Start the repeating notification
                     if(intent.getExtras().getBoolean("repeatNotif")){
                         Log.i("alarmInterfaceService", "Starting repeatNotif");
+                        ongoingServiceIntent.putExtra("pull", true);
 
                         //Setup an alarm to fire in 30 mins, and then every half hour after that
                         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_HALF_HOUR,
@@ -47,7 +47,6 @@ public class alarmInterfaceService extends Service {
 
                         //Start the first pull
                         this.startService(ongoingServiceIntent);
-                        stopSelf();
                     }
                     //Cancel the repeating notification
                     else{
@@ -58,7 +57,6 @@ public class alarmInterfaceService extends Service {
                         Intent notSticky = new Intent(this, ongoingNotifService.class);
                         notSticky.putExtra("notSticky", false);//Sends an intent to the service to return START_NOT_STICKY, which will allow it to die
                         startService(notSticky);
-                        stopSelf();
                     }
                 }
 
@@ -83,8 +81,8 @@ public class alarmInterfaceService extends Service {
 //                        //If the calendar time is greater than the current time
 //                        if((calendar.getTimeInMillis() > System.currentTimeMillis())){
 //                            //Start the alarm
-//                            alarmManager.cancel(summaryAlarmIntent);
-//                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 300000, summaryAlarmIntent);
+//                            alarmManager.cancel(alertAlarmIntent);
+//                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 300000, alertAlarmIntent);
 //                            //Persist the alarm in sharedPreferences to be started again if the system were to restart
 //                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 //                            SharedPreferences.Editor editor = sharedPref.edit();
@@ -96,8 +94,8 @@ public class alarmInterfaceService extends Service {
 //                            //Start the alarm
 //                            Log.i("alarmIntService", "Time is in the past");
 //                            calendar.add(Calendar.MINUTE, 5);
-//                            alarmManager.cancel(summaryAlarmIntent);
-//                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 300000, summaryAlarmIntent);
+//                            alarmManager.cancel(alertAlarmIntent);
+//                            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 300000, alertAlarmIntent);
 //                            //Persist the alarm in sharedPreferences to be started again if the system were to restart
 //                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 //                            SharedPreferences.Editor editor = sharedPref.edit();
@@ -110,7 +108,7 @@ public class alarmInterfaceService extends Service {
 //                    else{
 //                        Log.i("alarmInterfaceService", "Cancelling summaryNotif");
 //                        //Cancel the alarm
-//                        alarmManager.cancel(summaryAlarmIntent);
+//                        alarmManager.cancel(alertAlarmIntent);
 //                        //Remove the alarm from the key-value pair
 //                        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 //                        SharedPreferences.Editor editor = sharedPref.edit();
@@ -124,7 +122,17 @@ public class alarmInterfaceService extends Service {
                     //Start the alert notification
                     if(intent.getExtras().getBoolean("alertNotif")){
                         Log.i("alarmInterfaceService", "Starting alertNotif");
+                        //Setup an alarm to pull every 15 mins to check for alerts
+                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+                                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alertAlarmIntent);
 
+                        //Start the first pull
+                        this.startService(alertNotifIntent);
+                    }
+                    else{
+                        //Stop the alert notification
+                        Log.i("alarmInterfaceService", "Stopping alertNotif");
+                        alarmManager.cancel(alertAlarmIntent);
                     }
                 }
             }

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
@@ -32,12 +31,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
+import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -53,10 +51,11 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
     private Double longitude;
     private Location lastLocation;
     private String currentAddress;
-    private String todaySummary;
+//    private String todaySummary;
     private String todaySunrise;
     private String todaySunset;
-    private boolean hasLocation;
+    private List<AlertsBlock> alertList;
+//    private boolean hasLocation;
     private boolean createNewNotif;
 
     public alertNotifService() {
@@ -101,44 +100,44 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
     /**
      * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
      */
-    private void getAddresses() {
-        Boolean serviceAvailable = true;
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List<Address> addressList = null;
-        try {
-            addressList = geocoder.getFromLocation(latitude, longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i("IO Exception", "getAdresses");
-            serviceAvailable = false;
-        }
-        if (serviceAvailable) {
-            if (addressList.size() > 0) {
-                if (addressList.get(0).getLocality() != null) {
-                    currentAddress = addressList.get(0).getLocality();//Assign locality if available
-                    Log.i("getLocality", addressList.get(0).getLocality());
-                } else {
-                    currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
-                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
-                }
-            } else {
-                Log.i("getLocality", "No localities found.");
-            }
-        } else {
-            Log.i("Geocoder", "Service unavailable.");
-            currentAddress = "---";
-        }
-        if (!currentAddress.equals("---")) {
-            //Store the pulled location for future reference
-            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = mySPrefs.edit();
-            editor.putString(getString(R.string.last_location_key), currentAddress);
-            editor.apply();
-            hasLocation = true;
-        } else {
-            hasLocation = false;
-        }
-    }
+//    private void getAddresses() {
+//        Boolean serviceAvailable = true;
+//        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+//        List<Address> addressList = null;
+//        try {
+//            addressList = geocoder.getFromLocation(latitude, longitude, 1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Log.i("IO Exception", "getAdresses");
+//            serviceAvailable = false;
+//        }
+//        if (serviceAvailable) {
+//            if (addressList.size() > 0) {
+//                if (addressList.get(0).getLocality() != null) {
+//                    currentAddress = addressList.get(0).getLocality();//Assign locality if available
+//                    Log.i("getLocality", addressList.get(0).getLocality());
+//                } else {
+//                    currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
+//                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+//                }
+//            } else {
+//                Log.i("getLocality", "No localities found.");
+//            }
+//        } else {
+//            Log.i("Geocoder", "Service unavailable.");
+//            currentAddress = "---";
+//        }
+//        if (!currentAddress.equals("---")) {
+//            //Store the pulled location for future reference
+//            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//            SharedPreferences.Editor editor = mySPrefs.edit();
+//            editor.putString(getString(R.string.last_location_key), currentAddress);
+//            editor.apply();
+//            hasLocation = true;
+//        } else {
+//            hasLocation = false;
+//        }
+//    }
 
     /**
      * Creates location request.
@@ -190,7 +189,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                                     if (!Geocoder.isPresent()) {
                                         Log.i("Geocoder", "Unavailable");
                                     }
-                                    getAddresses();
+//                                    getAddresses();
                                     //Pull initial data
                                     pullForecast();
                                 } else {
@@ -264,7 +263,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
     @Override
     public void onConnectionSuspended(int i) {
         //Let the user know the operation failed
-        Log.i("summaryNotif", "connectionSuspended");
+        Log.i("AlertNotif", "connectionSuspended");
     }
 
     @Override
@@ -273,8 +272,8 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         if(googleApiClient.isConnected()){
             googleApiClient.disconnect();
         }
-        createErrorNotif();
-        Log.i("summaryNotif", "connectionSuspended");
+//        createErrorNotif();
+        Log.i("alertNotif", "connectionSuspended");
         stopSelf();
     }
 
@@ -300,10 +299,11 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.i("DarkSky API", "Pull request successful");
-                //Pull and parse weather summary
+                //Pull and parse weather alerts
                 todaySunrise = weatherResponse.getDaily().getData().get(0).getSunriseTime();
                 todaySunset = weatherResponse.getDaily().getData().get(0).getSunsetTime();
-
+                alertList = weatherResponse.getAlerts();
+                Log.i("alerts", alertList.size() + "");
 
                 //Create/update notification
                 if(createNewNotif){
@@ -330,10 +330,10 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                     googleApiClient.disconnect();
                 }
                 if(createNewNotif){
-                    createNewErrorNotif();
+//                    createNewErrorNotif();
                 }
                 else{
-                    createErrorNotif();
+//                    createErrorNotif();
                 }
                 clearData();
                 stopSelf();
@@ -346,69 +346,69 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
     /**
      * Creates notification letting the user know that we were unable to get their summary for Lollipop through Marshmallow.
      */
-    private void createErrorNotif(){
-        //Determine which color to use for large icon background
-        int setID = determineLayoutColor(todaySunrise, todaySunset);
-        int color = -1;
-
-        switch (setID){
-            case 0:
-                color = getResources().getColor(R.color.colorOrange);
-                break;
-            case 1:
-                color = getResources().getColor(R.color.colorBlueLight);
-                break;
-            case 2:
-                color = getResources().getColor(R.color.colorYellow);
-                break;
-            case 3:
-                color = getResources().getColor(R.color.colorPurple);
-                break;
-        }
-
-        //Create notification asking the user to try again
-        NotificationCompat.Builder notifBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Unable to sync weather")
-                        .setContentText("Tap to try again now.")
-                        .setColor(color);
-        Intent serviceIntent = new Intent(this, alertNotifService.class);
-        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-        notifBuilder.setContentIntent(servicePendingIntent);
-        notifBuilder.setAutoCancel(true);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
-    }
+//    private void createErrorNotif(){
+//        //Determine which color to use for large icon background
+//        int setID = determineLayoutColor(todaySunrise, todaySunset);
+//        int color = -1;
+//
+//        switch (setID){
+//            case 0:
+//                color = getResources().getColor(R.color.colorOrange);
+//                break;
+//            case 1:
+//                color = getResources().getColor(R.color.colorBlueLight);
+//                break;
+//            case 2:
+//                color = getResources().getColor(R.color.colorYellow);
+//                break;
+//            case 3:
+//                color = getResources().getColor(R.color.colorPurple);
+//                break;
+//        }
+//
+//        //Create notification asking the user to try again
+//        NotificationCompat.Builder notifBuilder =
+//                new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.drawable.ic_launcher)
+//                        .setContentTitle("Unable to sync weather")
+//                        .setContentText("Tap to try again now.")
+//                        .setColor(color);
+//        Intent serviceIntent = new Intent(this, alertNotifService.class);
+//        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
+//        notifBuilder.setContentIntent(servicePendingIntent);
+//        notifBuilder.setAutoCancel(true);
+//        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
+//    }
 
     /**
      * Creates notification letting the user know we were unable to pull summary for Nougat.
      */
-    private void createNewErrorNotif(){
-        //Create notification asking the user to try again
-        NotificationCompat.Builder notifBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Unable to sync weather")
-                        .setContentText("Tap to try again now.");
-        Intent serviceIntent = new Intent(this, alertNotifService.class);
-        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-        notifBuilder.setContentIntent(servicePendingIntent);
-        notifBuilder.setAutoCancel(true);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
-    }
+//    private void createNewErrorNotif(){
+//        //Create notification asking the user to try again
+//        NotificationCompat.Builder notifBuilder =
+//                new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.drawable.ic_launcher)
+//                        .setContentTitle("Unable to sync weather")
+//                        .setContentText("Tap to try again now.");
+//        Intent serviceIntent = new Intent(this, alertNotifService.class);
+//        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
+//        notifBuilder.setContentIntent(servicePendingIntent);
+//        notifBuilder.setAutoCancel(true);
+//        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
+//    }
 
     /**
-     * Creates summary notification for Lollipop through Marshmallow.
+     * Creates alert notification for Lollipop through Marshmallow.
      */
     private void createNotification(){
         //Check to see if we were able to pull the current location, and adjust accordingly
-        if(!hasLocation){
-            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            //Get a previously stored location to display, in order to avoid showing "---"
-            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
-        }
+//        if(!hasLocation){
+//            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//            //Get a previously stored location to display, in order to avoid showing "---"
+//            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
+//        }
 
         //Determine which color to use for large icon background
         int setID = determineLayoutColor(todaySunrise, todaySunset);
@@ -436,7 +436,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(currentAddress)
-                        .setContentText(todaySummary)
+                        .setContentText("Weather alerts")
 //                        .setLargeIcon(icon)
                         .setColor(color);
         Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
@@ -444,31 +444,31 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
+        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
     }
 
     /**
-     * Creates summary notification for Nougat.
+     * Creates alert notification for Nougat.
      */
     private void createNewNotification(){
         //Check to see if we were able to pull the current location, and adjust accordingly
-        if(!hasLocation){
-            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            //Get a previously stored location to display, in order to avoid showing "---"
-            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
-        }
+//        if(!hasLocation){
+//            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//            //Get a previously stored location to display, in order to avoid showing "---"
+//            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
+//        }
 
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(currentAddress)
-                        .setContentText(todaySummary);
+                        .setContentText("Weather alerts");
         Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(MainActivity.SUMMARY_NOTIF_ID, notifBuilder.build());
+        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
     }
 
     //Time
@@ -531,7 +531,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
      */
     private void clearData(){
         lastLocation = null;
-        todaySummary = null;
+//        todaySummary = null;
         latitude = 0.0;
         longitude = 0.0;
     }

@@ -73,9 +73,9 @@
         </service>
 
         <!--Summary notification service-->
-        <service android:name="dean.weather.alertNotifService"
-            android:exported="false">
-        </service>
+        <!--<service android:name="dean.weather.alertNotifService"-->
+            <!--android:exported="false">-->
+        <!--</service>-->
 
         <!--Alarm interface service-->
         <service android:name=".alarmInterfaceService"

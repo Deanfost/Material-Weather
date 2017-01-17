@@ -39,7 +39,7 @@ import java.util.Date;
 
 public class settingsActivity extends PreferenceActivity{
     SharedPreferences prefs;
-    Preference followMePref;
+//    Preference followMePref;
     SwitchPreference ongoingNotif;
 //    SwitchPreference summaryNotif;
 //    Preference timePickerPref;
@@ -55,9 +55,9 @@ public class settingsActivity extends PreferenceActivity{
 
         //Preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        followMePref = findPreference(getString(R.string.follow_me_key));
+//        followMePref = findPreference(getString(R.string.follow_me_key));
         ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
-//        alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
+        alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
 //        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
 //        timePickerPref = findPreference(getString(R.string.summary_time_key));
     }
@@ -72,49 +72,49 @@ public class settingsActivity extends PreferenceActivity{
 
         //Register preference listeners
         //Follow me pref
-        followMePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                Log.i("followMePref", "Value changed");
-                if(!(boolean) newValue){
-                    Log.i("followMePref", "Changed to false, turning off services");
-                    //Kill the ongoing notif if running
-                    if(prefs.getBoolean(getString(R.string.ongoing_notif_key), false)){
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
-                        editor.commit();
-                        ongoingNotif.setChecked(false);
-
-                        //Kill the ongoing service if running
-                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
-                        stopService.putExtra("repeatNotif", false);
-                        startService(stopService);
-
-                        //Clear the notif
-                        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
-                    }
-                    //Kill the summary notif if running
-//                    if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
+//        followMePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//            @Override
+//            public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                Log.i("followMePref", "Value changed");
+//                if(!(boolean) newValue){
+//                    Log.i("followMePref", "Changed to false, turning off services");
+//                    //Kill the ongoing notif if running
+//                    if(prefs.getBoolean(getString(R.string.ongoing_notif_key), false)){
 //                        SharedPreferences.Editor editor = prefs.edit();
-//                        editor.putBoolean(getString(R.string.summary_notif_key), false);
+//                        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
 //                        editor.commit();
-//                        summaryNotif.setChecked(false);
-//                        timePickerPref.setEnabled(false);
+//                        ongoingNotif.setChecked(false);
 //
 //                        //Kill the ongoing service if running
 //                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
-//                        stopService.putExtra("summaryNotif", false);
+//                        stopService.putExtra("repeatNotif", false);
 //                        startService(stopService);
 //
 //                        //Clear the notif
 //                        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-//                        notificationManager.cancel(MainActivity.SUMMARY_NOTIF_ID);
+//                        notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
 //                    }
-                }
-                return true;
-            }
-        });
+//                    //Kill the summary notif if running
+////                    if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
+////                        SharedPreferences.Editor editor = prefs.edit();
+////                        editor.putBoolean(getString(R.string.summary_notif_key), false);
+////                        editor.commit();
+////                        summaryNotif.setChecked(false);
+////                        timePickerPref.setEnabled(false);
+////
+////                        //Kill the ongoing service if running
+////                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+////                        stopService.putExtra("summaryNotif", false);
+////                        startService(stopService);
+////
+////                        //Clear the notif
+////                        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+////                        notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
+////                    }
+//                }
+//                return true;
+//            }
+//        });
 
         //Ongoing notification pref
         ongoingNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -126,7 +126,6 @@ public class settingsActivity extends PreferenceActivity{
                 //Start the notif service
                 if(ongoingNotifValue){
                     //Check to see if the user selected "follow me"
-                    if(prefs.getBoolean(getString(R.string.follow_me_key),false)){
                         //Check if we are able to use current location
                         if(performChecks()){
                             //Start it, everything is looking good
@@ -140,13 +139,6 @@ public class settingsActivity extends PreferenceActivity{
                             //Don't save the value, conditions not met
                             return false;
                         }
-                    }
-                    //The user selected a location
-                    else{
-                        //TODO - FINISH THIS
-                        Log.i("ongoingNotif", "location selected");
-                        return false;
-                    }
                 }
                 else{
                     //Stop the notif service
@@ -256,7 +248,7 @@ public class settingsActivity extends PreferenceActivity{
 //
 //                    //Clear the notif
 //                    NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-//                    notificationManager.cancel(MainActivity.SUMMARY_NOTIF_ID);
+//                    notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
 //                    return true;
 //                }
 //            }
@@ -335,23 +327,49 @@ public class settingsActivity extends PreferenceActivity{
 //            }
 //        });
 
-        //Alert notif pref
-//        alertNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//            @Override
-//            public boolean onPreferenceChange(Preference preference, Object o) {
-//
-//
-//                return false;
-//            }
-//        });
+        alertNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Log.i("alert pref", "Changed");
+                if((Boolean) newValue){
+                    //Check to see if we can do this
+                    if(performChecks()){
+                        //Start the alarm intent service, everything is looking good
+                        Log.i("alert pref", "Starting service");
+                        Intent alarmService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                        alarmService.putExtra("alertNotif", true);
+                        startService(alarmService);
+                        return true;
+                    }
+                    else{
+                        //Leave the pref off, conditions not met
+                        Log.i("performChecks", "Returned false");
+                        return false;
+                    }
+                }
+                else{
+                    //Kill the alarm
+                    Log.i("alert pref", "Killing alarm");
+                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                    stopService.putExtra("alertNotif", false);
+                    startService(stopService);
+
+                    //Kill the notification
+                    NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
+                    return true;
+                }
+            }
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //Un-register click listeners
-        followMePref.setOnPreferenceChangeListener(null);
+//        followMePref.setOnPreferenceChangeListener(null);
         ongoingNotif.setOnPreferenceClickListener(null);
+        alertNotif.setOnPreferenceChangeListener(null);
 //        summaryNotif.setOnPreferenceChangeListener(null);
 //        timePickerPref.setOnPreferenceChangeListener(null);
     }

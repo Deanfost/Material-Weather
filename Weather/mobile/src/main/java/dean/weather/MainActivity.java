@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //Notification
     public static final int FOLLOW_NOTIF_ID = 23;
-    public static final int SUMMARY_NOTIF_ID = 32;
+    public static final int ALERT_NOTIF_ID = 32;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
