@@ -35,6 +35,7 @@ import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -67,6 +68,13 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         //Creates a weather alert notif if one is present
         Log.i("alertNotifService", "started");
         FirebaseApp.initializeApp(this);
+
+        if(intent.hasExtra("Hello")){
+            Log.i("alertNotifService", "First start");
+        }
+        if(intent.hasExtra("Hai")){
+            Log.i("alertNotifService", "Alarm intent");
+        }
 
         //Instantiate GoogleAPIClient
         if(googleApiClient == null){
@@ -190,13 +198,18 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                                         Log.i("Geocoder", "Unavailable");
                                     }
 //                                    getAddresses();
-                                    //Pull initial data
+                                    //Pull initial data and disconnect from GoogleAPIClient
                                     pullForecast();
+                                    googleApiClient.disconnect();
                                 } else {
                                     Log.i("notifService", "Unable to gather location");
+                                    googleApiClient.disconnect();
+                                    stopSelf();
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");
+                                googleApiClient.disconnect();
+                                stopSelf();
                             }
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
@@ -262,13 +275,11 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
 
     @Override
     public void onConnectionSuspended(int i) {
-        //Let the user know the operation failed
         Log.i("AlertNotif", "connectionSuspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        //Let the user know the operation failed
         if(googleApiClient.isConnected()){
             googleApiClient.disconnect();
         }
@@ -302,15 +313,30 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                 //Pull and parse weather alerts
                 todaySunrise = weatherResponse.getDaily().getData().get(0).getSunriseTime();
                 todaySunset = weatherResponse.getDaily().getData().get(0).getSunsetTime();
-                alertList = weatherResponse.getAlerts();
-                Log.i("alerts", alertList.size() + "");
-
-                //Create/update notification
-                if(createNewNotif){
-                    createNewNotification();
+                if(weatherResponse.getAlerts() != null){
+                    Log.i("alerts", weatherResponse.getAlerts().size() + "");
+                    alertList = new ArrayList<>(weatherResponse.getAlerts());
+                    for(int i = 0; i < alertList.size(); i++){
+                        Log.i("Alert", alertList.get(i).getTitle());
+                        Log.i("Alert", alertList.get(i).getDescription());
+                    }
                 }
                 else{
-                    createNotification();
+                    Log.i("alerts", "null");
+                }
+
+                //Create/update notification if there is data to display
+                if(alertList != null){
+                    Log.i("alertService", "Alerts available");
+                    if(createNewNotif){
+                        createNewNotification();
+                    }
+                    else{
+                        createNotification();
+                    }
+                }
+                else{
+                    Log.i("alertService", "No alerts");
                 }
 
                 //Kill the connection
@@ -435,8 +461,8 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle(currentAddress)
-                        .setContentText("Weather alerts")
+                        .setContentTitle("Weather alerts")
+                        .setContentText("There is 1 weather alert for your area")
 //                        .setLargeIcon(icon)
                         .setColor(color);
         Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
@@ -461,8 +487,8 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle(currentAddress)
-                        .setContentText("Weather alerts");
+                        .setContentTitle("Weather alerts")
+                        .setContentText("There is 1 weather alert in your area");
         Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);

@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -29,6 +30,7 @@ public class alarmInterfaceService extends Service {
         PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
         //Alert notif
         Intent alertNotifIntent = new Intent(this, alertNotifService.class);
+        alertNotifIntent.putExtra("Hai", "woah");
         PendingIntent alertAlarmIntent = PendingIntent.getService(this, 0, alertNotifIntent, 0);
 
         if(intent != null){
@@ -123,11 +125,13 @@ public class alarmInterfaceService extends Service {
                     if(intent.getExtras().getBoolean("alertNotif")){
                         Log.i("alarmInterfaceService", "Starting alertNotif");
                         //Setup an alarm to pull every 15 mins to check for alerts
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-                                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alertAlarmIntent);
+                        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 900000,
+                                900000, alertAlarmIntent);
 
                         //Start the first pull
-                        this.startService(alertNotifIntent);
+                        Intent firstIntent = new Intent(this, alertNotifService.class);
+                        firstIntent.putExtra("Hello", "sup");
+                        this.startService(firstIntent);
                     }
                     else{
                         //Stop the alert notification

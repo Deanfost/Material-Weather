@@ -398,7 +398,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Powered by Forecast"
+                        android:text="Powered by Dark Sky"
                         android:textSize="12sp"
                         android:id="@+id/dayPoweredByForecast"
                         android:layout_alignParentBottom="true"
