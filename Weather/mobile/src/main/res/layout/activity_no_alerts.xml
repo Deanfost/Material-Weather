@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:gravity="center">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/noAlertsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBlueDark"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="@dimen/_4sdp"/>
+
+    <ImageView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:src="@drawable/ic_sunny_white"
+        android:tint="@color/colorBlue"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="@dimen/_30sdp"
+        android:id="@+id/noAlertsIcon"/>
+
+    <TextView
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="wrap_content"
+        android:text="No weather alerts for your area."
+        android:layout_marginBottom="@dimen/_90sdp"
+        android:gravity="center"
+        android:textSize="18sp" />
+
+    <Button
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:text="Got it!"
+        android:textAllCaps="false"
+        android:enabled="true"
+        android:textSize="14sp"
+        android:background="@color/colorBlue"
+        android:textColor="@color/colorWhite"
+        android:id="@+id/btnNoAlertsFinish"/>
+</LinearLayout>

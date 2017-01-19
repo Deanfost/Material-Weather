@@ -52,6 +52,14 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
+        <!--Alerts activity -->
+        <activity android:name=".AlertsActivity"
+            android:theme="@style/ActivityTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
         <!--Settings activity-->
         <activity android:name=".SettingsActivity"
             android:theme="@style/SettingsTheme"
@@ -100,17 +108,6 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-
-        <!-- Alarm intent receiver -->
-        <!--<receiver-->
-            <!--android:name="dean.weather.alarmIntentReceiver"-->
-            <!--android:label="alarmIntentReceiver"-->
-            <!--android:enabled="false">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="dean.weather.alarmRepeating"/>-->
-                <!--<action android:name="dean.weather.alarmAlerts"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
 
     </application>
 </manifest>

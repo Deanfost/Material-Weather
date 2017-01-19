@@ -29,6 +29,15 @@ public class BootReceiver extends BroadcastReceiver {
                 context.startService(interfaceIntent);
             }
 
+            //Alerts notif
+            if(prefs.getBoolean("key_notif_alert", false)){
+                //Restart the alerts pull
+                Intent interfaceIntent = new Intent(context, AlarmInterfaceService.class);
+                interfaceIntent.putExtra("alertNotif", true);
+                Log.i("BootReceiver", "alertNotif enabled");
+                context.startService(interfaceIntent);
+            }
+
 //            //Summary notif
 //            if(prefs.getBoolean("key_notif_summary", false)){
 //                Log.i("BootReceiver", "summaryNotif enabled");

@@ -401,6 +401,10 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
+
+            //You know its working when this happens
+            createTestNotif();
+
         } else {
             //Create notification asking the user to try again
             NotificationCompat.Builder notifBuilder =
@@ -414,9 +418,6 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notifBuilder.build());
-
-            //You know its working when this happens
-            createTestNotif();
 
             if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();

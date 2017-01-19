@@ -13,7 +13,8 @@
         android:src="@drawable/ic_locationunavailable_color"
         android:layout_marginTop="@dimen/_55sdp"
         android:tint="@color/location_red"
-        android:layout_marginBottom="@dimen/_24sdp"/>
+        android:layout_marginBottom="@dimen/_24sdp"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:layout_width="@dimen/_165sdp"

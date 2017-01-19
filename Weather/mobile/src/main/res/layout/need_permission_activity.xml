@@ -13,7 +13,8 @@
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_rain_color"
         android:layout_marginTop="@dimen/_80sdp"
-        android:layout_marginBottom="@dimen/_24sdp"/>
+        android:layout_marginBottom="@dimen/_24sdp"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:layout_width="@dimen/_165sdp"
