@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.TimePicker;
 
@@ -17,19 +16,19 @@ import java.util.GregorianCalendar;
  * Created by Dean on 12/29/2016.
  */
 
-public class timePickerPreference extends DialogPreference {
+public class TimePickerPreference extends DialogPreference {
     private Calendar calendar;
     private TimePicker picker = null;
 
-    public timePickerPreference(Context ctxt) {
+    public TimePickerPreference(Context ctxt) {
         this(ctxt, null);
     }
 
-    public timePickerPreference(Context ctxt, AttributeSet attrs) {
+    public TimePickerPreference(Context ctxt, AttributeSet attrs) {
         this(ctxt, attrs, android.R.attr.dialogPreferenceStyle);
     }
 
-    public timePickerPreference(Context ctxt, AttributeSet attrs, int defStyle) {
+    public TimePickerPreference(Context ctxt, AttributeSet attrs, int defStyle) {
         super(ctxt, attrs, defStyle);
 
         setPositiveButtonText("Set");

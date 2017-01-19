@@ -8,6 +8,12 @@
         app:showAsAction="always">
     </item>
 
+    <item
+        android:id="@+id/action_alerts"
+        android:title="@string/action_alerts"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_alerts_white"/>
+
     <!-- Items to show up in the overflow menu -->
     <item
         android:id="@+id/action_settings"

@@ -3,9 +3,11 @@ package dean.weather;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -406,5 +408,4 @@ public class MainFragment extends Fragment{
                 break;
         }
     }
-
 }

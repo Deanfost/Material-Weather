@@ -4,6 +4,7 @@
 
     <!-- Overflow menu -->
     <string name="action_settings">Settings</string>
+    <string name="action_alerts">Alerts</string>
     <string name="action_refresh">Refresh</string>
 
     <!-- Key-value pairs -->

@@ -46,35 +46,28 @@ import retrofit.client.Response;
  * Created by Dean on 12/25/2016.
  */
 
-public class alertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AlertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient googleApiClient;
     private Double latitude;
     private Double longitude;
     private Location lastLocation;
-    private String currentAddress;
+//    private String currentAddress;
 //    private String todaySummary;
     private String todaySunrise;
     private String todaySunset;
-    private List<AlertsBlock> alertList;
 //    private boolean hasLocation;
     private boolean createNewNotif;
+    private int alertCount;
 
-    public alertNotifService() {
+    public AlertNotifService() {
         super(null);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         //Creates a weather alert notif if one is present
-        Log.i("alertNotifService", "started");
+        Log.i("AlertNotifService", "started");
         FirebaseApp.initializeApp(this);
-
-        if(intent.hasExtra("Hello")){
-            Log.i("alertNotifService", "First start");
-        }
-        if(intent.hasExtra("Hai")){
-            Log.i("alertNotifService", "Alarm intent");
-        }
 
         //Instantiate GoogleAPIClient
         if(googleApiClient == null){
@@ -225,7 +218,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                             editor.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm = new Intent(getApplicationContext(), alarmInterfaceService.class);
+                            Intent stopAlarm = new Intent(getApplicationContext(), AlarmInterfaceService.class);
                             stopAlarm.putExtra("alertNotif", false);
                             startService(stopAlarm);
 
@@ -244,7 +237,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                             editor1.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
+                            Intent stopAlarm1 = new Intent(getApplicationContext(), AlarmInterfaceService.class);
                             stopAlarm1.putExtra("alertNotif", false);
                             startService(stopAlarm1);
 
@@ -265,7 +258,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
             editor.apply();
 
             //End the repeating preference alarm
-            Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
+            Intent stopAlarm = new Intent(this, AlarmInterfaceService.class);
             stopAlarm.putExtra("alertNotif", false);
             startService(stopAlarm);
 
@@ -315,10 +308,10 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                 todaySunset = weatherResponse.getDaily().getData().get(0).getSunsetTime();
                 if(weatherResponse.getAlerts() != null){
                     Log.i("alerts", weatherResponse.getAlerts().size() + "");
-                    alertList = new ArrayList<>(weatherResponse.getAlerts());
-                    for(int i = 0; i < alertList.size(); i++){
-                        Log.i("Alert", alertList.get(i).getTitle());
-                        Log.i("Alert", alertList.get(i).getDescription());
+                    for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
+                        Log.i("Alert", weatherResponse.getAlerts().get(i).getTitle());
+                        Log.i("Alert", weatherResponse.getAlerts().get(i).getDescription());
+                        alertCount ++;
                     }
                 }
                 else{
@@ -326,7 +319,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                 }
 
                 //Create/update notification if there is data to display
-                if(alertList != null){
+                if(weatherResponse.getAlerts() != null){
                     Log.i("alertService", "Alerts available");
                     if(createNewNotif){
                         createNewNotification();
@@ -399,7 +392,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
 //                        .setContentTitle("Unable to sync weather")
 //                        .setContentText("Tap to try again now.")
 //                        .setColor(color);
-//        Intent serviceIntent = new Intent(this, alertNotifService.class);
+//        Intent serviceIntent = new Intent(this, AlertNotifService.class);
 //        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
 //        notifBuilder.setContentIntent(servicePendingIntent);
 //        notifBuilder.setAutoCancel(true);
@@ -417,7 +410,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
 //                        .setSmallIcon(R.drawable.ic_launcher)
 //                        .setContentTitle("Unable to sync weather")
 //                        .setContentText("Tap to try again now.");
-//        Intent serviceIntent = new Intent(this, alertNotifService.class);
+//        Intent serviceIntent = new Intent(this, AlertNotifService.class);
 //        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
 //        notifBuilder.setContentIntent(servicePendingIntent);
 //        notifBuilder.setAutoCancel(true);
@@ -458,14 +451,23 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         //Set the large icon
 //        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 
+        //Determine content text
+        String contentString;
+        if(!(alertCount > 1)){
+            contentString = "1 weather alert for your area";
+        }
+        else{
+            contentString = alertCount + " weather alerts for your area";
+        }
+
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
-                        .setContentText("There is 1 weather alert for your area")
+                        .setContentText(contentString)
 //                        .setLargeIcon(icon)
                         .setColor(color);
-        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
+        Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
@@ -484,12 +486,21 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
 //            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
 //        }
 
+        //Determine content text
+        String contentString;
+        if(!(alertCount > 1)){
+            contentString = "1 weather alert for your area";
+        }
+        else{
+            contentString = alertCount + " weather alerts for your area";
+        }
+
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
-                        .setContentText("There is 1 weather alert in your area");
-        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
+                        .setContentText(contentString);
+        Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);

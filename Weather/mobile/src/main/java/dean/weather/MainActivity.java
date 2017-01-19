@@ -5,8 +5,12 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,8 +19,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,10 +33,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -45,6 +54,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
+import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
@@ -63,7 +73,7 @@ import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer,
-        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher, changeLocationSettingsFragment.Initializer{
+        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher, ChangeLocationSettingsFragment.Initializer{
 
     //Layout
     Toolbar toolbar;
@@ -117,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements
     private String sunsetTime;
     private String updateTime;
     public static int setID;
+    private int alertsCount;
+    private ArrayList<AlertsBlock> alertsList;
 
     //Notification
     public static final int FOLLOW_NOTIF_ID = 23;
@@ -142,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements
             PermissionsFragment.setInitializer(this);
             NoConnectionFragment.setConnectionRefresher(this);
             LocationUnavailableFragment.setDataFetcher(this);
-            changeLocationSettingsFragment.setInitializer(this);
+            ChangeLocationSettingsFragment.setInitializer(this);
 
             //Connect to the Google API
             googleApiClient.connect();
@@ -176,33 +188,8 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             //Settings
             case R.id.action_settings:
-                //TODO - GO TO SETTINGS ACTIVITY
-                //For now, reset keyvalue pair, and go back to intro
-//                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                SharedPreferences.Editor editor = mySPrefs.edit();
-//                editor.putString(getString(R.string.first_launch_key), "0");
-//                editor.apply();
-//                Snackbar.make(findViewById(R.id.mainActivityLayout), "Key-value pair reset.", Snackbar.LENGTH_LONG)
-//                        .show();
-//                Log.i("Editor", "Updated 1st launch");
-//                Intent ongoingNotifService = new Intent(this, ongoingNotifService.class);
-//                startService(ongoingNotifService);
-//
-//                Snackbar.make(findViewById(R.id.mainActivityLayout), "Settings coming soon.", Snackbar.LENGTH_LONG)
-//                        .show();
-
-                //Build the notification
-//                NotificationCompat.Builder notificationBuilder =
-//                        new NotificationCompat.Builder(this)
-//                                .setContentTitle(43 + "° - " + "Cloudy")
-//                                .setContentTitle(45 + "°/" + 23 + "° · " + "Frederick")
-//                                .setSmallIcon(R.drawable.ic_cloudy_white);
-//                notificationBuilder.setOngoing(false);
-//                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//                notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
-
                 //Open the settings activity
-                Intent settingsIntent = new Intent(this, settingsActivity.class);
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
             //Refresh data
@@ -211,6 +198,11 @@ public class MainActivity extends AppCompatActivity implements
                 loadingFragmentTransaction();
                 //Reconnect to Google services, and onConnect, requestDataAndLocation will be called.
                 googleApiClient.connect();
+                return true;
+            case R.id.action_alerts:
+                //Move to the alerts activity
+                Snackbar snackbar = Snackbar.make(mainActivityLayout, "Weather alerts coming soon.", Snackbar.LENGTH_SHORT);
+                snackbar.show();
                 return true;
             //User action not recognized
             default:
@@ -223,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.appbar_items, menu);
 
-        //Customize menu options
+        //Customize black menu options to be white
         Drawable icSettings = menu.findItem(R.id.action_settings).getIcon();
         icSettings = DrawableCompat.wrap(icSettings);
         DrawableCompat.setTint(icSettings, getResources().getColor(R.color.colorWhite));
@@ -321,9 +313,15 @@ public class MainActivity extends AppCompatActivity implements
                     currentLocation = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
                     Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
                 }
+                //Save the last location for future reference by the ongoing notification
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(getString(R.string.last_location_key), currentLocation);
+                editor.apply();
             }
             else{
                 Log.i("getLocality", "No localities found.");
+                currentLocation = "---";
             }
         }
         else{
@@ -553,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
         //Form a pull request
-        RequestBuilder weather = new RequestBuilder();
+        final RequestBuilder weather = new RequestBuilder();
         final Request request = new Request();
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
@@ -621,7 +619,7 @@ public class MainActivity extends AppCompatActivity implements
                 todaysLO = String.valueOf(LoDouble.intValue());
                 Log.i("HI", todaysHI);
                 Log.i("LO", todaysLO);
-                todaysHILO = todaysHI + "\u00B0" + "/" + todaysLO + "\u00B0";//76degrees/42degrees format
+                todaysHILO = todaysHI + "\u00B0" + "/" + todaysLO + "\u00B0";//76°/42° format
 
                 //Parse current wind speed and bearing
                 String currentWindSpeed = weatherResponse.getCurrently().getWindSpeed();
@@ -729,6 +727,33 @@ public class MainActivity extends AppCompatActivity implements
                 //Get daily data
                 parseDaily();
 
+                //Get weather alerts
+                if(weatherResponse.getAlerts() != null){
+                    for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
+                        alertsList.add(i, weatherResponse.getAlerts().get(i));
+                        Log.i("Weather alerts", weatherResponse.getAlerts().get(i).getTitle());
+                        Log.i("Weather alerts", weatherResponse.getAlerts().get(i).getDescription());
+                        alertsCount ++;
+                    }
+                }
+
+                //There are alerts, let the user know
+                if(alertsCount != 0){
+                    //Display a snackbar for 10 seconds
+                    Snackbar snackbar = Snackbar
+                            .make(mainActivityLayout, "Message is deleted", Snackbar.LENGTH_LONG)
+                            .setDuration(10000)
+                            .setAction("View", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //TODO - Take the user to the alerts activity
+                                    Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    snackbar.show();
+                }
+
                 //Set main layout color
                 setID = determineLayoutColor(sunriseTimeString, sunsetTimeString);
                 setMainLayoutColor(setID);
@@ -739,6 +764,12 @@ public class MainActivity extends AppCompatActivity implements
                 MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcon, pulledWind, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecip);
                 MainFragment.passViewData(currentLocation, currentDay, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
+
+                //Update ongoing notification if it is enabled
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                if(prefs.getBoolean(getString(R.string.ongoing_notif_key), false)){
+                    updateNotification();
+                }
 
                 //Terminate Google API Connection
                 if(googleApiClient.isConnected()){
@@ -858,14 +889,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Creates new changeLocationSettingsFragment transaction.
+     * Creates new ChangeLocationSettingsFragment transaction.
      */
     private void changeLocationFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
-        changeLocationSettingsFragment changeLocationSettingsFragment = new changeLocationSettingsFragment();
+        ChangeLocationSettingsFragment ChangeLocationSettingsFragment = new ChangeLocationSettingsFragment();
         if (!isFinishing()) {
-            mainFragmentTransaction.replace(R.id.mainContentView, changeLocationSettingsFragment);
+            mainFragmentTransaction.replace(R.id.mainContentView, ChangeLocationSettingsFragment);
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
             mainFragmentTransaction.commit();
         }
@@ -885,7 +916,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Conducts loadingFragment transaction, and begins pulling location and data(called from changeLocationSettingsFragment).
+     * Conducts loadingFragment transaction, and begins pulling location and data(called from ChangeLocationSettingsFragment).
      */
     @Override
     public void beginNormalOperations1() {
@@ -1169,4 +1200,91 @@ public class MainActivity extends AppCompatActivity implements
     public void onBackPressed() {
         //Block back button for now
     }
+
+    //Notifications
+    private void updateNotification() {
+            //Create the weather notification
+            int iconID;
+            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_older);
+            //Set icon
+            switch (currentIcon) {
+                case "clear-day":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sunny_white);
+                    iconID = R.drawable.ic_sunny_white;
+                    break;
+                case "clear-night":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_clear_night_white);
+                    iconID = R.drawable.ic_clear_night_white;
+                    break;
+                case "rain":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_rain_white);
+                    iconID = R.drawable.ic_rain_white;
+                    break;
+                case "snow":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_snow_white);
+                    iconID = R.drawable.ic_snow_white;
+                    break;
+                case "sleet":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sleet_white);
+                    iconID = R.drawable.ic_sleet_white;
+                    break;
+                case "wind":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_windrose_white);
+                    iconID = R.drawable.ic_windrose_white;
+                    break;
+                case "fog":
+                    //If it is daytime
+                    if (setID != 3) {
+                        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggyday_white);
+                        iconID = R.drawable.ic_foggyday_white;
+                    } else {
+                        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggynight_white);
+                        iconID = R.drawable.ic_foggynight_white;
+                    }
+                    break;
+                case "cloudy":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
+                    iconID = R.drawable.ic_cloudy_white;
+                    break;
+                case "partly-cloudy-day":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudy_white);
+                    iconID = R.drawable.ic_partlycloudy_white;
+
+                    break;
+                case "partly-cloudy-night":
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudynight_white);
+                    iconID = R.drawable.ic_partlycloudynight_white;
+                    break;
+                default:
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
+                    iconID = R.drawable.ic_cloudy_white;
+                    Log.i("CurrentConditions", "Unsupported condition.");
+                    break;
+            }
+            //Set temp and condition
+            notificationView.setTextViewText(R.id.notifCondition, currentTemp + "" + "° - " + currentConditions);
+            //Set location
+            if (!currentLocation.equals("---")) {
+                notificationView.setTextViewText(R.id.notifLocation, currentLocation);
+            } else {
+                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String savedLocation = mySPrefs.getString(getString(R.string.last_location_key), "---");
+                notificationView.setTextViewText(R.id.notifLocation, savedLocation);
+            }
+
+            //Set high and low
+            notificationView.setTextViewText(R.id.notifBody, "Hi - " + todaysHI + "° Lo - " + todaysLO + "°");
+            //Build the notification
+            NotificationCompat.Builder notificationBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setContent(notificationView)
+                            .setSmallIcon(iconID);
+            //Intent to go to main activity
+            Intent mainIntent = new Intent(this, NotificationIntentHandler.class);
+            PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
+            notificationBuilder.setContentIntent(resultPendingIntent);
+            notificationBuilder.setOngoing(true);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
+        }
 }

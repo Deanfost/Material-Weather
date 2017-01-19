@@ -16,7 +16,7 @@ import java.util.Date;
  * Created by Dean Foster on 1/15/2017.
  */
 
-public class shutdownReciever extends BroadcastReceiver {
+public class ShutdownReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 //        Log.i("shutdownReceiver", "Broadcast received");

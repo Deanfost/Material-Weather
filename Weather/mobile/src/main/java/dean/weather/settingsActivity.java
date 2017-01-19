@@ -29,15 +29,11 @@ import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by Dean on 12/23/2016.
  */
 
-public class settingsActivity extends PreferenceActivity{
+public class SettingsActivity extends PreferenceActivity{
     SharedPreferences prefs;
 //    Preference followMePref;
     SwitchPreference ongoingNotif;
@@ -86,7 +82,7 @@ public class settingsActivity extends PreferenceActivity{
 //                        ongoingNotif.setChecked(false);
 //
 //                        //Kill the ongoing service if running
-//                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+//                        Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
 //                        stopService.putExtra("repeatNotif", false);
 //                        startService(stopService);
 //
@@ -103,7 +99,7 @@ public class settingsActivity extends PreferenceActivity{
 ////                        timePickerPref.setEnabled(false);
 ////
 ////                        //Kill the ongoing service if running
-////                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+////                        Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
 ////                        stopService.putExtra("summaryNotif", false);
 ////                        startService(stopService);
 ////
@@ -125,12 +121,11 @@ public class settingsActivity extends PreferenceActivity{
                 Log.i("ongoingNotif", ongoingNotifValue.toString());
                 //Start the notif service
                 if(ongoingNotifValue){
-                    //Check to see if the user selected "follow me"
                         //Check if we are able to use current location
                         if(performChecks()){
                             //Start it, everything is looking good
                             Log.i("ongoingNotifPref", "Looks good, starting service");
-                            Intent serviceIntent = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                            Intent serviceIntent = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
                             serviceIntent.putExtra("repeatNotif", true);
                             startService(serviceIntent);
                             return true;
@@ -143,7 +138,7 @@ public class settingsActivity extends PreferenceActivity{
                 else{
                     //Stop the notif service
                     Log.i("ongoingNotifPref", "stoppingService");
-                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                    Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
                     stopService.putExtra("repeatNotif", false);
                     startService(stopService);
 
@@ -180,7 +175,7 @@ public class settingsActivity extends PreferenceActivity{
 //                            else
 //                                Log.i("hel", setTime.toString());
 //                            Log.i("summaryNotifPref", "Looks good, starting service");
-//                            Intent summaryService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+//                            Intent summaryService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
 //                            summaryService.putExtra("summaryNotif", true);
 //                            summaryService.putExtra("alarmTime", setTime);
 //                            startService(summaryService);
@@ -192,7 +187,7 @@ public class settingsActivity extends PreferenceActivity{
 //
 //                            //Detect if the user is using 24 hour time or not
 //                            //They aren't
-//                            if(!android.text.format.DateFormat.is24HourFormat(settingsActivity.this)){
+//                            if(!android.text.format.DateFormat.is24HourFormat(SettingsActivity.this)){
 //                                Date date = new Date(alarmTime);
 //                                DateFormat formatter = new SimpleDateFormat("HH:mm aa");
 //                                dateFormatted = formatter.format(date);
@@ -201,13 +196,13 @@ public class settingsActivity extends PreferenceActivity{
 //                                //TODO - FIX THIS
 //                                if(hh > 12){
 //                                    hh -= 12;
-//                                    Toast.makeText(settingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(SettingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
 //                                }
 //                                else if (hh < 12 && hh > 0){
-//                                    Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(SettingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
 //                                }
 //                                else{
-//                                    Toast.makeText(settingsActivity.this, "Alarm set for " + 12 + restOfString, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(SettingsActivity.this, "Alarm set for " + 12 + restOfString, Toast.LENGTH_SHORT).show();
 //                                }
 //                            }
 //                            //They are
@@ -215,7 +210,7 @@ public class settingsActivity extends PreferenceActivity{
 //                                Date date = new Date(alarmTime);
 //                                DateFormat formatter = new SimpleDateFormat("HH:mm");
 //                                dateFormatted = formatter.format(date);
-//                                Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(SettingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
 //                            }
 //                            Log.i("alarmTime", dateFormatted);
 //                            return true;
@@ -242,7 +237,7 @@ public class settingsActivity extends PreferenceActivity{
 //                    timePickerPref.setEnabled(false);
 //
 //                    //Kill the alarm
-//                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+//                    Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
 //                    stopService.putExtra("summaryNotif", false);
 //                    startService(stopService);
 //
@@ -265,7 +260,7 @@ public class settingsActivity extends PreferenceActivity{
 //                    if(performChecks()){
 //                        //Start the alarm intent service, everything is looking good
 //                        Log.i("timePickerPref", "Looks good, starting service");
-//                        Intent alarmService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+//                        Intent alarmService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
 //                        alarmService.putExtra("summaryNotif", true);
 //                        alarmService.putExtra("alarmTime", (Long) newValue);
 //                        startService(alarmService);
@@ -276,7 +271,7 @@ public class settingsActivity extends PreferenceActivity{
 //
 //                        //Detect if the user is using 24 hour time or not
 //                        //They aren't
-//                        if(!android.text.format.DateFormat.is24HourFormat(settingsActivity.this)){
+//                        if(!android.text.format.DateFormat.is24HourFormat(SettingsActivity.this)){
 //                            Date date = new Date(alarmTime);
 //                            DateFormat formatter = new SimpleDateFormat("HH:mm aa");
 //                            dateFormatted = formatter.format(date);
@@ -284,13 +279,13 @@ public class settingsActivity extends PreferenceActivity{
 //                            String restOfString = dateFormatted.substring(2);
 //                            if(hh > 12){
 //                                hh -= 12;
-//                                Toast.makeText(settingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(SettingsActivity.this, "Alarm set for " + hh.toString() + restOfString, Toast.LENGTH_SHORT).show();
 //                            }
 //                            else if(hh < 12 && hh > 0   ){
-//                                Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(SettingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
 //                            }
 //                            else{
-//                                Toast.makeText(settingsActivity.this, "Alarm set for " + 12 + restOfString, Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(SettingsActivity.this, "Alarm set for " + 12 + restOfString, Toast.LENGTH_SHORT).show();
 //                            }
 //                        }
 //                        //They are
@@ -298,7 +293,7 @@ public class settingsActivity extends PreferenceActivity{
 //                            Date date = new Date(alarmTime);
 //                            DateFormat formatter = new SimpleDateFormat("HH:mm");
 //                            dateFormatted = formatter.format(date);
-//                            Toast.makeText(settingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(SettingsActivity.this, "Alarm set for " + dateFormatted, Toast.LENGTH_SHORT).show();
 //                        }
 //                        Log.i("alarmTime", dateFormatted);
 //                        return true;
@@ -312,7 +307,7 @@ public class settingsActivity extends PreferenceActivity{
 //                        timePickerPref.setEnabled(false);
 //
 //                        //Kill the alarm
-//                        Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+//                        Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
 //                        stopService.putExtra("summaryNotif", false);
 //                        startService(stopService);
 //                        return true;
@@ -336,7 +331,7 @@ public class settingsActivity extends PreferenceActivity{
                     if(performChecks()){
                         //Start the alarm intent service, everything is looking good
                         Log.i("alert pref", "Starting service");
-                        Intent alarmService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                        Intent alarmService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
                         alarmService.putExtra("alertNotif", true);
                         startService(alarmService);
                         return true;
@@ -350,7 +345,7 @@ public class settingsActivity extends PreferenceActivity{
                 else{
                     //Kill the alarm
                     Log.i("alert pref", "Killing alarm");
-                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                    Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
                     stopService.putExtra("alertNotif", false);
                     startService(stopService);
 
@@ -381,7 +376,7 @@ public class settingsActivity extends PreferenceActivity{
      */
     private boolean performChecks(){
         //Check to see if location permissions and services are enabled
-        int locationPermissionCheck = ContextCompat.checkSelfPermission(settingsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION);
+        int locationPermissionCheck = ContextCompat.checkSelfPermission(SettingsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
             Log.i("permissionsCheck", "Granted");
             //Check to see if location services are enabled
@@ -398,7 +393,7 @@ public class settingsActivity extends PreferenceActivity{
         //Permission has not been granted
         else{
             //Request permission access
-            ActivityCompat.requestPermissions(settingsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 22);
+            ActivityCompat.requestPermissions(SettingsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 22);
             performChecksReturn = false;
         }
         Log.i("checksReturn", performChecksReturn + "");

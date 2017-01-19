@@ -29,7 +29,7 @@
                     <!--android:summary="Create a push notification containing a summary of the day's weather forecast"-->
                     <!--android:defaultValue="false" />-->
 
-                <!--<dean.weather.timePickerPreference-->
+                <!--<dean.weather.TimePickerPreference-->
                     <!--android:key="@string/summary_time_key"-->
                     <!--android:title="Summary time"-->
                     <!--android:enabled="false" />-->
