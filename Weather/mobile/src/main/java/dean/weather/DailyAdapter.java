@@ -30,7 +30,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
     private List<Integer> HISet;
     private List<Integer> LOSet;
     private List<Integer> precipSet;
-    private Context context;//Activity context passed from mainFragment
+    private Context context;//Activity context passed from MainFragment
     Typeface robotoLight;
     //Set duration for fade anim
     private final int FADE_DURATION = 500;
