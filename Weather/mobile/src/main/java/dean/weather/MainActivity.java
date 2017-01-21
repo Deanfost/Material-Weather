@@ -38,7 +38,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,7 +53,6 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
-import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
@@ -95,16 +93,16 @@ public class MainActivity extends AppCompatActivity implements
 
     //Hourly
     public List<String> pulledHours = new ArrayList<>();
-    public List<String> pulledIcon = new ArrayList<>();
+    public List<String> pulledIcons = new ArrayList<>();
     public List<Integer> pulledTemps = new ArrayList<>();
-    public List<Integer> pulledWind = new ArrayList<>();
+    public List<Integer> pulledWinds = new ArrayList<>();
 
     //Daily
     private List<String> pulledDays = new ArrayList<>();
     private List<String> pulledDailyCond = new ArrayList<>();
     private List<Integer> pulledHIs = new ArrayList<>();
     private List<Integer> pulledLOs = new ArrayList<>();
-    private List<Integer> pulledPrecip = new ArrayList<>();
+    private List<Integer> pulledPrecips = new ArrayList<>();
 
     //Current
     public static String currentLocation;
@@ -128,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements
     private String updateTime;
     public static int setID;
     private int alertsCount;
-    private ArrayList<AlertsBlock> alertsList;
 
     //Notification
     public static final int FOLLOW_NOTIF_ID = 23;
@@ -201,8 +198,10 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             case R.id.action_alerts:
                 //Move to the alerts activity
-                Snackbar snackbar = Snackbar.make(mainActivityLayout, "Weather alerts coming soon.", Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                Intent alertsIntent = new Intent(this, AlertsActivity.class);
+                alertsIntent.putExtra("setID", setID);
+                alertsIntent.putExtra("conditionsIcon", currentIcon);
+                startActivity(alertsIntent);
                 return true;
             //User action not recognized
             default:
@@ -215,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.appbar_items, menu);
 
-        //Customize black menu options to be white
+        //Customize black menu option icons to be white
         Drawable icSettings = menu.findItem(R.id.action_settings).getIcon();
         icSettings = DrawableCompat.wrap(icSettings);
         DrawableCompat.setTint(icSettings, getResources().getColor(R.color.colorWhite));
@@ -730,24 +729,46 @@ public class MainActivity extends AppCompatActivity implements
                 //Get weather alerts
                 if(weatherResponse.getAlerts() != null){
                     for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
-                        alertsList.add(i, weatherResponse.getAlerts().get(i));
                         Log.i("Weather alerts", weatherResponse.getAlerts().get(i).getTitle());
                         Log.i("Weather alerts", weatherResponse.getAlerts().get(i).getDescription());
                         alertsCount ++;
                     }
                 }
+                else{
+                    Log.i("Weather alerts", "No alerts");
+                }
 
                 //There are alerts, let the user know
                 if(alertsCount != 0){
+                    Integer colorID = -1;
+                    switch (setID){
+                        case 0:
+                            colorID = R.color.colorYellowExtraLight;
+                            break;
+                        case 1:
+                            colorID = R.color.colorBlueExtraLight;
+                            break;
+                        case 2:
+                            colorID = R.color.colorOrangeExtraLight;
+                            break;
+                        case 3:
+                            colorID = R.color.colorPurpleExtraLight;
+                            break;
+                    }
+
                     //Display a snackbar for 10 seconds
                     Snackbar snackbar = Snackbar
-                            .make(mainActivityLayout, "Message is deleted", Snackbar.LENGTH_LONG)
+                            .make(mainActivityLayout, "Weather alerts available.", Snackbar.LENGTH_LONG)
                             .setDuration(10000)
+                            .setActionTextColor(colorID)
                             .setAction("View", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    //TODO - Take the user to the alerts activity
-                                    Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                                    //Move to the alerts activity
+                                    Intent alertsIntent = new Intent(MainActivity.this, AlertsActivity.class);
+                                    alertsIntent.putExtra("setID", setID);
+                                    alertsIntent.putExtra("conditionsIcon", currentIcon);
+                                    startActivity(alertsIntent);
                                 }
                             });
 
@@ -761,7 +782,7 @@ public class MainActivity extends AppCompatActivity implements
                 //Update views
                 Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
                 mainFragmentTransaction();
-                MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcon, pulledWind, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecip);
+                MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcons, pulledWinds, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecips);
                 MainFragment.passViewData(currentLocation, currentDay, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
 
@@ -1079,7 +1100,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //Get icon for next 24 hours
         for(int i = 0; i < pulledHours.size(); i++){
-            pulledIcon.add(pulledWeatherResponse.getHourly().getData().get(i).getIcon());
+            pulledIcons.add(pulledWeatherResponse.getHourly().getData().get(i).getIcon());
         }
 
         //Get temps for the next 24 hours
@@ -1092,7 +1113,7 @@ public class MainActivity extends AppCompatActivity implements
         for(int i = 0; i < pulledHours.size(); i++){
             String pulledWindString = pulledWeatherResponse.getHourly().getData().get(i).getWindSpeed();
             Double pulledWindDouble = Double.valueOf(pulledWindString);
-            pulledWind.add(pulledWindDouble.intValue());
+            pulledWinds.add(pulledWindDouble.intValue());
         }
     }
 
@@ -1136,10 +1157,10 @@ public class MainActivity extends AppCompatActivity implements
         //Get Precips
         for(int i = 0; i < dailySetSize; i++){
             String pulledPrecipString = pulledWeatherResponse.getDaily().getData().get(i).getPrecipProbability();
-            Log.i("pulledPrecip", pulledPrecipString);
+            Log.i("pulledPrecips", pulledPrecipString);
             Double pulledPrecipDouble = Double.valueOf(pulledPrecipString) * 100;
             Integer pulledPrecipInt = pulledPrecipDouble.intValue();
-            pulledPrecip.add(pulledPrecipInt);
+            pulledPrecips.add(pulledPrecipInt);
         }
 
         //Get Icons
@@ -1156,15 +1177,15 @@ public class MainActivity extends AppCompatActivity implements
     public void clearDataSets(){
 
         pulledHours.clear();
-        pulledIcon.clear();
+        pulledIcons.clear();
         pulledTemps.clear();
-        pulledWind.clear();
+        pulledWinds.clear();
 
         pulledDays.clear();
         pulledDailyCond.clear();
         pulledHIs.clear();
         pulledLOs.clear();
-        pulledPrecip.clear();
+        pulledPrecips.clear();
 
         currentDay = null;
         currentDate = null;
@@ -1202,6 +1223,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //Notifications
+
+    /**
+     * Updates ongoing notification if one exists on activity launch.
+     */
     private void updateNotification() {
             //Create the weather notification
             int iconID;

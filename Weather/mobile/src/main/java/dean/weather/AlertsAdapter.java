@@ -22,6 +22,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     Typeface robotoLight;
     private List<AlertsBlock> dataSet;
     private Context context;//Activity context passed from AlertsActivity
+    private Integer setID;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView cardTitle;
@@ -54,9 +55,10 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     }
 
     //Gather data for the adapter
-    public AlertsAdapter (Context passedContext, List<AlertsBlock> passedDataSet){
+    public AlertsAdapter (Context passedContext, List<AlertsBlock> passedDataSet, Integer passedSetID){
         context = passedContext;
         dataSet = new ArrayList<>(passedDataSet);
+        setID = passedSetID;
     }
 
     @Override

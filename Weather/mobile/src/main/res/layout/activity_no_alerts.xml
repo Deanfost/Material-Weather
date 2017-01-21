@@ -33,15 +33,15 @@
         android:gravity="center"
         android:textSize="18sp" />
 
-    <Button
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
-        android:text="Got it!"
-        android:textAllCaps="false"
-        android:enabled="true"
-        android:textSize="14sp"
-        android:background="@color/colorBlue"
-        android:textColor="@color/colorWhite"
-        android:id="@+id/btnNoAlertsFinish"/>
+    <!--<Button-->
+        <!--android:layout_width="@dimen/_100sdp"-->
+        <!--android:layout_height="@dimen/_40sdp"-->
+        <!--android:layout_marginBottom="@dimen/_20sdp"-->
+        <!--android:text="Got it!"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:enabled="true"-->
+        <!--android:textSize="14sp"-->
+        <!--android:background="@color/colorBlue"-->
+        <!--android:textColor="@color/colorWhite"-->
+        <!--android:id="@+id/btnNoAlertsFinish"/>-->
 </LinearLayout>

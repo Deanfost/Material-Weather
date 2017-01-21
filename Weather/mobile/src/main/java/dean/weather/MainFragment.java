@@ -210,7 +210,6 @@ public class MainFragment extends Fragment{
         currentLocation.setText(passedLocationValue);
         currentDay.setText(passedDayValue);
         currentDate.setText(passedDateValue);
-        //TODO - GET NEW ICONS AND UPDATE
         switch (passedIconValue) {
             case "clear-day":
                 currentConditionsIcon.setImageResource(R.drawable.ic_sunny_white);
