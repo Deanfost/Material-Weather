@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_refresh:
                 clearDataSets();
                 loadingFragmentTransaction();
-                //Reconnect to Google services, and onConnect, requestDataAndLocation will be called.
+                //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
                 googleApiClient.connect();
                 return true;
             case R.id.action_alerts:
@@ -1189,7 +1189,6 @@ public class MainActivity extends AppCompatActivity implements
 
         currentDay = null;
         currentDate = null;
-        currentIcon = null;
         currentTemp = 0;
         currentConditions = null;
         todaysHI = null;

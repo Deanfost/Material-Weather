@@ -1,5 +1,8 @@
 package dean.weather;
 
+import android.app.ActivityManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,6 +38,7 @@ public class AlertsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //Get the color of the layout
         setID = getIntent().getExtras().getInt("setID");
+        Log.i("Alert Activity", "setID: " + setID.toString());
 
         //Check to see if there are any alerts
         if(MainActivity.pulledWeatherResponse.getAlerts() != null){
@@ -62,23 +66,29 @@ public class AlertsActivity extends AppCompatActivity {
             Window window = this.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
+            //TODO - SET COLOR OF THE CARDS
             switch (setID){
                 case 0:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorYellow)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorYellow));
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorYellowDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorYellowDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorYellowDark));
                     break;
                 case 1:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlue)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorBlue));
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorBlueDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlueDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorBlueDark));
                     break;
                 case 2:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrange)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorOrange));
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorOrangeDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrangeDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorOrangeDark));
                     break;
                 case 3:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurple)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorPurple));
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorPurpleDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurpleDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorPurpleDark));
                     break;
             }
 
@@ -86,13 +96,13 @@ public class AlertsActivity extends AppCompatActivity {
             alertsRecycler = (RecyclerView) findViewById(R.id.alertsRecyclerView);
             alertsRecycler.setHasFixedSize(true);
 
-            //Setup recyclerView adapter
-            alertsAdapter = new AlertsAdapter(this, alertsList, setID);
-            alertsRecycler.setAdapter(alertsAdapter);
-
             //Setup recyclerView layout manager
             alertsLayoutManager = new LinearLayoutManager(this);
             alertsRecycler.setLayoutManager(alertsLayoutManager);
+
+            //Setup recyclerView adapter
+            alertsAdapter = new AlertsAdapter(this, alertsList, setID);
+            alertsRecycler.setAdapter(alertsAdapter);
         }
         else{
             //There are no alerts
@@ -118,24 +128,24 @@ public class AlertsActivity extends AppCompatActivity {
 
             switch (setID){
                 case 0:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorYellow)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorYellow));
-                    noAlertsIcon.setColorFilter(R.color.colorYellowDark);
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorYellowDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorYellowDark));
+                    noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
                     break;
                 case 1:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlue)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorBlue));
-                    noAlertsIcon.setColorFilter(R.color.colorBlueDark);
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlueDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorBlueDark));
+                    noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
                     break;
                 case 2:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrange)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorOrange));
-                    noAlertsIcon.setColorFilter(R.color.colorOrangeDark);
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrangeDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorOrangeDark));
+                    noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
                     break;
                 case 3:
-                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurple)));
-                    window.setStatusBarColor(getResources().getColor(R.color.colorPurple));
-                    noAlertsIcon.setColorFilter(R.color.colorPurpleDark);
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurpleDark)));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorPurpleDark));
+                    noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
                     break;
             }
 

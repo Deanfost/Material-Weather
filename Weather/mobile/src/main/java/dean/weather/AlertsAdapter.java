@@ -2,6 +2,7 @@ package dean.weather;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,30 +26,34 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     private Integer setID;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public CardView card;
         public TextView cardTitle;
         public TextView cardDesc;
-        public TextView cardDismiss;
-        public TextView cardView;
+        public TextView cardActionDismiss;
+        public TextView cardActionView;
 
         //Accepts entire card, and finds each subview
         public ViewHolder(View itemView) {
             super(itemView);
+            card = (CardView) itemView.findViewById(R.id.alertCardView);
             cardTitle = (TextView) itemView.findViewById(R.id.cardViewTitle);
             cardDesc = (TextView) itemView.findViewById(R.id.cardViewDesc);
-            cardDismiss = (TextView) itemView.findViewById(R.id.btnCardDismiss);
-            cardView = (TextView) itemView.findViewById(R.id.btnCardView);
+            cardActionDismiss = (TextView) itemView.findViewById(R.id.btnCardDismiss);
+            cardActionView = (TextView) itemView.findViewById(R.id.btnCardView);
 
-            cardDismiss.setOnClickListener(new View.OnClickListener() {
+            cardActionDismiss.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.i("Card", "Dismiss clicked");
+                    
                 }
             });
 
-            cardView.setOnClickListener(new View.OnClickListener() {
+            cardActionView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.i("Card", "View clicked");
+
                 }
             });
         }
@@ -76,6 +81,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         String alertDesc = dataSet.get(position).getDescription();
 
         //Set the views in the card
+        CardView card = holder.card;
         TextView title = holder.cardTitle;
         TextView desc = holder.cardDesc;
         title.setText(alertTitle);
@@ -83,11 +89,27 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
 
         //Set typeface of description
         desc.setTypeface(robotoLight);
+
+        //Set the background color
+        switch (setID){
+            case 0:
+                card.setBackgroundColor(context.getResources().getColor(R.color.colorYellow));
+                break;
+            case 1:
+                card.setBackgroundColor(context.getResources().getColor(R.color.colorBlue));
+                break;
+            case 2:
+                card.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
+                break;
+            case 3:
+                card.setBackgroundColor(context.getResources().getColor(R.color.colorPurple));
+                break;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataSet.size();
     }
 
     public Context getContext() {
