@@ -38,7 +38,7 @@ public class AlertsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //Get the color of the layout
         setID = getIntent().getExtras().getInt("setID");
-        Log.i("Alert Activity", "setID: " + setID.toString());
+        Log.i("Alert Activity", "setID = " + setID.toString());
 
         //Check to see if there are any alerts
         if(MainActivity.pulledWeatherResponse.getAlerts() != null){
@@ -68,7 +68,6 @@ public class AlertsActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
-            //TODO - SET COLOR OF THE CARDS
             switch (setID){
                 case 0:
                     this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorYellowDark)));

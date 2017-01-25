@@ -1,8 +1,8 @@
 package dean.weather;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +26,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     private Integer setID;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public CardView card;
+        public View card;
         public TextView cardTitle;
         public TextView cardDesc;
         public TextView cardActionDismiss;
@@ -35,27 +35,11 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         //Accepts entire card, and finds each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            card = (CardView) itemView.findViewById(R.id.alertCardView);
+            card = itemView;
             cardTitle = (TextView) itemView.findViewById(R.id.cardViewTitle);
             cardDesc = (TextView) itemView.findViewById(R.id.cardViewDesc);
             cardActionDismiss = (TextView) itemView.findViewById(R.id.btnCardDismiss);
             cardActionView = (TextView) itemView.findViewById(R.id.btnCardView);
-
-            cardActionDismiss.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("Card", "Dismiss clicked");
-                    
-                }
-            });
-
-            cardActionView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("Card", "View clicked");
-
-                }
-            });
         }
     }
 
@@ -64,6 +48,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         context = passedContext;
         dataSet = new ArrayList<>(passedDataSet);
         setID = passedSetID;
+        Log.i("passedSetID", passedSetID.toString());
     }
 
     @Override
@@ -74,16 +59,18 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(AlertsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         robotoLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         //Get the data based on current iteration
         String alertTitle = dataSet.get(position).getTitle();
         String alertDesc = dataSet.get(position).getDescription();
 
         //Set the views in the card
-        CardView card = holder.card;
+        View cardView = holder.card;
         TextView title = holder.cardTitle;
         TextView desc = holder.cardDesc;
+        TextView cardActionView = holder.cardActionView;
+        TextView cardActionDismiss = holder.cardActionDismiss;
         title.setText(alertTitle);
         desc.setText(alertDesc);
 
@@ -93,18 +80,42 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         //Set the background color
         switch (setID){
             case 0:
-                card.setBackgroundColor(context.getResources().getColor(R.color.colorYellow));
+                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorYellow));
                 break;
             case 1:
-                card.setBackgroundColor(context.getResources().getColor(R.color.colorBlue));
+                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorBlue));
                 break;
             case 2:
-                card.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
+                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
                 break;
             case 3:
-                card.setBackgroundColor(context.getResources().getColor(R.color.colorPurple));
+                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorPurple));
                 break;
         }
+
+        cardActionDismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Card", "Dismiss clicked");
+                Log.i("Position", position + "");
+
+
+            }
+        });
+
+        cardActionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Card", "View clicked");
+                Log.i("Position", position + "");
+
+                Intent alertIntent = new Intent(getContext(), ViewAlertActivity.class);
+                alertIntent.putExtra("setID", setID);
+                alertIntent.putExtra("alertTitle", dataSet.get(position).getTitle());
+                alertIntent.putExtra("alertDesc", dataSet.get(position).getDescription());
+                getContext().startActivity(alertIntent);
+            }
+        });
     }
 
     @Override

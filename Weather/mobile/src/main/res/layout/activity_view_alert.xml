@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/viewAlertToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorBlueDark"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="@dimen/_4sdp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -9,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/_16sdp">
 
@@ -17,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/alertViewTitle"
-                android:layout_marginBottom="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_25sdp"
                 android:text="Dense Fog Advisory for Frederick, MD"
                 android:textSize="18sp"/>
 
@@ -25,7 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/alertViewDesc"
-                android:text="...DENSE FOG ADVISORY IN EFFECT UNTIL 4 AM WEDNESDAY...THE NATIONAL WEATHER SERVICE IN BALTIMORE MD/WASHINGTON HAS ISSUED A DENSE FOG ADVISORY...WHICH IS IN EFFECT UNTIL 4 AM EST WEDNESDAY..." />
+                android:text="...DENSE FOG ADVISORY IN EFFECT UNTIL 4 AM WEDNESDAY...THE NATIONAL WEATHER SERVICE IN BALTIMORE MD/WASHINGTON HAS ISSUED A DENSE FOG ADVISORY...WHICH IS IN EFFECT UNTIL 4 AM EST WEDNESDAY..."
+                android:textSize="16sp"/>
 
         </LinearLayout>
     </ScrollView>
