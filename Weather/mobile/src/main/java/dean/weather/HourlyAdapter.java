@@ -112,6 +112,7 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 condView.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
+                //TODO - FIX THIS
                 if(MainActivity.setID != 3){
                     condView.setImageResource(R.drawable.ic_foggyday_white);
                 }

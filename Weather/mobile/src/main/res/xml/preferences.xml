@@ -43,7 +43,8 @@
 
         <ListPreference
             android:key="@string/units_list_key"
-            android:title="Units of measure"/>
+            android:title="Units of measure"
+            />
 
     </PreferenceCategory>
 

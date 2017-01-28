@@ -39,6 +39,4 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.0.0'
     apply plugin: 'com.google.gms.google-services'
     compile files('libs/MaterialSettings-master.jar')
-    compile 'com.mikepenz:actionitembadge:3.3.1@aar'
-    compile 'com.mikepenz:iconics-core:2.8.1@aar'
 }

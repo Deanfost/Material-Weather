@@ -12,8 +12,7 @@
         android:id="@+id/action_alerts"
         android:title="@string/action_alerts"
         app:showAsAction="always"
-        android:icon="@drawable/ic_alerts_white"
-        app:actionLayout="@layout/menu_action_item_badge"/>
+        android:icon="@drawable/ic_alerts_white" />
 
     <!-- Items to show up in the overflow menu -->
     <item

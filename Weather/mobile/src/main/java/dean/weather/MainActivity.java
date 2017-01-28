@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -132,7 +133,8 @@ public class MainActivity extends AppCompatActivity implements
     public static final int ALERT_NOTIF_ID = 32;
 
     //Menu
-    private Menu appbar;
+//    private Menu appbarMenu;
+    Typeface robotoLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +163,9 @@ public class MainActivity extends AppCompatActivity implements
 
             //Set content view
             setContentView(R.layout.activity_main);
+
+            //Setup typeface for icon badges
+            robotoLight = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
 
             //Customize toolbar
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -227,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements
         DrawableCompat.setTint(icRefresh, getResources().getColor(R.color.colorWhite));
 
         //Setup a reference to menu to update badge on notif item
-        appbar = menu;
+//        appbarMenu = menu;
 
         return true;
     }
@@ -743,27 +748,10 @@ public class MainActivity extends AppCompatActivity implements
 
                     //There are alerts, let the user know
                     if(alertsCount != 0){
-                        Integer colorID = -1;
-                        switch (setID){
-                            case 0:
-                                colorID = R.color.colorYellowExtraLight;
-                                break;
-                            case 1:
-                                colorID = R.color.colorBlueExtraLight;
-                                break;
-                            case 2:
-                                colorID = R.color.colorOrangeExtraLight;
-                                break;
-                            case 3:
-                                colorID = R.color.colorPurpleExtraLight;
-                                break;
-                        }
-
                         //Display a snackbar for 10 seconds
                         Snackbar snackbar = Snackbar
                                 .make(mainActivityLayout, "Weather alerts available.", Snackbar.LENGTH_LONG)
                                 .setDuration(10000)
-                                .setActionTextColor(colorID)
                                 .setAction("View", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -776,13 +764,10 @@ public class MainActivity extends AppCompatActivity implements
                                 });
 
                         snackbar.show();
-
-                        //Create a badge on the notif app bar item with number of alerts
-                        
                     }
                 }
                 else{
-                    Log.i("Weather alerts", "No alerts");
+                    Log.i("Alerts", "No alerts");
                 }
 
                 //Set main layout color
