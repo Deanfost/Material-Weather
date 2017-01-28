@@ -131,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements
     public static final int FOLLOW_NOTIF_ID = 23;
     public static final int ALERT_NOTIF_ID = 32;
 
+    //Menu
+    private Menu appbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,6 +225,10 @@ public class MainActivity extends AppCompatActivity implements
         Drawable icRefresh = menu.findItem(R.id.action_refresh).getIcon();
         icRefresh = DrawableCompat.wrap(icRefresh);
         DrawableCompat.setTint(icRefresh, getResources().getColor(R.color.colorWhite));
+
+        //Setup a reference to menu to update badge on notif item
+        appbar = menu;
+
         return true;
     }
 
@@ -430,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements
         Long currentTimeLong = Long.valueOf(currentTime);
         Long sunriseTimeLong = Long.valueOf(sunriseTime);
         Long sunsetTimeLong = Long.valueOf(sunsetTime);
-        int setID = 4;
+        int setID;
         Log.i("currentTime", currentTime);
         Log.i("sunriseTime", sunriseTime);
         Log.i("sunsetTime", sunsetTime);
@@ -733,46 +740,49 @@ public class MainActivity extends AppCompatActivity implements
                         Log.i("Weather alerts", weatherResponse.getAlerts().get(i).getDescription());
                         alertsCount ++;
                     }
+
+                    //There are alerts, let the user know
+                    if(alertsCount != 0){
+                        Integer colorID = -1;
+                        switch (setID){
+                            case 0:
+                                colorID = R.color.colorYellowExtraLight;
+                                break;
+                            case 1:
+                                colorID = R.color.colorBlueExtraLight;
+                                break;
+                            case 2:
+                                colorID = R.color.colorOrangeExtraLight;
+                                break;
+                            case 3:
+                                colorID = R.color.colorPurpleExtraLight;
+                                break;
+                        }
+
+                        //Display a snackbar for 10 seconds
+                        Snackbar snackbar = Snackbar
+                                .make(mainActivityLayout, "Weather alerts available.", Snackbar.LENGTH_LONG)
+                                .setDuration(10000)
+                                .setActionTextColor(colorID)
+                                .setAction("View", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //Move to the alerts activity
+                                        Intent alertsIntent = new Intent(MainActivity.this, AlertsActivity.class);
+                                        alertsIntent.putExtra("setID", setID);
+                                        alertsIntent.putExtra("conditionsIcon", currentIcon);
+                                        startActivity(alertsIntent);
+                                    }
+                                });
+
+                        snackbar.show();
+
+                        //Create a badge on the notif app bar item with number of alerts
+                        
+                    }
                 }
                 else{
                     Log.i("Weather alerts", "No alerts");
-                }
-
-                //There are alerts, let the user know
-                if(alertsCount != 0){
-                    Integer colorID = -1;
-                    switch (setID){
-                        case 0:
-                            colorID = R.color.colorYellowExtraLight;
-                            break;
-                        case 1:
-                            colorID = R.color.colorBlueExtraLight;
-                            break;
-                        case 2:
-                            colorID = R.color.colorOrangeExtraLight;
-                            break;
-                        case 3:
-                            colorID = R.color.colorPurpleExtraLight;
-                            break;
-                    }
-
-                    //Display a snackbar for 10 seconds
-                    Snackbar snackbar = Snackbar
-                            .make(mainActivityLayout, "Weather alerts available.", Snackbar.LENGTH_LONG)
-                            .setDuration(10000)
-                            .setActionTextColor(colorID)
-                            .setAction("View", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //Move to the alerts activity
-                                    Intent alertsIntent = new Intent(MainActivity.this, AlertsActivity.class);
-                                    alertsIntent.putExtra("setID", setID);
-                                    alertsIntent.putExtra("conditionsIcon", currentIcon);
-                                    startActivity(alertsIntent);
-                                }
-                            });
-
-                    snackbar.show();
                 }
 
                 //Set main layout color

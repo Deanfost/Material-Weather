@@ -294,6 +294,10 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
         //Form a pull request
         final RequestBuilder weather = new RequestBuilder();
         final Request request = new Request();
+        request.addExcludeBlock(Request.Block.CURRENTLY);
+        request.addExcludeBlock(Request.Block.MINUTELY);
+        request.addExcludeBlock(Request.Block.HOURLY);
+        request.addExcludeBlock(Request.Block.FLAGS);
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
         request.setUnits(Request.Units.US);

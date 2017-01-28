@@ -129,9 +129,9 @@ public class AlarmInterfaceService extends Service {
                     //Start the alert notification
                     if(intent.getExtras().getBoolean("alertNotif")){
                         Log.i("AlarmInterfaceService", "Starting alertNotif");
-                        //Setup an alarm to pull every 15 mins to check for alerts
-                        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-                                AlarmManager.INTERVAL_FIFTEEN_MINUTES, alertAlarmIntent);
+                        //Setup an alarm to pull every hour to check for alerts
+                        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR,
+                                AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
 
                         //Start the first pull
                         Intent firstPull = new Intent(this, AlertNotifService.class);

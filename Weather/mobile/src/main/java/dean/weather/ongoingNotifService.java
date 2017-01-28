@@ -545,6 +545,10 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();
         final Request request = new Request();
+        request.addExcludeBlock(Request.Block.ALERTS);
+        request.addExcludeBlock(Request.Block.HOURLY);
+        request.addExcludeBlock(Request.Block.FLAGS);
+        request.addExcludeBlock(Request.Block.MINUTELY);
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
         request.setUnits(Request.Units.US);
