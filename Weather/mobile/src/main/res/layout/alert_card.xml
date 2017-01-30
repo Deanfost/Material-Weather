@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/_190sdp"
     android:padding="@dimen/_10sdp">
 
     <android.support.v7.widget.CardView
@@ -13,7 +13,8 @@
         card_view:cardCornerRadius="4dp"
         card_view:cardBackgroundColor="@color/colorBlue"
         card_view:contentPadding="@dimen/_16sdp"
-        card_view:cardElevation="2dp">
+        card_view:cardElevation="2dp"
+        android:clickable="true">
 
         <TextView
             android:layout_width="match_parent"
@@ -21,7 +22,9 @@
             android:text="Dense Fog Advisory for Frederick, MD"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"
-            android:id="@+id/cardViewTitle" />
+            android:id="@+id/cardViewTitle"
+            android:singleLine="true"
+            android:ellipsize="end"/>
 
         <TextView
             android:layout_width="match_parent"
