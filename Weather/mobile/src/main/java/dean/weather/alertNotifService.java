@@ -328,6 +328,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                         if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri())){
                             //This is a new alert, add it to the list of new alerts
                             newAlerts.add(weatherResponse.getAlerts().get(i));
+                            Log.i("New alert", weatherResponse.getAlerts().get(i).getUri());
                         }
                     }
 
@@ -358,7 +359,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                 }
 
                 //Create/update notification if there is new data to notify the user about
-                if(newAlerts != null){
+                if(newAlerts.size() > 0){
                     Log.i("alertService", "New alerts available");
                     if(createNewNotif){
                         createNewNotification();

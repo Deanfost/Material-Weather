@@ -108,8 +108,11 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
                 Log.i("Card", "Share clicked");
                 Log.i("Position", position + "");
                 //Create a message to send to a messaging service or social media
-
-
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, dataSet.get(position).getUri());
+                shareIntent.setType("text/plain");
+                context.startActivity(Intent.createChooser(shareIntent, "Send to"));
             }
         });
 
@@ -123,6 +126,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
                 alertIntent.putExtra("setID", setID);
                 alertIntent.putExtra("alertTitle", dataSet.get(position).getTitle());
                 alertIntent.putExtra("alertDesc", dataSet.get(position).getDescription());
+                alertIntent.putExtra("alertSrc", dataSet.get(position).getUri());
                 getContext().startActivity(alertIntent);
             }
         });

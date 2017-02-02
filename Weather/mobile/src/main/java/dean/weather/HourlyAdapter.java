@@ -21,11 +21,13 @@ import java.util.List;
  */
 
 public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder> {
+    private Context context;
+    private Long sunriseTimeLong;
+    private Long sunsetTimeLong;
     private List<String> hourSet;
     private List<Integer> tempSet;
     private List<String> conditionSet;
     private List<Integer> windSet;
-    private Context context;
     Typeface robotoLight;
     //Set duration for fade anim
     private final int FADE_DURATION = 500;
@@ -50,8 +52,10 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
     }
 
     //Pass pulled data from API
-    public HourlyAdapter(Context pulledContext, List<String> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
+    public HourlyAdapter(Context pulledContext, Long pulledSunriseTimeLong, Long pulledSunsetTimeLong, List<String> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
         context = pulledContext;
+        sunriseTimeLong = pulledSunriseTimeLong;
+        sunsetTimeLong = pulledSunsetTimeLong;
         hourSet = pulledHours;
         tempSet = pulledTemps;
         conditionSet = pulledConditions;
@@ -112,13 +116,8 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 condView.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                //TODO - FIX THIS
-                if(MainActivity.setID != 3){
-                    condView.setImageResource(R.drawable.ic_foggyday_white);
-                }
-                else{
-                    condView.setImageResource(R.drawable.ic_foggynight_white);
-                }
+                
+
                 break;
             case "cloudy":
                 condView.setImageResource(R.drawable.ic_cloudy_white);

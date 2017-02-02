@@ -771,7 +771,7 @@ public class MainActivity extends AppCompatActivity implements
                 mainFragmentTransaction();
                 MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcons, pulledWinds, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecips);
                 MainFragment.passViewData(currentLocation, currentDay, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
-                        currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
+                        currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime, sunriseTimeString, sunsetTimeString);
 
                 //Update ongoing notification if it is enabled
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);

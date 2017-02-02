@@ -70,6 +70,10 @@ public class MainFragment extends Fragment{
     private static String passedSunsetTimeValue;
     private static String passedUpdateTimeValue;
 
+    //For the hourly adapter
+    private static Long passedSunriseTimeLongValue;
+    private static Long passedSunsetTimeLongValue;
+
     Typeface robotoLight;
     LinearLayout wrapperLayout;
     RelativeLayout topLayout;
@@ -267,7 +271,7 @@ public class MainFragment extends Fragment{
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
-        hourlyRecyclerAdapter = new HourlyAdapter(getActivity(), passedHoursValues, passedTempsValues, passedConditionsValues, passedWindValues);
+        hourlyRecyclerAdapter = new HourlyAdapter(getActivity(), passedSunriseTimeLongValue, passedSunsetTimeLongValue, passedHoursValues, passedTempsValues, passedConditionsValues, passedWindValues);
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 
         //Daily adapter
@@ -315,7 +319,7 @@ public class MainFragment extends Fragment{
      * Saves passed values from mainActivity to current variables.
      */
     public static void passViewData(String passedLocation, String passedDay, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
-                                    int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime) {
+                                    int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime, String passedSunriseTimeUNIX, String passedSunsetTimeUNIX) {
 
         passedLocationValue = passedLocation;
         passedDayValue = passedDay;
@@ -334,6 +338,8 @@ public class MainFragment extends Fragment{
         passedSunriseTimeValue = passedSunriseTime;
         passedSunsetTimeValue = passedSunsetTime;
         passedUpdateTimeValue = passedUpdateTime;
+        passedSunriseTimeLongValue = Long.valueOf(passedSunriseTimeUNIX);
+        passedSunsetTimeLongValue = Long.valueOf(passedSunsetTimeUNIX);
     }
 
     /**
