@@ -52,7 +52,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class OngoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class OngoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -301,16 +301,6 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
         createNotification(false);
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.i("notifService", "Location changed, updating notification");
-        //Reset the connection, and pull data
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-        }
-        googleApiClient.connect();
-    }
-
     //Notification
 
     /**
@@ -535,12 +525,6 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
         //TODO - CHECK FOR THE UNITS AND STUFF, AS WELL AS WHEN THE PREFERENCES CHANGE
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
-
-        //Setup location change requests
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    googleApiClient, locationRequest, this);
-        }
 
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();

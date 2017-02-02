@@ -38,5 +38,5 @@ dependencies {
     compile 'com.leo.simplearcloader:simplearcloader:1.0.+'
     compile 'com.google.firebase:firebase-crash:10.0.0'
     apply plugin: 'com.google.gms.google-services'
-    compile files('libs/MaterialSettings-master.jar')
+
 }

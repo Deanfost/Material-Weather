@@ -1,10 +1,12 @@
 package dean.weather;
 
 import android.app.ActivityManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +17,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +40,8 @@ public class AlertsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
+
         //Get the color of the layout
         setID = getIntent().getExtras().getInt("setID");
         Log.i("Alert Activity", "setID = " + setID.toString());

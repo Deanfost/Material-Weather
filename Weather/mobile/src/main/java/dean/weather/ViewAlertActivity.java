@@ -13,6 +13,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by Dean Foster on 1/22/2017.
  */
@@ -28,6 +30,7 @@ public class ViewAlertActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setID = getIntent().getExtras().getInt("setID");
         alertTitle = getIntent().getExtras().getString("alertTitle");
         alertDesc = getIntent().getExtras().getString("alertDesc");

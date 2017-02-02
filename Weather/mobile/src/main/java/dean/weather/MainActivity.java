@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -132,17 +131,13 @@ public class MainActivity extends AppCompatActivity implements
     public static final int FOLLOW_NOTIF_ID = 23;
     public static final int ALERT_NOTIF_ID = 32;
 
-    //Menu
-//    private Menu appbarMenu;
-    Typeface robotoLight;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("onCreate", "started");
             FirebaseApp.initializeApp(this);
 
-            // Create an instance of GoogleAPIClient
+            //Create an instance of GoogleAPIClient
             if (googleApiClient == null) {
                 googleApiClient = new GoogleApiClient.Builder(this)
                         .addConnectionCallbacks(this)
@@ -163,9 +158,6 @@ public class MainActivity extends AppCompatActivity implements
 
             //Set content view
             setContentView(R.layout.activity_main);
-
-            //Setup typeface for icon badges
-            robotoLight = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
 
             //Customize toolbar
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -746,7 +738,7 @@ public class MainActivity extends AppCompatActivity implements
                         alertsCount ++;
                     }
 
-                    //There are alerts, let the user know
+                    //Any alerts?
                     if(alertsCount != 0){
                         //Display a snackbar for 10 seconds
                         Snackbar snackbar = Snackbar
@@ -785,6 +777,12 @@ public class MainActivity extends AppCompatActivity implements
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 if(prefs.getBoolean(getString(R.string.ongoing_notif_key), false)){
                     updateNotification();
+                }
+
+                //Clear the alert notification if it is enabled
+                if(prefs.getBoolean(getString(R.string.alert_notif_key), false)){
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
                 }
 
                 //Terminate Google API Connection

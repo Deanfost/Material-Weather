@@ -2,9 +2,7 @@ package dean.weather;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,7 +30,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         public CardView card;
         public TextView cardTitle;
         public TextView cardDesc;
-        public TextView cardActionDismiss;
+        public TextView cardActionShare;
         public TextView cardActionView;
 
         //Accepts entire card, and finds each subview
@@ -41,7 +39,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
             card = (CardView) itemView.findViewById(R.id.alertCardView);
             cardTitle = (TextView) itemView.findViewById(R.id.cardViewTitle);
             cardDesc = (TextView) itemView.findViewById(R.id.cardViewDesc);
-            cardActionDismiss = (TextView) itemView.findViewById(R.id.btnCardDismiss);
+            cardActionShare = (TextView) itemView.findViewById(R.id.btnCardShare);
             cardActionView = (TextView) itemView.findViewById(R.id.btnCardView);
         }
     }
@@ -62,18 +60,18 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         robotoLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
         //Get the data based on current iteration
         String alertTitle = dataSet.get(position).getTitle();
         String alertDesc = dataSet.get(position).getDescription();
 
         //Set the views in the card
-        View cardView = holder.card;
+        CardView cardView = holder.card;
         TextView title = holder.cardTitle;
         TextView desc = holder.cardDesc;
         TextView cardActionView = holder.cardActionView;
-        TextView cardActionDismiss = holder.cardActionDismiss;
+        TextView cardActionShare = holder.cardActionShare;
         title.setText(alertTitle);
         desc.setText(alertDesc);
 
@@ -84,31 +82,32 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         switch (setID){
             case 0:
                 cardView.setBackgroundColor(context.getResources().getColor(R.color.colorYellow));
-                cardActionDismiss.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_yellow));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_yellow));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_yellow));
                 break;
             case 1:
                 cardView.setBackgroundColor(context.getResources().getColor(R.color.colorBlue));
-                cardActionDismiss.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_blue));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_blue));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_blue));
                 break;
             case 2:
                 cardView.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
-                cardActionDismiss.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_orange));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_orange));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_orange));
                 break;
             case 3:
                 cardView.setBackgroundColor(context.getResources().getColor(R.color.colorPurple));
-                cardActionDismiss.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
                 break;
         }
 
-        cardActionDismiss.setOnClickListener(new View.OnClickListener() {
+        cardActionShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Card", "Dismiss clicked");
+                Log.i("Card", "Share clicked");
                 Log.i("Position", position + "");
+                //Create a message to send to a messaging service or social media
 
 
             }

@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,6 +38,7 @@ import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -58,6 +60,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
 //    private boolean hasLocation;
     private boolean createNewNotif;
     private int alertCount;
+    private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
 
     public AlertNotifService() {
         super(null);
@@ -317,14 +320,46 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                         Log.i("Alert", weatherResponse.getAlerts().get(i).getDescription());
                         alertCount ++;
                     }
+
+                    //Check to see if these are new alerts
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AlertNotifService.this);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
+                        if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri())){
+                            //This is a new alert, add it to the list of new alerts
+                            newAlerts.add(weatherResponse.getAlerts().get(i));
+                        }
+                    }
+
+                    //Persist the alerts list as to not notify the user of the same alerts
+                    for(int i = 0; i < newAlerts.size(); i++){
+                        String alertURI = newAlerts.get(i).getUri();
+                        Long alertIssueTime = newAlerts.get(i).getTime();
+                        editor.putLong(alertURI + ".Alert", alertIssueTime);
+                    }
+
+                    //Check to see if it has been 48 hours (just to be safe), and if we can remove any persisted alert from sharedPrefs
+                    Map<String,?> sharedPrefsKeys = prefs.getAll();
+                    for(String key : sharedPrefsKeys.keySet()){
+                        if(key.contains(".Alert")){
+                            //Get the issuance time of the alert in UNIX format
+                            Long value = (Long) sharedPrefsKeys.get(key);
+                            //If 48 hours has passed since the issuance of the alert
+                            if(System.currentTimeMillis() >= value + 172800000){
+                                //Remove the alert
+                                editor.remove(key);
+                            }
+                        }
+                    }
+                    editor.apply();
                 }
                 else{
                     Log.i("alerts", "null");
                 }
 
-                //Create/update notification if there is data to display
-                if(weatherResponse.getAlerts() != null){
-                    Log.i("alertService", "Alerts available");
+                //Create/update notification if there is new data to notify the user about
+                if(newAlerts != null){
+                    Log.i("alertService", "New alerts available");
                     if(createNewNotif){
                         createNewNotification();
                     }
@@ -456,19 +491,19 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
 //        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 
         //Determine content text
-        String contentString;
-        if(!(alertCount > 1)){
-            contentString = "1 weather alert for your area";
-        }
-        else{
-            contentString = alertCount + " weather alerts for your area";
-        }
+//        String contentString;
+//        if(!(alertCount > 1)){
+//            contentString = "1 weather alert for your area";
+//        }
+//        else{
+//            contentString = alertCount + " weather alerts for your area";
+//        }
 
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
-                        .setContentText(contentString)
+                        .setContentText("New weather statement for your area")
 //                        .setLargeIcon(icon)
                         .setColor(color);
         Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
@@ -491,19 +526,19 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
 //        }
 
         //Determine content text
-        String contentString;
-        if(!(alertCount > 1)){
-            contentString = "1 weather alert for your area";
-        }
-        else{
-            contentString = alertCount + " weather alerts for your area";
-        }
+//        String contentString;
+//        if(!(alertCount > 1)){
+//            contentString = "1 weather alert for your area";
+//        }
+//        else{
+//            contentString = alertCount + " weather alerts for your area";
+//        }
 
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
-                        .setContentText(contentString);
+                        .setContentText("New weather statement for your area");
         Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
