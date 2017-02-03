@@ -8,12 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,8 +23,7 @@ import java.util.List;
 
 public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder> {
     private Context context;
-    private Long sunriseTimeLong;
-    private Long sunsetTimeLong;
+    private List<Integer> comparisonHourSet;
     private List<String> hourSet;
     private List<Integer> tempSet;
     private List<String> conditionSet;
@@ -52,10 +52,9 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
     }
 
     //Pass pulled data from API
-    public HourlyAdapter(Context pulledContext, Long pulledSunriseTimeLong, Long pulledSunsetTimeLong, List<String> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
+    public HourlyAdapter(Context pulledContext, List<Integer> pulledHours24, List<String> pulledHours, List<Integer> pulledTemps, List<String> pulledConditions, List<Integer> pulledWind){
         context = pulledContext;
-        sunriseTimeLong = pulledSunriseTimeLong;
-        sunsetTimeLong = pulledSunsetTimeLong;
+        comparisonHourSet = pulledHours24;
         hourSet = pulledHours;
         tempSet = pulledTemps;
         conditionSet = pulledConditions;
@@ -116,7 +115,14 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 condView.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                
+                Log.i("Hourly condition", "Fog");
+                Integer selectedHour = comparisonHourSet.get(position);
+                Log.i("selectedHour", selectedHour.toString());
+                Calendar calendar = Calendar.getInstance();
+                Integer currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+                Log.i("currentHour", currentHour.toString());
+                calendar.setTimeInMillis(getTodayMilli());
+
 
                 break;
             case "cloudy":
@@ -181,4 +187,20 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         return context;
     }
 
+    /**
+     * Gets today's day to pass to mainFragment.
+     */
+    private Long getTodayMilli(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        String today = simpleDateFormat.format(calendar.getTime());
+        try {
+            Date date = simpleDateFormat.parse(today);
+            Log.i("dateInMilli", date.getTime() + "");
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return System.currentTimeMillis();
+        }
+    }
 }

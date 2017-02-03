@@ -325,7 +325,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AlertNotifService.this);
                     SharedPreferences.Editor editor = prefs.edit();
                     for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
-                        if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri())){
+                        if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri() + ".Alert")){
                             //This is a new alert, add it to the list of new alerts
                             newAlerts.add(weatherResponse.getAlerts().get(i));
                             Log.i("New alert", weatherResponse.getAlerts().get(i).getUri());

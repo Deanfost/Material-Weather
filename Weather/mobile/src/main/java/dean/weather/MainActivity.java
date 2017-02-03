@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements
     public static WeatherResponse pulledWeatherResponse;
 
     //Hourly
+    public List<Integer> pulledComparisonHours = new ArrayList<>();//Used for hourly comparison in hourly adapter
     public List<String> pulledHours = new ArrayList<>();
     public List<String> pulledIcons = new ArrayList<>();
     public List<Integer> pulledTemps = new ArrayList<>();
@@ -726,6 +727,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Get hourly data
                 parseHourly();
+                parseHourly24ForComparison();
 
                 //Get daily data
                 parseDaily();
@@ -769,9 +771,9 @@ public class MainActivity extends AppCompatActivity implements
                 //Update views
                 Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
                 mainFragmentTransaction();
-                MainFragment.passRecyclerDataSets(pulledHours, pulledTemps, pulledIcons, pulledWinds, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecips);
+                MainFragment.passRecyclerDataSets(pulledHours, pulledComparisonHours, pulledTemps, pulledIcons, pulledWinds, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecips);
                 MainFragment.passViewData(currentLocation, currentDay, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
-                        currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime, sunriseTimeString, sunsetTimeString);
+                        currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
 
                 //Update ongoing notification if it is enabled
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -1031,7 +1033,41 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Parses hourly info for hourly datasets.
+     * Parses hour info for hourly datasets in 24hr format.
+     */
+    private void parseHourly24ForComparison() {
+        //Load in the next 24 hours
+        int hourlySetSize = pulledWeatherResponse.getHourly().getData().size();
+        Log.i("hourlySetSize", String.valueOf(hourlySetSize));
+        //Gather only the next 24 hours
+        if (hourlySetSize >= 24) {
+            int iteratedHour = Integer.valueOf(getCurrentHour());
+            Log.i("hourlySetSize", "greaterThan24");
+            Log.i("iteratedHourStart", String.valueOf(iteratedHour));
+            for (int i = 0; i < 24; i++) {
+                Log.i("iteratedHour", iteratedHour + "");
+                //Keep iterating for up to the next 24 hours, with entries that go over 23 being the next day
+                    pulledComparisonHours.add(iteratedHour);
+                    iteratedHour++;
+            }
+            Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+        } else {
+            //Use the data available
+            int iteratedHour = Integer.valueOf(getCurrentHour());
+            Log.i("iteratedHour", String.valueOf(iteratedHour));
+            for (int i = 0; i < pulledWeatherResponse.getHourly().getData().size(); i++) {
+                iteratedHour = iteratedHour % 24;
+                Log.i("iteratedHourStart", String.valueOf(iteratedHour));
+                //Keep iterating for up to the amount of data we have, with entries that go over 23 being the next day
+                    pulledComparisonHours.add(iteratedHour);
+                    iteratedHour++;
+            }
+            Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+        }
+    }
+
+    /**
+     * Parses hourly info for hourly datasets in 12hr format.
      */
     private void parseHourly(){
         //Load in the next 24 hours

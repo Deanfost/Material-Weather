@@ -3,17 +3,13 @@ package dean.weather;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.app.Fragment;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,6 +27,7 @@ import java.util.List;
 public class MainFragment extends Fragment{
 
     //Hourly
+    public static List<Integer> passedComparisonHoursValues;
     public static List<String> passedHoursValues;
     public static List<Integer> passedTempsValues;
     public static List<String> passedConditionsValues;
@@ -69,10 +66,6 @@ public class MainFragment extends Fragment{
     private static String passedSunriseTimeValue;
     private static String passedSunsetTimeValue;
     private static String passedUpdateTimeValue;
-
-    //For the hourly adapter
-    private static Long passedSunriseTimeLongValue;
-    private static Long passedSunsetTimeLongValue;
 
     Typeface robotoLight;
     LinearLayout wrapperLayout;
@@ -271,7 +264,7 @@ public class MainFragment extends Fragment{
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
-        hourlyRecyclerAdapter = new HourlyAdapter(getActivity(), passedSunriseTimeLongValue, passedSunsetTimeLongValue, passedHoursValues, passedTempsValues, passedConditionsValues, passedWindValues);
+        hourlyRecyclerAdapter = new HourlyAdapter(getActivity(), passedComparisonHoursValues, passedHoursValues, passedTempsValues, passedConditionsValues, passedWindValues);
         hourlyRecyclerView.setAdapter(hourlyRecyclerAdapter);
 
         //Daily adapter
@@ -297,11 +290,12 @@ public class MainFragment extends Fragment{
          * Saves passed values from mainActivity to fragment lists.
          */
 
-    public static void passRecyclerDataSets(List<String> passedHours, List<Integer> passedTemps, List<String> passedConditions, List<Integer> passedWind,
+    public static void passRecyclerDataSets(List<String> passedHours, List<Integer> passedHours24, List<Integer> passedTemps, List<String> passedConditions, List<Integer> passedWind,
                                             List<String> passedDays, List<String> passedDailyCond, List<Integer> passedHis, List<Integer> passedLos, List<Integer> passedPrecip) {
         Log.i("passDataSets", "called");
 
         //Hourly
+        passedComparisonHoursValues = new ArrayList<>(passedHours24);
         passedHoursValues = new ArrayList<>(passedHours);
         passedTempsValues = new ArrayList<>(passedTemps);
         passedConditionsValues = new ArrayList<>(passedConditions);
@@ -312,14 +306,13 @@ public class MainFragment extends Fragment{
         passedHIsValues = new ArrayList<>(passedHis);
         passedLOsValues = new ArrayList<>(passedLos);
         passedPrecipValues = new ArrayList<>(passedPrecip);
-
     }
 
     /**
      * Saves passed values from mainActivity to current variables.
      */
     public static void passViewData(String passedLocation, String passedDay, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
-                                    int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime, String passedSunriseTimeUNIX, String passedSunsetTimeUNIX) {
+                                    int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime) {
 
         passedLocationValue = passedLocation;
         passedDayValue = passedDay;
@@ -338,8 +331,6 @@ public class MainFragment extends Fragment{
         passedSunriseTimeValue = passedSunriseTime;
         passedSunsetTimeValue = passedSunsetTime;
         passedUpdateTimeValue = passedUpdateTime;
-        passedSunriseTimeLongValue = Long.valueOf(passedSunriseTimeUNIX);
-        passedSunsetTimeLongValue = Long.valueOf(passedSunsetTimeUNIX);
     }
 
     /**
