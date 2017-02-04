@@ -119,11 +119,70 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
                 Integer selectedHour = comparisonHourSet.get(position);
                 Log.i("selectedHour", selectedHour.toString());
                 Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
                 Integer currentHour = calendar.get(Calendar.HOUR_OF_DAY);
                 Log.i("currentHour", currentHour.toString());
-                calendar.setTimeInMillis(getTodayMilli());
+                Integer hourDiff = selectedHour - currentHour;
+                Log.i("hourDiff", hourDiff.toString());
 
-
+                //The selected hour takes place tomorrow
+                if(selectedHour >= 24){
+                    //Get the sunrise/sunset times for tomorrow in UNIX to millis
+                    Long tmrwSunrise = Long.valueOf(MainActivity.pulledWeatherResponse.getDaily().getData().get(1).getSunriseTime()) * 1000;
+                    Long tmrwSunset = Long.valueOf(MainActivity.pulledWeatherResponse.getDaily().getData().get(1).getSunsetTime()) * 1000;
+                    calendar.add(Calendar.HOUR_OF_DAY, hourDiff);
+                    Long selectedHourInMillis = calendar.getTimeInMillis();
+                    //Compare the selected hour to the sunrise/sunset
+                    //Before sunrise
+                    if(selectedHourInMillis < tmrwSunrise){
+                        condView.setImageResource(R.drawable.ic_foggynight_white);
+                    }
+                    //Sunrise
+                    else if(selectedHourInMillis.equals(tmrwSunrise)){
+                        condView.setImageResource(R.drawable.ic_foggynight_white);
+                    }
+                    //After sunrise and before sunset
+                    else if(selectedHourInMillis > tmrwSunrise && selectedHourInMillis < tmrwSunset){
+                        condView.setImageResource(R.drawable.ic_foggyday_white);
+                    }
+                    //Sunset
+                    else if(selectedHourInMillis.equals(tmrwSunset)){
+                        condView.setImageResource(R.drawable.ic_foggyday_white);
+                    }
+                    //After sunset
+                    else{
+                        condView.setImageResource(R.drawable.ic_foggynight_white);
+                    }
+                }
+                //The selected hour still takes place today
+                else{
+                    //Get the sunrise/sunset times for today in UNIX to millis
+                    Long todaySunrise = Long.valueOf(MainActivity.pulledWeatherResponse.getDaily().getData().get(0).getSunriseTime()) * 1000;
+                    Long todaySunset = Long.valueOf(MainActivity.pulledWeatherResponse.getDaily().getData().get(0).getSunsetTime()) * 1000;
+                    calendar.add(Calendar.HOUR_OF_DAY, hourDiff);
+                    Long selectedHourInMillis = calendar.getTimeInMillis();
+                    //Compare the selected hour to the sunrise/sunset times
+                    //Before sunrise
+                    if(selectedHourInMillis < todaySunrise){
+                        condView.setImageResource(R.drawable.ic_foggynight_white);
+                    }
+                    //Sunrise
+                    else if(selectedHourInMillis.equals(todaySunrise)){
+                        condView.setImageResource(R.drawable.ic_foggynight_white);
+                    }
+                    //After sunrise and before sunset
+                    else if(selectedHourInMillis > todaySunrise && selectedHourInMillis < todaySunset){
+                        condView.setImageResource(R.drawable.ic_foggyday_white);
+                    }
+                    //Sunset
+                    else if(selectedHourInMillis.equals(todaySunset)){
+                        condView.setImageResource(R.drawable.ic_foggyday_white);
+                    }
+                    //After sunset
+                    else{
+                        condView.setImageResource(R.drawable.ic_foggynight_white);
+                    }
+                }
                 break;
             case "cloudy":
                 condView.setImageResource(R.drawable.ic_cloudy_white);
@@ -190,17 +249,17 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
     /**
      * Gets today's day to pass to mainFragment.
      */
-    private Long getTodayMilli(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        String today = simpleDateFormat.format(calendar.getTime());
-        try {
-            Date date = simpleDateFormat.parse(today);
-            Log.i("dateInMilli", date.getTime() + "");
-            return date.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return System.currentTimeMillis();
-        }
-    }
+//    private Long getTodayMilli(){
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Calendar calendar = Calendar.getInstance();
+//        String today = simpleDateFormat.format(calendar.getTime());
+//        try {
+//            Date date = simpleDateFormat.parse(today);
+//            Log.i("dateInMilli", date.getTime() + "");
+//            return date.getTime();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return System.currentTimeMillis();
+//        }
+//    }
 }
