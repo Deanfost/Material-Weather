@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity implements
     public static int setID;
     private int alertsCount;
 
+    //Units
+    int units;
+
     //Notification
     public static final int FOLLOW_NOTIF_ID = 23;
     public static final int ALERT_NOTIF_ID = 32;
@@ -554,13 +557,25 @@ public class MainActivity extends AppCompatActivity implements
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+
         //Form a pull request
         final RequestBuilder weather = new RequestBuilder();
         final Request request = new Request();
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
-        request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
+        if(preferences.getInt(getString(R.string.units_list_key), 0) == 0){
+            //Use English units
+            request.setUnits(Request.Units.US);
+            units = 0;
+        }
+        else{
+            //Use metric units
+            request.setUnits(Request.Units.UK);
+            units = 1;
+        }
 
         weather.getWeather(request, new Callback<WeatherResponse>() {
             @Override
@@ -569,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements
                 //Setup a static reference to the response for other activities
                 pulledWeatherResponse = weatherResponse;
 
-                //Parse response
+                //Parse and format response
                 //Parse currentTemp
                 Double tempDouble = weatherResponse.getCurrently().getTemperature();
                 currentTemp = tempDouble.intValue();
@@ -635,29 +650,45 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("WindBearing", weatherResponse.getCurrently().getWindBearing());
                 Log.i("WindBearingValue", String.valueOf(currentWindBearingValue));
                 //TODO - BE SURE TO CHECK FOR THE UNITS!
-                if(currentWindBearingValue >= 0 && currentWindBearingValue < 45){
-                    currentWind = "↓" + currentWindSpeedInt + "MPH";
+                //English units
+                if(units == 0) {
+                    if (currentWindBearingValue >= 0 && currentWindBearingValue < 45) {
+                        currentWind = "↓" + currentWindSpeedInt + "MPH";
+                    } else if (currentWindBearingValue >= 45 && currentWindBearingValue < 90) {
+                        currentWind = "↙" + currentWindSpeedInt + "MPH";
+                    } else if (currentWindBearingValue >= 90 && currentWindBearingValue < 135) {
+                        currentWind = "←" + currentWindSpeedInt + "MPH";
+                    } else if (currentWindBearingValue >= 135 && currentWindBearingValue < 180) {
+                        currentWind = "↖" + currentWindSpeedInt + "MPH";
+                    } else if (currentWindBearingValue >= 180 && currentWindBearingValue < 225) {
+                        currentWind = "↑" + currentWindSpeedInt + "MPH";
+                    } else if (currentWindBearingValue >= 225 && currentWindBearingValue < 270) {
+                        currentWind = "↗" + currentWindSpeedInt + "MPH";
+                    } else if (currentWindBearingValue >= 270 && currentWindBearingValue < 315) {
+                        currentWind = "→" + currentWindSpeedInt + "MPH";
+                    } else if (currentWindBearingValue >= 315 && currentWindBearingValue < 360) {
+                        currentWind = "↘" + currentWindSpeedInt + "MPH";
+                    }
                 }
-                else if(currentWindBearingValue >= 45 && currentWindBearingValue < 90){
-                    currentWind = "↙" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 90 && currentWindBearingValue < 135){
-                    currentWind = "←" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 135 && currentWindBearingValue < 180){
-                    currentWind = "↖" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 180 && currentWindBearingValue < 225){
-                    currentWind = "↑" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 225 && currentWindBearingValue < 270){
-                    currentWind = "↗" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 270 && currentWindBearingValue < 315){
-                    currentWind = "→" + currentWindSpeedInt + "MPH";
-                }
-                else if(currentWindBearingValue >= 315 && currentWindBearingValue < 360){
-                    currentWind = "↘" + currentWindSpeedInt + "MPH";
+                //Metric units
+                else{
+                    if (currentWindBearingValue >= 0 && currentWindBearingValue < 45) {
+                        currentWind = "↓" + currentWindSpeedInt + "KPH";
+                    } else if (currentWindBearingValue >= 45 && currentWindBearingValue < 90) {
+                        currentWind = "↙" + currentWindSpeedInt + "KPH";
+                    } else if (currentWindBearingValue >= 90 && currentWindBearingValue < 135) {
+                        currentWind = "←" + currentWindSpeedInt + "KPH";
+                    } else if (currentWindBearingValue >= 135 && currentWindBearingValue < 180) {
+                        currentWind = "↖" + currentWindSpeedInt + "KPH";
+                    } else if (currentWindBearingValue >= 180 && currentWindBearingValue < 225) {
+                        currentWind = "↑" + currentWindSpeedInt + "KPH";
+                    } else if (currentWindBearingValue >= 225 && currentWindBearingValue < 270) {
+                        currentWind = "↗" + currentWindSpeedInt + "KPH";
+                    } else if (currentWindBearingValue >= 270 && currentWindBearingValue < 315) {
+                        currentWind = "→" + currentWindSpeedInt + "KPH";
+                    } else if (currentWindBearingValue >= 315 && currentWindBearingValue < 360) {
+                        currentWind = "↘" + currentWindSpeedInt + "KPH";
+                    }
                 }
 
                 //Parse Precip
@@ -682,7 +713,15 @@ public class MainActivity extends AppCompatActivity implements
                 String currentPressureString = weatherResponse.getCurrently().getPressure();
                 Log.i("currentPresString", currentPressureString);
                 Double currentPressureDouble = Double.valueOf(currentPressureString);
-                Double currentPressureDoubleConverted = currentPressureDouble * 0.0295301;//Convert Millibars to inHg
+                Double currentPressureDoubleConverted;
+                if(units == 0){
+                    //English
+                    currentPressureDoubleConverted = currentPressureDouble * 0.0295301;//Convert Millibars to inHg
+                }
+                else{
+                    //Metric
+                    currentPressureDoubleConverted = currentPressureDouble / 1.3332239;//Convert Millibars to mmHg
+                }
                 currentPressure = currentPressureDoubleConverted.intValue();
 
                 //Parse Visibility

@@ -1,7 +1,9 @@
 package dean.weather;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.johnhiott.darkskyandroidlib.models.Request;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +27,7 @@ import java.util.List;
 
 public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder> {
     private Context context;
+    int units;
     private List<Integer> comparisonHourSet;
     private List<String> hourSet;
     private List<Integer> tempSet;
@@ -86,13 +91,28 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         String pulledCond = conditionSet.get(position);
         int pulledWind = windSet.get(position);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if(preferences.getInt(context.getString(R.string.units_list_key), 0) == 0){
+            //Use English units
+            units = 0;
+        }
+        else{
+            //Use metric units
+            units = 1;
+        }
+
         //Set item views to pulled data values
         TextView hourView = holder.hourlyHour;
         hourView.setText(String.valueOf(pulledHour));
         TextView tempView = holder.hourlyTemp;
         tempView.setText(String.valueOf(pulledTemp) + (char) 0x00B0);
         TextView windView = holder.hourlyWind;
-        windView.setText(pulledWind + "MPH");
+        if(units == 0){
+            windView.setText(pulledWind + "MPH");
+        }
+        else{
+            windView.setText(pulledWind + "KPH");
+        }
         ImageView condView = holder.hourlyIcon;
         //TODO - IMPLEMENT LOGIC TO HANDLE ICON SELECTION AND UNITS
         switch (pulledCond){

@@ -45,7 +45,7 @@
             android:key="@string/units_list_key"
             android:title="Units of measure"
             android:defaultValue="0"
-            android:summary="Set the type of units used in Material Weather"
+            android:summary="Set the units used in Material Weather"
             android:entries="@array/unitsEntries"
             android:entryValues="@array/unitsValues"
             android:enabled="true"

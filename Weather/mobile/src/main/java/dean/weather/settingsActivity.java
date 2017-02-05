@@ -380,16 +380,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if(s.equals(getString(R.string.units_list_key))){
-            ListPreference unitsPref = (ListPreference) findPreference(getString(R.string.units_list_key));
-            if(unitsPref.getValue().equals("0")){
-                //Set to English units
-                unitsPref.setSummary("English(°F/MPH/IN)");
-            }
-            else{
-                unitsPref.setSummary("Metric(°C/KPH/MM)");
-            }
-        }
+//        if(s.equals(getString(R.string.units_list_key))){
+//            ListPreference unitsPref = (ListPreference) findPreference(getString(R.string.units_list_key));
+//            if(unitsPref.getValue().equals("0")){
+//                //Set to English units
+//                unitsPref.setSummary("English(°F/MPH/IN)");
+//            }
+//            else{
+//                unitsPref.setSummary("Metric(°C/KPH/MM)");
+//            }
+//        }
     }
 
     //Checks and callbacks

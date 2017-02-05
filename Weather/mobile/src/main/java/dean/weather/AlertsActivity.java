@@ -130,24 +130,29 @@ public class AlertsActivity extends AppCompatActivity {
             Window window = this.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
             switch (setID){
                 case 0:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorYellowDark)));
                     getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorYellowDark)));
                     window.setStatusBarColor(getResources().getColor(R.color.colorYellowDark));
                     noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
                     break;
                 case 1:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorBlueDark)));
                     getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlueDark)));
                     window.setStatusBarColor(getResources().getColor(R.color.colorBlueDark));
                     noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
                     break;
                 case 2:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorOrangeDark)));
                     getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrangeDark)));
                     window.setStatusBarColor(getResources().getColor(R.color.colorOrangeDark));
                     noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
                     break;
                 case 3:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorPurpleDark)));
                     getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurpleDark)));
                     window.setStatusBarColor(getResources().getColor(R.color.colorPurpleDark));
                     noAlertsIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
