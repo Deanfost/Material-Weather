@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -33,7 +34,7 @@ import com.google.firebase.FirebaseApp;
  * Created by Dean on 12/23/2016.
  */
 
-public class SettingsActivity extends PreferenceActivity{
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     SharedPreferences prefs;
 //    Preference followMePref;
     SwitchPreference ongoingNotif;
@@ -56,11 +57,16 @@ public class SettingsActivity extends PreferenceActivity{
         alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
 //        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
 //        timePickerPref = findPreference(getString(R.string.summary_time_key));
+
+        //Shared prefs
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        prefs.registerOnSharedPreferenceChangeListener(this);
+
         //Enable the timePickerPref?
 //        if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
 //            timePickerPref.setEnabled(true);
@@ -113,6 +119,7 @@ public class SettingsActivity extends PreferenceActivity{
 //        });
 
         //Ongoing notification pref
+
         ongoingNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -322,6 +329,7 @@ public class SettingsActivity extends PreferenceActivity{
 //            }
 //        });
 
+        //Alert notification pref
         alertNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -365,8 +373,23 @@ public class SettingsActivity extends PreferenceActivity{
 //        followMePref.setOnPreferenceChangeListener(null);
         ongoingNotif.setOnPreferenceClickListener(null);
         alertNotif.setOnPreferenceChangeListener(null);
+        prefs.registerOnSharedPreferenceChangeListener(null);
 //        summaryNotif.setOnPreferenceChangeListener(null);
 //        timePickerPref.setOnPreferenceChangeListener(null);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if(s.equals(getString(R.string.units_list_key))){
+            ListPreference unitsPref = (ListPreference) findPreference(getString(R.string.units_list_key));
+            if(unitsPref.getValue().equals("0")){
+                //Set to English units
+                unitsPref.setSummary("English(°F/MPH/IN)");
+            }
+            else{
+                unitsPref.setSummary("Metric(°C/KPH/MM)");
+            }
+        }
     }
 
     //Checks and callbacks
