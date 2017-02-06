@@ -1,11 +1,13 @@
 package dean.weather;
 
 import android.app.ActivityManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -80,11 +82,23 @@ public class DailyActivity extends AppCompatActivity {
 
     Typeface robotoLight;
 
+    //Units
+    int units;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily);
+
+        //Determine units
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(preferences.getString(getString(R.string.units_list_key), "0").equals("0")){
+            units = 0;
+        }
+        else{
+            units = 1;
+        }
 
         //Pull this day's data
         //Get the selected day
@@ -182,36 +196,67 @@ public class DailyActivity extends AppCompatActivity {
         //Parse current wind speed and bearing
         String dayWindSpeed = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getWindSpeed();
         Double dayWindSpeedDouble = Double.valueOf(dayWindSpeed);
+        //Convert MPH to KPH if in metric
+        if(units == 1){
+            dayWindSpeedDouble = dayWindSpeedDouble * 1.6093440;
+        }
         int dayWindSpeedInt = dayWindSpeedDouble.intValue();
         String dayWindBearing = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getWindBearing();
         int dayWindBearingValue = Integer.valueOf(dayWindBearing);
         Log.i("dayWindSpeed", dayWindSpeed);
         Log.i("dayWindBearing", dayWindBearing);
 
-        //TODO - BE SURE TO CHECK FOR THE UNITS!
-        if(dayWindBearingValue >= 0 && dayWindBearingValue < 45){
-            pulledWind = "↓" + dayWindSpeedInt + "MPH";
+        if(units == 0){
+            if(dayWindBearingValue >= 0 && dayWindBearingValue < 45){
+                pulledWind = "↓" + dayWindSpeedInt + "MPH";
+            }
+            else if(dayWindBearingValue >= 45 && dayWindBearingValue < 90){
+                pulledWind = "↙" + dayWindSpeedInt + "MPH";
+            }
+            else if(dayWindBearingValue >= 90 && dayWindBearingValue < 135){
+                pulledWind = "←" + dayWindSpeedInt + "MPH";
+            }
+            else if(dayWindBearingValue >= 135 && dayWindBearingValue < 180){
+                pulledWind = "↖" + dayWindSpeedInt + "MPH";
+            }
+            else if(dayWindBearingValue >= 180 && dayWindBearingValue < 225){
+                pulledWind = "↑" + dayWindSpeedInt + "MPH";
+            }
+            else if(dayWindBearingValue >= 225 && dayWindBearingValue < 270){
+                pulledWind = "↗" + dayWindSpeedInt + "MPH";
+            }
+            else if(dayWindBearingValue >= 270 && dayWindBearingValue < 315){
+                pulledWind = "→" + dayWindSpeedInt + "MPH";
+            }
+            else if(dayWindBearingValue >= 315 && dayWindBearingValue < 360){
+                pulledWind = "↘" + dayWindSpeedInt + "MPH";
+            }
         }
-        else if(dayWindBearingValue >= 45 && dayWindBearingValue < 90){
-            pulledWind = "↙" + dayWindSpeedInt + "MPH";
-        }
-        else if(dayWindBearingValue >= 90 && dayWindBearingValue < 135){
-            pulledWind = "←" + dayWindSpeedInt + "MPH";
-        }
-        else if(dayWindBearingValue >= 135 && dayWindBearingValue < 180){
-            pulledWind = "↖" + dayWindSpeedInt + "MPH";
-        }
-        else if(dayWindBearingValue >= 180 && dayWindBearingValue < 225){
-            pulledWind = "↑" + dayWindSpeedInt + "MPH";
-        }
-        else if(dayWindBearingValue >= 225 && dayWindBearingValue < 270){
-            pulledWind = "↗" + dayWindSpeedInt + "MPH";
-        }
-        else if(dayWindBearingValue >= 270 && dayWindBearingValue < 315){
-            pulledWind = "→" + dayWindSpeedInt + "MPH";
-        }
-        else if(dayWindBearingValue >= 315 && dayWindBearingValue < 360){
-            pulledWind = "↘" + dayWindSpeedInt + "MPH";
+        else{
+            if(dayWindBearingValue >= 0 && dayWindBearingValue < 45){
+                pulledWind = "↓" + dayWindSpeedInt + "KPH";
+            }
+            else if(dayWindBearingValue >= 45 && dayWindBearingValue < 90){
+                pulledWind = "↙" + dayWindSpeedInt + "KPH";
+            }
+            else if(dayWindBearingValue >= 90 && dayWindBearingValue < 135){
+                pulledWind = "←" + dayWindSpeedInt + "KPH";
+            }
+            else if(dayWindBearingValue >= 135 && dayWindBearingValue < 180){
+                pulledWind = "↖" + dayWindSpeedInt + "KPH";
+            }
+            else if(dayWindBearingValue >= 180 && dayWindBearingValue < 225){
+                pulledWind = "↑" + dayWindSpeedInt + "KPH";
+            }
+            else if(dayWindBearingValue >= 225 && dayWindBearingValue < 270){
+                pulledWind = "↗" + dayWindSpeedInt + "KPH";
+            }
+            else if(dayWindBearingValue >= 270 && dayWindBearingValue < 315){
+                pulledWind = "→" + dayWindSpeedInt + "KPH";
+            }
+            else if(dayWindBearingValue >= 315 && dayWindBearingValue < 360){
+                pulledWind = "↘" + dayWindSpeedInt + "KPH";
+            }
         }
 
         //Get day's Precip
@@ -235,7 +280,13 @@ public class DailyActivity extends AppCompatActivity {
         //Get day's Pressure
         String dayPressure = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getPressure();
         Double dayPressureDouble = Double.valueOf(dayPressure);
-        Double currentPressureDoubleConverted = dayPressureDouble * 0.0295301;//Convert Millibars to inHg
+        Double currentPressureDoubleConverted;
+        if(units == 0){
+            currentPressureDoubleConverted = dayPressureDouble * 0.0295301;//Convert Millibars to inHg
+        }
+        else{
+            currentPressureDoubleConverted = dayPressureDouble;//Use Millibars
+        }
         pulledPressure = currentPressureDoubleConverted.intValue();
         Log.i("dayPressure", dayDewPoint);
 
@@ -534,16 +585,24 @@ public class DailyActivity extends AppCompatActivity {
                 break;
         }
 
-        //TODO - CHECK FOR UNITS AND SETTINGS
         viewDescription.setText(pulledDescription);
         viewConditions.setText(pulledCondition);
         viewHiLo.setText(pulledHi + "°/" + pulledLo + "°");
         viewWindValue.setText(pulledWind);
-        viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
-        viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
-        viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
-        viewPressureValue.setText(String.valueOf(pulledPressure) + "inHg");
-        viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
+        if(units == 0){
+            viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
+            viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
+            viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
+            viewPressureValue.setText(String.valueOf(pulledPressure) + "InHg");
+            viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
+        }
+        else{
+            viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
+            viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
+            viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
+            viewPressureValue.setText(String.valueOf(pulledPressure) + "Mb");
+            viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
+        }
         viewSunriseTime.setText(daySunriseTime);
         viewSunsetTime.setText(daySunsetTime);
     }

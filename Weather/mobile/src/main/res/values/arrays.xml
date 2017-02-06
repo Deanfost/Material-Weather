@@ -3,8 +3,8 @@
 
     <!-- Arrays for units list pref -->
     <string-array name="unitsEntries">
-        <item>English(°F/MPH/IN)</item>
-        <item>Metric(°C/KPH/MM)</item>
+        <item>Imperial(°F/MPH/IN)</item>
+        <item>Metric(°C/KPH/MB)</item>
     </string-array>
 
     <string-array name="unitsValues">

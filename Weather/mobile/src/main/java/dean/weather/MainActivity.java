@@ -557,8 +557,8 @@ public class MainActivity extends AppCompatActivity implements
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
+        //Determine which units to use
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
 
         //Form a pull request
         final RequestBuilder weather = new RequestBuilder();
@@ -566,7 +566,7 @@ public class MainActivity extends AppCompatActivity implements
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
         request.setLanguage(Request.Language.ENGLISH);
-        if(preferences.getInt(getString(R.string.units_list_key), 0) == 0){
+        if(preferences.getString(getString(R.string.units_list_key), "0").equals("0")){
             //Use English units
             request.setUnits(Request.Units.US);
             units = 0;
@@ -643,6 +643,10 @@ public class MainActivity extends AppCompatActivity implements
                 //Parse current wind speed and bearing
                 String currentWindSpeed = weatherResponse.getCurrently().getWindSpeed();
                 Double currentWindSpeedDouble = Double.valueOf(currentWindSpeed);
+                //Convert MPH to KPH if in metric
+                if(units == 1){
+                    currentWindSpeedDouble = currentWindSpeedDouble * 1.6093440;
+                }
                 int currentWindSpeedInt = currentWindSpeedDouble.intValue();
                 String currentWindBearing = weatherResponse.getCurrently().getWindBearing();
                 int currentWindBearingValue = Integer.valueOf(currentWindBearing);
@@ -720,7 +724,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 else{
                     //Metric
-                    currentPressureDoubleConverted = currentPressureDouble / 1.3332239;//Convert Millibars to mmHg
+                    currentPressureDoubleConverted = currentPressureDouble;//Use Millibars
                 }
                 currentPressure = currentPressureDoubleConverted.intValue();
 
@@ -1181,6 +1185,10 @@ public class MainActivity extends AppCompatActivity implements
         for(int i = 0; i < pulledHours.size(); i++){
             String pulledWindString = pulledWeatherResponse.getHourly().getData().get(i).getWindSpeed();
             Double pulledWindDouble = Double.valueOf(pulledWindString);
+            //Convert MPH to KPH if in metric
+            if(units == 1){
+                pulledWindDouble = pulledWindDouble * 1.6093440;
+            }
             pulledWinds.add(pulledWindDouble.intValue());
         }
     }

@@ -3,8 +3,10 @@ package dean.weather;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +27,8 @@ import java.util.List;
  */
 
 public class MainFragment extends Fragment{
+    //Units
+    int units;
 
     //Hourly
     public static List<Integer> passedComparisonHoursValues;
@@ -112,6 +116,14 @@ public class MainFragment extends Fragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //Determine units
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(preferences.getString(getString(R.string.units_list_key), "0").equals("0")){
+            units = 0;
+        }
+        else{
+            units = 1;
+        }
 
         //Setup references
         robotoLight = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
@@ -252,12 +264,23 @@ public class MainFragment extends Fragment{
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
         currentWindValue.setText(passedWindValue);
-        currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
-        currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
-        currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
-        currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
-        currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "mi");
-        currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
+        if(units == 0){
+            currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
+            currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
+            currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
+            currentPressureValue.setText(String.valueOf(passedPressureValue) + "InHg");
+            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "Mi");
+            currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
+        }
+        else{
+            currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
+            currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
+            currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
+            currentPressureValue.setText(String.valueOf(passedPressureValue) + "Mb");
+            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "Km");
+            currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
+        }
+
         sunriseTime.setText(passedSunriseTimeValue);
         sunsetTime.setText(passedSunsetTimeValue);
 //        updateTime.setText(passedUpdateTimeValue);

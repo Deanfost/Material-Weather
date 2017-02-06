@@ -92,7 +92,7 @@ public class HourlyAdapter extends RecyclerView.Adapter<HourlyAdapter.ViewHolder
         int pulledWind = windSet.get(position);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if(preferences.getInt(context.getString(R.string.units_list_key), 0) == 0){
+        if(preferences.getString(context.getString(R.string.units_list_key), "0").equals("0")){
             //Use English units
             units = 0;
         }
