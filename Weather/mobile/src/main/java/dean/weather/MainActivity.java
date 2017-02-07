@@ -440,38 +440,38 @@ public class MainActivity extends AppCompatActivity implements
         Long currentTimeLong = Long.valueOf(currentTime);
         Long sunriseTimeLong = Long.valueOf(sunriseTime);
         Long sunsetTimeLong = Long.valueOf(sunsetTime);
-        int setID;
+        int innerSetID;
         Log.i("currentTime", currentTime);
         Log.i("sunriseTime", sunriseTime);
         Log.i("sunsetTime", sunsetTime);
 
         //If it is sunrise or sunset time
         if(currentTimeLong.equals(sunriseTimeLong)){
-            setID = 0;
+            innerSetID = 0;
         }
         else if(currentTimeLong.equals(sunsetTimeLong)){
-            setID = 2;
+            innerSetID = 2;
         }
         //If it is within 30 mins of sunrise or sunset time
         else if(currentTimeLong > (sunriseTimeLong - 1800) && currentTimeLong < (sunriseTimeLong + 1800)){
-            setID = 0;
+            innerSetID = 0;
         }
         else if(currentTimeLong > (sunsetTimeLong - 1800) && currentTimeLong < (sunsetTimeLong + 1800)){
-            setID = 2;
+            innerSetID = 2;
         }
         //If it is day time
         else if(currentTimeLong > (sunriseTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
-            setID = 1;
+            innerSetID = 1;
         }
         //If it is night time
         else if(currentTimeLong > (sunsetTimeLong + 1800)){
-            setID = 3;
+            innerSetID = 3;
         }
         //If it is early morning time
         else{
-            setID = 3;
+            innerSetID = 3;
         }
-        return setID;
+        return innerSetID;
     }
 
     /**
@@ -890,11 +890,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         Log.i("onStart", "Triggered");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        //Enable 24 hour time
+        //Enable theme changes
         if(preferences.getBoolean(getString(R.string.theme_change_key), true)){
             changeTheme = true;
             Log.i("changeTheme", "True");
@@ -902,6 +902,7 @@ public class MainActivity extends AppCompatActivity implements
         else{
             changeTheme = false;
             Log.i("changeTheme", "False");
+            setID = 1;
         }
 
         //Enable 24 hour time
