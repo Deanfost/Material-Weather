@@ -84,6 +84,7 @@ public class DailyActivity extends AppCompatActivity {
 
     //Units
     int units;
+    int hourFormat;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,10 +95,22 @@ public class DailyActivity extends AppCompatActivity {
         //Determine units
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(preferences.getString(getString(R.string.units_list_key), "0").equals("0")){
+            //Use Imperial units
             units = 0;
         }
         else{
+            //Use Metric units
             units = 1;
+        }
+
+        //Determine hour format
+        if(preferences.getBoolean(getString(R.string.hour_format_key), false)){
+            //Use 24 hour format
+            hourFormat = 1;
+        }
+        else{
+            //Use 12 hour format
+            hourFormat = 0;
         }
 
         //Pull this day's data
@@ -296,23 +309,41 @@ public class DailyActivity extends AppCompatActivity {
         pulledCloudCover = dayCloudCoverDouble.intValue();
         Log.i("dayCloudCover", dayCloudCover);
 
-        //Get day's sunrise time
+        //Get sunrise and sunset times
         String sunriseTimeString = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSunriseTime();//UNIX timestamp
-        Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
-        Date sunriseDateObject = new Date(sunriseTimeInMili);
-        //TODO - CHECK FOR TIME SETTINGS!
-        SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
-        daySunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
-        Log.i("daySunriseTime", daySunriseTime);
-
-        //Get day's sunset time
         String sunsetTimeString = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSunsetTime();//UNIX timestamp
-        Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
-        Date sunsetDateObject = new Date(sunsetTimeInMili);
-        //TODO - CHECK FOR TIME SETTINGS!
-        SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
-        daySunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
-        Log.i("daySunsetTime", daySunsetTime);
+        if(hourFormat == 0){
+            //12 hour time
+            //Get day's sunrise time
+            Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+            Date sunriseDateObject = new Date(sunriseTimeInMili);
+            SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
+            daySunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+            Log.i("daySunriseTime", daySunriseTime);
+
+            //Get day's sunset time
+            Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+            Date sunsetDateObject = new Date(sunsetTimeInMili);
+            SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
+            daySunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+            Log.i("daySunsetTime", daySunsetTime);
+        }
+        else{
+            //24 hour time
+            //Get day's sunrise time
+            Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+            Date sunriseDateObject = new Date(sunriseTimeInMili);
+            SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("HH:mm");
+            daySunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+            Log.i("daySunriseTime", daySunriseTime);
+
+            //Get day's sunset time
+            Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+            Date sunsetDateObject = new Date(sunsetTimeInMili);
+            SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("HH:mm");
+            daySunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+            Log.i("daySunsetTime", daySunsetTime);
+        }
 
         //References
         //Set toolbar

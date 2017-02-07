@@ -51,6 +51,13 @@
             android:enabled="true"
             android:persistent="true"/>
 
+        <SwitchPreference
+            android:key="@string/hour_format_key"
+            android:title="24 Hour Time"
+            android:summary="Enable to display time in 24 hour format"
+            android:defaultValue="false"
+            android:persistent="true"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

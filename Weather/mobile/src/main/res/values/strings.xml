@@ -21,6 +21,7 @@
     <string name="summary_time_key">key_summary_time</string>
     <string name="units_group_key">key_units_group</string>
     <string name="units_list_key">key_units_list</string>
+    <string name="hour_format_key">key_hour_format</string>
     <string name="theme_group_key">key_theme_group</string>
     <string name="theme_change_key">key_theme_change</string>
     <string name="support_group_key">key_support_group</string>

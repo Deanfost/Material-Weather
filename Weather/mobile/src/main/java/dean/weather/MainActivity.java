@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //Units
     int units;
+    int hourFormat;
 
     //Theme
     boolean changeTheme;
@@ -230,9 +231,6 @@ public class MainActivity extends AppCompatActivity implements
         Drawable icRefresh = menu.findItem(R.id.action_refresh).getIcon();
         icRefresh = DrawableCompat.wrap(icRefresh);
         DrawableCompat.setTint(icRefresh, getResources().getColor(R.color.colorWhite));
-
-        //Setup a reference to menu to update badge on notif item
-//        appbarMenu = menu;
 
         return true;
     }
@@ -553,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //Dark Sky API
     /**
-     * Initializes API Wrapper Lib, and forms pull request to receive weather data.
+     * Initializes API Wrapper Lib, forms pull request for weather data, and parses and formats it, and passes it to MainFragment.
      */
     private void pullForecast(){
         Log.i("forecastRequest", "pullingForecast");
@@ -752,28 +750,56 @@ public class MainActivity extends AppCompatActivity implements
                 Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverString) * 100;
                 currentCloudCover = currentCloudCoverDouble.intValue();
 
-                //Parse sunrise time
+                //Sunrise and sunset times
                 String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
-                Log.i("sunriseTimeUNIX", sunriseTimeString);
-                Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
-                Date sunriseDateObject = new Date(sunriseTimeInMili);
-                //TODO - CHECK FOR TIME SETTINGS!
-                SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
-                sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
-                Log.i("sunriseTime", sunriseTime);
-
-                //Parse sunset time
                 String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
-                Log.i("sunsetTimeUNIX", sunsetTimeString);
-                Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
-                Date sunsetDateObject = new Date(sunsetTimeInMili);
-                //TODO - CHECK FOR TIME SETTINGS!
-                SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
-                sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
-                Log.i("sunsetTime", sunsetTime);
+                //Get times in 12 hour format
+                if(hourFormat == 0){
+                    //Parse sunrise time
+                    Log.i("sunriseTimeUNIX", sunriseTimeString);
+                    Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+                    Date sunriseDateObject = new Date(sunriseTimeInMili);
+                    SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
+                    sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+                    Log.i("sunriseTime", sunriseTime);
+
+                    //Parse sunset time
+                    Log.i("sunsetTimeUNIX", sunsetTimeString);
+                    Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+                    Date sunsetDateObject = new Date(sunsetTimeInMili);
+                    SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
+                    sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+                    Log.i("sunsetTime", sunsetTime);
+                }
+                //Else get times in 24 hour format
+                else{
+                    //Parse sunrise time
+                    Log.i("sunriseTimeUNIX", sunriseTimeString);
+                    Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+                    Date sunriseDateObject = new Date(sunriseTimeInMili);
+                    SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("HH:mm");
+                    sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+                    Log.i("sunriseTime", sunriseTime);
+
+                    //Parse sunset time
+                    Log.i("sunsetTimeUNIX", sunsetTimeString);
+                    Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+                    Date sunsetDateObject = new Date(sunsetTimeInMili);
+                    SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("HH:mm");
+                    sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+                    Log.i("sunsetTime", sunsetTime);
+                }
 
                 //Get hourly data
-                parseHourly();
+                if(hourFormat == 0){
+                    //Use 12 hour format
+                    parseHourly();
+                }
+                else{
+                    //Use 24 hour format
+                    parseHourly24();
+                }
+                //Parse hours for comparison during hourly fog icon assignment
                 parseHourly24ForComparison();
 
                 //Get daily data
@@ -868,6 +894,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onStart();
         Log.i("onStart", "Triggered");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //Enable 24 hour time
         if(preferences.getBoolean(getString(R.string.theme_change_key), true)){
             changeTheme = true;
             Log.i("changeTheme", "True");
@@ -875,6 +902,16 @@ public class MainActivity extends AppCompatActivity implements
         else{
             changeTheme = false;
             Log.i("changeTheme", "False");
+        }
+
+        //Enable 24 hour time
+        if(preferences.getBoolean(getString(R.string.hour_format_key), false)){
+            //24 hour format
+            hourFormat = 1;
+        }
+        else{
+            //12 hour format
+            hourFormat = 0;
         }
     }
 
@@ -1097,7 +1134,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Parses hour info for hourly datasets in 24hr format.
+     * Parses hour info for hourly datasets in 24hr format(but it continues above 24 for comparison).
      */
     private void parseHourly24ForComparison() {
         //Load in the next 24 hours
@@ -1127,6 +1164,74 @@ public class MainActivity extends AppCompatActivity implements
                     iteratedHour++;
             }
             Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+        }
+    }
+
+    /**
+     * Parses hour info for hourly datasets in 24 hr format.
+     */
+    private void parseHourly24() {
+        //Load in the next 24 hours
+        int hourlySetSize = pulledWeatherResponse.getHourly().getData().size();
+        Log.i("hourlySetSize", String.valueOf(hourlySetSize));
+        //Gather only the next 24 hours
+        if (hourlySetSize >= 24) {
+            int iteratedHour = Integer.valueOf(getCurrentHour());
+            Log.i("hourlySetSize", "greaterThan24");
+            Log.i("iteratedHourStart", String.valueOf(iteratedHour));
+            for (int i = 0; i < 24; i++) {
+                Log.i("iteratedHour", iteratedHour + "");
+                //Keep iterating for up to the next 24 hours
+                if(iteratedHour == 24){
+                    pulledHours.add(0 + "");
+                    iteratedHour = 0;
+                }
+                else{
+                    pulledHours.add(iteratedHour + "");
+                }
+                iteratedHour++;
+            }
+            Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+        } else {
+            //Use the data available
+            int iteratedHour = Integer.valueOf(getCurrentHour());
+            Log.i("iteratedHour", String.valueOf(iteratedHour));
+            for (int i = 0; i < pulledWeatherResponse.getHourly().getData().size(); i++) {
+                iteratedHour = iteratedHour % 24;
+                Log.i("iteratedHourStart", String.valueOf(iteratedHour));
+                //Keep iterating for up to the amount of data we have
+                if(iteratedHour == 24){
+                    pulledHours.add(0 + "");
+                    iteratedHour = 0;
+                }
+                else{
+                    pulledHours.add(iteratedHour + "");
+                }
+                iteratedHour++;
+            }
+            Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+        }
+
+        //Get icon for next 24 hours
+        for(int i = 0; i < pulledHours.size(); i++){
+            pulledIcons.add(pulledWeatherResponse.getHourly().getData().get(i).getIcon());
+        }
+
+        //Get temps for the next 24 hours
+        for(int i = 0; i < pulledHours.size(); i++){
+            Double pulledTempDouble = pulledWeatherResponse.getHourly().getData().get(i).getTemperature();
+            pulledTemps.add(pulledTempDouble.intValue());
+        }
+
+        //Get winds for the next 24 hours
+        for(int i = 0; i < pulledHours.size(); i++){
+            String pulledWindString = pulledWeatherResponse.getHourly().getData().get(i).getWindSpeed();
+            Double pulledWindDouble = Double.valueOf(pulledWindString);
+            //Convert MPH to KPH if in metric
+            if(units == 1){
+                pulledWindDouble = pulledWindDouble * 1.6093440;
+            }
+            pulledWinds.add(pulledWindDouble.intValue());
         }
     }
 
