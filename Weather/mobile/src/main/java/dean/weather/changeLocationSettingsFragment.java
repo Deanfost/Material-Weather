@@ -118,7 +118,7 @@ public class ChangeLocationSettingsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Check the result of the location settings change request
+        //Check the result of the location settings changeTheme request
         if(requestCode == REQUEST_CHANGE_SETTINGS){
             switch (requestCode) {
                 case REQUEST_CHANGE_SETTINGS:
@@ -133,7 +133,7 @@ public class ChangeLocationSettingsFragment extends Fragment {
                             }
                             break;
                         case Activity.RESULT_CANCELED:
-                            // The user was asked to change settings, but chose not to
+                            // The user was asked to changeTheme settings, but chose not to
                             //Do nothing
                             break;
                         default:

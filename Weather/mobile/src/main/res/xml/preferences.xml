@@ -61,7 +61,8 @@
             android:key="@string/theme_change_key"
             android:title="Enable color theme updates"
             android:summary="If enabled, the color theme will change according to current time of day"
-            android:defaultValue="true"/>
+            android:defaultValue="true"
+            android:persistent="true"/>
 
     </PreferenceCategory>
 

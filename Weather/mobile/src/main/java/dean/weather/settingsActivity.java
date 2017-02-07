@@ -34,8 +34,7 @@ import com.google.firebase.FirebaseApp;
  * Created by Dean on 12/23/2016.
  */
 
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
-    SharedPreferences prefs;
+public class SettingsActivity extends PreferenceActivity{
 //    Preference followMePref;
     SwitchPreference ongoingNotif;
 //    SwitchPreference summaryNotif;
@@ -51,7 +50,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         addPreferencesFromResource(R.xml.preferences);
 
         //Preferences
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 //        followMePref = findPreference(getString(R.string.follow_me_key));
         ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
         alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
@@ -65,7 +63,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     protected void onStart() {
         super.onStart();
-        prefs.registerOnSharedPreferenceChangeListener(this);
 
         //Enable the timePickerPref?
 //        if(prefs.getBoolean(getString(R.string.summary_notif_key), false)){
@@ -306,7 +303,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 //                        return true;
 //                    }
 //                    else{
-//                        //Turn off the pref, and change the value
+//                        //Turn off the pref, and changeTheme the value
 //                        SharedPreferences.Editor editor = prefs.edit();
 //                        editor.putBoolean(getString(R.string.summary_notif_key), false);
 //                        editor.commit();
@@ -373,23 +370,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 //        followMePref.setOnPreferenceChangeListener(null);
         ongoingNotif.setOnPreferenceClickListener(null);
         alertNotif.setOnPreferenceChangeListener(null);
-        prefs.registerOnSharedPreferenceChangeListener(null);
 //        summaryNotif.setOnPreferenceChangeListener(null);
 //        timePickerPref.setOnPreferenceChangeListener(null);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-//        if(s.equals(getString(R.string.units_list_key))){
-//            ListPreference unitsPref = (ListPreference) findPreference(getString(R.string.units_list_key));
-//            if(unitsPref.getValue().equals("0")){
-//                //Set to English units
-//                unitsPref.setSummary("English(°F/MPH/IN)");
-//            }
-//            else{
-//                unitsPref.setSummary("Metric(°C/KPH/MM)");
-//            }
-//        }
     }
 
     //Checks and callbacks

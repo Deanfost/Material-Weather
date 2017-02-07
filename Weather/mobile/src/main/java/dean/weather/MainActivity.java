@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements
     Toolbar toolbar;
     LinearLayout mainActivityLayout;
 
-    //Location settings change
+    //Location settings changeTheme
     final int REQUEST_CHANGE_SETTINGS = 15;
 
     //Address receiver
@@ -131,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements
     //Units
     int units;
 
+    //Theme
+    boolean changeTheme;
+
     //Notification
     public static final int FOLLOW_NOTIF_ID = 23;
     public static final int ALERT_NOTIF_ID = 32;
@@ -181,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements
 
             //Set default layout color(blue)
             setMainLayoutColor(1);
+            setID = 1;
     }
 
     //Action bar events
@@ -257,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Check the result of the location settings change request
+        //Check the result of the location settings changeTheme request
         if(requestCode == REQUEST_CHANGE_SETTINGS){
             switch (requestCode) {
                 case REQUEST_CHANGE_SETTINGS:
@@ -272,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements
                             }
                             break;
                         case Activity.RESULT_CANCELED:
-                            // The user was asked to change settings, but chose not to
+                            // The user was asked to changeTheme settings, but chose not to
                             changeLocationFragmentTransaction();
                             break;
                         default:
@@ -477,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param colorSet
      */
     private void setMainLayoutColor(int colorSet){
-        //Setup resources to change
+        //Setup resources to changeTheme
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
         Window window = this.getWindow();
@@ -808,8 +812,10 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 //Set main layout color
-                setID = determineLayoutColor(sunriseTimeString, sunsetTimeString);
-                setMainLayoutColor(setID);
+                if(changeTheme){
+                    setID = determineLayoutColor(sunriseTimeString, sunsetTimeString);
+                    setMainLayoutColor(setID);
+                }
 
                 //Update views
                 Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
@@ -855,6 +861,21 @@ public class MainActivity extends AppCompatActivity implements
             googleApiClient.disconnect();
         }
         super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i("onStart", "Triggered");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(preferences.getBoolean(getString(R.string.theme_change_key), true)){
+            changeTheme = true;
+            Log.i("changeTheme", "True");
+        }
+        else{
+            changeTheme = false;
+            Log.i("changeTheme", "False");
+        }
     }
 
     //Fragments

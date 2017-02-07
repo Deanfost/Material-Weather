@@ -403,7 +403,7 @@ public class DailyActivity extends AppCompatActivity {
      * Customizes window colors.
      */
     private void setWindowColor(){
-        //Setup resources to change
+        //Setup resources to changeTheme
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
         Window window = this.getWindow();
@@ -593,14 +593,14 @@ public class DailyActivity extends AppCompatActivity {
             viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
             viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
             viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
-            viewPressureValue.setText(String.valueOf(pulledPressure) + "InHg");
+            viewPressureValue.setText(String.valueOf(pulledPressure) + "inHg");
             viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
         }
         else{
             viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
             viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
             viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
-            viewPressureValue.setText(String.valueOf(pulledPressure) + "Mb");
+            viewPressureValue.setText(String.valueOf(pulledPressure) + "mb");
             viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
         }
         viewSunriseTime.setText(daySunriseTime);

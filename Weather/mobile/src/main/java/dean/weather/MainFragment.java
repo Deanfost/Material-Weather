@@ -268,16 +268,16 @@ public class MainFragment extends Fragment{
             currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
             currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
             currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
-            currentPressureValue.setText(String.valueOf(passedPressureValue) + "InHg");
-            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "Mi");
+            currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
+            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "mi");
             currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
         }
         else{
             currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
             currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
             currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
-            currentPressureValue.setText(String.valueOf(passedPressureValue) + "Mb");
-            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "Km");
+            currentPressureValue.setText(String.valueOf(passedPressureValue) + "mb");
+            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "km");
             currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
         }
 
