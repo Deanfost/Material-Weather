@@ -560,7 +560,7 @@ public class MainActivity extends AppCompatActivity implements
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
         //Determine which units to use
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         //Form a pull request
         final RequestBuilder weather = new RequestBuilder();
@@ -865,6 +865,13 @@ public class MainActivity extends AppCompatActivity implements
                 //Terminate Google API Connection
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
+                }
+
+                //Call the alert notification service (if enabled)
+                if(preferences.getBoolean(getString(R.string.alert_notif_key), false)){
+                    Intent alertNotifService = new Intent(MainActivity.this, AlertNotifService.class);
+                    startService(alertNotifService);
+                    Log.i("Main Activity", "Starting alertNotifService");
                 }
             }
 

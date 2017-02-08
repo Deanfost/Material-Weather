@@ -59,7 +59,6 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
     private String todaySunset;
 //    private boolean hasLocation;
     private boolean createNewNotif;
-    private int alertCount;
     private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
 
     public AlertNotifService() {
@@ -318,24 +317,26 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                     for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
                         Log.i("Alert", weatherResponse.getAlerts().get(i).getTitle());
                         Log.i("Alert", weatherResponse.getAlerts().get(i).getDescription());
-                        alertCount ++;
                     }
 
                     //Check to see if these are new alerts
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AlertNotifService.this);
-                    SharedPreferences.Editor editor = prefs.edit();
                     for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
                         if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri() + ".Alert")){
                             //This is a new alert, add it to the list of new alerts
                             newAlerts.add(weatherResponse.getAlerts().get(i));
                             Log.i("New alert", weatherResponse.getAlerts().get(i).getUri());
                         }
+                        else{
+                            Log.i("Old alert", "ignoring");
+                        }
                     }
 
+                    SharedPreferences.Editor editor = prefs.edit();
                     //Persist the alerts list as to not notify the user of the same alerts
                     for(int i = 0; i < newAlerts.size(); i++){
                         String alertURI = newAlerts.get(i).getUri();
-                        Long alertIssueTime = newAlerts.get(i).getTime();
+                        Long alertIssueTime = newAlerts.get(i).getTime() * 1000;//Store UNIX in millis
                         editor.putLong(alertURI + ".Alert", alertIssueTime);
                     }
 
@@ -348,11 +349,12 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                             //If 48 hours has passed since the issuance of the alert
                             if(System.currentTimeMillis() >= value + 172800000){
                                 //Remove the alert
+                                Log.i("Removing alert", key);
                                 editor.remove(key);
                             }
                         }
                     }
-                    editor.apply();
+                    editor.commit();
                 }
                 else{
                     Log.i("alerts", "null");
@@ -360,7 +362,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
 
                 //Create/update notification if there is new data to notify the user about
                 if(newAlerts.size() > 0){
-                    Log.i("alertService", "New alerts available");
+                    Log.i("alertService", "New alerts available, notifying");
                     if(createNewNotif){
                         createNewNotification();
                     }
@@ -369,7 +371,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                     }
                 }
                 else{
-                    Log.i("alertService", "No alerts");
+                    Log.i("alertService", "No new alerts");
                 }
 
                 //Kill the connection
