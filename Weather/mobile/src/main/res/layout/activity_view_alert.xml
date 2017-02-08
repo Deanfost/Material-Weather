@@ -40,13 +40,13 @@
                 android:text="...DENSE FOG ADVISORY IN EFFECT UNTIL 4 AM WEDNESDAY...THE NATIONAL WEATHER SERVICE IN BALTIMORE MD/WASHINGTON HAS ISSUED A DENSE FOG ADVISORY...WHICH IS IN EFFECT UNTIL 4 AM EST WEDNESDAY..."
                 android:textSize="16sp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/alertViewSrc"
-                android:text="Source - National Weather Service"
-                android:textSize="13sp"
-                android:layout_marginTop="@dimen/_20sdp"/>
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/alertViewSrc"-->
+                <!--android:text="Source - National Weather Service"-->
+                <!--android:textSize="13sp"-->
+                <!--android:layout_marginTop="@dimen/_20sdp"/>-->
 
         </LinearLayout>
     </ScrollView>

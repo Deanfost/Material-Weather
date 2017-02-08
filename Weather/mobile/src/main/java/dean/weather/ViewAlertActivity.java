@@ -23,7 +23,7 @@ public class ViewAlertActivity extends AppCompatActivity {
     Typeface robotoLight;
     TextView titleView;
     TextView descView;
-    TextView srcView;
+//    TextView srcView;
     String alertTitle;
     String alertDesc;
     String alertSrc;
@@ -51,7 +51,7 @@ public class ViewAlertActivity extends AppCompatActivity {
         robotoLight = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
         titleView = (TextView) findViewById(R.id.alertViewTitle);
         descView = (TextView) findViewById(R.id.alertViewDesc);
-        srcView = (TextView) findViewById(R.id.alertViewSrc);
+//        srcView = (TextView) findViewById(R.id.alertViewSrc);
 
         //Set the color of the layout
         Window window = this.getWindow();
@@ -86,8 +86,8 @@ public class ViewAlertActivity extends AppCompatActivity {
         titleView.setText(alertTitle);
         descView.setTypeface(robotoLight);
         descView.setText(alertDesc);
-        srcView.setTypeface(robotoLight);
-        srcView.setText(alertSrc);
+//        srcView.setTypeface(robotoLight);
+//        srcView.setText(alertSrc);
     }
 
     @Override

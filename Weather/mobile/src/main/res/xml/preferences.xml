@@ -80,7 +80,9 @@
         <!-- Opens WebView to display the info about the app, including library attrs-->
         <Preference
             android:title="About this app"
-            android:key="@string/support_about_key" />
+            android:key="@string/support_about_key">
+
+        </Preference>
 
         <Preference
             android:title="Tutorial"
