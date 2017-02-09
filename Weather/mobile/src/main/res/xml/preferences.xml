@@ -77,11 +77,12 @@
         android:title="Support"
         android:key="@string/support_group_key">
 
-        <!-- Opens WebView to display the info about the app, including library attrs-->
+        <!-- Opens activity displaying info about the app -->
         <Preference
             android:title="About this app"
             android:key="@string/support_about_key">
-
+            <intent android:targetClass="dean.weather.AboutActivity"
+                android:targetPackage="dean.weather"/>
         </Preference>
 
         <Preference
