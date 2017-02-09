@@ -3,12 +3,14 @@ package dean.weather;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
@@ -27,7 +29,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
     private Integer setID;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public CardView card;
+        public FrameLayout card;
         public TextView cardTitle;
         public TextView cardDesc;
         public TextView cardActionShare;
@@ -36,7 +38,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         //Accepts entire card, and finds each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            card = (CardView) itemView.findViewById(R.id.alertCardView);
+            card = (FrameLayout) itemView.findViewById(R.id.alertCardView);
             cardTitle = (TextView) itemView.findViewById(R.id.cardViewTitle);
             cardDesc = (TextView) itemView.findViewById(R.id.cardViewDesc);
             cardActionShare = (TextView) itemView.findViewById(R.id.btnCardShare);
@@ -67,7 +69,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         String alertDesc = dataSet.get(position).getDescription();
 
         //Set the views in the card
-        CardView cardView = holder.card;
+        FrameLayout cardView = holder.card;
         TextView title = holder.cardTitle;
         TextView desc = holder.cardDesc;
         TextView cardActionView = holder.cardActionView;
@@ -81,22 +83,22 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         //Set the background color
         switch (setID){
             case 0:
-                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorYellow));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_yellow));
                 cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_yellow));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_yellow));
                 break;
             case 1:
-                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorBlue));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_blue));
                 cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_blue));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_blue));
                 break;
             case 2:
-                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorOrange));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_orange));
                 cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_orange));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_orange));
                 break;
             case 3:
-                cardView.setBackgroundColor(context.getResources().getColor(R.color.colorPurple));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_purple));
                 cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
                 break;
