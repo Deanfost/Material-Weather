@@ -86,11 +86,11 @@
             android:theme="@style/OnboardingTheme">
         </activity>
 
+        <!--About activity -->
         <activity android:name=".AboutActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme"
-            android:parentActivityName=".SettingsActivity">
+            android:theme="@style/ActivityTheme">
         </activity>
 
         <!--Active notification service-->

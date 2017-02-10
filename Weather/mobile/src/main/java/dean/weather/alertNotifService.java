@@ -381,6 +381,9 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                 }
                 clearData();
                 stopSelf();
+
+                //You know its working when this happens
+                createTestNotif();
             }
 
             @Override
@@ -550,6 +553,20 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
+    }
+
+    /**
+     * Creates test notification to go along with actual ongoing notif.
+     */
+    private void createTestNotif(){
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_info_white)
+                        .setContentTitle("Update")
+                        .setContentText("Updated alert notification");
+        notifBuilder.setAutoCancel(true);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, notifBuilder.build());
     }
 
     //Time

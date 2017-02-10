@@ -15,6 +15,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+    <!-- Upper layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_140sdp"
@@ -22,8 +23,10 @@
         android:padding="@dimen/_16sdp"
         android:background="@color/colorBlue"
         android:layout_marginBottom="@dimen/_1sdp"
-        android:elevation="@dimen/_2sdp">
+        android:elevation="@dimen/_2sdp"
+        android:id="@+id/aboutUpperLayout">
 
+        <!-- Logo and title -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,9 +61,9 @@
                 android:layout_marginLeft="@dimen/_70sdp"
                 android:textColor="@color/colorWhiteDark"
                 android:layout_below="@id/aboutTitle"/>
-
         </RelativeLayout>
 
+        <!-- Version info -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -95,10 +98,11 @@
                 android:layout_below="@id/aboutVersionLabel"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_toRightOf="@id/aboutInfoIcon" />
-
         </RelativeLayout>
+
     </LinearLayout>
 
+    <!-- Lower layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -114,13 +118,14 @@
             android:paddingLeft="@dimen/_20sdp"
             android:paddingTop="@dimen/_7sdp"
             android:clickable="true"
-            android:background="?attr/selectableItemBackground">
+            android:background="?attr/selectableItemBackground"
+            android:id="@+id/aboutRateLayout">
 
             <ImageView
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_heart_black"
+                android:src="@drawable/ic_star_black"
                 android:tint="@color/colorBlue"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/aboutRateIcon"/>
@@ -145,57 +150,125 @@
                 android:layout_below="@id/aboutRateTitle"/>
         </RelativeLayout>
 
-            <!-- Attribution -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_65sdp"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/_20sdp"
-                android:paddingTop="@dimen/_7sdp"
-                android:clickable="true"
-                android:background="?attr/selectableItemBackground">
+        <!-- Attribution -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_65sdp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_20sdp"
+            android:paddingTop="@dimen/_7sdp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
+            android:id="@+id/aboutLicenseLayout">
 
-                <ImageView
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_file_black"
-                    android:tint="@color/colorBlue"
-                    android:layout_gravity="center_vertical"
-                    android:id="@+id/aboutAttrIcon"/>
+            <ImageView
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_file_black"
+                android:tint="@color/colorBlue"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/aboutLicenseIcon"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Licenses"
-                    android:textSize="18sp"
-                    android:layout_marginLeft="@dimen/_16sdp"
-                    android:layout_toRightOf="@id/aboutAttrIcon"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:id="@+id/aboutAttrTitle"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Licenses"
+                android:textSize="18sp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_toRightOf="@id/aboutLicenseIcon"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:id="@+id/aboutAttrTitle"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Useful resources and libraries."
-                    android:textSize="14sp"
-                    android:layout_marginLeft="@dimen/_16sdp"
-                    android:layout_toRightOf="@id/aboutAttrIcon"
-                    android:layout_below="@id/aboutAttrTitle"/>
-            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Useful resources and libraries."
+                android:textSize="14sp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_toRightOf="@id/aboutLicenseIcon"
+                android:layout_below="@id/aboutAttrTitle"/>
+        </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_65sdp"
-                android:orientation="horizontal">
+        <!-- Data source -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_65sdp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_20sdp"
+            android:paddingTop="@dimen/_7sdp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
+            android:id="@+id/aboutSrcLayout">
 
-            </RelativeLayout>
+            <ImageView
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_satellite_black"
+                android:tint="@color/colorBlue"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/aboutSrcIcon"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_65sdp"
-                android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data source"
+                android:textSize="18sp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_toRightOf="@id/aboutSrcIcon"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:id="@+id/aboutSrcTitle"/>
 
-            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All forecasts provided by Dark Sky."
+                android:textSize="14sp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_toRightOf="@id/aboutSrcIcon"
+                android:layout_below="@id/aboutSrcTitle"/>
+        </RelativeLayout>
+
+        <!-- Donate -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_65sdp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_20sdp"
+            android:paddingTop="@dimen/_7sdp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
+            android:id="@+id/aboutDonateLayout">
+
+            <ImageView
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_heart_black"
+                android:tint="@color/colorBlue"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/aboutDonateIcon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Donate"
+                android:textSize="18sp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_toRightOf="@id/aboutDonateIcon"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:id="@+id/aboutDonateTitle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Support the developer."
+                android:textSize="14sp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_toRightOf="@id/aboutDonateIcon"
+                android:layout_below="@id/aboutDonateTitle"/>
+        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>

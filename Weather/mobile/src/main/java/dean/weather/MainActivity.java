@@ -818,7 +818,7 @@ public class MainActivity extends AppCompatActivity implements
                         //Display a snackbar for 10 seconds
                         Snackbar snackbar = Snackbar
                                 .make(mainActivityLayout, "Weather alerts available.", Snackbar.LENGTH_LONG)
-                                .setDuration(10000)
+                                .setDuration(Snackbar.LENGTH_LONG)
                                 .setAction("View", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
