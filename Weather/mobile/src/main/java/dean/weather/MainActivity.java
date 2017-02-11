@@ -1191,11 +1191,14 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("iteratedHour", iteratedHour + "");
                 //Keep iterating for up to the next 24 hours
                 if(iteratedHour == 24){
-                    pulledHours.add(0 + "");
+                    pulledHours.add(0 + "000");
                     iteratedHour = 0;
                 }
-                else{
-                    pulledHours.add(iteratedHour + "");
+                else if(iteratedHour < 10){
+                    pulledHours.add("0" + iteratedHour + "00");
+                }
+                else if(iteratedHour >= 10 && iteratedHour < 24){
+                    pulledHours.add(iteratedHour + "00");
                 }
                 iteratedHour++;
             }
@@ -1209,11 +1212,14 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("iteratedHourStart", String.valueOf(iteratedHour));
                 //Keep iterating for up to the amount of data we have
                 if(iteratedHour == 24){
-                    pulledHours.add(0 + "");
+                    pulledHours.add(0 + "000");
                     iteratedHour = 0;
                 }
-                else{
-                    pulledHours.add(iteratedHour + "");
+                else if(iteratedHour < 10){
+                    pulledHours.add("0" + iteratedHour + "00");
+                }
+                else if(iteratedHour >= 10 && iteratedHour < 24){
+                    pulledHours.add(iteratedHour + "00");
                 }
                 iteratedHour++;
             }

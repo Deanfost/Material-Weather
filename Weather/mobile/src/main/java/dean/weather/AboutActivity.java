@@ -1,12 +1,15 @@
 package dean.weather;
 
 import android.app.ActivityManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -66,47 +69,55 @@ public class AboutActivity extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlueDark)));
         window.setStatusBarColor(getResources().getColor(R.color.colorBlueDark));
 
-        switch (setID){
-            case 0:
-                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorYellowDark)));
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorYellowDark)));
-                upperLayout.setBackgroundColor(getResources().getColor(R.color.colorYellow));
-                rateIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
-                licenseIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
-                srcIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
-                donateIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
-                window.setStatusBarColor(getResources().getColor(R.color.colorYellowDark));
-                break;
-            case 1:
-                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorBlueDark)));
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlueDark)));
-                upperLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
-                rateIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
-                licenseIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
-                srcIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
-                donateIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
-                window.setStatusBarColor(getResources().getColor(R.color.colorBlueDark));
-                break;
-            case 2:
-                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorOrangeDark)));
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrangeDark)));
-                upperLayout.setBackgroundColor(getResources().getColor(R.color.colorOrange));
-                rateIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
-                licenseIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
-                srcIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
-                donateIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
-                window.setStatusBarColor(getResources().getColor(R.color.colorOrangeDark));
-                break;
-            case 3:
-                this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorPurpleDark)));
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurpleDark)));
-                upperLayout.setBackgroundColor(getResources().getColor(R.color.colorPurple));
-                rateIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
-                licenseIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
-                srcIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
-                donateIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
-                window.setStatusBarColor(getResources().getColor(R.color.colorPurpleDark));
-                break;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(prefs.getBoolean(getString(R.string.theme_change_key), false)){
+            Log.i("aboutActivity", "Theme change enabled");
+
+            switch (setID){
+                case 0:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorYellowDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorYellowDark)));
+                    upperLayout.setBackgroundColor(getResources().getColor(R.color.colorYellow));
+                    rateIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
+                    licenseIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
+                    srcIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
+                    donateIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorYellowDark));
+                    break;
+                case 1:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorBlueDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlueDark)));
+                    upperLayout.setBackgroundColor(getResources().getColor(R.color.colorBlue));
+                    rateIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
+                    licenseIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
+                    srcIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
+                    donateIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorBlueDark));
+                    break;
+                case 2:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorOrangeDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorOrangeDark)));
+                    upperLayout.setBackgroundColor(getResources().getColor(R.color.colorOrange));
+                    rateIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
+                    licenseIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
+                    srcIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
+                    donateIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorOrangeDark));
+                    break;
+                case 3:
+                    this.setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), icon, getResources().getColor(R.color.colorPurpleDark)));
+                    getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPurpleDark)));
+                    upperLayout.setBackgroundColor(getResources().getColor(R.color.colorPurple));
+                    rateIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
+                    licenseIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
+                    srcIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
+                    donateIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
+                    window.setStatusBarColor(getResources().getColor(R.color.colorPurpleDark));
+                    break;
+            }
+        }
+        else{
+            Log.i("aboutActivity", "Theme change disabled");
         }
     }
 
