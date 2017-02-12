@@ -40,6 +40,20 @@ public class TutorialActivity extends com.heinrichreimersoftware.materialintro.a
                 .fragment(R.layout.onboarding_frag_three)
                 .build());
 
+        //Create slide 4
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(R.layout.onboarding_frag_four)
+                .build());
+
+        //Create slide 5
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(R.layout.onboarding_frag_five)
+                .build());
+
         setSkipEnabled(false);
 
         setNavigationPolicy(new NavigationPolicy() {
@@ -51,6 +65,10 @@ public class TutorialActivity extends com.heinrichreimersoftware.materialintro.a
                     case 1:
                         return true;
                     case 2:
+                        return true;
+                    case 3:
+                        return true;
+                    case 4:
                         return true;
                 }
                 return true;
@@ -64,6 +82,10 @@ public class TutorialActivity extends com.heinrichreimersoftware.materialintro.a
                     case 1:
                         return true;
                     case 2:
+                        return true;
+                    case 3:
+                        return true;
+                    case 4:
                         return true;
                 }
                 return false;

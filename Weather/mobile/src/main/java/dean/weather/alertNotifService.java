@@ -556,7 +556,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
     }
 
     /**
-     * Creates test notification to go along with actual ongoing notif.
+     * Creates test notification every time the alert service is updated.
      */
     private void createTestNotif(){
         NotificationCompat.Builder notifBuilder =

@@ -32,13 +32,10 @@
     <TextView
         android:layout_width="@dimen/_140sdp"
         android:layout_height="wrap_content"
-        android:text="Get accurate reports for your location, instantly, and all in one place."
+        android:text="Get accurate reports and forecasts for your location, instantly, and all in one place."
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:layout_marginBottom="@dimen/_40sdp"
         android:textColor="@color/colorWhite"/>
-
-
-
 </com.heinrichreimersoftware.materialintro.view.parallax.ParallaxLinearLayout>

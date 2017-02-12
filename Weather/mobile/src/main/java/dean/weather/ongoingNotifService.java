@@ -298,7 +298,14 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("notifService", "GoogleAPI connection suspended");
-        createNotification(false);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            //Create notification for Lollipop through Marshmallow
+            createNotification(false);
+        }
+        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+            //Create notification for Nougat and above
+            createNewNotification(false);
+        }
     }
 
     //Notification
@@ -512,7 +519,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                         .setContentText("Updated weather notification");
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, notifBuilder.build());
+        mNotificationManager.notify(1, notifBuilder.build());
     }
 
     //Dark Sky API
@@ -632,6 +639,14 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
                 }
+                NotificationCompat.Builder notifBuilder =
+                        new NotificationCompat.Builder(OngoingNotifService.this)
+                                .setSmallIcon(R.drawable.ic_wifi_color)
+                                .setContentTitle("Error")
+                                .setContentText("Problem accessing dark sky.");
+                notifBuilder.setAutoCancel(true);
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(2, notifBuilder.build());
                 clearData();
             }
         });

@@ -1,17 +1,21 @@
 package dean.weather;
 
 import android.app.ActivityManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -25,6 +29,7 @@ import com.google.firebase.FirebaseApp;
  */
 
 public class AboutActivity extends AppCompatActivity {
+    LinearLayout parentLayout;
     LinearLayout upperLayout;
     RelativeLayout rateLayout;
     RelativeLayout licenseLayout;
@@ -49,6 +54,7 @@ public class AboutActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("About");
 
         //References
+        parentLayout = (LinearLayout) findViewById(R.id.aboutParentLayout);
         upperLayout = (LinearLayout) findViewById(R.id.aboutUpperLayout);
         rateLayout = (RelativeLayout) findViewById(R.id.aboutRateLayout);
         licenseLayout = (RelativeLayout) findViewById(R.id.aboutLicenseLayout);
@@ -119,6 +125,50 @@ public class AboutActivity extends AppCompatActivity {
         else{
             Log.i("aboutActivity", "Theme change disabled");
         }
+
+        //Click listeners
+        rateLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("aboutActivity", "rate clicked");
+                //TODO - MOVE TO THE APP'S PAGE
+                Snackbar snackbar = Snackbar
+                        .make(parentLayout, "Coming soon.", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
+        });
+
+        licenseLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("aboutActivity", "attr clicked");
+                Snackbar snackbar = Snackbar
+                        .make(parentLayout, "Coming soon.", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
+        });
+
+        srcLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("aboutActivity", "src clicked");
+                //Move to darksky.net
+                String url = "http://www.darksky.net";
+                Intent webIntent = new Intent(Intent.ACTION_VIEW);
+                webIntent.setData(Uri.parse(url));
+                startActivity(webIntent);
+            }
+        });
+
+        donateLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("aboutActivity", "donate clicked");
+                Snackbar snackbar = Snackbar
+                        .make(parentLayout, "Coming soon.", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
+        });
     }
 
     @Override

@@ -260,7 +260,12 @@ public class MainFragment extends Fragment{
                 break;
         }
 
-        currentTemp.setText(passedTempValue + "\u00B0");
+        if(units == 0){
+            currentTemp.setText(passedTempValue + "\u00B0" + "F");
+        }
+        else{
+            currentTemp.setText(passedTempValue + "\u00B0" + "C");
+        }
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
         currentWindValue.setText(passedWindValue);

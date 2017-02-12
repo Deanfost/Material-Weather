@@ -1,9 +1,7 @@
 package dean.weather;
 
-
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -11,8 +9,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.NavigationPolicy;
@@ -67,10 +63,24 @@ public class OnboardingActivity extends IntroActivity{
         addSlide(new FragmentSlide.Builder()
                 .backgroundDark(R.color.colorBlue)
                 .background(R.color.colorBlueLight)
-                .fragment(onBoardingFragPermissions)
+                .fragment(R.layout.onboarding_frag_four)
                 .build());
 
         //Create slide 5
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(R.layout.onboarding_frag_five)
+                .build());
+
+        //Create slide 6
+        addSlide(new FragmentSlide.Builder()
+                .backgroundDark(R.color.colorBlue)
+                .background(R.color.colorBlueLight)
+                .fragment(onBoardingFragPermissions)
+                .build());
+
+        //Create slide 7
         addSlide(new FragmentSlide.Builder()
                 .backgroundDark(R.color.colorBlue)
                 .background(R.color.colorBlueLight)
@@ -90,8 +100,12 @@ public class OnboardingActivity extends IntroActivity{
                     case 2:
                         return true;
                     case 3:
-                        return false;
+                        return true;
                     case 4:
+                        return true;
+                    case 5:
+                        return false;
+                    case 6:
                         return true;
                 }
                 return true;
@@ -107,6 +121,12 @@ public class OnboardingActivity extends IntroActivity{
                     case 2:
                         return true;
                     case 3:
+                        return true;
+                    case 4:
+                        return true;
+                    case 5:
+                        return true;
+                    case 6:
                         return true;
                 }
                 return false;

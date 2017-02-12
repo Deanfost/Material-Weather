@@ -86,7 +86,7 @@
         </Preference>
 
         <Preference
-            android:title="Tutorial"
+            android:title="Product tour"
             android:key="@string/support_tutorial_key">
 
             <!-- Intent opens special tutorial activity -->

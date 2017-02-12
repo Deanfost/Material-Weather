@@ -12,17 +12,18 @@
         android:layout_height="@dimen/_150sdp"
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/ic_alerts_white"
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_35sdp"
         app:layout_parallaxFactor="1"
         android:elevation="2dp"
+        android:tint="@color/colorYellowLight"
         android:scaleType="fitXY"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Your weather, simplified"
+        android:text="Alert statements"
         android:textSize="24sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
@@ -32,7 +33,7 @@
     <TextView
         android:layout_width="@dimen/_140sdp"
         android:layout_height="wrap_content"
-        android:text="Welcome to Material Weather, a simple and easy to use weather app."
+        android:text="Receive weather alerts and warnings issued for your area."
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
