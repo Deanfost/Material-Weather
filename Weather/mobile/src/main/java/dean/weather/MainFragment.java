@@ -59,6 +59,7 @@ public class MainFragment extends Fragment{
     private static String passedIconValue;
     private static int passedTempValue;
     private static String passedConditionValue;
+    private static String passedMinutelyValue;
     private static String passedHILOValue;
     private static String passedWindValue;
     private static int passedPrecipValue;
@@ -81,6 +82,7 @@ public class MainFragment extends Fragment{
     TextView currentTemp;
     TextView currentConditions;
     TextView todaysHiLo;
+    TextView currentMinutely;
     TextView currentWind;
     TextView currentPrecip;
     TextView currentHumidity;
@@ -136,6 +138,7 @@ public class MainFragment extends Fragment{
         currentTemp = (TextView) getView().findViewById(R.id.currentTemp);
         currentConditions = (TextView) getView().findViewById(R.id.currentConditions);
         todaysHiLo = (TextView) getView().findViewById(R.id.todaysHiLo);
+        currentMinutely = (TextView) getView().findViewById(R.id.currentMinutelySummary);
         currentWind = (TextView) getView().findViewById(R.id.currentDetailsWindLabel);
         currentPrecip = (TextView) getView().findViewById(R.id.currentDetailsPrecipLabel);
         currentHumidity = (TextView) getView().findViewById(R.id.currentDetailsHumidityLabel);
@@ -161,6 +164,7 @@ public class MainFragment extends Fragment{
         currentTemp.setTypeface(robotoLight);
         currentConditions.setTypeface(robotoLight);
         todaysHiLo.setTypeface(robotoLight);
+        currentMinutely.setTypeface(robotoLight);
         currentWind.setTypeface(robotoLight);
         currentPrecip.setTypeface(robotoLight);
         currentHumidity.setTypeface(robotoLight);
@@ -268,6 +272,7 @@ public class MainFragment extends Fragment{
         }
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
+        currentMinutely.setText(passedMinutelyValue);
         currentWindValue.setText(passedWindValue);
         if(units == 0){
             currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
@@ -339,7 +344,7 @@ public class MainFragment extends Fragment{
     /**
      * Saves passed values from mainActivity to current variables.
      */
-    public static void passViewData(String passedLocation, String passedDay, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedWind, int passedPrecip, int passedHumidity,
+    public static void passViewData(String passedLocation, String passedDay, String passedDate, String passedIcon, int passedTemp, String passedCondition, String passedHILO, String passedMinutely, String passedWind, int passedPrecip, int passedHumidity,
                                     int passedDewpoint, int passedPressure, String passedVisibility, int passedCloudCover, String passedSunriseTime, String passedSunsetTime, String passedUpdateTime) {
 
         passedLocationValue = passedLocation;
@@ -349,6 +354,7 @@ public class MainFragment extends Fragment{
         passedTempValue = passedTemp;
         passedConditionValue = passedCondition;
         passedHILOValue = passedHILO;
+        passedMinutelyValue = passedMinutely;
         passedWindValue = passedWind;
         passedPrecipValue = passedPrecip;
         passedHumidityValue = passedHumidity;

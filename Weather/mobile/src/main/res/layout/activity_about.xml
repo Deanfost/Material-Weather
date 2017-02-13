@@ -38,7 +38,8 @@
                 android:layout_height="@dimen/_60sdp"
                 android:src="@drawable/ic_launcher"
                 android:scaleType="fitXY"
-                android:id="@+id/aboutIcon"/>
+                android:id="@+id/aboutIcon"
+                android:elevation="@dimen/_2sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -138,7 +139,8 @@
                 android:src="@drawable/ic_star_black"
                 android:tint="@color/colorBlue"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/aboutRateIcon"/>
+                android:id="@+id/aboutRateIcon"
+                android:elevation="@dimen/_2sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -178,7 +180,8 @@
                 android:src="@drawable/ic_file_black"
                 android:tint="@color/colorBlue"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/aboutLicenseIcon"/>
+                android:id="@+id/aboutLicenseIcon"
+                android:elevation="@dimen/_2sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -218,7 +221,8 @@
                 android:src="@drawable/ic_satellite_black"
                 android:tint="@color/colorBlue"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/aboutSrcIcon"/>
+                android:id="@+id/aboutSrcIcon"
+                android:elevation="@dimen/_2sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -258,7 +262,8 @@
                 android:src="@drawable/ic_heart_black"
                 android:tint="@color/colorBlue"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/aboutDonateIcon"/>
+                android:id="@+id/aboutDonateIcon"
+                android:elevation="@dimen/_2sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"

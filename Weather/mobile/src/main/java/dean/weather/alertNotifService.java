@@ -288,7 +288,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
             googleApiClient.disconnect();
         }
 //        createErrorNotif();
-        Log.i("alertNotif", "connectionSuspended");
+        Log.i("alertNotif", "connectionFailed");
         stopSelf();
     }
 

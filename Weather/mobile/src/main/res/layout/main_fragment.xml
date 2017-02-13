@@ -164,7 +164,17 @@
                     android:text="Current details"
                     android:textSize="16sp"
                     android:id="@+id/currentDetailsLabel"
-                    android:layout_marginBottom="@dimen/_16sdp"/>
+                    android:layout_marginBottom="@dimen/_10sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---"
+                    android:textSize="14sp"
+                    android:id="@+id/currentMinutelySummary"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_below="@id/currentDetailsLabel"
+                    android:layout_marginLeft="@dimen/_2sdp"/>
 
                 <!-- Left side of details label -->
 
@@ -174,7 +184,7 @@
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_windrose_white"
                     android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentDetailsLabel"
+                    android:layout_below="@id/currentMinutelySummary"
                     android:id="@+id/currentWindIcon"
                     android:layout_marginRight="@dimen/_6sdp"/>
 
@@ -186,7 +196,7 @@
                     android:id="@+id/currentDetailsWindLabel"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsLabel"
+                    android:layout_below="@id/currentMinutelySummary"
                     android:layout_toRightOf="@id/currentWindIcon"/>
 
                 <ImageView
@@ -324,7 +334,7 @@
                     android:id="@+id/currentDetailsWindValue"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsLabel"
+                    android:layout_below="@id/currentMinutelySummary"
                     android:layout_toRightOf="@id/currentDetailsWindLabel"
                     android:textColor="@color/colorBlue"/>
 

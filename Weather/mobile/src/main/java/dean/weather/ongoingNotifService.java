@@ -407,6 +407,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
             //You know its working when this happens
@@ -424,6 +425,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notifBuilder.build());
 
             if (googleApiClient.isConnected()) {
@@ -495,6 +497,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
         } else {
@@ -510,6 +513,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notifBuilder.build());
         }
 
@@ -529,6 +533,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                         .setContentText("Updated weather notification");
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(1);
         mNotificationManager.notify(1, notifBuilder.build());
     }
 
@@ -651,11 +656,12 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                 }
                 NotificationCompat.Builder notifBuilder =
                         new NotificationCompat.Builder(OngoingNotifService.this)
-                                .setSmallIcon(R.drawable.ic_wifi_color)
+                                .setSmallIcon(R.drawable.ic_launcher)
                                 .setContentTitle("Error")
-                                .setContentText("Problem accessing dark sky.");
+                                .setContentText("Problem accessing Dark Sky.");
                 notifBuilder.setAutoCancel(true);
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.cancel(2);
                 mNotificationManager.notify(2, notifBuilder.build());
                 clearData();
             }

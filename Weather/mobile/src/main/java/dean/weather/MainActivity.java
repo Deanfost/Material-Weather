@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements
     private String todaysHI;
     private String todaysLO;
     private String todaysHILO;
+    private String todaysMinutely;
     private String currentWind;
     private int currentPrecip;
     private int currentHumidity;
@@ -649,6 +650,10 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("LO", todaysLO);
                 todaysHILO = todaysHI + "\u00B0" + "/" + todaysLO + "\u00B0";//76°/42° format
 
+                //Parse summary forecast
+                todaysMinutely = weatherResponse.getMinutely().getSummary();
+                Log.i("todayMinutely", todaysMinutely);
+
                 //Parse current wind speed and bearing
                 String currentWindSpeed = weatherResponse.getCurrently().getWindSpeed();
                 Double currentWindSpeedDouble = Double.valueOf(currentWindSpeed);
@@ -854,7 +859,7 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("pulledHoursSize", String.valueOf(pulledHours.size()));
                 mainFragmentTransaction();
                 MainFragment.passRecyclerDataSets(pulledHours, pulledComparisonHours, pulledTemps, pulledIcons, pulledWinds, pulledDays, pulledDailyCond, pulledHIs, pulledLOs, pulledPrecips);
-                MainFragment.passViewData(currentLocation, currentDay, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, currentWind, currentPrecip, currentHumidity, currentDewpoint,
+                MainFragment.passViewData(currentLocation, currentDay, currentDate, currentIcon, currentTemp, currentConditions, todaysHILO, todaysMinutely, currentWind, currentPrecip, currentHumidity, currentDewpoint,
                         currentPressure, currentVisibilty, currentCloudCover, sunriseTime, sunsetTime, updateTime);
 
                 //Update ongoing notification if it is enabled
