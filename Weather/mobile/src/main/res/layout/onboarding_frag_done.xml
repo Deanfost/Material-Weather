@@ -16,7 +16,7 @@
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_35sdp"
         app:layout_parallaxFactor="1"
-        android:elevation="2dp"
+        android:elevation="4dp"
         android:tint="@color/check_mark_green"
         android:scaleType="fitXY"/>
 

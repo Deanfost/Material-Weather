@@ -21,6 +21,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -245,6 +246,9 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             stopAlarm.putExtra("repeatNotif", false);
                             startService(stopAlarm);
 
+                            //Notify the user
+                            Toast.makeText(OngoingNotifService.this, "Please enable location services to use this service", Toast.LENGTH_LONG).show();
+
                             stopSelf();
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
@@ -263,6 +267,9 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             Intent stopAlarm1 = new Intent(getApplicationContext(), AlarmInterfaceService.class);
                             stopAlarm1.putExtra("repeatNotif", false);
                             startService(stopAlarm1);
+
+                            //Notify the user
+                            Toast.makeText(OngoingNotifService.this, "Pelase enable location services to use this service", Toast.LENGTH_LONG).show();
 
                             stopSelf();
 
@@ -285,6 +292,9 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             Intent stopAlarm = new Intent(this, AlarmInterfaceService.class);
             stopAlarm.putExtra("repeatNotif", false);
             startService(stopAlarm);
+
+            //Notify the user
+            Toast.makeText(this, "Please grant location permission to use this service", Toast.LENGTH_LONG).show();
 
             stopSelf();
         }

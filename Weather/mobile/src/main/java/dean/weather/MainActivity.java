@@ -139,6 +139,9 @@ public class MainActivity extends AppCompatActivity implements
     public static final int FOLLOW_NOTIF_ID = 23;
     public static final int ALERT_NOTIF_ID = 32;
 
+    //App bar buttons
+    public static boolean enableAppBarButtons = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,8 +187,8 @@ public class MainActivity extends AppCompatActivity implements
             loadingFragmentTransaction();
 
             //Set default layout color(blue)
-            setMainLayoutColor(1);
             setID = 1;
+            setMainLayoutColor(1);
     }
 
     //Action bar events
@@ -194,23 +197,27 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             //Settings
             case R.id.action_settings:
-                //Open the settings activity
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingsIntent);
+                    //Open the settings activity
+                    Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                    startActivity(settingsIntent);
                 return true;
             //Refresh data
             case R.id.action_refresh:
-                clearDataSets();
-                loadingFragmentTransaction();
-                //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
-                googleApiClient.connect();
+                if(enableAppBarButtons){
+                    clearDataSets();
+                    loadingFragmentTransaction();
+                    //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
+                    googleApiClient.connect();
+                }
                 return true;
             case R.id.action_alerts:
-                //Move to the alerts activity
-                Intent alertsIntent = new Intent(this, AlertsActivity.class);
-                alertsIntent.putExtra("setID", setID);
-                alertsIntent.putExtra("conditionsIcon", currentIcon);
-                startActivity(alertsIntent);
+                if(enableAppBarButtons){
+                    //Move to the alerts activity
+                    Intent alertsIntent = new Intent(this, AlertsActivity.class);
+                    alertsIntent.putExtra("setID", setID);
+                    alertsIntent.putExtra("conditionsIcon", currentIcon);
+                    startActivity(alertsIntent);
+                }
                 return true;
             //User action not recognized
             default:
@@ -275,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements
                             break;
                         case Activity.RESULT_CANCELED:
                             // The user was asked to changeTheme settings, but chose not to
-                            changeLocationFragmentTransaction();
+                            changeLocationSettingsFragmentTransaction();
                             break;
                         default:
                             break;
@@ -408,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements
                                 break;
                             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                                 //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
-                                changeLocationFragmentTransaction();
+                                changeLocationSettingsFragmentTransaction();
                                 break;
                         }
                     }
@@ -939,6 +946,7 @@ public class MainActivity extends AppCompatActivity implements
         else{
             Log.i("MainActivity", "Finishing");
         }
+        enableAppBarButtons = true;
     }
 
     /**
@@ -957,6 +965,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
+        enableAppBarButtons = true;
     }
 
     /**
@@ -975,6 +984,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
+        enableAppBarButtons = false;
     }
 
     /**
@@ -993,6 +1003,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
+        enableAppBarButtons = false;
     }
 
     /**
@@ -1011,12 +1022,13 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
+        enableAppBarButtons = false;
     }
 
     /**
      * Creates new ChangeLocationSettingsFragment transaction.
      */
-    private void changeLocationFragmentTransaction(){
+    private void changeLocationSettingsFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
         ChangeLocationSettingsFragment ChangeLocationSettingsFragment = new ChangeLocationSettingsFragment();
@@ -1029,6 +1041,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("MainActivity", "Finishing");
         }
         setMainLayoutColor(1);
+        enableAppBarButtons = false;
     }
 
     /**

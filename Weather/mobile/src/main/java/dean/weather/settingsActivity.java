@@ -7,15 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -24,8 +25,11 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
@@ -56,8 +60,34 @@ public class SettingsActivity extends PreferenceActivity{
 //        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
 //        timePickerPref = findPreference(getString(R.string.summary_time_key));
 
-        //Shared prefs
+        //Color accents
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(prefs.getBoolean(getString(R.string.theme_change_key), false)){
+            switch(MainActivity.setID){
+                case 0:
+                    setTheme(R.style.SettingsThemeYellow);
+                    break;
+                case 1:
+                    setTheme(R.style.SettingsThemeBlue);
+                    break;
+                case 2:
+                    setTheme(R.style.SettingsThemeOrange);
+                    break;
+                case 3:
+                    setTheme(R.style.SettingsThemePurple);
+                    break;
+            }
+        }
+        else{
+            //Set default theme(blue)
+            setTheme(R.style.SettingsThemeBlue);
+        }
+
+        //Customize the window
+        Window window = this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.colorGrey));
     }
 
     @Override
@@ -127,12 +157,25 @@ public class SettingsActivity extends PreferenceActivity{
                 if(ongoingNotifValue){
                         //Check if we are able to use current location
                         if(performChecks()){
-                            //Start it, everything is looking good
-                            Log.i("ongoingNotifPref", "Looks good, starting service");
-                            Intent serviceIntent = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
-                            serviceIntent.putExtra("repeatNotif", true);
-                            startService(serviceIntent);
-                            return true;
+                            //Perform one more round of checks against MainActivity
+                            if(MainActivity.enableAppBarButtons){
+                                //Start it, everything is looking good
+                                Log.i("ongoingNotifPref", "Looks good, starting service");
+                                Intent serviceIntent = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
+                                serviceIntent.putExtra("repeatNotif", true);
+                                startService(serviceIntent);
+                                return true;
+                            }
+                            else{
+                                //Notify the user
+                                Snackbar snackbar = Snackbar
+                                        .make(getListView(), "Please ensure location services is enabled, and location permission is granted to use this service.", Snackbar.LENGTH_LONG);
+                                View sbView = snackbar.getView();
+                                TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                                sbText.setTextColor(getResources().getColor(R.color.colorWhite));
+                                snackbar.show();
+                                return false;
+                            }
                         }
                         else{
                             //Don't save the value, conditions not met
@@ -334,12 +377,25 @@ public class SettingsActivity extends PreferenceActivity{
                 if((Boolean) newValue){
                     //Check to see if we can do this
                     if(performChecks()){
-                        //Start the alarm intent service, everything is looking good
-                        Log.i("alert pref", "Starting service");
-                        Intent alarmService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
-                        alarmService.putExtra("alertNotif", true);
-                        startService(alarmService);
-                        return true;
+                        //Perform one more round of checks against MainActivity
+                        if(MainActivity.enableAppBarButtons){
+                            //Start the alarm intent service, everything is looking good
+                            Log.i("alert pref", "Starting service");
+                            Intent alarmService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
+                            alarmService.putExtra("alertNotif", true);
+                            startService(alarmService);
+                            return true;
+                        }
+                        else{
+                            //Notify the user
+                            Snackbar snackbar = Snackbar
+                                    .make(getListView(), "Please ensure location services is enabled, and location permission is granted to use this service.", Snackbar.LENGTH_LONG);
+                            View sbView = snackbar.getView();
+                            TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                            sbText.setTextColor(getResources().getColor(R.color.colorWhite));
+                            snackbar.show();
+                            return false;
+                        }
                     }
                     else{
                         //Leave the pref off, conditions not met

@@ -54,12 +54,39 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <!-- Settings theme -->
-    <style name="SettingsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Settings theme yellow-->
+    <style name="SettingsThemeYellow" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">true</item>
         <item name="android:windowBackground">@color/colorWhite</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:textColor">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorYellow</item>
     </style>
 
+    <!-- Settings theme blue-->
+    <style name="SettingsThemeBlue" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorBlue</item>
+    </style>
+
+    <!-- Settings theme orange-->
+    <style name="SettingsThemeOrange" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorOrange</item>
+    </style>
+
+    <!-- Settings theme purple-->
+    <style name="SettingsThemePurple" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorPurple</item>
+    </style>
 </resources>

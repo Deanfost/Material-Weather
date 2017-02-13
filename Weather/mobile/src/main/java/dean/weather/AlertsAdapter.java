@@ -109,6 +109,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
             public void onClick(View view) {
                 Log.i("Card", "Share clicked");
                 Log.i("Position", position + "");
+
                 //Create a message to send to a messaging service or social media
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -124,6 +125,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
                 Log.i("Card", "View clicked");
                 Log.i("Position", position + "");
 
+                //Pass selected alert details to ViewAlertActivity
                 Intent alertIntent = new Intent(getContext(), ViewAlertActivity.class);
                 alertIntent.putExtra("setID", setID);
                 alertIntent.putExtra("alertTitle", dataSet.get(position).getTitle());
