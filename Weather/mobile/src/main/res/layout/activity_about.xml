@@ -171,7 +171,7 @@
             android:paddingTop="@dimen/_7sdp"
             android:clickable="true"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/aboutLicenseLayout">
+            android:id="@+id/aboutAttrLayout">
 
             <ImageView
                 android:layout_width="@dimen/_50sdp"
@@ -180,16 +180,16 @@
                 android:src="@drawable/ic_file_black"
                 android:tint="@color/colorBlue"
                 android:layout_gravity="center_vertical"
-                android:id="@+id/aboutLicenseIcon"
+                android:id="@+id/aboutAttrIcon"
                 android:elevation="@dimen/_2sdp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Licenses"
+                android:text="Attribution"
                 android:textSize="18sp"
                 android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_toRightOf="@id/aboutLicenseIcon"
+                android:layout_toRightOf="@id/aboutAttrIcon"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:id="@+id/aboutAttrTitle"/>
 
@@ -199,7 +199,7 @@
                 android:text="Useful resources and libraries."
                 android:textSize="14sp"
                 android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_toRightOf="@id/aboutLicenseIcon"
+                android:layout_toRightOf="@id/aboutAttrIcon"
                 android:layout_below="@id/aboutAttrTitle"/>
         </RelativeLayout>
 

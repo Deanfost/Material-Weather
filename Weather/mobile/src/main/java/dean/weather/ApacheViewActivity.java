@@ -7,27 +7,30 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 
 /**
- * Created by Dean Foster on 2/12/2017.
+ * Created by Dean Foster on 2/13/2017.
  */
 
-public class LicensesActivity extends AppCompatActivity {
+public class ApacheViewActivity extends AppCompatActivity {
+    WebView apacheWebView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_licenses);
+        setContentView(R.layout.apache_activity);
 
         //Setup app bar
-        Toolbar licensesToolbar = (Toolbar) findViewById(R.id.licensesToolbar);
+        Toolbar licensesToolbar = (Toolbar) findViewById(R.id.apacheToolbar);
         setSupportActionBar(licensesToolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Licenses");
+        getSupportActionBar().setTitle("Apache 2.0");
         //Set color of appbar title
         licensesToolbar.setTitleTextColor(getResources().getColor(R.color.colorBlack));
 
@@ -41,6 +44,14 @@ public class LicensesActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(getResources().getColor(R.color.colorGrey));
+
+        //References
+        apacheWebView = (WebView) findViewById(R.id.apacheWebView);
+
+        //Load in html
+        String license = getResources().getString(R.string.apache_2_0);
+        String other = "<html><body>asuh<ul><li>woah</li></ul></body></html>";
+        apacheWebView.loadData(other, "text/html", null);
     }
 
     @Override

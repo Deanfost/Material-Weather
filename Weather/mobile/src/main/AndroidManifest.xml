@@ -95,7 +95,13 @@
         </activity>
 
         <!--Licenses activity -->
-        <activity android:name=".LicensesActivity"
+        <activity android:name=".AttributionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme">
+        </activity>
+
+        <activity android:name=".ApacheViewActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme">

@@ -23,7 +23,9 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingBottom="@dimen/_10sdp"
+                android:paddingLeft="@dimen/_16sdp"
+                android:paddingRight="@dimen/_16sdp">
 
                 <!-- Libs -->
                 <TextView
@@ -31,7 +33,6 @@
                     android:layout_height="wrap_content"
                     android:text="Libraries"
                     android:textSize="20sp"
-                    android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"/>
 
                 <!-- Android Client Wrapper -->
@@ -140,7 +141,6 @@
                     android:layout_height="wrap_content"
                     android:text="Resources"
                     android:textSize="20sp"
-                    android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
@@ -225,7 +225,6 @@
                     android:layout_height="wrap_content"
                     android:text="Android"
                     android:textSize="20sp"
-                    android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
@@ -260,7 +259,6 @@
                     android:layout_height="wrap_content"
                     android:text="Licenses"
                     android:textSize="20sp"
-                    android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
@@ -268,7 +266,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:id="@+id/licensesApacheLayout">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -277,7 +278,6 @@
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp"/>
-
                 </LinearLayout>
 
             </LinearLayout>

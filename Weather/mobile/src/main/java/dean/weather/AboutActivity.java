@@ -13,7 +13,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -57,11 +56,11 @@ public class AboutActivity extends AppCompatActivity {
         parentLayout = (LinearLayout) findViewById(R.id.aboutParentLayout);
         upperLayout = (LinearLayout) findViewById(R.id.aboutUpperLayout);
         rateLayout = (RelativeLayout) findViewById(R.id.aboutRateLayout);
-        licenseLayout = (RelativeLayout) findViewById(R.id.aboutLicenseLayout);
+        licenseLayout = (RelativeLayout) findViewById(R.id.aboutAttrLayout);
         srcLayout = (RelativeLayout) findViewById(R.id.aboutSrcLayout);
         donateLayout = (RelativeLayout) findViewById(R.id.aboutDonateLayout);
         rateIcon = (ImageView) findViewById(R.id.aboutRateIcon);
-        licenseIcon = (ImageView) findViewById(R.id.aboutLicenseIcon);
+        licenseIcon = (ImageView) findViewById(R.id.aboutAttrIcon);
         srcIcon = (ImageView) findViewById(R.id.aboutSrcIcon);
         donateIcon = (ImageView) findViewById(R.id.aboutDonateIcon);
 
@@ -142,7 +141,7 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("aboutActivity", "attr clicked");
-                Intent licensesIntent = new Intent(AboutActivity.this, LicensesActivity.class);
+                Intent licensesIntent = new Intent(AboutActivity.this, AttributionActivity.class);
                 startActivity(licensesIntent);
             }
         });
