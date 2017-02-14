@@ -174,7 +174,7 @@
                     android:id="@+id/currentMinutelySummary"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_below="@id/currentDetailsLabel"
-                    android:layout_marginLeft="@dimen/_2sdp"/>
+                    android:layout_marginLeft="@dimen/_1sdp"/>
 
                 <!-- Left side of details label -->
 
