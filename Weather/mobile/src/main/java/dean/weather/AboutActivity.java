@@ -142,9 +142,8 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("aboutActivity", "attr clicked");
-                Snackbar snackbar = Snackbar
-                        .make(parentLayout, "Coming soon.", Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                Intent licensesIntent = new Intent(AboutActivity.this, LicensesActivity.class);
+                startActivity(licensesIntent);
             }
         });
 

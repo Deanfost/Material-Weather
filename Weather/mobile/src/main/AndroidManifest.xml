@@ -94,6 +94,13 @@
             android:theme="@style/ActivityTheme">
         </activity>
 
+        <!--Licenses activity -->
+        <activity android:name=".LicensesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme">
+        </activity>
+
         <!--Active notification service-->
         <service android:name="dean.weather.OngoingNotifService"
             android:exported="false"
