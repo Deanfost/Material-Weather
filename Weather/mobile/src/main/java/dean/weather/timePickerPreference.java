@@ -16,19 +16,19 @@ import java.util.GregorianCalendar;
  * Created by Dean on 12/29/2016.
  */
 
-public class TimePickerPreference extends DialogPreference {
+public class timePickerPreference extends DialogPreference {
     private Calendar calendar;
     private TimePicker picker = null;
 
-    public TimePickerPreference(Context ctxt) {
+    public timePickerPreference(Context ctxt) {
         this(ctxt, null);
     }
 
-    public TimePickerPreference(Context ctxt, AttributeSet attrs) {
+    public timePickerPreference(Context ctxt, AttributeSet attrs) {
         this(ctxt, attrs, android.R.attr.dialogPreferenceStyle);
     }
 
-    public TimePickerPreference(Context ctxt, AttributeSet attrs, int defStyle) {
+    public timePickerPreference(Context ctxt, AttributeSet attrs, int defStyle) {
         super(ctxt, attrs, defStyle);
 
         setPositiveButtonText("Set");

@@ -11,7 +11,7 @@ import android.util.Log;
  * Created by DeanF on 12/11/2016.
  */
 
-public class BootReceiver extends BroadcastReceiver {
+public class bootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -23,7 +23,7 @@ public class BootReceiver extends BroadcastReceiver {
             //Put the appropriate extras
             //Repeating notif
             if(prefs.getBoolean("key_notif_follow", false)){
-                Intent interfaceIntent = new Intent(context, AlarmInterfaceService.class);
+                Intent interfaceIntent = new Intent(context, alarmInterfaceService.class);
                 interfaceIntent.putExtra("repeatNotif", true);
                 Log.i("BootReceiver", "repeatNotif enabled");
                 context.startService(interfaceIntent);
@@ -32,7 +32,7 @@ public class BootReceiver extends BroadcastReceiver {
             //Alerts notif
             if(prefs.getBoolean("key_notif_alert", false)){
                 //Restart the alerts pull
-                Intent interfaceIntent = new Intent(context, AlarmInterfaceService.class);
+                Intent interfaceIntent = new Intent(context, alarmInterfaceService.class);
                 interfaceIntent.putExtra("alertNotif", true);
                 Log.i("BootReceiver", "alertNotif enabled");
                 context.startService(interfaceIntent);

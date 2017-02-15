@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -38,7 +37,7 @@ import com.google.firebase.FirebaseApp;
  * Created by Dean on 12/23/2016.
  */
 
-public class SettingsActivity extends PreferenceActivity{
+public class settingsActivity extends PreferenceActivity{
 //    Preference followMePref;
     SwitchPreference ongoingNotif;
 //    SwitchPreference summaryNotif;
@@ -161,7 +160,7 @@ public class SettingsActivity extends PreferenceActivity{
                             if(MainActivity.enableAppBarButtons){
                                 //Start it, everything is looking good
                                 Log.i("ongoingNotifPref", "Looks good, starting service");
-                                Intent serviceIntent = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
+                                Intent serviceIntent = new Intent(settingsActivity.this, alarmInterfaceService.class);
                                 serviceIntent.putExtra("repeatNotif", true);
                                 startService(serviceIntent);
                                 return true;
@@ -185,7 +184,7 @@ public class SettingsActivity extends PreferenceActivity{
                 else{
                     //Stop the notif service
                     Log.i("ongoingNotifPref", "stoppingService");
-                    Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
+                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("repeatNotif", false);
                     startService(stopService);
 
@@ -381,7 +380,7 @@ public class SettingsActivity extends PreferenceActivity{
                         if(MainActivity.enableAppBarButtons){
                             //Start the alarm intent service, everything is looking good
                             Log.i("alert pref", "Starting service");
-                            Intent alarmService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
+                            Intent alarmService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                             alarmService.putExtra("alertNotif", true);
                             startService(alarmService);
                             return true;
@@ -406,7 +405,7 @@ public class SettingsActivity extends PreferenceActivity{
                 else{
                     //Kill the alarm
                     Log.i("alert pref", "Killing alarm");
-                    Intent stopService = new Intent(SettingsActivity.this, AlarmInterfaceService.class);
+                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("alertNotif", false);
                     startService(stopService);
 
@@ -437,7 +436,7 @@ public class SettingsActivity extends PreferenceActivity{
      */
     private boolean performChecks(){
         //Check to see if location permissions and services are enabled
-        int locationPermissionCheck = ContextCompat.checkSelfPermission(SettingsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION);
+        int locationPermissionCheck = ContextCompat.checkSelfPermission(settingsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         if(locationPermissionCheck == PackageManager.PERMISSION_GRANTED){
             Log.i("permissionsCheck", "Granted");
             //Check to see if location services are enabled
@@ -454,7 +453,7 @@ public class SettingsActivity extends PreferenceActivity{
         //Permission has not been granted
         else{
             //Request permission access
-            ActivityCompat.requestPermissions(SettingsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 22);
+            ActivityCompat.requestPermissions(settingsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 22);
             performChecksReturn = false;
         }
         Log.i("checksReturn", performChecksReturn + "");

@@ -14,14 +14,23 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 /**
  * Created by Dean Foster on 2/12/2017.
  */
 
 public class AttributionActivity extends AppCompatActivity {
+    RelativeLayout clientLayout;
+    RelativeLayout SDPLayout;
+    RelativeLayout introLayout;
+    RelativeLayout arcLoaderLayout;
+    RelativeLayout assetStudioLayot;
+    RelativeLayout vectorizerLayout;
+    RelativeLayout iconsLayout;
+    RelativeLayout AOSPLayout;
     LinearLayout apacheLayout;
-
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

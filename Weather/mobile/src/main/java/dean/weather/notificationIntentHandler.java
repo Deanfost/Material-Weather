@@ -11,9 +11,9 @@ import android.util.Log;
  * Created by DeanF on 12/14/2016.
  */
 
-public class NotificationIntentHandler extends IntentService{
+public class notificationIntentHandler extends IntentService{
 
-    public NotificationIntentHandler() {
+    public notificationIntentHandler() {
         super(null);
     }
 

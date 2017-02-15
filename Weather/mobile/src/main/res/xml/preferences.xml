@@ -91,7 +91,7 @@
 
             <!-- Intent opens special tutorial activity -->
             <intent android:targetPackage="dean.weather"
-                android:targetClass="dean.weather.TutorialActivity" >
+                android:targetClass="dean.weather.tutorialActivity" >
             </intent>
         </Preference>
 

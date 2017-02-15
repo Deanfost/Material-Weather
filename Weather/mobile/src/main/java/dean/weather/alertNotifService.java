@@ -11,9 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.renderscript.RenderScript;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -39,7 +37,6 @@ import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;
@@ -50,7 +47,7 @@ import retrofit.client.Response;
  * Created by Dean on 12/25/2016.
  */
 
-public class AlertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class alertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient googleApiClient;
     private Double latitude;
     private Double longitude;
@@ -63,7 +60,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
     private boolean createNewNotif;
     private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
 
-    public AlertNotifService() {
+    public alertNotifService() {
         super(null);
     }
 
@@ -222,12 +219,12 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                             editor.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm = new Intent(getApplicationContext(), AlarmInterfaceService.class);
+                            Intent stopAlarm = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm.putExtra("alertNotif", false);
                             startService(stopAlarm);
 
                             //Notify the user
-                            Toast.makeText(AlertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
                             stopSelf();
                             break;
@@ -244,12 +241,12 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                             editor1.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm1 = new Intent(getApplicationContext(), AlarmInterfaceService.class);
+                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm1.putExtra("alertNotif", false);
                             startService(stopAlarm1);
 
                             //Notify the user
-                            Toast.makeText(AlertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
                             stopSelf();
                             break;
@@ -268,7 +265,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
             editor.apply();
 
             //End the repeating preference alarm
-            Intent stopAlarm = new Intent(this, AlarmInterfaceService.class);
+            Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
             stopAlarm.putExtra("alertNotif", false);
             startService(stopAlarm);
 
@@ -329,7 +326,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                     }
 
                     //Check to see if these are new alerts
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AlertNotifService.this);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(alertNotifService.this);
                     for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
                         if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri() + ".Alert")){
                             //This is a new alert, add it to the list of new alerts
@@ -521,7 +518,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                         .setContentText("New weather statement for your area")
 //                        .setLargeIcon(icon)
                         .setColor(color);
-        Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
+        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
@@ -555,7 +552,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
                         .setContentText("New weather statement for your area");
-        Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
+        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);

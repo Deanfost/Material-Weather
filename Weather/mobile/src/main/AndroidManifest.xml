@@ -73,7 +73,7 @@
         </activity>
 
         <!--Settings activity-->
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".settingsActivity"
             android:theme="@style/SettingsThemeBlue"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
@@ -81,7 +81,7 @@
         </activity>
 
         <!--Settings tutorial activity-->
-        <activity android:name=".TutorialActivity"
+        <activity android:name=".tutorialActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/OnboardingTheme">
@@ -101,6 +101,7 @@
             android:theme="@style/ActivityTheme">
         </activity>
 
+        <!-- Apache view activity -->
         <activity android:name=".ApacheViewActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
@@ -108,30 +109,30 @@
         </activity>
 
         <!--Active notification service-->
-        <service android:name="dean.weather.OngoingNotifService"
+        <service android:name="dean.weather.ongoingNotifService"
             android:exported="false"
             android:enabled="true">
         </service>
 
         <!--Alert notification service-->
-        <service android:name="dean.weather.AlertNotifService"
+        <service android:name="dean.weather.alertNotifService"
             android:exported="false"
             android:enabled="true">
         </service>
 
         <!--Alarm interface service-->
-        <service android:name=".AlarmInterfaceService"
+        <service android:name=".alarmInterfaceService"
             android:exported="false">
         </service>
 
         <!--Notification intent receiver-->
-        <service android:name="dean.weather.NotificationIntentHandler"
+        <service android:name="dean.weather.notificationIntentHandler"
             android:exported="false">
         </service>
 
         <!--Boot receiver-->
         <receiver
-            android:name="dean.weather.BootReceiver"
+            android:name="dean.weather.bootReceiver"
             android:label="bootReceiver"
             android:enabled="true">
             <intent-filter>
