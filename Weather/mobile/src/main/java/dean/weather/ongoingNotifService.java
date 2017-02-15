@@ -16,7 +16,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -28,7 +27,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -308,14 +306,14 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("notifService", "GoogleAPI connection suspended");
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            //Create notification for Lollipop through Marshmallow
-            createNotification(false);
-        }
-        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-            //Create notification for Nougat and above
-            createNewNotification(false);
-        }
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+//            //Create notification for Lollipop through Marshmallow
+//            createNotification(false);
+//        }
+//        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+//            //Create notification for Nougat and above
+//            createNewNotification(false);
+//        }
     }
 
     //Notification
@@ -425,8 +423,8 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
-            mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notifBuilder.build());
+            mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+            mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ERROR_ID, notifBuilder.build());
 
             if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();
@@ -513,8 +511,8 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
-            mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notifBuilder.build());
+            mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+            mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ERROR_ID, notifBuilder.build());
         }
 
         if (googleApiClient.isConnected()) {
