@@ -219,6 +219,40 @@
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
+                <!-- Dark Sky -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dark sky"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"/>
+
+                <!-- Dark Sky -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_70sdp"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:id="@+id/licensesDarkSkyLayout">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dark Sky"
+                        android:padding="@dimen/_10sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Weather information and forecasts sourced from the Dark Sky API."
+                        android:padding="@dimen/_10sdp"
+                        android:textSize="13sp"
+                        android:layout_marginTop="@dimen/_22sdp"/>
+                </RelativeLayout>
+
                 <!-- Android -->
                 <TextView
                     android:layout_width="wrap_content"

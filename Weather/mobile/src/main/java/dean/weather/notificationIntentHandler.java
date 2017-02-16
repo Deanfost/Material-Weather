@@ -11,9 +11,9 @@ import android.util.Log;
  * Created by DeanF on 12/14/2016.
  */
 
-public class notificationIntentHandler extends IntentService{
+public class NotificationIntentHandler extends IntentService{
 
-    public notificationIntentHandler() {
+    public NotificationIntentHandler() {
         super(null);
     }
 
@@ -22,7 +22,7 @@ public class notificationIntentHandler extends IntentService{
         Log.i("NotifIntentHndlr", "Started");
         //When instantiated, clear the back stack if there is one, and then start a new instance of introActivity
         Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         this.startActivity(mainIntent);
         stopSelf();
     }

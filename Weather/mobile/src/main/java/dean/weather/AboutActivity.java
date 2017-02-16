@@ -124,7 +124,10 @@ public class AboutActivity extends AppCompatActivity {
         else{
             Log.i("aboutActivity", "Theme change disabled");
         }
+    }
 
+    @Override
+    protected void onResume() {
         //Click listeners
         rateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +154,7 @@ public class AboutActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i("aboutActivity", "src clicked");
                 //Move to darksky.net
-                String url = "http://www.darksky.net";
+                String url = "https://darksky.net/poweredby/";
                 Intent webIntent = new Intent(Intent.ACTION_VIEW);
                 webIntent.setData(Uri.parse(url));
                 startActivity(webIntent);
@@ -167,6 +170,16 @@ public class AboutActivity extends AppCompatActivity {
                 snackbar.show();
             }
         });
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        rateLayout.setOnClickListener(null);
+        licenseLayout.setOnClickListener(null);
+        srcLayout.setOnClickListener(null);
+        donateLayout.setOnClickListener(null);
+        super.onPause();
     }
 
     @Override

@@ -14,7 +14,7 @@ import android.util.Log;
  * Created by Dean on 12/25/2016.
  */
 
-public class alarmInterfaceService extends Service {
+public class AlarmInterfaceService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -26,12 +26,12 @@ public class alarmInterfaceService extends Service {
         //Initialize intents and alarms for later use
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         //Ongoing notif
-        Intent ongoingServiceIntent = new Intent(this, ongoingNotifService.class);
+        Intent ongoingServiceIntent = new Intent(this, OngoingNotifService.class);
         ongoingServiceIntent.putExtra("pull", true);
 //        ongoingServiceIntent.setAction("dean.weather.alarmRepeating");
         PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
         //Alert notif
-        Intent alertNotifIntent = new Intent(this, alertNotifService.class);
+        Intent alertNotifIntent = new Intent(this, AlertNotifService.class);
 //        alertNotifIntent.setAction("dean.weather.alarmAlerts");
         PendingIntent alertAlarmIntent = PendingIntent.getService(this, 0, alertNotifIntent, 0);
 
@@ -51,7 +51,7 @@ public class alarmInterfaceService extends Service {
                                 AlarmManager.INTERVAL_HALF_HOUR, ongoingAlarmIntent);
 
                         //Start the first pull
-                        Intent firstPull = new Intent(this, ongoingNotifService.class);
+                        Intent firstPull = new Intent(this, OngoingNotifService.class);
                         firstPull.putExtra("pull", true);
                         this.startService(firstPull);
                     }
@@ -61,7 +61,7 @@ public class alarmInterfaceService extends Service {
                         //Cancel the alarm
                         alarmManager.cancel(ongoingAlarmIntent);
                         //Kill the notification service
-                        Intent notSticky = new Intent(this, ongoingNotifService.class);
+                        Intent notSticky = new Intent(this, OngoingNotifService.class);
                         notSticky.putExtra("notSticky", false);//Sends an intent to the service to return START_NOT_STICKY, which will allow it to die
                         startService(notSticky);
                     }
@@ -134,7 +134,7 @@ public class alarmInterfaceService extends Service {
                                 AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
 
                         //Start the first pull
-                        Intent firstPull = new Intent(this, alertNotifService.class);
+                        Intent firstPull = new Intent(this, AlertNotifService.class);
                         this.startService(firstPull);
                     }
                     else{

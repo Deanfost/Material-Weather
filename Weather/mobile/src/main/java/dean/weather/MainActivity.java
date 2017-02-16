@@ -71,7 +71,7 @@ import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer,
-        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher, changeLocationSettingsFragment.Initializer{
+        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher, ChangeLocationSettingsFragment.Initializer{
 
     //Layout
     Toolbar toolbar;
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements
             PermissionsFragment.setInitializer(this);
             NoConnectionFragment.setConnectionRefresher(this);
             LocationUnavailableFragment.setDataFetcher(this);
-            changeLocationSettingsFragment.setInitializer(this);
+            ChangeLocationSettingsFragment.setInitializer(this);
 
             //Connect to the Google API
             googleApiClient.connect();
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements
             //Settings
             case R.id.action_settings:
                     //Open the settings activity
-                    Intent settingsIntent = new Intent(this, settingsActivity.class);
+                    Intent settingsIntent = new Intent(this, SettingsActivity.class);
                     startActivity(settingsIntent);
                 return true;
             //Refresh data
@@ -882,9 +882,9 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Call the alert notification service (if enabled)
                 if(preferences.getBoolean(getString(R.string.alert_notif_key), false)){
-                    Intent alertNotifService = new Intent(MainActivity.this, dean.weather.alertNotifService.class);
+                    Intent alertNotifService = new Intent(MainActivity.this, AlertNotifService.class);
                     startService(alertNotifService);
-                    Log.i("Main Activity", "Starting alertNotifService");
+                    Log.i("Main Activity", "Starting AlertNotifService");
                 }
             }
 
@@ -1037,7 +1037,7 @@ public class MainActivity extends AppCompatActivity implements
     private void changeLocationSettingsFragmentTransaction(){
         FragmentManager mainFragmentManager = getFragmentManager();
         FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
-        changeLocationSettingsFragment ChangeLocationSettingsFragment = new changeLocationSettingsFragment();
+        ChangeLocationSettingsFragment ChangeLocationSettingsFragment = new ChangeLocationSettingsFragment();
         if (!isFinishing()) {
             mainFragmentTransaction.replace(R.id.mainContentView, ChangeLocationSettingsFragment);
             mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
@@ -1539,7 +1539,7 @@ public class MainActivity extends AppCompatActivity implements
                             .setContent(notificationView)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
-            Intent mainIntent = new Intent(this, notificationIntentHandler.class);
+            Intent mainIntent = new Intent(this, NotificationIntentHandler.class);
             PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);

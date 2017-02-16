@@ -28,7 +28,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
  * Created by DeanF on 11/11/2016.
  */
 
-public class changeLocationSettingsFragment extends Fragment {
+public class ChangeLocationSettingsFragment extends Fragment {
     Button btnEnableLocationSettings;
     final int REQUEST_CHANGE_SETTINGS = 15;
     static Initializer sInitializer;
@@ -39,7 +39,7 @@ public class changeLocationSettingsFragment extends Fragment {
     }
 
     //Obtain reference to calling activity
-    public static void setInitializer(changeLocationSettingsFragment.Initializer initializer){
+    public static void setInitializer(ChangeLocationSettingsFragment.Initializer initializer){
         sInitializer = initializer;
     }
 

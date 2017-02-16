@@ -29,13 +29,14 @@ public class AttributionActivity extends AppCompatActivity {
     RelativeLayout assetStudioLayout;
     RelativeLayout vectorizerLayout;
     RelativeLayout iconsLayout;
+    RelativeLayout darkSkyLayout;
     RelativeLayout AOSPLayout;
     LinearLayout apacheLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_licenses);
+        setContentView(R.layout.activity_attribution);
 
         //Setup app bar
         Toolbar licensesToolbar = (Toolbar) findViewById(R.id.licensesToolbar);
@@ -65,9 +66,13 @@ public class AttributionActivity extends AppCompatActivity {
         assetStudioLayout = (RelativeLayout) findViewById(R.id.licensesAssetStudioLayout);
         vectorizerLayout = (RelativeLayout) findViewById(R.id.licensesVectorizerLayout);
         iconsLayout = (RelativeLayout) findViewById(R.id.licensesIcons8Layout);
+        darkSkyLayout = (RelativeLayout) findViewById(R.id.licensesDarkSkyLayout);
         AOSPLayout = (RelativeLayout) findViewById(R.id.licensesAOSPLayoout);
         apacheLayout = (LinearLayout) findViewById(R.id.licensesApacheLayout);
+    }
 
+    @Override
+    protected void onResume() {
         //Click listeners
         clientLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +126,7 @@ public class AttributionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Asset studio", "Clicked");
-                //Move to github page of the lib
+                //Move to android asset studio page
                 String url = "https://romannurik.github.io/AndroidAssetStudio/";
                 Intent webIntent = new Intent(Intent.ACTION_VIEW);
                 webIntent.setData(Uri.parse(url));
@@ -133,7 +138,7 @@ public class AttributionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Vectorizer", "Clicked");
-                //Move to github page of the lib
+                //Move to vectorizer.io
                 String url = "https://www.vectorizer.io/";
                 Intent webIntent = new Intent(Intent.ACTION_VIEW);
                 webIntent.setData(Uri.parse(url));
@@ -145,8 +150,19 @@ public class AttributionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Icons", "Clicked");
-                //Move to github page of the lib
+                //Move to icons8.com
                 String url = "https://icons8.com/";
+                Intent webIntent = new Intent(Intent.ACTION_VIEW);
+                webIntent.setData(Uri.parse(url));
+                startActivity(webIntent);
+            }
+        });
+
+        darkSkyLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Move to dark sky
+                String url = "https://darksky.net/poweredby/";
                 Intent webIntent = new Intent(Intent.ACTION_VIEW);
                 webIntent.setData(Uri.parse(url));
                 startActivity(webIntent);
@@ -157,7 +173,7 @@ public class AttributionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("AOSP", "Clicked");
-                //Move to github page of the lib
+                //Move to Android Open Source Project
                 String url = "https://source.android.com/";
                 Intent webIntent = new Intent(Intent.ACTION_VIEW);
                 webIntent.setData(Uri.parse(url));
@@ -174,6 +190,22 @@ public class AttributionActivity extends AppCompatActivity {
                 startActivity(licenseIntent);
             }
         });
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        darkSkyLayout.setOnClickListener(null);
+        SDPLayout.setOnClickListener(null);
+        introLayout.setOnClickListener(null);
+        arcLoaderLayout.setOnClickListener(null);
+        assetStudioLayout.setOnClickListener(null);
+        vectorizerLayout.setOnClickListener(null);
+        iconsLayout.setOnClickListener(null);
+        darkSkyLayout.setOnClickListener(null);
+        AOSPLayout.setOnClickListener(null);
+        apacheLayout.setOnClickListener(null);
+        super.onPause();
     }
 
     @Override

@@ -73,7 +73,7 @@
         </activity>
 
         <!--Settings activity-->
-        <activity android:name=".settingsActivity"
+        <activity android:name=".SettingsActivity"
             android:theme="@style/SettingsThemeBlue"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
@@ -81,7 +81,7 @@
         </activity>
 
         <!--Settings tutorial activity-->
-        <activity android:name=".tutorialActivity"
+        <activity android:name=".TutorialActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/OnboardingTheme">
@@ -109,30 +109,30 @@
         </activity>
 
         <!--Active notification service-->
-        <service android:name="dean.weather.ongoingNotifService"
+        <service android:name="dean.weather.OngoingNotifService"
             android:exported="false"
             android:enabled="true">
         </service>
 
         <!--Alert notification service-->
-        <service android:name="dean.weather.alertNotifService"
+        <service android:name="dean.weather.AlertNotifService"
             android:exported="false"
             android:enabled="true">
         </service>
 
         <!--Alarm interface service-->
-        <service android:name=".alarmInterfaceService"
+        <service android:name=".AlarmInterfaceService"
             android:exported="false">
         </service>
 
         <!--Notification intent receiver-->
-        <service android:name="dean.weather.notificationIntentHandler"
+        <service android:name="dean.weather.NotificationIntentHandler"
             android:exported="false">
         </service>
 
         <!--Boot receiver-->
         <receiver
-            android:name="dean.weather.bootReceiver"
+            android:name="dean.weather.BootReceiver"
             android:label="bootReceiver"
             android:enabled="true">
             <intent-filter>
