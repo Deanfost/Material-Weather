@@ -349,8 +349,10 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                     //Check to see if it has been 48 hours (just to be safe), and if we can remove any persisted alert from sharedPrefs
                     Map<String,?> sharedPrefsKeys = prefs.getAll();
                     for(String key : sharedPrefsKeys.keySet()){
+                        Log.i("Printing key", key);
                         if(key.contains(".Alert")){
                             //Get the issuance time of the alert in UNIX format
+                            Log.i("Key", "Contains .Alert");
                             Long value = (Long) sharedPrefsKeys.get(key);
                             //If 48 hours has passed since the issuance of the alert
                             if(System.currentTimeMillis() >= value + 172800000){
@@ -364,6 +366,14 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                 }
                 else{
                     Log.i("alerts", "null");
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(alertNotifService.this);
+                    Map<String,?> sharedPrefsKeys = prefs.getAll();
+                    for(String key : sharedPrefsKeys.keySet()){
+                        Log.i("Printing key", key);
+                        if(key.contains(".Alert")){
+                            Log.i("Key", "Contains .Alert");
+                        }
+                    }
                 }
 
                 //Create/update notification if there is new data to notify the user about
