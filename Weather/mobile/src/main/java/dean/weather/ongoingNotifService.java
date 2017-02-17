@@ -400,8 +400,9 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             .setContent(notificationView)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
-            Intent mainIntent = new Intent(this, NotificationIntentHandler.class);
-            PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0);
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -490,8 +491,9 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
-            Intent mainIntent = new Intent(this, NotificationIntentHandler.class);
-            PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0);
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

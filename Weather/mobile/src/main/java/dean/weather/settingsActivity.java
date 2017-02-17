@@ -43,6 +43,7 @@ public class SettingsActivity extends PreferenceActivity{
 //    SwitchPreference summaryNotif;
 //    Preference timePickerPref;
     SwitchPreference alertNotif;
+    Preference tutorialPref;
     boolean performChecksReturn;
 
     //Lifecycle and preference listeners
@@ -58,6 +59,7 @@ public class SettingsActivity extends PreferenceActivity{
         alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
 //        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
 //        timePickerPref = findPreference(getString(R.string.summary_time_key));
+        tutorialPref = findPreference(getResources().getString(R.string.support_tutorial_key));
 
         //Color accents
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -416,6 +418,16 @@ public class SettingsActivity extends PreferenceActivity{
                 }
             }
         });
+        tutorialPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Log.i("Settings", "Tutorial pref clicked");
+                Intent tutorialIntent = new Intent(SettingsActivity.this, TutorialActivity.class);
+                startActivity(tutorialIntent);
+                return false;
+            }
+        });
+
     }
 
     @Override

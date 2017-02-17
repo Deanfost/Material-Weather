@@ -44,7 +44,7 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/MaterialTheme"
-            android:launchMode="singleTop">
+            android:launchMode="singleTask">
         </activity>
 
         <!--Day Activity-->

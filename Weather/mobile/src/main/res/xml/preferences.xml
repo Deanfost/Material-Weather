@@ -88,11 +88,6 @@
         <Preference
             android:title="Product tour"
             android:key="@string/support_tutorial_key">
-
-            <!-- Intent opens special tutorial activity -->
-            <intent android:targetPackage="dean.weather"
-                android:targetClass="dean.weather.TutorialActivity" >
-            </intent>
         </Preference>
 
         <!-- Shows modal that is connected with Google Merchant API, shows IAPs to donate-->

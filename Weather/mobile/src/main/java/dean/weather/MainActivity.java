@@ -19,6 +19,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -1539,11 +1540,22 @@ public class MainActivity extends AppCompatActivity implements
                             .setContent(notificationView)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
-            Intent mainIntent = new Intent(this, NotificationIntentHandler.class);
-            PendingIntent resultPendingIntent = PendingIntent.getService(this, 0, mainIntent, 0);
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0);
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
         }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        //Do nothing
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        //Do nothing
+    }
 }
