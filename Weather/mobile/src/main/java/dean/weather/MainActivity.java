@@ -653,8 +653,14 @@ public class MainActivity extends AppCompatActivity implements
                 todaysHILO = todaysHI + "\u00B0" + "/" + todaysLO + "\u00B0";//76°/42° format
 
                 //Parse summary forecast
-                todaysMinutely = weatherResponse.getMinutely().getSummary();
-                Log.i("todayMinutely", todaysMinutely);
+                if(weatherResponse.getMinutely() != null){
+                    todaysMinutely = weatherResponse.getMinutely().getSummary();
+                    Log.i("todayMinutely", todaysMinutely);
+                }
+                else{
+                    Log.i("todayMinutely", "Null");
+                    todaysMinutely = "---";
+                }
 
                 //Parse current wind speed and bearing
                 String currentWindSpeed = weatherResponse.getCurrently().getWindSpeed();
