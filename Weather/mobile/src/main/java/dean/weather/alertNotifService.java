@@ -90,11 +90,10 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
             createNewNotif = true;
         }
 
-        //Update the summary alarm time key-value pair for comparison on phone shutdown
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//        SharedPreferences.Editor editor = prefs.edit();
-//        editor.putLong(getString(R.string.summary_alarm_key), System.currentTimeMillis());
-//        editor.apply();
+        //Reset the alarm
+        Intent alarmService = new Intent(this, alarmInterfaceService.class);
+        alarmService.putExtra("alertNotifReset", true);
+        startService(alarmService);
     }
 
     //Location
@@ -219,7 +218,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                             editor.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm = new Intent(getApplicationContext(), AlarmInterfaceService.class);
+                            Intent stopAlarm = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm.putExtra("alertNotif", false);
                             startService(stopAlarm);
 
@@ -241,7 +240,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                             editor1.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm1 = new Intent(getApplicationContext(), AlarmInterfaceService.class);
+                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm1.putExtra("alertNotif", false);
                             startService(stopAlarm1);
 
@@ -265,7 +264,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
             editor.apply();
 
             //End the repeating preference alarm
-            Intent stopAlarm = new Intent(this, AlarmInterfaceService.class);
+            Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
             stopAlarm.putExtra("alertNotif", false);
             startService(stopAlarm);
 

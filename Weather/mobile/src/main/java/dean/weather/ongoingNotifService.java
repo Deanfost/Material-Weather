@@ -74,6 +74,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     private String sunriseTimeString;
     private String sunsetTimeString;
 
+    private boolean displaySuccess = false;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -102,14 +104,34 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 .addApi(LocationServices.API)
                                 .build();
                     }
+                    displaySuccess = false;
+                    //Reset the alarm
+                    Intent serviceIntent = new Intent(this, alarmInterfaceService.class);
+                    serviceIntent.putExtra("repeatNotifReset", true);
+                    startService(serviceIntent);
                     googleApiClient.connect();
                     return START_STICKY;
                 }
                 //Intent specifies the service to stop
                 else if(intent.getExtras().containsKey("notSticky")){
                     Log.i("notifService", "notStickyReceived");
+                    displaySuccess = false;
                     stopSelf();
                     return START_NOT_STICKY;
+                }
+                //Intent specifies that this is restarting from an error notif
+                else if(intent.getExtras().containsKey("restart")){
+                    //Restart, but display an extra notif saying that it worked
+                    if(googleApiClient == null){
+                        googleApiClient = new GoogleApiClient.Builder(this)
+                                .addConnectionCallbacks(this)
+                                .addOnConnectionFailedListener(this)
+                                .addApi(LocationServices.API)
+                                .build();
+                    }
+                    displaySuccess = true;
+                    googleApiClient.connect();
+                    return START_STICKY;
                 }
             }
         }
@@ -176,7 +198,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("NotifService", "GoogleAPIClient connected");
-        //TODO - CHECK TO SEE IF THE USER HAS A DEFAULT LOCATION SET/IF THE USER WANTS A LOCATION REPORT
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         //If we have location permissions, check for location settings, if not, then end the service
         if (locationPermissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -240,7 +261,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             editor.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm = new Intent(getApplicationContext(), AlarmInterfaceService.class);
+                            Intent stopAlarm = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm.putExtra("repeatNotif", false);
                             startService(stopAlarm);
 
@@ -262,7 +283,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             editor1.apply();
 
                             //End the repeating preference alarm
-                            Intent stopAlarm1 = new Intent(getApplicationContext(), AlarmInterfaceService.class);
+                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
                             stopAlarm1.putExtra("repeatNotif", false);
                             startService(stopAlarm1);
 
@@ -287,7 +308,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             editor.apply();
 
             //End the repeating preference alarm
-            Intent stopAlarm = new Intent(this, AlarmInterfaceService.class);
+            Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
             stopAlarm.putExtra("repeatNotif", false);
             startService(stopAlarm);
 
@@ -306,14 +327,15 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("notifService", "GoogleAPI connection suspended");
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            //Create notification for Lollipop through Marshmallow
-//            createNotification(false);
-//        }
-//        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-//            //Create notification for Nougat and above
-//            createNewNotification(false);
-//        }
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            //Create notification for Lollipop through Marshmallow
+            createNotification(false);
+        }
+        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+            //Create notification for Nougat and above
+            createNewNotification(false);
+        }
     }
 
     //Notification
@@ -410,7 +432,10 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
             //You know its working when this happens
-            createTestNotif();
+            //TODO - ENABLE THE LOGIC AFTER YOU REMOVE THE TESTING NOTIF
+//            if(displaySuccess){
+                createSuccessNotif();
+//            }
 
         } else {
             //Create notification asking the user to try again
@@ -420,6 +445,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again now.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
+            serviceIntent.putExtra("restart", "true");
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
@@ -500,6 +526,11 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
+            //TODO - ENABLE THE LOGIC AFTER YOU REMOVE THE TESTING NOTIF
+//            if(displaySuccess){
+                createSuccessNotif();
+//            }
+
         } else {
             //Create notification asking the user to try again
             NotificationCompat.Builder notifBuilder =
@@ -508,6 +539,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again now.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
+            serviceIntent.putExtra("restart", "true");
             serviceIntent.putExtra("pull", true);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
@@ -525,7 +557,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     /**
      * Creates test notification to go along with actual ongoing notif.
      */
-    private void createTestNotif(){
+    private void createSuccessNotif(){
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_check_color)
@@ -656,9 +688,14 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 }
                 NotificationCompat.Builder notifBuilder =
                         new NotificationCompat.Builder(ongoingNotifService.this)
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle("Error")
-                                .setContentText("Problem accessing Dark Sky.");
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Problem accessing Dark Sky")
+                                .setContentText("Tap to try again now.");
+                Intent serviceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
+                serviceIntent.putExtra("restart", "true");
+                serviceIntent.putExtra("pull", true);
+                PendingIntent servicePendingIntent = PendingIntent.getService(ongoingNotifService.this, 0, serviceIntent, 0);
+                notifBuilder.setContentIntent(servicePendingIntent);
                 notifBuilder.setAutoCancel(true);
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.cancel(2);

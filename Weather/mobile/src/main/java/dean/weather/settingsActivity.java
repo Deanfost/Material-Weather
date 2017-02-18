@@ -162,7 +162,7 @@ public class settingsActivity extends PreferenceActivity{
                             if(MainActivity.enableAppBarButtons){
                                 //Start it, everything is looking good
                                 Log.i("ongoingNotifPref", "Looks good, starting service");
-                                Intent serviceIntent = new Intent(settingsActivity.this, AlarmInterfaceService.class);
+                                Intent serviceIntent = new Intent(settingsActivity.this, alarmInterfaceService.class);
                                 serviceIntent.putExtra("repeatNotif", true);
                                 startService(serviceIntent);
                                 return true;
@@ -186,7 +186,7 @@ public class settingsActivity extends PreferenceActivity{
                 else{
                     //Stop the notif service
                     Log.i("ongoingNotifPref", "stoppingService");
-                    Intent stopService = new Intent(settingsActivity.this, AlarmInterfaceService.class);
+                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("repeatNotif", false);
                     startService(stopService);
 
@@ -382,7 +382,7 @@ public class settingsActivity extends PreferenceActivity{
                         if(MainActivity.enableAppBarButtons){
                             //Start the alarm intent service, everything is looking good
                             Log.i("alert pref", "Starting service");
-                            Intent alarmService = new Intent(settingsActivity.this, AlarmInterfaceService.class);
+                            Intent alarmService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                             alarmService.putExtra("alertNotif", true);
                             startService(alarmService);
                             return true;
@@ -407,7 +407,7 @@ public class settingsActivity extends PreferenceActivity{
                 else{
                     //Kill the alarm
                     Log.i("alert pref", "Killing alarm");
-                    Intent stopService = new Intent(settingsActivity.this, AlarmInterfaceService.class);
+                    Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("alertNotif", false);
                     startService(stopService);
 
@@ -422,7 +422,7 @@ public class settingsActivity extends PreferenceActivity{
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Log.i("Settings", "Tutorial pref clicked");
-                Intent tutorialIntent = new Intent(settingsActivity.this, TutorialActivity.class);
+                Intent tutorialIntent = new Intent(settingsActivity.this, tutorialActivity.class);
                 startActivity(tutorialIntent);
                 return false;
             }

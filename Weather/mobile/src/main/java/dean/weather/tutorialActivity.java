@@ -12,7 +12,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
  * Created by Dean on 12/23/2016.
  */
 
-public class TutorialActivity extends com.heinrichreimersoftware.materialintro.app.IntroActivity {
+public class tutorialActivity extends com.heinrichreimersoftware.materialintro.app.IntroActivity {
     //Similar to OnboardingActivity, but does not request permissions
     public static Activity activity;
 

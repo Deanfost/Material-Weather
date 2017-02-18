@@ -81,7 +81,7 @@
         </activity>
 
         <!--Settings tutorial activity-->
-        <activity android:name=".TutorialActivity"
+        <activity android:name=".tutorialActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/OnboardingTheme">
@@ -121,7 +121,7 @@
         </service>
 
         <!--Alarm interface service-->
-        <service android:name=".AlarmInterfaceService"
+        <service android:name=".alarmInterfaceService"
             android:exported="false">
         </service>
 

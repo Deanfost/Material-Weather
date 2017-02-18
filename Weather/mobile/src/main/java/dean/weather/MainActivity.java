@@ -966,13 +966,13 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new loadingFragment transaction.
      */
     private void loadingFragmentTransaction(){
-        FragmentManager mainFragmentManager = getFragmentManager();
-        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        FragmentManager loadingFragmentManager = getFragmentManager();
+        FragmentTransaction loadingFragmentTransaction = loadingFragmentManager.beginTransaction();
         LoadingFragment LoadingFragment = new LoadingFragment();
         if(!isFinishing()){
-            mainFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
-            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            mainFragmentTransaction.commit();
+            loadingFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
+            loadingFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            loadingFragmentTransaction.commit();
         }
         else{
             Log.i("MainActivity", "Finishing");
@@ -985,13 +985,13 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new noConnectionFragment transaction.
      */
     private void noConnectionFragmentTransaction(){
-        FragmentManager mainFragmentManager = getFragmentManager();
-        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        FragmentManager noConnectionFragmentManager = getFragmentManager();
+        FragmentTransaction noConnectionFragmentTransaction = noConnectionFragmentManager.beginTransaction();
         NoConnectionFragment noConnectionFragment = new NoConnectionFragment();
         if(!isFinishing()){
-            mainFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
-            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            mainFragmentTransaction.commit();
+            noConnectionFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
+            noConnectionFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            noConnectionFragmentTransaction.commit();
         }
         else{
             Log.i("MainActivity", "Finishing");
@@ -1004,13 +1004,13 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new locationUnavailableFragment transaction.
      */
     private void locationUnavailableFragmentTransaction(){
-        FragmentManager mainFragmentManager = getFragmentManager();
-        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        FragmentManager locationUnavailableFragmentManager = getFragmentManager();
+        FragmentTransaction locationUnavailableFragmentTransaction = locationUnavailableFragmentManager.beginTransaction();
         LocationUnavailableFragment locationUnavailableFragment = new LocationUnavailableFragment();
         if(!isFinishing()){
-            mainFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
-            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            mainFragmentTransaction.commit();
+            locationUnavailableFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
+            locationUnavailableFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            locationUnavailableFragmentTransaction.commit();
         }
         else{
             Log.i("MainActivity", "Finishing");
@@ -1023,13 +1023,13 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new permissionsFragment transaction.
      */
     private void permissionsFragmentTransaction(){
-        FragmentManager mainFragmentManager = getFragmentManager();
-        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        FragmentManager permissionsFragmentManager = getFragmentManager();
+        FragmentTransaction permissionsFragmentTransation = permissionsFragmentManager.beginTransaction();
         PermissionsFragment permissionsFragment = new PermissionsFragment();
         if(!isFinishing()){
-            mainFragmentTransaction.replace(R.id.mainContentView, permissionsFragment);
-            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            mainFragmentTransaction.commit();
+            permissionsFragmentTransation.replace(R.id.mainContentView, permissionsFragment);
+            permissionsFragmentTransation.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            permissionsFragmentTransation.commit();
         }
         else{
             Log.i("MainActivity", "Finishing");
@@ -1042,13 +1042,13 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new ChangeLocationSettingsFragment transaction.
      */
     private void changeLocationSettingsFragmentTransaction(){
-        FragmentManager mainFragmentManager = getFragmentManager();
-        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+        FragmentManager changeLocationSettingsFragmentManager = getFragmentManager();
+        FragmentTransaction changeLocationSettingsFragmentTransaction = changeLocationSettingsFragmentManager.beginTransaction();
         ChangeLocationSettingsFragment ChangeLocationSettingsFragment = new ChangeLocationSettingsFragment();
         if (!isFinishing()) {
-            mainFragmentTransaction.replace(R.id.mainContentView, ChangeLocationSettingsFragment);
-            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            mainFragmentTransaction.commit();
+            changeLocationSettingsFragmentTransaction.replace(R.id.mainContentView, ChangeLocationSettingsFragment);
+            changeLocationSettingsFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            changeLocationSettingsFragmentTransaction.commit();
         }
         else{
             Log.i("MainActivity", "Finishing");
