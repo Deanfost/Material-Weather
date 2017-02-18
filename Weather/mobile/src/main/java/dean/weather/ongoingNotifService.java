@@ -51,7 +51,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class OngoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class ongoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -245,7 +245,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             startService(stopAlarm);
 
                             //Notify the user
-                            Toast.makeText(OngoingNotifService.this, "Please enable location services to use this service", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ongoingNotifService.this, "Please enable location services to use this service", Toast.LENGTH_LONG).show();
 
                             stopSelf();
                             break;
@@ -267,7 +267,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             startService(stopAlarm1);
 
                             //Notify the user
-                            Toast.makeText(OngoingNotifService.this, "Pelase enable location services to use this service", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ongoingNotifService.this, "Pelase enable location services to use this service", Toast.LENGTH_LONG).show();
 
                             stopSelf();
 
@@ -419,7 +419,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again now.");
-            Intent serviceIntent = new Intent(this, OngoingNotifService.class);
+            Intent serviceIntent = new Intent(this, ongoingNotifService.class);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
@@ -507,7 +507,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again now.");
-            Intent serviceIntent = new Intent(this, OngoingNotifService.class);
+            Intent serviceIntent = new Intent(this, ongoingNotifService.class);
             serviceIntent.putExtra("pull", true);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
@@ -655,7 +655,7 @@ public class OngoingNotifService extends Service implements GoogleApiClient.Conn
                     googleApiClient.disconnect();
                 }
                 NotificationCompat.Builder notifBuilder =
-                        new NotificationCompat.Builder(OngoingNotifService.this)
+                        new NotificationCompat.Builder(ongoingNotifService.this)
                                 .setSmallIcon(R.drawable.ic_launcher)
                                 .setContentTitle("Error")
                                 .setContentText("Problem accessing Dark Sky.");

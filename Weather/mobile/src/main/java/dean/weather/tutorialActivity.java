@@ -2,7 +2,9 @@ package dean.weather;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
 import com.heinrichreimersoftware.materialintro.app.*;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 
@@ -17,6 +19,7 @@ public class TutorialActivity extends com.heinrichreimersoftware.materialintro.a
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         activity = this;
 
         //Create slide 1
@@ -91,5 +94,11 @@ public class TutorialActivity extends com.heinrichreimersoftware.materialintro.a
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Tutorial Activity", "Finishing");
     }
 }

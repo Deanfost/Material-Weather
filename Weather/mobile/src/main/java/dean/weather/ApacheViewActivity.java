@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
@@ -49,7 +50,7 @@ public class ApacheViewActivity extends AppCompatActivity {
         apacheWebView = (WebView) findViewById(R.id.apacheWebView);
 
         //Load in html
-        apacheWebView.getSettings().setJavaScriptEnabled(true);
+        apacheWebView.getSettings().setBuiltInZoomControls(true);
         apacheWebView.loadUrl("file:///android_asset/apache.html");
     }
 
@@ -61,5 +62,11 @@ public class ApacheViewActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Apache Activity", "Finishing");
     }
 }

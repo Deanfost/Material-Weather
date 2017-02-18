@@ -73,7 +73,7 @@
         </activity>
 
         <!--Settings activity-->
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".settingsActivity"
             android:theme="@style/SettingsThemeBlue"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
@@ -109,13 +109,13 @@
         </activity>
 
         <!--Active notification service-->
-        <service android:name="dean.weather.OngoingNotifService"
+        <service android:name="dean.weather.ongoingNotifService"
             android:exported="false"
             android:enabled="true">
         </service>
 
         <!--Alert notification service-->
-        <service android:name="dean.weather.AlertNotifService"
+        <service android:name="dean.weather.alertNotifService"
             android:exported="false"
             android:enabled="true">
         </service>
@@ -126,7 +126,7 @@
         </service>
 
         <!--Notification intent receiver-->
-        <service android:name="dean.weather.NotificationIntentHandler"
+        <service android:name="dean.weather.notificationIntentHandler"
             android:exported="false">
         </service>
 

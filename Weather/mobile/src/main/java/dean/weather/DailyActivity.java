@@ -637,4 +637,10 @@ public class DailyActivity extends AppCompatActivity {
         viewSunriseTime.setText(daySunriseTime);
         viewSunsetTime.setText(daySunsetTime);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Daily Activity", "Finishing");
+    }
 }

@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements
             //Settings
             case R.id.action_settings:
                     //Open the settings activity
-                    Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                    Intent settingsIntent = new Intent(this, settingsActivity.class);
                     startActivity(settingsIntent);
                 return true;
             //Refresh data
@@ -883,7 +883,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Call the alert notification service (if enabled)
                 if(preferences.getBoolean(getString(R.string.alert_notif_key), false)){
-                    Intent alertNotifService = new Intent(MainActivity.this, AlertNotifService.class);
+                    Intent alertNotifService = new Intent(MainActivity.this, dean.weather.alertNotifService.class);
                     startService(alertNotifService);
                     Log.i("Main Activity", "Starting AlertNotifService");
                 }

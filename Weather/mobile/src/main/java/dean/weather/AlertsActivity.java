@@ -202,4 +202,10 @@ public class AlertsActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Alerts Activity", "Finishing");
+    }
 }

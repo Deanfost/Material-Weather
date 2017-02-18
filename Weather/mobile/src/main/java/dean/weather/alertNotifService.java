@@ -47,7 +47,7 @@ import retrofit.client.Response;
  * Created by Dean on 12/25/2016.
  */
 
-public class AlertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class alertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient googleApiClient;
     private Double latitude;
     private Double longitude;
@@ -60,7 +60,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
     private boolean createNewNotif;
     private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
 
-    public AlertNotifService() {
+    public alertNotifService() {
         super(null);
     }
 
@@ -224,7 +224,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                             startService(stopAlarm);
 
                             //Notify the user
-                            Toast.makeText(AlertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
                             stopSelf();
                             break;
@@ -246,7 +246,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                             startService(stopAlarm1);
 
                             //Notify the user
-                            Toast.makeText(AlertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
                             stopSelf();
                             break;
@@ -326,7 +326,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                     }
 
                     //Check to see if these are new alerts
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AlertNotifService.this);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(alertNotifService.this);
                     for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
                         if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri() + ".Alert")){
                             //This is a new alert, add it to the list of new alerts
@@ -366,7 +366,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                 }
                 else{
                     Log.i("alerts", "null");
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AlertNotifService.this);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(alertNotifService.this);
                     Map<String,?> sharedPrefsKeys = prefs.getAll();
                     for(String key : sharedPrefsKeys.keySet()){
                         Log.i("Printing key", key);
@@ -528,7 +528,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                         .setContentText("New weather statement for your area")
 //                        .setLargeIcon(icon)
                         .setColor(color);
-        Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
+        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
@@ -562,7 +562,7 @@ public class AlertNotifService extends IntentService implements GoogleApiClient.
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
                         .setContentText("New weather statement for your area");
-        Intent serviceIntent = new Intent(this, NotificationIntentHandler.class);
+        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
         PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
         notifBuilder.setContentIntent(servicePendingIntent);
         notifBuilder.setAutoCancel(true);
