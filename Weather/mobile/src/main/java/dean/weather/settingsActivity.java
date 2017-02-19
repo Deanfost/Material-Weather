@@ -45,6 +45,7 @@ public class settingsActivity extends PreferenceActivity{
     SwitchPreference alertNotif;
     Preference tutorialPref;
     boolean performChecksReturn;
+    int setID = MainActivity.setID;
 
     //Lifecycle and preference listeners
     @Override
@@ -64,7 +65,7 @@ public class settingsActivity extends PreferenceActivity{
         //Color accents
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(prefs.getBoolean(getString(R.string.theme_change_key), false)){
-            switch(MainActivity.setID){
+            switch(setID){
                 case 0:
                     setTheme(R.style.SettingsThemeYellow);
                     break;
@@ -587,5 +588,17 @@ public class settingsActivity extends PreferenceActivity{
     protected void onDestroy() {
         super.onDestroy();
         Log.i("Settings Activity", "Finishing");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("setID", setID);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        setID = state.getInt("setID");
+        super.onRestoreInstanceState(state);
     }
 }

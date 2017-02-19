@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -145,6 +146,17 @@ public class MainActivity extends AppCompatActivity implements
 
     //App bar buttons
     public static boolean enableAppBarButtons = true;
+
+    //Activity state
+    private boolean isRunning = true;
+
+    //Fragments - if these are true, defer the transactions to onResumeFragments()
+    private boolean mainPending = false;
+    private boolean loadingPending = false;
+    private boolean noConnectionPending = false;
+    private boolean locationUnavPending = false;
+    private boolean permissionsPending = false;
+    private boolean changeLocationSetPending = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -914,6 +926,7 @@ public class MainActivity extends AppCompatActivity implements
         if(googleApiClient.isConnected()){
             googleApiClient.disconnect();
         }
+        isRunning = false;
         super.onStop();
     }
 
@@ -944,118 +957,236 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        isRunning = true;
+        //Check to see if there are any deferred fragment transactions
+
+        if(loadingPending){
+            loadingPending = false;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Commit the fragment after 1 second to preserve animations
+                    loadingFragmentTransaction();
+                }
+            }, 1000);
+        }
+
+        if(mainPending){
+            mainPending = false;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Commit the fragment after 1 second to preserve animations
+                    mainFragmentTransaction();
+                }
+            }, 1000);
+        }
+
+        if(changeLocationSetPending){
+            changeLocationSetPending = false;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Commit the fragment after 1 second to preserve animations
+                    changeLocationSettingsFragmentTransaction();
+                }
+            }, 1000);
+        }
+
+        if(locationUnavPending){
+            locationUnavPending = false;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Commit the fragment after 1 second to preserve animations
+                    locationUnavailableFragmentTransaction();
+                }
+            }, 1000);
+        }
+
+        if(noConnectionPending){
+            noConnectionPending = false;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Commit the fragment after 1 second to preserve animations
+                    noConnectionFragmentTransaction();
+                }
+            }, 1000);
+        }
+
+        if(permissionsPending){
+            permissionsPending = false;
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Commit the fragment after 1 second to preserve animations
+                    permissionsFragmentTransaction();
+                }
+            }, 1000);
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isRunning = false;
+    }
+
     //Fragments
     /**
      * Creates new mainFragment transaction.
      */
     private void mainFragmentTransaction(){
-        FragmentManager mainFragmentManager = getFragmentManager();
-        FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
-        MainFragment MainFragment = new MainFragment();
-        if(!isFinishing()){
-            mainFragmentTransaction.replace(R.id.mainContentView, MainFragment);
-            mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            mainFragmentTransaction.commit();
+        //Make sure it is fine to commit the transaction
+        if(isRunning){
+            FragmentManager mainFragmentManager = getFragmentManager();
+            FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
+            MainFragment MainFragment = new MainFragment();
+            if(!isFinishing()){
+                mainFragmentTransaction.replace(R.id.mainContentView, MainFragment);
+                mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                mainFragmentTransaction.commit();
+            }
+            else{
+                Log.i("MainActivity", "Finishing");
+            }
+            enableAppBarButtons = true;
         }
         else{
-            Log.i("MainActivity", "Finishing");
+            //Defer the transaction to onResumeFragments()
+            mainPending = true;
         }
-        enableAppBarButtons = true;
     }
 
     /**
      * Creates new loadingFragment transaction.
      */
     private void loadingFragmentTransaction(){
-        FragmentManager loadingFragmentManager = getFragmentManager();
-        FragmentTransaction loadingFragmentTransaction = loadingFragmentManager.beginTransaction();
-        LoadingFragment LoadingFragment = new LoadingFragment();
-        if(!isFinishing()){
-            loadingFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
-            loadingFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            loadingFragmentTransaction.commit();
+        if(isRunning){
+            FragmentManager loadingFragmentManager = getFragmentManager();
+            FragmentTransaction loadingFragmentTransaction = loadingFragmentManager.beginTransaction();
+            LoadingFragment LoadingFragment = new LoadingFragment();
+            if(!isFinishing()){
+                loadingFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
+                loadingFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                loadingFragmentTransaction.commit();
+            }
+            else{
+                Log.i("MainActivity", "Finishing");
+            }
+            setMainLayoutColor(1);
+            enableAppBarButtons = true;
         }
         else{
-            Log.i("MainActivity", "Finishing");
+            loadingPending = true;
         }
-        setMainLayoutColor(1);
-        enableAppBarButtons = true;
     }
 
     /**
      * Creates new noConnectionFragment transaction.
      */
     private void noConnectionFragmentTransaction(){
-        FragmentManager noConnectionFragmentManager = getFragmentManager();
-        FragmentTransaction noConnectionFragmentTransaction = noConnectionFragmentManager.beginTransaction();
-        NoConnectionFragment noConnectionFragment = new NoConnectionFragment();
-        if(!isFinishing()){
-            noConnectionFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
-            noConnectionFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            noConnectionFragmentTransaction.commit();
+        if(isRunning){
+            FragmentManager noConnectionFragmentManager = getFragmentManager();
+            FragmentTransaction noConnectionFragmentTransaction = noConnectionFragmentManager.beginTransaction();
+            NoConnectionFragment noConnectionFragment = new NoConnectionFragment();
+            if(!isFinishing()){
+                noConnectionFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
+                noConnectionFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                noConnectionFragmentTransaction.commit();
+            }
+            else{
+                Log.i("MainActivity", "Finishing");
+            }
+            setMainLayoutColor(1);
+            enableAppBarButtons = false;
         }
         else{
-            Log.i("MainActivity", "Finishing");
+            noConnectionPending = true;
         }
-        setMainLayoutColor(1);
-        enableAppBarButtons = false;
     }
 
     /**
      * Creates new locationUnavailableFragment transaction.
      */
     private void locationUnavailableFragmentTransaction(){
-        FragmentManager locationUnavailableFragmentManager = getFragmentManager();
-        FragmentTransaction locationUnavailableFragmentTransaction = locationUnavailableFragmentManager.beginTransaction();
-        LocationUnavailableFragment locationUnavailableFragment = new LocationUnavailableFragment();
-        if(!isFinishing()){
-            locationUnavailableFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
-            locationUnavailableFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            locationUnavailableFragmentTransaction.commit();
+        if(isRunning){
+            FragmentManager locationUnavailableFragmentManager = getFragmentManager();
+            FragmentTransaction locationUnavailableFragmentTransaction = locationUnavailableFragmentManager.beginTransaction();
+            LocationUnavailableFragment locationUnavailableFragment = new LocationUnavailableFragment();
+            if(!isFinishing()){
+                locationUnavailableFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
+                locationUnavailableFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                locationUnavailableFragmentTransaction.commit();
+            }
+            else{
+                Log.i("MainActivity", "Finishing");
+            }
+            setMainLayoutColor(1);
+            enableAppBarButtons = false;
         }
         else{
-            Log.i("MainActivity", "Finishing");
+            locationUnavPending = true;
         }
-        setMainLayoutColor(1);
-        enableAppBarButtons = false;
     }
 
     /**
      * Creates new permissionsFragment transaction.
      */
     private void permissionsFragmentTransaction(){
-        FragmentManager permissionsFragmentManager = getFragmentManager();
-        FragmentTransaction permissionsFragmentTransation = permissionsFragmentManager.beginTransaction();
-        PermissionsFragment permissionsFragment = new PermissionsFragment();
-        if(!isFinishing()){
-            permissionsFragmentTransation.replace(R.id.mainContentView, permissionsFragment);
-            permissionsFragmentTransation.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            permissionsFragmentTransation.commit();
+        if(isRunning){
+            FragmentManager permissionsFragmentManager = getFragmentManager();
+            FragmentTransaction permissionsFragmentTransation = permissionsFragmentManager.beginTransaction();
+            PermissionsFragment permissionsFragment = new PermissionsFragment();
+            if(!isFinishing()){
+                permissionsFragmentTransation.replace(R.id.mainContentView, permissionsFragment);
+                permissionsFragmentTransation.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                permissionsFragmentTransation.commit();
+            }
+            else{
+                Log.i("MainActivity", "Finishing");
+            }
+            setMainLayoutColor(1);
+            enableAppBarButtons = false;
         }
         else{
-            Log.i("MainActivity", "Finishing");
+            permissionsPending = true;
         }
-        setMainLayoutColor(1);
-        enableAppBarButtons = false;
     }
 
     /**
      * Creates new ChangeLocationSettingsFragment transaction.
      */
     private void changeLocationSettingsFragmentTransaction(){
-        FragmentManager changeLocationSettingsFragmentManager = getFragmentManager();
-        FragmentTransaction changeLocationSettingsFragmentTransaction = changeLocationSettingsFragmentManager.beginTransaction();
-        ChangeLocationSettingsFragment ChangeLocationSettingsFragment = new ChangeLocationSettingsFragment();
-        if (!isFinishing()) {
-            changeLocationSettingsFragmentTransaction.replace(R.id.mainContentView, ChangeLocationSettingsFragment);
-            changeLocationSettingsFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            changeLocationSettingsFragmentTransaction.commit();
+        if(isRunning){
+            FragmentManager changeLocationSettingsFragmentManager = getFragmentManager();
+            FragmentTransaction changeLocationSettingsFragmentTransaction = changeLocationSettingsFragmentManager.beginTransaction();
+            ChangeLocationSettingsFragment ChangeLocationSettingsFragment = new ChangeLocationSettingsFragment();
+            if (!isFinishing()) {
+                changeLocationSettingsFragmentTransaction.replace(R.id.mainContentView, ChangeLocationSettingsFragment);
+                changeLocationSettingsFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                changeLocationSettingsFragmentTransaction.commit();
+            }
+            else{
+                Log.i("MainActivity", "Finishing");
+            }
+            setMainLayoutColor(1);
+            enableAppBarButtons = false;
         }
         else{
-            Log.i("MainActivity", "Finishing");
+            changeLocationSetPending = true;
         }
-        setMainLayoutColor(1);
-        enableAppBarButtons = false;
     }
 
     /**
@@ -1556,18 +1687,4 @@ public class MainActivity extends AppCompatActivity implements
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
         }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        //Do nothing
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        //Set an alarm to restart the process, and kill it(i know, its messy, ill be better next time)
-        Log.i("onRestoreInstanceState", "Called");
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, PendingIntent.getActivity(this, 0, new Intent(this, IntroActivity.class), 0));
-        android.os.Process.killProcess(android.os.Process.myPid());
-    }
 }
