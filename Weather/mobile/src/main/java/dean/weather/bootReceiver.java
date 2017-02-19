@@ -11,7 +11,7 @@ import android.util.Log;
  * Created by DeanF on 12/11/2016.
  */
 
-public class BootReceiver extends BroadcastReceiver {
+public class bootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 

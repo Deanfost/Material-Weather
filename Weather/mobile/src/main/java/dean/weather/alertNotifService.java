@@ -89,11 +89,6 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         else{
             createNewNotif = true;
         }
-
-        //Reset the alarm
-        Intent alarmService = new Intent(this, alarmInterfaceService.class);
-        alarmService.putExtra("alertNotifReset", true);
-        startService(alarmService);
     }
 
     //Location

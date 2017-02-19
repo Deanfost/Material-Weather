@@ -3,6 +3,7 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
@@ -1558,10 +1559,15 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         //Do nothing
+
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        //Do nothing
+        //Set an alarm to restart the process, and kill it(i know, its messy, ill be better next time)
+        Log.i("onRestoreInstanceState", "Called");
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, PendingIntent.getActivity(this, 0, new Intent(this, IntroActivity.class), 0));
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

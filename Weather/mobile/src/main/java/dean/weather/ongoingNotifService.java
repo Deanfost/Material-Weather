@@ -105,10 +105,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 .build();
                     }
                     displaySuccess = false;
-                    //Reset the alarm
-                    Intent serviceIntent = new Intent(this, alarmInterfaceService.class);
-                    serviceIntent.putExtra("repeatNotifReset", true);
-                    startService(serviceIntent);
                     googleApiClient.connect();
                     return START_STICKY;
                 }
