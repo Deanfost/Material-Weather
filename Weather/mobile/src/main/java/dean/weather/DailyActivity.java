@@ -86,6 +86,9 @@ public class DailyActivity extends AppCompatActivity {
     int units;
     int hourFormat;
 
+    //Color themes
+    int setID = MainActivity.setID;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         FirebaseApp.initializeApp(this);
@@ -441,7 +444,7 @@ public class DailyActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-        switch (MainActivity.setID){
+        switch (setID){
             //Sunrise
             case 0:
                 //Set color of header in task tray
@@ -508,7 +511,7 @@ public class DailyActivity extends AppCompatActivity {
      * Sets of layout depending on time of day.
      */
     private void setLayoutColor() {
-        switch (MainActivity.setID) {
+        switch (setID) {
             //Sunrise
             case 0:
                 //Top layout
@@ -642,5 +645,63 @@ public class DailyActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i("Daily Activity", "Finishing");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //Color themes
+        outState.putInt("setID", setID);
+        //Top layout
+        outState.putInt("passedDayInt", passedDayInt);
+        outState.putString("passedDay", passedDay);
+        outState.putString("passedDate", passedDate);
+        outState.putString("pulledDescription", pulledDescription);
+        outState.putString("pulledLocation", pulledLocation);
+        outState.putInt("pulledHi", pulledHi);
+        outState.putInt("pulledLo", pulledLo);
+        outState.putString("pulledIcon", pulledIcon);
+        outState.putString("pulledCondition", pulledCondition);
+        //Bottom layout
+        outState.putString("pulledWind", pulledWind);
+        outState.putInt("pulledPrecip", pulledPrecip);
+        outState.putInt("pulledHumidity", pulledHumidity);
+        outState.putInt("pulledDewpoint", pulledDewpoint);
+        outState.putInt("pulledPressure", pulledPressure);
+        outState.putInt("pulledCloudCover", pulledCloudCover);
+        outState.putString("daySunriseTime", daySunriseTime);
+        outState.putString("daySunsetTime", daySunsetTime);
+        //Units
+        outState.putInt("units", units);
+        outState.putInt("hourFormat", hourFormat);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        //Color themes
+        setID = savedInstanceState.getInt("setID");
+        //Top layout
+        passedDayInt = savedInstanceState.getInt("passedDayInt");
+        passedDay = savedInstanceState.getString("passedDay");
+        passedDate = savedInstanceState.getString("passedDate");
+        pulledDescription = savedInstanceState.getString("pulledDescription");
+        pulledLocation = savedInstanceState.getString("pulledLocation");
+        pulledHi = savedInstanceState.getInt("pulledHi");
+        pulledLo = savedInstanceState.getInt("pulledLo");
+        pulledIcon = savedInstanceState.getString("pulledIcon");
+        pulledCondition = savedInstanceState.getString("pulledCondition");
+        //Bottom layout
+        pulledWind = savedInstanceState.getString("pulledWind");
+        pulledPrecip = savedInstanceState.getInt("pulledPrecip");
+        pulledHumidity = savedInstanceState.getInt("pulledHumidity");
+        pulledDewpoint = savedInstanceState.getInt("pulledDewpoint");
+        pulledPressure = savedInstanceState.getInt("pulledPressure");
+        pulledCloudCover = savedInstanceState.getInt("pulledCloudCover");
+        daySunriseTime = savedInstanceState.getString("daySunriseTime");
+        daySunsetTime = savedInstanceState.getString("daySunsetTime");
+        //Units
+        units = savedInstanceState.getInt("units");
+        hourFormat = savedInstanceState.getInt("hourFormat");
     }
 }
