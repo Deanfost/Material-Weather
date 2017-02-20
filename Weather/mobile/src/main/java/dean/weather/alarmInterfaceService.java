@@ -45,7 +45,7 @@ public class alarmInterfaceService extends Service {
 
                         //Setup an alarm to fire in 30 mins
                         alarmManager.cancel(ongoingAlarmIntent);
-                        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1800000, AlarmManager.INTERVAL_HALF_HOUR, ongoingAlarmIntent);
+                        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR, AlarmManager.INTERVAL_HALF_HOUR, ongoingAlarmIntent);
 
                         //Start the first pull
                         Intent firstPull = new Intent(this, ongoingNotifService.class);
@@ -129,7 +129,7 @@ public class alarmInterfaceService extends Service {
                         Log.i("AlarmInterfaceService", "Starting alertNotif");
                         //Setup an alarm to pull in an hour for alerts
                         alarmManager.cancel(alertAlarmIntent);
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
+                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
 
                         //Start the first pull
                         Intent firstPull = new Intent(this, alertNotifService.class);
