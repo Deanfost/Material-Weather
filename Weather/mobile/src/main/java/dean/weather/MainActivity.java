@@ -1593,6 +1593,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         //Block back button for now
+
     }
 
     //Notifications
