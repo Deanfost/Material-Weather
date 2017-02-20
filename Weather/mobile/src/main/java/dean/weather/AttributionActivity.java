@@ -17,6 +17,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by Dean Foster on 2/12/2017.
  */
@@ -36,6 +38,7 @@ public class AttributionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_attribution);
 
         //Setup app bar

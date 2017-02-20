@@ -52,44 +52,51 @@ public class settingsActivity extends PreferenceActivity{
     protected void onCreate(Bundle savedInstanceState) {
         FirebaseApp.initializeApp(this);
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+        if(savedInstanceState != null){
+            //Destroy - restoring instance
+            finish();
+        }
+        else {
+            //Default implementation
+            addPreferencesFromResource(R.xml.preferences);
 
-        //Preferences
+            //Preferences
 //        followMePref = findPreference(getString(R.string.follow_me_key));
-        ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
-        alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
+            ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
+            alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
 //        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
 //        timePickerPref = findPreference(getString(R.string.summary_time_key));
-        tutorialPref = findPreference(getResources().getString(R.string.support_tutorial_key));
+            tutorialPref = findPreference(getResources().getString(R.string.support_tutorial_key));
 
-        //Color accents
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if(prefs.getBoolean(getString(R.string.theme_change_key), false)){
-            switch(setID){
-                case 0:
-                    setTheme(R.style.SettingsThemeYellow);
-                    break;
-                case 1:
-                    setTheme(R.style.SettingsThemeBlue);
-                    break;
-                case 2:
-                    setTheme(R.style.SettingsThemeOrange);
-                    break;
-                case 3:
-                    setTheme(R.style.SettingsThemePurple);
-                    break;
+            //Color accents
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            if(prefs.getBoolean(getString(R.string.theme_change_key), false)){
+                switch(setID){
+                    case 0:
+                        setTheme(R.style.SettingsThemeYellow);
+                        break;
+                    case 1:
+                        setTheme(R.style.SettingsThemeBlue);
+                        break;
+                    case 2:
+                        setTheme(R.style.SettingsThemeOrange);
+                        break;
+                    case 3:
+                        setTheme(R.style.SettingsThemePurple);
+                        break;
+                }
             }
-        }
-        else{
-            //Set default theme(blue)
-            setTheme(R.style.SettingsThemeBlue);
-        }
+            else{
+                //Set default theme(blue)
+                setTheme(R.style.SettingsThemeBlue);
+            }
 
-        //Customize the window
-        Window window = this.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.colorGrey));
+            //Customize the window
+            Window window = this.getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.colorGrey));
+        }
     }
 
     @Override
@@ -592,13 +599,8 @@ public class settingsActivity extends PreferenceActivity{
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("setID", setID);
+        Log.i("onSaveInstanceState", "Called - Settings");
+        outState.putBoolean("restoring", true);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-        setID = state.getInt("setID");
-        super.onRestoreInstanceState(state);
     }
 }

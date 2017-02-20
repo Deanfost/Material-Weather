@@ -14,6 +14,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by Dean Foster on 2/13/2017.
  */
@@ -24,6 +26,7 @@ public class ApacheViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.apache_activity);
 
         //Setup app bar

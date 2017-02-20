@@ -1687,4 +1687,9 @@ public class MainActivity extends AppCompatActivity implements
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
         }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i("onSaveInstanceState", "Called - Main");
+        super.onSaveInstanceState(outState);
+    }
 }

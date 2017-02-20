@@ -44,6 +44,11 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        if(savedInstanceState != null){
+            //Restore the setID from bundle
+            setID = savedInstanceState.getInt("setID");
+        }
+
         setContentView(R.layout.activity_about);
 
         Toolbar aboutToolbar = (Toolbar) findViewById(R.id.aboutToolbar);
@@ -196,5 +201,12 @@ public class AboutActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i("onSaveInstanceState", "Called - About");
+        outState.putInt("setID", setID);
+        super.onSaveInstanceState(outState);
     }
 }

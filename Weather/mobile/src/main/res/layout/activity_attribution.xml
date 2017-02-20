@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/attributionLayout">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/licensesToolbar"
@@ -16,7 +17,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/attributionScrollView">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -25,7 +27,8 @@
                 android:paddingTop="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_10sdp"
                 android:paddingLeft="@dimen/_16sdp"
-                android:paddingRight="@dimen/_16sdp">
+                android:paddingRight="@dimen/_16sdp"
+                android:id="@+id/attributionInnerScrollLayout">
 
                 <!-- Libs -->
                 <TextView
@@ -33,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:text="Libraries"
                     android:textSize="20sp"
-                    android:layout_marginBottom="@dimen/_10sdp"/>
+                    android:layout_marginBottom="@dimen/_10sdp" />
 
                 <!-- Android Client Wrapper -->
                 <RelativeLayout

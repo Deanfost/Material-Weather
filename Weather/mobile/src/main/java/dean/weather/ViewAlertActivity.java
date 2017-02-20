@@ -27,17 +27,26 @@ public class ViewAlertActivity extends AppCompatActivity {
 //    TextView srcView;
     String alertTitle;
     String alertDesc;
-    String alertSrc;
+//    String alertSrc;
     Integer setID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-        setID = getIntent().getExtras().getInt("setID");
-        alertTitle = getIntent().getExtras().getString("alertTitle");
-        alertDesc = getIntent().getExtras().getString("alertDesc");
-        alertSrc = getIntent().getExtras().getString("alertSrc");
+        if(savedInstanceState != null){
+            //Restore data from savedInstanceState
+            setID = savedInstanceState.getInt("setID");
+            alertTitle = savedInstanceState.getString("alertTitle");
+            alertDesc = savedInstanceState.getString("alertDesc");
+        }
+        else {
+            //Default implementation
+            setID = getIntent().getExtras().getInt("setID");
+            alertTitle = getIntent().getExtras().getString("alertTitle");
+            alertDesc = getIntent().getExtras().getString("alertDesc");
+//            alertSrc = getIntent().getExtras().getString("alertSrc");
+        }
 
         setContentView(R.layout.activity_view_alert);
 
@@ -105,5 +114,14 @@ public class ViewAlertActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i("View Alert Activity", "Finishing");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i("onSaveInstanceState", "Called - View alerts");
+        outState.putString("alertTitle", alertTitle);
+        outState.putString("alertDesc", alertDesc);
+        outState.putInt("setID", setID);
+        super.onSaveInstanceState(outState);
     }
 }
