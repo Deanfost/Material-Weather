@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final int FOLLOW_NOTIF_ERROR_ID = 33;
 
     //App bar buttons
-    public static boolean enableAppBarButtons = true;
+    public static boolean enableAppBarButtons = false;
 
     //Activity state
     private boolean isRunning = true;
@@ -1086,7 +1086,7 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("MainActivity", "Finishing");
             }
             setMainLayoutColor(1);
-            enableAppBarButtons = true;
+            enableAppBarButtons = false;
         }
         else{
             loadingPending = true;
