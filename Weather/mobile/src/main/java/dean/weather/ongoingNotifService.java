@@ -239,6 +239,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                     pullForecast();
                                 } else {
                                     Log.i("notifService", "Unable to gather location");
+                                    //TODO - NOTIFY THE USER
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");

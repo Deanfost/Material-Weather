@@ -133,7 +133,7 @@
                     android:scrollbarThumbHorizontal="@drawable/hourly_scrollbar"
                     android:scrollbarSize="@dimen/_3sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"/>
+                    android:layout_marginBottom="@dimen/_5sdp" />
             </LinearLayout>
 
             <LinearLayout
