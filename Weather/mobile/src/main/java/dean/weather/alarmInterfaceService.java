@@ -27,7 +27,6 @@ public class alarmInterfaceService extends Service {
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         //Ongoing notif
         Intent ongoingServiceIntent = new Intent(this, ongoingNotifService.class);
-        ongoingServiceIntent.putExtra("pull", true);
 //        ongoingServiceIntent.setAction("dean.weather.alarmRepeating");
         PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
         //Alert notif
@@ -42,6 +41,7 @@ public class alarmInterfaceService extends Service {
                     //Start the repeating notification
                     if(intent.getExtras().getBoolean("repeatNotif")){
                         Log.i("AlarmInterfaceService", "Starting repeatNotif - from settings");
+                        ongoingServiceIntent.putExtra("pull", true);
 
                         //Setup an alarm to fire immediately and then every 30 mins after
                         alarmManager.cancel(ongoingAlarmIntent);
@@ -124,7 +124,7 @@ public class alarmInterfaceService extends Service {
                         Log.i("AlarmInterfaceService", "Starting alertNotif");
                         //Setup an alarm to pull in an hour for alerts
                         alarmManager.cancel(alertAlarmIntent);
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
+                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
 
                         //Start the first pull
                         Intent firstPull = new Intent(this, alertNotifService.class);

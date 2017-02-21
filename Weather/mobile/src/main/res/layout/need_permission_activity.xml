@@ -11,10 +11,11 @@
         android:layout_height="@dimen/_100sdp"
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_rain_color"
+        android:src="@drawable/ic_rain_white"
         android:layout_marginTop="@dimen/_80sdp"
         android:layout_marginBottom="@dimen/_24sdp"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:tint="@color/colorBlue"/>
 
     <TextView
         android:layout_width="@dimen/_165sdp"

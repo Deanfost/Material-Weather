@@ -689,7 +689,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 .setContentText("Tap to try again now.");
                 Intent serviceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
                 serviceIntent.putExtra("restart", "true");
-                serviceIntent.putExtra("pull", true);
                 PendingIntent servicePendingIntent = PendingIntent.getService(ongoingNotifService.this, 0, serviceIntent, 0);
                 notifBuilder.setContentIntent(servicePendingIntent);
                 notifBuilder.setAutoCancel(true);
