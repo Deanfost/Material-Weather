@@ -20,7 +20,7 @@
                 <SwitchPreference
                     android:key="@string/alert_notif_key"
                     android:title="Show weather alerts"
-                    android:summary="Create a push notification for weather alerts and warnings, updating every hour"
+                    android:summary="Create a push notification for weather alerts and warnings, updating roughly every hour"
                     android:defaultValue="false" />
 
                 <!--<SwitchPreference-->

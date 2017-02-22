@@ -74,8 +74,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     private String sunriseTimeString;
     private String sunsetTimeString;
 
-    private boolean displaySuccess = false;
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -104,30 +102,14 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 .addApi(LocationServices.API)
                                 .build();
                     }
-                    displaySuccess = false;
                     googleApiClient.connect();
                     return START_STICKY;
                 }
                 //Intent specifies the service to stop
                 else if(intent.getExtras().containsKey("notSticky")){
                     Log.i("notifService", "notStickyReceived");
-                    displaySuccess = false;
                     stopSelf();
                     return START_NOT_STICKY;
-                }
-                //Intent specifies that this is restarting from an error notif
-                else if(intent.getExtras().containsKey("restart")){
-                    //Restart, but display an extra notif saying that it worked
-                    if(googleApiClient == null){
-                        googleApiClient = new GoogleApiClient.Builder(this)
-                                .addConnectionCallbacks(this)
-                                .addOnConnectionFailedListener(this)
-                                .addApi(LocationServices.API)
-                                .build();
-                    }
-                    displaySuccess = true;
-                    googleApiClient.connect();
-                    return START_STICKY;
                 }
             }
         }
@@ -194,6 +176,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("NotifService", "GoogleAPIClient connected");
+        //TODO - CHECK TO SEE IF THE USER HAS A DEFAULT LOCATION SET/IF THE USER WANTS A LOCATION REPORT
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         //If we have location permissions, check for location settings, if not, then end the service
         if (locationPermissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -239,7 +222,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                     pullForecast();
                                 } else {
                                     Log.i("notifService", "Unable to gather location");
-                                    //TODO - NOTIFY THE USER
+                                    //TODO - FIX THIS
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");
@@ -324,15 +307,14 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("notifService", "GoogleAPI connection suspended");
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            //Create notification for Lollipop through Marshmallow
-            createNotification(false);
-        }
-        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-            //Create notification for Nougat and above
-            createNewNotification(false);
-        }
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+//            //Create notification for Lollipop through Marshmallow
+//            createNotification(false);
+//        }
+//        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+//            //Create notification for Nougat and above
+//            createNewNotification(false);
+//        }
     }
 
     //Notification
@@ -429,10 +411,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
             //You know its working when this happens
-            //TODO - ENABLE THE LOGIC AFTER YOU REMOVE THE TESTING NOTIF
-//            if(displaySuccess){
-                createSuccessNotif();
-//            }
+            createTestNotif();
 
         } else {
             //Create notification asking the user to try again
@@ -442,7 +421,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again now.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
-            serviceIntent.putExtra("restart", "true");
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
             notifBuilder.setAutoCancel(true);
@@ -511,7 +489,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
                             .setContentTitle(currentTemp.toString() + "° - " + currentCondition)
-                            .setContentText(currentHi + "°/" + currentLo + "° · " + currentAddress)
+                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
             Intent mainIntent = new Intent(this, MainActivity.class);
@@ -523,11 +501,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
-            //TODO - ENABLE THE LOGIC AFTER YOU REMOVE THE TESTING NOTIF
-//            if(displaySuccess){
-                createSuccessNotif();
-//            }
-
         } else {
             //Create notification asking the user to try again
             NotificationCompat.Builder notifBuilder =
@@ -536,7 +509,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             .setContentTitle("Unable to sync weather")
                             .setContentText("Tap to try again now.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
-            serviceIntent.putExtra("restart", "true");
             serviceIntent.putExtra("pull", true);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
@@ -554,7 +526,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     /**
      * Creates test notification to go along with actual ongoing notif.
      */
-    private void createSuccessNotif(){
+    private void createTestNotif(){
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_check_color)
@@ -661,11 +633,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 //Test to see which one to make
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                     //Create notification for Lollipop through Marshmallow
-                    Log.i("ongoingNotif", "Creating old notif");
                     createNotification(true);
                 }
                 else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-                    Log.i("ongoingNotif", "Creating new notif");
                     //Create notification for Nougat and above
                     createNewNotification(true);
                 }
@@ -687,13 +657,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 }
                 NotificationCompat.Builder notifBuilder =
                         new NotificationCompat.Builder(ongoingNotifService.this)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle("Problem accessing Dark Sky")
-                                .setContentText("Tap to try again now.");
-                Intent serviceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
-                serviceIntent.putExtra("restart", "true");
-                PendingIntent servicePendingIntent = PendingIntent.getService(ongoingNotifService.this, 0, serviceIntent, 0);
-                notifBuilder.setContentIntent(servicePendingIntent);
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle("Error")
+                                .setContentText("Problem accessing Dark Sky.");
                 notifBuilder.setAutoCancel(true);
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.cancel(2);
