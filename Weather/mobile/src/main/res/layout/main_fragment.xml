@@ -124,7 +124,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:background="@color/colorWhite"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/_100sdp"
                     android:id="@+id/hourlyRecyclerView"
                     android:scrollbars="horizontal"
@@ -133,7 +133,8 @@
                     android:scrollbarThumbHorizontal="@drawable/hourly_scrollbar"
                     android:scrollbarSize="@dimen/_3sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_5sdp" />
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:orientation="horizontal"/>
             </LinearLayout>
 
             <LinearLayout
@@ -146,7 +147,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_241sdp"
+                    android:layout_height="@dimen/_242sdp"
                     android:id="@+id/dailyRecyclerView" />
             </LinearLayout>
 

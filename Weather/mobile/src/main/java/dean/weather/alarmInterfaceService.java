@@ -23,16 +23,7 @@ public class alarmInterfaceService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        //Initialize intents and alarms for later use
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        //Ongoing notif
-        Intent ongoingServiceIntent = new Intent(this, ongoingNotifService.class);
-//        ongoingServiceIntent.setAction("dean.weather.alarmRepeating");
-        PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
-        //Alert notif
-        Intent alertNotifIntent = new Intent(this, alertNotifService.class);
-//        alertNotifIntent.setAction("dean.weather.alarmAlerts");
-        PendingIntent alertAlarmIntent = PendingIntent.getService(this, 0, alertNotifIntent, 0);
 
         if(intent != null){
             if(intent.getExtras() != null){
@@ -41,22 +32,27 @@ public class alarmInterfaceService extends Service {
                     //Start the repeating notification
                     if(intent.getExtras().getBoolean("repeatNotif")){
                         Log.i("AlarmInterfaceService", "Starting repeatNotif - from settings");
+                        Intent ongoingServiceIntent = new Intent(this, ongoingNotifService.class);
                         ongoingServiceIntent.putExtra("pull", true);
+                        PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
 
                         //Setup an alarm to fire immediately and then every 30 mins after
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR, AlarmManager.INTERVAL_HALF_HOUR, ongoingAlarmIntent);
+                        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR, AlarmManager.INTERVAL_HALF_HOUR, ongoingAlarmIntent);
 
                         //Start the first pull
                         Intent firstPull = new Intent(this, ongoingNotifService.class);
                         firstPull.putExtra("pull", true);
                         startService(firstPull);
-
                     }
                     //Cancel the repeating notification
                     else{
                         Log.i("AlarmInterfaceService", "Cancelling repeatNotif");
-                        //Cancel the alarm
+                        Intent ongoingServiceIntent = new Intent(this, ongoingNotifService.class);
+                        ongoingServiceIntent.putExtra("pull", true);
+                        PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
+
                         alarmManager.cancel(ongoingAlarmIntent);
+
                         //Kill the notification service
                         Intent notSticky = new Intent(this, ongoingNotifService.class);
                         notSticky.putExtra("notSticky", false);//Sends an intent to the service to return START_NOT_STICKY, which will allow it to die
@@ -126,6 +122,9 @@ public class alarmInterfaceService extends Service {
                 if(intent.getExtras().containsKey("alertNotif")){
                     //Start the alert notification
                     if(intent.getExtras().getBoolean("alertNotif")){
+                        Intent alertNotifIntent = new Intent(this, alertNotifService.class);
+                        PendingIntent alertAlarmIntent = PendingIntent.getService(this, 0, alertNotifIntent, 0);
+
                         Log.i("AlarmInterfaceService", "Starting alertNotif");
                         //Setup an alarm to pull in an hour for alerts
                         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
@@ -136,11 +135,13 @@ public class alarmInterfaceService extends Service {
                     }
                     else{
                         //Stop the alert notification
+                        Intent alertNotifIntent = new Intent(this, alertNotifService.class);
+                        PendingIntent alertAlarmIntent = PendingIntent.getService(this, 0, alertNotifIntent, 0);
+
                         Log.i("AlarmInterfaceService", "Stopping alertNotif");
                         alarmManager.cancel(alertAlarmIntent);
                     }
                 }
-
             }
         }
         stopSelf();

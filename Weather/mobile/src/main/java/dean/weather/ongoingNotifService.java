@@ -511,7 +511,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
                             .setContentTitle(currentTemp.toString() + "° - " + currentCondition)
-                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress)
+                            .setContentText(currentHi + "°/" + currentLo + "° · " + currentAddress)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
             Intent mainIntent = new Intent(this, MainActivity.class);
@@ -661,9 +661,11 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 //Test to see which one to make
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                     //Create notification for Lollipop through Marshmallow
+                    Log.i("ongoingNotif", "Creating old notif");
                     createNotification(true);
                 }
                 else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                    Log.i("ongoingNotif", "Creating new notif");
                     //Create notification for Nougat and above
                     createNewNotification(true);
                 }

@@ -21,7 +21,7 @@
         android:layout_gravity="center_vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_30sdp"
             android:layout_height="wrap_content"
             android:text="Sat"
             android:textSize="@dimen/_13sdp"
@@ -32,7 +32,7 @@
             android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_45sdp"
             android:layout_height="wrap_content"
             android:text="72&#xb0;/56&#xb0;"
             android:textSize="@dimen/_13sdp"
@@ -40,10 +40,11 @@
             android:layout_row="0"
             android:layout_column="1"
             android:layout_columnWeight="1"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_10sdp"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_25sdp"
             android:layout_height="wrap_content"
             android:text="20%"
             android:textSize="@dimen/_13sdp"

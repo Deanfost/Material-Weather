@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
@@ -886,7 +887,14 @@ public class MainActivity extends AppCompatActivity implements
                 //Update ongoing notification if it is enabled
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 if(prefs.getBoolean(getString(R.string.ongoing_notif_key), false)){
-                    updateNotification();
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        //Create notification for Lollipop through Marshmallow
+                        updateNotification();
+                    }
+                    else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                        //Create notification for Nougat and above
+                        updateNewNotification();
+                    }
                 }
 
                 //Clear the alert notification if it is enabled
@@ -1687,6 +1695,83 @@ public class MainActivity extends AppCompatActivity implements
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
         }
+
+    /**
+     * Updates ongoing notification if one exists on activity launch.
+     */
+    private void updateNewNotification() {
+        //Create the weather notification
+        int iconID;
+        //Set icon
+        switch (currentIcon) {
+            case "clear-day":
+                iconID = R.drawable.ic_sunny_white;
+                break;
+            case "clear-night":
+                iconID = R.drawable.ic_clear_night_white;
+                break;
+            case "rain":
+                iconID = R.drawable.ic_rain_white;
+                break;
+            case "snow":
+                iconID = R.drawable.ic_snow_white;
+                break;
+            case "sleet":
+                iconID = R.drawable.ic_sleet_white;
+                break;
+            case "wind":
+                iconID = R.drawable.ic_windrose_white;
+                break;
+            case "fog":
+                //If it is daytime
+                if (setID != 3) {
+                    iconID = R.drawable.ic_foggyday_white;
+                } else {
+                    iconID = R.drawable.ic_foggynight_white;
+                }
+                break;
+            case "cloudy":
+                iconID = R.drawable.ic_cloudy_white;
+                break;
+            case "partly-cloudy-day":
+                iconID = R.drawable.ic_partlycloudy_white;
+
+                break;
+            case "partly-cloudy-night":
+                iconID = R.drawable.ic_partlycloudynight_white;
+                break;
+            default:
+                iconID = R.drawable.ic_cloudy_white;
+                Log.i("CurrentConditions", "Unsupported condition.");
+                break;
+        }
+
+        //Set location
+        String notifLocation;
+        if (!currentLocation.equals("---")) {
+            notifLocation = currentLocation;
+        } else {
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String savedLocation = mySPrefs.getString(getString(R.string.last_location_key), "---");
+            notifLocation = savedLocation;
+        }
+
+        //Build the notification
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
+                        .setContentTitle(currentTemp + "° - " + currentConditions)
+                        .setContentText(todaysHI + "°/" + todaysLO + "° · " + notifLocation)
+                        .setSmallIcon(iconID);
+
+        //Intent to go to main activity
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0);
+        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setOngoing(true);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
