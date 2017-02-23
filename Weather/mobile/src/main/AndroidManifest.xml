@@ -140,9 +140,6 @@
         </service>
 
         <!--Notification intent receiver-->
-        <service android:name="dean.weather.notificationIntentHandler"
-            android:exported="false">
-        </service>
 
         <!--Boot receiver-->
         <receiver

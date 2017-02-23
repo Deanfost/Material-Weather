@@ -94,48 +94,6 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
     //Location
 
     /**
-     * Uses geocoder object to retrieve addresses and localities from latitude and longitude.
-     */
-//    private void getAddresses() {
-//        Boolean serviceAvailable = true;
-//        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-//        List<Address> addressList = null;
-//        try {
-//            addressList = geocoder.getFromLocation(latitude, longitude, 1);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Log.i("IO Exception", "getAdresses");
-//            serviceAvailable = false;
-//        }
-//        if (serviceAvailable) {
-//            if (addressList.size() > 0) {
-//                if (addressList.get(0).getLocality() != null) {
-//                    currentAddress = addressList.get(0).getLocality();//Assign locality if available
-//                    Log.i("getLocality", addressList.get(0).getLocality());
-//                } else {
-//                    currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
-//                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
-//                }
-//            } else {
-//                Log.i("getLocality", "No localities found.");
-//            }
-//        } else {
-//            Log.i("Geocoder", "Service unavailable.");
-//            currentAddress = "---";
-//        }
-//        if (!currentAddress.equals("---")) {
-//            //Store the pulled location for future reference
-//            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//            SharedPreferences.Editor editor = mySPrefs.edit();
-//            editor.putString(getString(R.string.last_location_key), currentAddress);
-//            editor.apply();
-//            hasLocation = true;
-//        } else {
-//            hasLocation = false;
-//        }
-//    }
-
-    /**
      * Creates location request.
      */
     private LocationRequest createLocationRequest() {
@@ -193,6 +151,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                                     Log.i("notifService", "Unable to gather location");
                                     googleApiClient.disconnect();
                                     stopSelf();
+                                    //TODO - FIX THIS   
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");
@@ -477,13 +436,6 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
      * Creates alert notification for Lollipop through Marshmallow.
      */
     private void createNotification(){
-        //Check to see if we were able to pull the current location, and adjust accordingly
-//        if(!hasLocation){
-//            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//            //Get a previously stored location to display, in order to avoid showing "---"
-//            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
-//        }
-
         //Determine which color to use for large icon background
         int setID = determineLayoutColor(todaySunrise, todaySunset);
         int color = -1;
@@ -503,18 +455,6 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                 break;
         }
 
-        //Set the large icon
-//        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-
-        //Determine content text
-//        String contentString;
-//        if(!(alertCount > 1)){
-//            contentString = "1 weather alert for your area";
-//        }
-//        else{
-//            contentString = alertCount + " weather alerts for your area";
-//        }
-
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
@@ -522,9 +462,9 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                         .setContentText("New weather statement for your area")
 //                        .setLargeIcon(icon)
                         .setColor(color);
-        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
-        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-        notifBuilder.setContentIntent(servicePendingIntent);
+        Intent activityIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+        notifBuilder.setContentIntent(pendingIntent);
         notifBuilder.setAutoCancel(true);
         notifBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -535,30 +475,14 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
      * Creates alert notification for Nougat.
      */
     private void createNewNotification(){
-        //Check to see if we were able to pull the current location, and adjust accordingly
-//        if(!hasLocation){
-//            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//            //Get a previously stored location to display, in order to avoid showing "---"
-//            currentAddress = mySPrefs.getString(getString(R.string.last_location_key), "---");
-//        }
-
-        //Determine content text
-//        String contentString;
-//        if(!(alertCount > 1)){
-//            contentString = "1 weather alert for your area";
-//        }
-//        else{
-//            contentString = alertCount + " weather alerts for your area";
-//        }
-
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
                         .setContentText("New weather statement for your area");
-        Intent serviceIntent = new Intent(this, notificationIntentHandler.class);
-        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-        notifBuilder.setContentIntent(servicePendingIntent);
+        Intent activityIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+        notifBuilder.setContentIntent(pendingIntent);
         notifBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
