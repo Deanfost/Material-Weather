@@ -62,7 +62,6 @@
         <item name="android:textColor">@color/colorBlack</item>
         <item name="colorAccent">@color/colorYellow</item>
         <!--<item name="android:alertDialogTheme">@style/ListPreferenceYellow</item>-->
-        <item name="android:dialogPreferenceStyle">@style/ListPreferenceYellow</item>
     </style>
 
     <!-- Settings theme blue-->
@@ -73,7 +72,6 @@
         <item name="android:textColor">@color/colorBlack</item>
         <item name="colorAccent">@color/colorBlue</item>
         <!--<item name="android:alertDialogTheme">@style/ListPreferenceBlue</item>-->
-        <item name="android:dialogPreferenceStyle">@style/ListPreferenceBlue</item>
     </style>
 
     <!-- Settings theme orange-->
@@ -84,7 +82,6 @@
         <item name="android:textColor">@color/colorBlack</item>
         <item name="colorAccent">@color/colorOrange</item>
         <!--<item name="android:alertDialogStyle">@style/ListPreferenceOrange</item>-->
-        <item name="android:dialogPreferenceStyle">@style/ListPreferenceOrange</item>
     </style>
 
     <!-- Settings theme purple-->
@@ -94,50 +91,6 @@
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:textColor">@color/colorBlack</item>
         <item name="colorAccent">@color/colorPurple</item>
-        <item name="android:dialogPreferenceStyle">@style/ListPreferencePurple</item>
         <!--<item name="android:alertDialogTheme">@style/ListPreferencePurple</item>-->
-    </style>
-
-    <!-- Custom alert dialog theme yellow-->
-    <style name="ListPreferenceYellow" parent="android:Theme.Material.Dialog.Alert">
-        <item name="colorAccent">@color/colorYellow</item>
-        <item name="android:colorAccent">@color/colorYellow</item>
-        <item name="android:colorPrimaryDark">@color/colorYellow</item>
-        <item name="android:textColorPrimary">@color/colorBlack</item>
-        <item name="android:textColorTertiary">@color/colorBlack</item>
-        <item name="android:textColorSecondary">@color/colorBlack</item>
-        <item name="android:background">@color/colorWhite</item>
-    </style>
-    <!-- Custom alert dialog theme blue-->
-    <style name="ListPreferenceBlue" parent="android:Theme.Material.Dialog.Alert">
-        <item name="colorAccent">@color/colorBlue</item>
-        <item name="android:colorAccent">@color/colorBlue</item>
-        <item name="android:colorPrimaryDark">@color/colorBlue</item>
-        <item name="android:textColorPrimary">@color/colorBlack</item>
-        <item name="android:textColorTertiary">@color/colorBlack</item>
-        <item name="android:textColorSecondary">@color/colorBlack</item>
-        <item name="android:background">@color/colorWhite</item>
-    </style>
-
-    <!-- Custom alert dialog theme orange-->
-    <style name="ListPreferenceOrange" parent="android:Theme.Material.Dialog.Alert">
-        <item name="colorAccent">@color/colorOrange</item>
-        <item name="android:colorAccent">@color/colorOrange</item>
-        <item name="android:colorPrimaryDark">@color/colorOrange</item>
-        <item name="android:textColorPrimary">@color/colorBlack</item>
-        <item name="android:textColorTertiary">@color/colorBlack</item>
-        <item name="android:textColorSecondary">@color/colorBlack</item>
-        <item name="android:background">@color/colorWhite</item>
-    </style>
-
-    <!-- Custom alert dialog theme purple-->
-    <style name="ListPreferencePurple" parent="android:Theme.Material.Dialog.Alert">
-        <item name="colorAccent">@color/colorPurple</item>
-        <item name="android:colorAccent">@color/colorPurple</item>
-        <item name="android:colorPrimaryDark">@color/colorPurple</item>
-        <!--<item name="android:textColorPrimary">@color/colorBlack</item>-->
-        <!--<item name="android:textColorTertiary">@color/colorBlack</item>-->
-        <!--<item name="android:textColorSecondary">@color/colorBlack</item>-->
-        <item name="android:background">@color/colorWhite</item>
     </style>
 </resources>
