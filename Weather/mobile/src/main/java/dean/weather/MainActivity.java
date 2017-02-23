@@ -3,7 +3,6 @@ package dean.weather;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
@@ -22,7 +21,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -146,7 +144,8 @@ public class MainActivity extends AppCompatActivity implements
     public static final int FOLLOW_NOTIF_ERROR_ID = 33;
 
     //App bar buttons
-    public static boolean enableAppBarButtons = false;
+    public static boolean enableRefresh = true;
+    public static boolean enableAlerts = true;
 
     //Activity state
     private boolean isRunning = true;
@@ -220,20 +219,28 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             //Refresh data
             case R.id.action_refresh:
-                if(enableAppBarButtons){
+                if(enableRefresh){
+                    Log.i("Refresh", "Enabled");
                     clearDataSets();
                     loadingFragmentTransaction();
                     //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
                     googleApiClient.connect();
                 }
+                else{
+                    Log.i("Refresh", "Disabled");
+                }
                 return true;
             case R.id.action_alerts:
-                if(enableAppBarButtons){
+                if(enableAlerts){
+                    Log.i("Alerts", "Enabled");
                     //Move to the alerts activity
                     Intent alertsIntent = new Intent(this, AlertsActivity.class);
                     alertsIntent.putExtra("setID", setID);
                     alertsIntent.putExtra("conditionsIcon", currentIcon);
                     startActivity(alertsIntent);
+                }
+                else{
+                    Log.i("Alerts", "Disabled");
                 }
                 return true;
             //User action not recognized
@@ -262,6 +269,18 @@ public class MainActivity extends AppCompatActivity implements
     //Google API Client events
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //Enable theme changes
+        if(preferences.getBoolean(getString(R.string.theme_change_key), true)){
+            changeTheme = true;
+            Log.i("changeTheme", "True");
+        }
+        else{
+            changeTheme = false;
+            Log.i("changeTheme", "False");
+            setID = 1;
+        }
+
         //Get current location
         Log.i("GoogleAPI", "Connected");
         clearDataSets();
@@ -283,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Check the result of the location settings changeTheme request
+        //Check the result of the location settings change request
         if(requestCode == REQUEST_CHANGE_SETTINGS){
             switch (requestCode) {
                 case REQUEST_CHANGE_SETTINGS:
@@ -298,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements
                             }
                             break;
                         case Activity.RESULT_CANCELED:
-                            // The user was asked to changeTheme settings, but chose not to
+                            // The user was asked to change location settings, but chose not to
                             changeLocationSettingsFragmentTransaction();
                             break;
                         default:
@@ -439,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements
                 });
             }
             else{
-                //Tell the user to grant location permissions
+                //Tell the user to grant location permissions 
                 permissionsFragmentTransaction();
                 Log.i("LocationSettings", "Incompatible");
             }
@@ -943,16 +962,6 @@ public class MainActivity extends AppCompatActivity implements
         super.onResume();
         Log.i("onStart", "Triggered");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        //Enable theme changes
-        if(preferences.getBoolean(getString(R.string.theme_change_key), true)){
-            changeTheme = true;
-            Log.i("changeTheme", "True");
-        }
-        else{
-            changeTheme = false;
-            Log.i("changeTheme", "False");
-            setID = 1;
-        }
 
         //Enable 24 hour time
         if(preferences.getBoolean(getString(R.string.hour_format_key), false)){
@@ -1056,6 +1065,8 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new mainFragment transaction.
      */
     private void mainFragmentTransaction(){
+        enableAlerts = true;
+        enableRefresh = true;
         //Make sure it is fine to commit the transaction
         if(isRunning){
             FragmentManager mainFragmentManager = getFragmentManager();
@@ -1069,7 +1080,6 @@ public class MainActivity extends AppCompatActivity implements
             else{
                 Log.i("MainActivity", "Finishing");
             }
-            enableAppBarButtons = true;
         }
         else{
             //Defer the transaction to onResumeFragments()
@@ -1081,6 +1091,8 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new loadingFragment transaction.
      */
     private void loadingFragmentTransaction(){
+        enableRefresh = false;
+        enableAlerts = false;
         if(isRunning){
             FragmentManager loadingFragmentManager = getFragmentManager();
             FragmentTransaction loadingFragmentTransaction = loadingFragmentManager.beginTransaction();
@@ -1094,7 +1106,6 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("MainActivity", "Finishing");
             }
             setMainLayoutColor(1);
-            enableAppBarButtons = false;
         }
         else{
             loadingPending = true;
@@ -1105,6 +1116,8 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new noConnectionFragment transaction.
      */
     private void noConnectionFragmentTransaction(){
+        enableAlerts = false;
+        enableRefresh = true;
         if(isRunning){
             FragmentManager noConnectionFragmentManager = getFragmentManager();
             FragmentTransaction noConnectionFragmentTransaction = noConnectionFragmentManager.beginTransaction();
@@ -1118,17 +1131,21 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("MainActivity", "Finishing");
             }
             setMainLayoutColor(1);
-            enableAppBarButtons = false;
         }
         else{
             noConnectionPending = true;
         }
+
+        //Reset setID
+        setID = 1;
     }
 
     /**
      * Creates new locationUnavailableFragment transaction.
      */
     private void locationUnavailableFragmentTransaction(){
+        enableAlerts = false;
+        enableRefresh = true;
         if(isRunning){
             FragmentManager locationUnavailableFragmentManager = getFragmentManager();
             FragmentTransaction locationUnavailableFragmentTransaction = locationUnavailableFragmentManager.beginTransaction();
@@ -1142,17 +1159,20 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("MainActivity", "Finishing");
             }
             setMainLayoutColor(1);
-            enableAppBarButtons = false;
         }
         else{
             locationUnavPending = true;
         }
+        //Reset setID
+        setID = 1;
     }
 
     /**
      * Creates new permissionsFragment transaction.
      */
     private void permissionsFragmentTransaction(){
+        enableRefresh = true;
+        enableAlerts = false;
         if(isRunning){
             FragmentManager permissionsFragmentManager = getFragmentManager();
             FragmentTransaction permissionsFragmentTransation = permissionsFragmentManager.beginTransaction();
@@ -1166,17 +1186,20 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("MainActivity", "Finishing");
             }
             setMainLayoutColor(1);
-            enableAppBarButtons = false;
         }
         else{
             permissionsPending = true;
         }
+        //Reset setID
+        setID = 1;
     }
 
     /**
      * Creates new ChangeLocationSettingsFragment transaction.
      */
     private void changeLocationSettingsFragmentTransaction(){
+        enableRefresh = true;
+        enableAlerts = false;
         if(isRunning){
             FragmentManager changeLocationSettingsFragmentManager = getFragmentManager();
             FragmentTransaction changeLocationSettingsFragmentTransaction = changeLocationSettingsFragmentManager.beginTransaction();
@@ -1190,11 +1213,12 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("MainActivity", "Finishing");
             }
             setMainLayoutColor(1);
-            enableAppBarButtons = false;
         }
         else{
             changeLocationSetPending = true;
         }
+        //Reset setID
+        setID = 1;
     }
 
     /**

@@ -69,8 +69,6 @@ public class settingsActivity extends PreferenceActivity{
             tutorialPref = findPreference(getResources().getString(R.string.support_tutorial_key));
 
             //Color accents
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            if(prefs.getBoolean(getString(R.string.theme_change_key), false)){
                 switch(setID){
                     case 0:
                         setTheme(R.style.SettingsThemeYellow);
@@ -85,11 +83,6 @@ public class settingsActivity extends PreferenceActivity{
                         setTheme(R.style.SettingsThemePurple);
                         break;
                 }
-            }
-            else{
-                //Set default theme(blue)
-                setTheme(R.style.SettingsThemeBlue);
-            }
 
             //Customize the window
             Window window = this.getWindow();
@@ -167,7 +160,7 @@ public class settingsActivity extends PreferenceActivity{
                         //Check if we are able to use current location
                         if(performChecks()){
                             //Perform one more round of checks against MainActivity
-                            if(MainActivity.enableAppBarButtons){
+                            if(MainActivity.enableRefresh && MainActivity.enableAlerts){
                                 //Start it, everything is looking good
                                 Log.i("ongoingNotifPref", "Looks good, starting service");
                                 Intent serviceIntent = new Intent(settingsActivity.this, alarmInterfaceService.class);
@@ -387,7 +380,7 @@ public class settingsActivity extends PreferenceActivity{
                     //Check to see if we can do this
                     if(performChecks()){
                         //Perform one more round of checks against MainActivity
-                        if(MainActivity.enableAppBarButtons){
+                        if(MainActivity.enableRefresh && MainActivity.enableAlerts){
                             //Start the alarm intent service, everything is looking good
                             Log.i("alert pref", "Starting service");
                             Intent alarmService = new Intent(settingsActivity.this, alarmInterfaceService.class);
