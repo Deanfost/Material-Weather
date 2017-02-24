@@ -19,7 +19,7 @@ import com.google.firebase.FirebaseApp;
  * Created by Dean Foster on 2/13/2017.
  */
 
-public class ApacheViewActivity extends AppCompatActivity {
+public class MITVIewActivity extends AppCompatActivity {
     WebView apacheWebView;
 
     @Override
@@ -33,7 +33,7 @@ public class ApacheViewActivity extends AppCompatActivity {
         setSupportActionBar(licensesToolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Apache 2.0 License");
+        getSupportActionBar().setTitle("MIT License");
         //Set color of appbar title
         licensesToolbar.setTitleTextColor(getResources().getColor(R.color.colorBlack));
 
@@ -53,7 +53,7 @@ public class ApacheViewActivity extends AppCompatActivity {
 
         //Load in html
         apacheWebView.getSettings().setBuiltInZoomControls(true);
-        apacheWebView.loadUrl("file:///android_asset/apache.html");
+        apacheWebView.loadUrl("file:///android_asset/mit.html");
     }
 
     @Override

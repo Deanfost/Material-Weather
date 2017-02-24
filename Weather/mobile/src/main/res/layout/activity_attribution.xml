@@ -83,7 +83,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="© Intuit - Apache License 2.0"
+                        android:text="© Intuit - MIT License"
                         android:padding="@dimen/_10sdp"
                         android:textSize="13sp"
                         android:layout_marginTop="@dimen/_22sdp"/>
@@ -108,7 +108,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="© Heinrich Reimer - Apache License 2.0"
+                        android:text="© Heinrich Reimer - Apache 2.0 License"
                         android:padding="@dimen/_10sdp"
                         android:textSize="13sp"
                         android:layout_marginTop="@dimen/_22sdp"/>
@@ -133,7 +133,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="© Prathamesh Sawant - Apache License 2.0"
+                        android:text="© Prathamesh Sawant - Apache 2.0 License"
                         android:padding="@dimen/_10sdp"
                         android:textSize="13sp"
                         android:layout_marginTop="@dimen/_22sdp"/>
@@ -313,6 +313,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Apache 2.0"
+                        android:padding="@dimen/_10sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+
+                <!-- MIT -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:id="@+id/licensesMITLayout">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MIT"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
                         android:textSize="15sp"/>

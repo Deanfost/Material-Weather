@@ -34,6 +34,7 @@ public class AttributionActivity extends AppCompatActivity {
     RelativeLayout darkSkyLayout;
     RelativeLayout AOSPLayout;
     LinearLayout apacheLayout;
+    LinearLayout MITLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class AttributionActivity extends AppCompatActivity {
         darkSkyLayout = (RelativeLayout) findViewById(R.id.licensesDarkSkyLayout);
         AOSPLayout = (RelativeLayout) findViewById(R.id.licensesAOSPLayoout);
         apacheLayout = (LinearLayout) findViewById(R.id.licensesApacheLayout);
+        MITLayout = (LinearLayout) findViewById(R.id.licensesMITLayout);
     }
 
     @Override
@@ -190,6 +192,16 @@ public class AttributionActivity extends AppCompatActivity {
                 //Move to Web view activity showing the Apache 2.0 License
                 Log.i("Apache", "Clicked");
                 Intent licenseIntent = new Intent(AttributionActivity.this, ApacheViewActivity.class);
+                startActivity(licenseIntent);
+            }
+        });
+
+        MITLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Move to Web view activity showing the Apache 2.0 License
+                Log.i("MIT", "Clicked");
+                Intent licenseIntent = new Intent(AttributionActivity.this, MITVIewActivity.class);
                 startActivity(licenseIntent);
             }
         });
