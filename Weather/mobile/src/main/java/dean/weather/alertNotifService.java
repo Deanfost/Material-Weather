@@ -151,7 +151,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                                     Log.i("notifService", "Unable to gather location");
                                     googleApiClient.disconnect();
                                     stopSelf();
-                                    //TODO - FIX THIS   
+                                    //TODO - FIX THIS
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");
