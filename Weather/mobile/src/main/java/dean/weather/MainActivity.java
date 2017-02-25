@@ -225,9 +225,10 @@ public class MainActivity extends AppCompatActivity implements
                     //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
                     googleApiClient.connect();
 
-                    //Clear any countdown callbacks
+                    //Reset countdown logic
                     countdown.removeCallbacksAndMessages(null);
                     dataOutdated = false;
+                    outdatedSnackbar.dismiss();
                 }
                 else{
                     Log.i("Refresh", "Disabled");
@@ -1114,10 +1115,10 @@ public class MainActivity extends AppCompatActivity implements
                             });
                     outdatedSnackbar.show();
                 }
-            }, 1000);
+            }, 500);
         }
         else
-            Log.i("onStart", "Countdown in progress");
+            Log.i("onStart", "Data up to date");
     }
 
     @Override
