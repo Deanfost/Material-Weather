@@ -158,6 +158,11 @@ public class MainActivity extends AppCompatActivity implements
     private boolean permissionsPending = false;
     private boolean changeLocationSetPending = false;
 
+    //Data updates
+    boolean dataOutdated = false;
+    final Handler countdown = new Handler();
+    Snackbar outdatedSnackbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,12 +178,6 @@ public class MainActivity extends AppCompatActivity implements
                         .build();
                 Log.i("GoogleAPIClient", "Creating new instance");
             }
-
-            //Give fragment interfaces reference to mainActivity
-            PermissionsFragment.setInitializer(this);
-            NoConnectionFragment.setConnectionRefresher(this);
-            LocationUnavailableFragment.setDataFetcher(this);
-            ChangeLocationSettingsFragment.setInitializer(this);
 
             //Connect to the Google API
             googleApiClient.connect();
@@ -225,6 +224,10 @@ public class MainActivity extends AppCompatActivity implements
                     loadingFragmentTransaction();
                     //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
                     googleApiClient.connect();
+
+                    //Clear any countdown callbacks
+                    countdown.removeCallbacksAndMessages(null);
+                    dataOutdated = false;
                 }
                 else{
                     Log.i("Refresh", "Disabled");
@@ -458,7 +461,7 @@ public class MainActivity extends AppCompatActivity implements
                 });
             }
             else{
-                //Tell the user to grant location permissions 
+                //Tell the user to grant location permissions
                 permissionsFragmentTransaction();
                 Log.i("LocationSettings", "Incompatible");
             }
@@ -933,6 +936,16 @@ public class MainActivity extends AppCompatActivity implements
                     startService(alertNotifService);
                     Log.i("Main Activity", "Starting AlertNotifService");
                 }
+
+                //Setup a countdown of 10 minutes, and when triggered, display a snackbar telling the user that the data is outdated
+                countdown.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Set outdated boolean to true
+                        Log.i("countdown", "returned");
+                        dataOutdated = true;
+                    }
+                }, 600000);
             }
 
             @Override
@@ -954,13 +967,16 @@ public class MainActivity extends AppCompatActivity implements
             googleApiClient.disconnect();
         }
         isRunning = false;
+        if(outdatedSnackbar != null){
+            outdatedSnackbar.dismiss();
+        }
         super.onStop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("onStart", "Triggered");
+        Log.i("onResume", "Triggered");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         //Enable 24 hour time
@@ -972,6 +988,12 @@ public class MainActivity extends AppCompatActivity implements
             //12 hour format
             hourFormat = 0;
         }
+
+        //Give fragment interfaces reference to mainActivity
+        PermissionsFragment.setInitializer(this);
+        NoConnectionFragment.setConnectionRefresher(this);
+        LocationUnavailableFragment.setDataFetcher(this);
+        ChangeLocationSettingsFragment.setInitializer(this);
     }
 
     @Override
@@ -1058,6 +1080,52 @@ public class MainActivity extends AppCompatActivity implements
     protected void onPause() {
         super.onPause();
         isRunning = false;
+        if(outdatedSnackbar != null){
+            outdatedSnackbar.dismiss();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Display a snackbar if it has been 10 minutes since the data was updated
+        if(dataOutdated){
+            Log.i("onStart", "Data outdated");
+
+            //Display the snackbar after 1 second
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    outdatedSnackbar = Snackbar
+                            .make(mainActivityLayout, "Forecast is outdated", Snackbar.LENGTH_LONG)
+                            .setAction("REFRESH", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    clearDataSets();
+                                    //Clear any countdown callbacks, reset boolean
+                                    countdown.removeCallbacksAndMessages(null);
+                                    dataOutdated = false;
+                                    loadingFragmentTransaction();
+                                    if(!googleApiClient.isConnected()){
+                                        googleApiClient.connect();
+                                    }
+                                }
+                            });
+                    outdatedSnackbar.show();
+                }
+            }, 1000);
+        }
+        else
+            Log.i("onStart", "Countdown in progress");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Remove countdown callbacks
+        countdown.removeCallbacksAndMessages(null);
+        clearDataSets();
     }
 
     //Fragments

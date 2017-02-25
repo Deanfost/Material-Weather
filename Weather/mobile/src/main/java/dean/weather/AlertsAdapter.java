@@ -3,8 +3,6 @@ package dean.weather;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -103,6 +101,22 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
                 cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
                 break;
         }
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Card", "Clicked");
+                Log.i("Position", position + "");
+
+                //Pass selected alert details to ViewAlertActivity
+                Intent alertIntent = new Intent(getContext(), ViewAlertActivity.class);
+                alertIntent.putExtra("setID", setID);
+                alertIntent.putExtra("alertTitle", dataSet.get(position).getTitle());
+                alertIntent.putExtra("alertDesc", dataSet.get(position).getDescription());
+                alertIntent.putExtra("alertSrc", dataSet.get(position).getUri());
+                getContext().startActivity(alertIntent);
+            }
+        });
 
         cardActionShare.setOnClickListener(new View.OnClickListener() {
             @Override

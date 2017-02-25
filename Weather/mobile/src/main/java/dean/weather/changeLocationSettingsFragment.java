@@ -76,7 +76,7 @@ public class ChangeLocationSettingsFragment extends Fragment {
 
                         switch (locationStatus.getStatusCode()){
                             case LocationSettingsStatusCodes.SUCCESS:
-                                //Settings are fine, how did we get here?
+                                //Settings are fine, how did we get here? (Probs airplane mode)
                                 Log.i("ChangeLocSettingsFrag", "Settings are fine");
                                 break;
 
