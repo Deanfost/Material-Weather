@@ -126,8 +126,8 @@ public class alarmInterfaceService extends Service {
                         PendingIntent alertAlarmIntent = PendingIntent.getService(this, 0, alertNotifIntent, 0);
 
                         Log.i("AlarmInterfaceService", "Starting alertNotif");
-                        //Setup an alarm to pull in an hour for alerts
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR, AlarmManager.INTERVAL_HOUR, alertAlarmIntent);
+                        //Setup an alarm to pull every half hour for alerts
+                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HALF_HOUR, AlarmManager.INTERVAL_HALF_HOUR, alertAlarmIntent);
 
                         //Start the first pull
                         Intent firstPull = new Intent(this, alertNotifService.class);
