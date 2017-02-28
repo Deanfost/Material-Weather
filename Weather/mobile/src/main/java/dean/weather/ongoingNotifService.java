@@ -661,6 +661,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 .setContentTitle("Error")
                                 .setContentText("Problem accessing Dark Sky.");
                 notifBuilder.setAutoCancel(true);
+                Intent serviceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
+                PendingIntent servicePendingIntent = PendingIntent.getService(ongoingNotifService.this, 0, serviceIntent, 0);
+                notifBuilder.setContentIntent(servicePendingIntent);
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.cancel(2);
                 mNotificationManager.notify(2, notifBuilder.build());

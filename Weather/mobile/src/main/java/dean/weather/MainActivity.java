@@ -228,7 +228,10 @@ public class MainActivity extends AppCompatActivity implements
                     //Reset countdown logic
                     countdown.removeCallbacksAndMessages(null);
                     dataOutdated = false;
-                    outdatedSnackbar.dismiss();
+                    if(outdatedSnackbar != null)
+                        outdatedSnackbar.dismiss();
+                    else
+                        Log.i("outdatedSnackbar", "Null");
                 }
                 else{
                     Log.i("Refresh", "Disabled");
@@ -1115,7 +1118,7 @@ public class MainActivity extends AppCompatActivity implements
                             });
                     outdatedSnackbar.show();
                 }
-            }, 500);
+            }, 1000);
         }
         else
             Log.i("onStart", "Data up to date");

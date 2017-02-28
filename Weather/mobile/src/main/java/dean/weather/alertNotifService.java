@@ -362,12 +362,19 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
                 }
-                if(createNewNotif){
-//                    createNewErrorNotif();
-                }
-                else{
-//                    createErrorNotif();
-                }
+                NotificationCompat.Builder notifBuilder =
+                        new NotificationCompat.Builder(alertNotifService.this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle("Error")
+                                .setContentText("Problem accessing Dark Sky.");
+                notifBuilder.setAutoCancel(true);
+                Intent serviceIntent = new Intent(alertNotifService.this, ongoingNotifService.class);
+                PendingIntent servicePendingIntent = PendingIntent.getService(alertNotifService.this, 0, serviceIntent, 0);
+                notifBuilder.setContentIntent(servicePendingIntent);
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.cancel(2);
+                mNotificationManager.notify(2, notifBuilder.build());
+
                 clearData();
                 stopSelf();
             }
