@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -51,7 +53,7 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class ongoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class ongoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -90,9 +92,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Refresh data when a new intent is received
-        if(intent != null){
-            if(intent.getExtras() != null){
-                if(intent.getExtras().getBoolean("pull", false)){
+        if (intent != null) {
+            if (intent.getExtras() != null) {
+                if (intent.getExtras().getBoolean("pull", false)) {
                     Log.i("notifService", "new intent received, updating");
                     //Setup GoogleAPIClient
                     if (googleApiClient == null) {
@@ -106,7 +108,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     return START_STICKY;
                 }
                 //Intent specifies the service to stop
-                else if(intent.getExtras().containsKey("notSticky")){
+                else if (intent.getExtras().containsKey("notSticky")) {
                     Log.i("notifService", "notStickyReceived");
                     stopSelf();
                     return START_NOT_STICKY;
@@ -172,6 +174,24 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         }
     }
 
+    /**
+     * Starts location updates.
+     */
+    public void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient, locationRequest, this);
+        }
+    }
+
+    /**
+     * Stops location updates.
+     */
+    public void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                googleApiClient, this);
+    }
+
     //GoogleAPI
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -222,7 +242,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                     pullForecast();
                                 } else {
                                     Log.i("notifService", "Unable to gather location");
-                                    //TODO - FIX THIS
+                                    //Request for a location update, and execute rest of logic when a new location is returned
+                                    startLocationUpdates();
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");
@@ -306,15 +327,41 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i("notifService", "GoogleAPI connection suspended");
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            //Create notification for Lollipop through Marshmallow
-//            createNotification(false);
-//        }
-//        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-//            //Create notification for Nougat and above
-//            createNewNotification(false);
-//        }
+        Log.i("notifService", "GoogleAPI connection failed");
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            //Create notification for Lollipop through Marshmallow
+            createNotification(false);
+        }
+        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+            //Create notification for Nougat and above
+            createNewNotification(false);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i("ongoingNotif", "New location pulled");
+        lastLocation = location;
+
+        //Get latitude and longitude of last known location
+        latitude = lastLocation.getLatitude();
+        longitude = lastLocation.getLongitude();
+        Log.i("Latitude", String.valueOf(latitude));
+        Log.i("Longitude", String.valueOf(longitude));
+
+        //Determine if a geocoder is available
+        if (!Geocoder.isPresent()) {
+            Log.i("Geocoder", "Unavailable");
+        }
+
+        //Stop pulling location updates
+        stopLocationUpdates();
+
+        //Get the current address
+        getAddresses();
+
+        //Pull initial data
+        pullForecast();
     }
 
     //Notification
@@ -665,8 +712,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 PendingIntent servicePendingIntent = PendingIntent.getService(ongoingNotifService.this, 0, serviceIntent, 0);
                 notifBuilder.setContentIntent(servicePendingIntent);
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.cancel(2);
-                mNotificationManager.notify(2, notifBuilder.build());
+                mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+                mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ERROR_ID, notifBuilder.build());
                 clearData();
             }
         });

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -47,7 +49,7 @@ import retrofit.client.Response;
  * Created by Dean on 12/25/2016.
  */
 
-public class alertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class alertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , LocationListener{
     private GoogleApiClient googleApiClient;
     private Double latitude;
     private Double longitude;
@@ -105,6 +107,25 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         return locationRequest;
     }
 
+    /**
+     * Starts location updates.
+     */
+    public void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient, createLocationRequest(), this);
+        }
+    }
+
+    /**
+     * Stops location updates.
+     */
+    public void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                googleApiClient, this);
+    }
+
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("NotifService", "GoogleAPIClient connected");
@@ -148,10 +169,9 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                                     pullForecast();
                                     googleApiClient.disconnect();
                                 } else {
-                                    Log.i("notifService", "Unable to gather location");
-                                    googleApiClient.disconnect();
-                                    stopSelf();
-                                    //TODO - FIX THIS
+                                    //Request for a location update, and execute rest of logic when a new location is returned
+                                    startLocationUpdates();
+
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");
@@ -237,9 +257,42 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         if(googleApiClient.isConnected()){
             googleApiClient.disconnect();
         }
-//        createErrorNotif();
         Log.i("alertNotif", "connectionFailed");
+
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(alertNotifService.this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Error")
+                        .setContentText("Problem pulling alerts.");
+        notifBuilder.setAutoCancel(true);
+        Intent serviceIntent = new Intent(alertNotifService.this, alertNotifService.class);
+        PendingIntent servicePendingIntent = PendingIntent.getService(alertNotifService.this, 0, serviceIntent, 0);
+        notifBuilder.setContentIntent(servicePendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
+        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
         stopSelf();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //Get latitude and longitude of last known location
+        latitude = lastLocation.getLatitude();
+        longitude = lastLocation.getLongitude();
+        Log.i("Latitude", String.valueOf(latitude));
+        Log.i("Longitude", String.valueOf(longitude));
+
+        //Determine if a geocoder is available
+        if (!Geocoder.isPresent()) {
+            Log.i("Geocoder", "Unavailable");
+        }
+
+        //Pull initial data
+        pullForecast();
+
+        //Stop location updates and disconnect
+        stopLocationUpdates();
+        googleApiClient.disconnect();
     }
 
     //Dark Sky API
@@ -366,14 +419,14 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                         new NotificationCompat.Builder(alertNotifService.this)
                                 .setSmallIcon(R.drawable.ic_launcher)
                                 .setContentTitle("Error")
-                                .setContentText("Problem accessing Dark Sky.");
+                                .setContentText("Problem pulling alerts.");
                 notifBuilder.setAutoCancel(true);
-                Intent serviceIntent = new Intent(alertNotifService.this, ongoingNotifService.class);
+                Intent serviceIntent = new Intent(alertNotifService.this, alertNotifService.class);
                 PendingIntent servicePendingIntent = PendingIntent.getService(alertNotifService.this, 0, serviceIntent, 0);
                 notifBuilder.setContentIntent(servicePendingIntent);
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.cancel(2);
-                mNotificationManager.notify(2, notifBuilder.build());
+                mNotificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
+                mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
 
                 clearData();
                 stopSelf();
