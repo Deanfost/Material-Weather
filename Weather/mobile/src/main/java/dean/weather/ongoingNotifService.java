@@ -68,13 +68,13 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     private String currentAddress;
     private boolean hasLocation;
 
-    private Integer currentTemp;
-    private String currentIcon;
-    private String currentCondition;
-    private String currentHi;
-    private String currentLo;
-    private String sunriseTimeString;
-    private String sunsetTimeString;
+    private Integer currentTemp = 0;
+    private String currentIcon = "---";
+    private String currentCondition = "---";
+    private String currentHi = "---";
+    private String currentLo = "---";
+    private String sunriseTimeString = "---";
+    private String sunsetTimeString = "---";
 
     @Nullable
     @Override
@@ -125,8 +125,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
      */
     private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(600000);//10 minutes
-        locationRequest.setFastestInterval(300000);//5 minutes
+        locationRequest.setInterval(10000);//10 seconds
+        locationRequest.setFastestInterval(5000);//5 seconds
         //City block accuracy
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return locationRequest;

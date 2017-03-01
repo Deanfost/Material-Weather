@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -46,6 +47,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -72,15 +74,16 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PermissionsFragment.Initializer,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, PermissionsFragment.Initializer,
         NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher, ChangeLocationSettingsFragment.Initializer{
 
     //Layout
     Toolbar toolbar;
     LinearLayout mainActivityLayout;
 
-    //Location settings changeTheme
+    //Location
     final int REQUEST_CHANGE_SETTINGS = 15;
+    boolean pullExpired = false;
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -108,28 +111,28 @@ public class MainActivity extends AppCompatActivity implements
     private List<Integer> pulledPrecips = new ArrayList<>();
 
     //Current
-    public static String currentLocation;
-    private String currentDay;
-    private String currentDate;
-    private String currentIcon;
-    private int currentTemp;
-    private String currentConditions;
-    private String todaysHI;
-    private String todaysLO;
-    private String todaysHILO;
-    private String todaysMinutely;
-    private String currentWind;
-    private int currentPrecip;
-    private int currentHumidity;
-    private int currentDewpoint;
-    private int currentPressure;
-    private String currentVisibilty;
+    public static String currentLocation = "---";
+    private String currentDay = "---";
+    private String currentDate = "---";
+    private String currentIcon = "---";
+    private int currentTemp = 0;
+    private String currentConditions = "---";
+    private String todaysHI = "---";
+    private String todaysLO = "---";
+    private String todaysHILO = "---";
+    private String todaysMinutely = "---";
+    private String currentWind = "---";
+    private int currentPrecip = 0;
+    private int currentHumidity = 0;
+    private int currentDewpoint = 0;
+    private int currentPressure = 0;
+    private String currentVisibilty = "---";
     private int currentCloudCover;
-    private String sunriseTime;
-    private String sunsetTime;
-    private String updateTime;
-    public static int setID;
-    private int alertsCount;
+    private String sunriseTime = "---";
+    private String sunsetTime = "---";
+    private String updateTime = "---";
+    public static int setID = -1;
+    private int alertsCount = 0;
 
     //Units
     int units;
@@ -307,6 +310,27 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onLocationChanged(Location location) {
+        //Get latitude and longitude for DarkSky API
+        latitude = lastLocation.getLatitude();
+        longitude = lastLocation.getLongitude();
+        Log.i("Latitude", String.valueOf(latitude));
+        Log.i("Longitude", String.valueOf(longitude));
+        //Determine if a geocoder is available
+        if(!Geocoder.isPresent()){
+            Log.i("Geocoder", "Unavailable");
+        }
+        //Parse and format data not related to weather
+        retrieveAndFormatNonWeatherData();
+
+        //Stop location updates
+        stopLocationUpdates();
+
+        //Call DarkSkyAPI
+        pullForecast();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Check the result of the location settings change request
@@ -335,14 +359,14 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    //Location updates
+    //Location
     /**
      * Creates location request.
      */
     private LocationRequest createLocationRequest(){
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(300000);//5 Minutes
-        locationRequest.setFastestInterval(60000);//One minute
+        locationRequest.setInterval(2000);//2 seconds (request for an immediate location update)
+        locationRequest.setFastestInterval(1000);//1 second
         //City block accuracy
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return locationRequest;
@@ -387,6 +411,24 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("Geocoder", "Service unavailable.");
             currentLocation = "---";
         }
+    }
+
+    /**
+     * Starts location updates.
+     */
+    public void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient, createLocationRequest(), this);
+        }
+    }
+
+    /**
+     * Stops location updates.
+     */
+    public void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                googleApiClient, this);
     }
 
     /**
@@ -438,9 +480,23 @@ public class MainActivity extends AppCompatActivity implements
                                         pullForecast();
                                     }
                                     else{
-                                        //Show a fragment telling the user the location is unavailable
-                                        locationUnavailableFragmentTransaction();
-                                        Log.i("Location", "Location unavailable");
+                                        //Pull a location update
+                                        Log.i("mainActivity", "Last location unavailable");
+                                        startLocationUpdates();
+
+                                        //Setup a timeout
+                                        final Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //Stop the location updates after 20 seconds, show the user the location unavailable fragment
+                                                stopLocationUpdates();
+                                                if(googleApiClient.isConnected()){
+                                                    googleApiClient.disconnect();
+                                                }
+                                                locationUnavailableFragmentTransaction();
+                                            }
+                                        }, 20000);
                                     }
                                 }
                                 catch (SecurityException e){

@@ -56,8 +56,8 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
     private Location lastLocation;
 //    private String currentAddress;
 //    private String todaySummary;
-    private String todaySunrise;
-    private String todaySunset;
+    private String todaySunrise = "---";
+    private String todaySunset = "---";
 //    private boolean hasLocation;
     private boolean createNewNotif;
     private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
@@ -100,8 +100,8 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
      */
     private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(600000);//10 minutes
-        locationRequest.setFastestInterval(300000);//5 minutes
+        locationRequest.setInterval(10000);//10 seconds
+        locationRequest.setFastestInterval(5000);//5 seconds
         //City block accuracy
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         return locationRequest;
