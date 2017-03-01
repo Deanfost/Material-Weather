@@ -171,7 +171,7 @@ public class settingsActivity extends PreferenceActivity{
                             else{
                                 //Notify the user
                                 Snackbar snackbar = Snackbar
-                                        .make(getListView(), "Please ensure location services is enabled, and location permission is granted to use this service.", Snackbar.LENGTH_LONG);
+                                        .make(getListView(), "Please ensure location services is enabled, and location permission is granted", Snackbar.LENGTH_LONG);
                                 View sbView = snackbar.getView();
                                 TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                                 sbText.setTextColor(getResources().getColor(R.color.colorWhite));
@@ -391,7 +391,7 @@ public class settingsActivity extends PreferenceActivity{
                         else{
                             //Notify the user
                             Snackbar snackbar = Snackbar
-                                    .make(getListView(), "Please ensure location services is enabled, and location permission is granted to use this service.", Snackbar.LENGTH_LONG);
+                                    .make(getListView(), "Please ensure location services is enabled, and location permission is granted", Snackbar.LENGTH_LONG);
                             View sbView = snackbar.getView();
                             TextView sbText = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
                             sbText.setTextColor(getResources().getColor(R.color.colorWhite));
@@ -459,7 +459,7 @@ public class settingsActivity extends PreferenceActivity{
             }
             else{
                 //Show a toast asking the user to enable location services
-                Toast.makeText(this, "Please enable location services to access this feature", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enable location services", Toast.LENGTH_SHORT).show();
                 performChecksReturn = false;
             }
         }

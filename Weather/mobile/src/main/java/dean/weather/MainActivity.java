@@ -311,6 +311,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.i("Main activity", "New location pulled");
+        lastLocation = location;
         //Get latitude and longitude for DarkSky API
         latitude = lastLocation.getLatitude();
         longitude = lastLocation.getLongitude();
@@ -427,8 +429,8 @@ public class MainActivity extends AppCompatActivity implements
      * Stops location updates.
      */
     public void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                googleApiClient, this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    googleApiClient, this);
     }
 
     /**
@@ -490,11 +492,13 @@ public class MainActivity extends AppCompatActivity implements
                                             @Override
                                             public void run() {
                                                 //Stop the location updates after 20 seconds, show the user the location unavailable fragment
-                                                stopLocationUpdates();
                                                 if(googleApiClient.isConnected()){
+                                                    stopLocationUpdates();
                                                     googleApiClient.disconnect();
                                                 }
-                                                locationUnavailableFragmentTransaction();
+                                                //Only show this fragment if the updates didn't work
+                                                if(lastLocation == null)
+                                                    locationUnavailableFragmentTransaction();
                                             }
                                         }, 20000);
                                     }
@@ -1236,6 +1240,7 @@ public class MainActivity extends AppCompatActivity implements
             setMainLayoutColor(1);
         }
         else{
+            Log.i("laodingTransaction", "!isRunning");
             loadingPending = true;
         }
     }
@@ -1356,6 +1361,8 @@ public class MainActivity extends AppCompatActivity implements
     public void beginNormalOperations() {
         loadingFragmentTransaction();
         requestLocationAndData();
+        if(!googleApiClient.isConnected())
+            googleApiClient.connect();
     }
 
     /**
@@ -1365,6 +1372,8 @@ public class MainActivity extends AppCompatActivity implements
     public void beginNormalOperations1() {
         loadingFragmentTransaction();
         requestLocationAndData();
+        if(!googleApiClient.isConnected())
+            googleApiClient.connect();
     }
 
     /**
@@ -1374,7 +1383,8 @@ public class MainActivity extends AppCompatActivity implements
     public void retryConnection() {
         loadingFragmentTransaction();
         clearDataSets();
-        googleApiClient.connect();
+        if(!googleApiClient.isConnected())
+            googleApiClient.connect();
     }
 
     /**
@@ -1384,6 +1394,8 @@ public class MainActivity extends AppCompatActivity implements
     public void retryDataFetch() {
         loadingFragmentTransaction();
         requestLocationAndData();
+        if(!googleApiClient.isConnected())
+            googleApiClient.connect();
     }
 
     //View data parsing and formatting

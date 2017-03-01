@@ -276,6 +276,8 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.i("alertNotif", "New location pulled");
+        lastLocation = location;
         //Get latitude and longitude of last known location
         latitude = lastLocation.getLatitude();
         longitude = lastLocation.getLongitude();
