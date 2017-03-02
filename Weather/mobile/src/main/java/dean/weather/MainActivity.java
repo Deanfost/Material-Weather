@@ -1162,7 +1162,7 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void run() {
                     outdatedSnackbar = Snackbar
-                            .make(mainActivityLayout, "Forecast is outdated", Snackbar.LENGTH_LONG)
+                            .make(mainActivityLayout, "Forecast is outdated.", Snackbar.LENGTH_LONG)
                             .setAction("REFRESH", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -1323,6 +1323,24 @@ public class MainActivity extends AppCompatActivity implements
         else{
             permissionsPending = true;
         }
+
+        //Change the preferences to reflect both services being disabled
+        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = mySPrefs.edit();
+        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
+        editor.putBoolean(getString(R.string.alert_notif_key), false);
+        editor.apply();
+
+        //End the ongoing alarm
+        Intent stopOngoing = new Intent(this, alarmInterfaceService.class);
+        stopOngoing.putExtra("repeatNotif", false);
+        startService(stopOngoing);
+
+        //End the alerts alarm
+        Intent stopAlerts = new Intent(this, alarmInterfaceService.class);
+        stopAlerts.putExtra("alertNotif", false);
+        startService(stopAlerts);
+
         //Reset setID
         setID = 1;
     }
@@ -1350,6 +1368,24 @@ public class MainActivity extends AppCompatActivity implements
         else{
             changeLocationSetPending = true;
         }
+
+        //Change the preferences to reflect both services being disabled
+        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = mySPrefs.edit();
+        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
+        editor.putBoolean(getString(R.string.alert_notif_key), false);
+        editor.apply();
+
+        //End the ongoing alarm
+        Intent stopOngoing = new Intent(this, alarmInterfaceService.class);
+        stopOngoing.putExtra("repeatNotif", false);
+        startService(stopOngoing);
+
+        //End the alerts alarm
+        Intent stopAlerts = new Intent(this, alarmInterfaceService.class);
+        stopAlerts.putExtra("alertNotif", false);
+        startService(stopAlerts);
+
         //Reset setID
         setID = 1;
     }

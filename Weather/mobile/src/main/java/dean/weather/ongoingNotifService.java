@@ -302,7 +302,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();
             }
-            //Change the preference to reflect the service being disabled
+            //Change the preferences to reflect the service being disabled
             SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = mySPrefs.edit();
             editor.putBoolean(getString(R.string.ongoing_notif_key), false);

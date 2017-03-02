@@ -56,7 +56,7 @@ public class DailyActivity extends AppCompatActivity {
     LinearLayout wrapperLayout;
     RelativeLayout topLayout;
     TextView viewLocation;
-    TextView viewDate;
+    TextView viewDay;
     TextView viewDescription;
     ImageView viewConditionsIcon;
     TextView viewConditions;
@@ -225,7 +225,7 @@ public class DailyActivity extends AppCompatActivity {
 
             topLayout = (RelativeLayout) findViewById(R.id.dayTopContentLayout);
 
-            viewDate = (TextView) findViewById(R.id.dayDate);
+            viewDay = (TextView) findViewById(R.id.dayDate);
             viewLocation = (TextView) findViewById(R.id.dayLocation);
             viewDescription = (TextView) findViewById(R.id.dayDesc);
             viewConditionsIcon = (ImageView) findViewById(R.id.iconDayConditions);
@@ -254,7 +254,7 @@ public class DailyActivity extends AppCompatActivity {
             //Customize the app bar
             assert dailyToolbar != null;
             assert getSupportActionBar() != null;
-            getSupportActionBar().setTitle(passedDay);
+            getSupportActionBar().setTitle(passedDate);
             dailyToolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
 
             //Enable up functions
@@ -554,7 +554,7 @@ public class DailyActivity extends AppCompatActivity {
 
             topLayout = (RelativeLayout) findViewById(R.id.dayTopContentLayout);
 
-            viewDate = (TextView) findViewById(R.id.dayDate);
+            viewDay = (TextView) findViewById(R.id.dayDate);
             viewLocation = (TextView) findViewById(R.id.dayLocation);
             viewDescription = (TextView) findViewById(R.id.dayDesc);
             viewConditionsIcon = (ImageView) findViewById(R.id.iconDayConditions);
@@ -583,7 +583,7 @@ public class DailyActivity extends AppCompatActivity {
             //Customize the app bar
             assert dailyToolbar != null;
             assert getSupportActionBar() != null;
-            getSupportActionBar().setTitle(passedDay);
+            getSupportActionBar().setTitle(passedDate);
             dailyToolbar.setBackgroundColor(this.getResources().getColor(R.color.colorBlue));
 
             //Enable up functions
@@ -780,7 +780,7 @@ public class DailyActivity extends AppCompatActivity {
      */
     private void setViews(){
         viewLocation.setText(pulledLocation);
-        viewDate.setText(passedDate);
+        viewDay.setText(passedDay);
         //TODO - GET NEW ICONS AND UPDATE
         switch (pulledIcon) {
             case "clear-day":
