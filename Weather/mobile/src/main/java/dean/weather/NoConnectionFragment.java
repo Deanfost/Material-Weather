@@ -30,7 +30,7 @@ public class NoConnectionFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.no_connection_fragment, container, false);
+        return inflater.inflate(R.layout.no_connection_activity, container, false);
     }
 
     @Override

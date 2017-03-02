@@ -10,7 +10,7 @@
         android:layout_height="@dimen/_100sdp"
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_storm_white"
+        android:src="@drawable/ic_noconnection_color"
         android:layout_marginTop="@dimen/_55sdp"
         android:tint="@color/colorBlue"
         android:layout_marginBottom="@dimen/_24sdp"
@@ -19,11 +19,11 @@
     <TextView
         android:layout_width="@dimen/_165sdp"
         android:layout_height="wrap_content"
-        android:text="Unable to retrieve location."
+        android:text="Please ensure there is an internet connection."
         android:textSize="17sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:layout_marginBottom="@dimen/_105sdp"/>
+        android:layout_marginBottom="@dimen/_115sdp"/>
 
     <Button
         android:layout_width="@dimen/_100sdp"
@@ -34,6 +34,6 @@
         android:layout_gravity="center_horizontal"
         android:background="@color/colorBlue"
         android:textColor="@color/colorWhite"
-        android:id="@+id/btnRetryLocation"/>
+        android:id="@+id/btnRetryConnection"/>
 
 </LinearLayout>

@@ -78,21 +78,22 @@ public class ChangeLocationSettingsFragment extends Fragment {
                             case LocationSettingsStatusCodes.SUCCESS:
                                 //Settings are fine, how did we get here? (Probs airplane mode)
                                 Log.i("ChangeLocSettingsFrag", "Settings are fine");
+                                sInitializer.beginNormalOperations1();
                                 break;
 
                             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                                 // Location settings are not satisfied, but this can be fixed
                                 // by showing the user a dialog.
                                 try {
-                                    // Show the dialog by calling startResolutionForResult(),
-                                    // and check the result in onActivityResult().
+                                    Log.i("changeSettings", "Change required");
                                     locationStatus.startResolutionForResult(getActivity(), REQUEST_CHANGE_SETTINGS);
                                 } catch (IntentSender.SendIntentException e) {
                                     // Ignore the error.
                                 }
                                 break;
                             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
+                                //Location settings aren't satisfied, but there is no way to fix them.
+                                Log.i("changeSettings", "Change unavailable");
                                 Snackbar snackbar = Snackbar.make(changeLocationSettingsFragLayout, "Please enable location services in settings.", Snackbar.LENGTH_LONG);
                                     snackbar.show();
                                 break;
@@ -118,6 +119,7 @@ public class ChangeLocationSettingsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("changeSettings", "onActivityResult - called");
         //Check the result of the location settings changeTheme request
         if(requestCode == REQUEST_CHANGE_SETTINGS){
             switch (requestCode) {

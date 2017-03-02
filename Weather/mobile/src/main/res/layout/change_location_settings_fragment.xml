@@ -10,9 +10,9 @@
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_100sdp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_locationunavailable_color"
+        android:src="@drawable/ic_storm_white"
         android:layout_marginTop="@dimen/_55sdp"
-        android:tint="@color/location_red"
+        android:tint="@color/colorBlue"
         android:layout_marginBottom="@dimen/_24sdp"
         android:scaleType="fitXY"/>
 
@@ -20,7 +20,7 @@
         android:layout_width="@dimen/_165sdp"
         android:layout_height="wrap_content"
         android:text="Material Weather requires your location to function properly. Please enable location services on your device."
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:layout_marginBottom="@dimen/_45sdp"/>

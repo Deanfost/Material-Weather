@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements
 
     //Location
     final int REQUEST_CHANGE_SETTINGS = 15;
-    boolean pullExpired = false;
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -1147,6 +1146,11 @@ public class MainActivity extends AppCompatActivity implements
         if(outdatedSnackbar != null){
             outdatedSnackbar.dismiss();
         }
+        //Remove references
+        PermissionsFragment.setInitializer(null);
+        NoConnectionFragment.setConnectionRefresher(null);
+        LocationUnavailableFragment.setDataFetcher(null);
+        ChangeLocationSettingsFragment.setInitializer(null);
     }
 
     @Override
@@ -1304,7 +1308,7 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new permissionsFragment transaction.
      */
     private void permissionsFragmentTransaction(){
-        enableRefresh = true;
+        enableRefresh = false;
         enableAlerts = false;
         if(isRunning){
             FragmentManager permissionsFragmentManager = getFragmentManager();
@@ -1349,7 +1353,7 @@ public class MainActivity extends AppCompatActivity implements
      * Creates new ChangeLocationSettingsFragment transaction.
      */
     private void changeLocationSettingsFragmentTransaction(){
-        enableRefresh = true;
+        enableRefresh = false;
         enableAlerts = false;
         if(isRunning){
             FragmentManager changeLocationSettingsFragmentManager = getFragmentManager();
@@ -1520,7 +1524,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.i("hourlySetSize", "greaterThan24");
             Log.i("iteratedHourStart", String.valueOf(iteratedHour));
             for (int i = 0; i < 24; i++) {
-                Log.i("iteratedHour", iteratedHour + "");
+                Log.i("iteratedHourComp", iteratedHour + "");
                 //Keep iterating for up to the next 24 hours, with entries that go over 23 being the next day
                     pulledComparisonHours.add(iteratedHour);
                     iteratedHour++;
@@ -1529,7 +1533,7 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             //Use the data available
             int iteratedHour = Integer.valueOf(getCurrentHour());
-            Log.i("iteratedHour", String.valueOf(iteratedHour));
+            Log.i("iteratedHourComp", String.valueOf(iteratedHour));
             for (int i = 0; i < pulledWeatherResponse.getHourly().getData().size(); i++) {
                 iteratedHour = iteratedHour % 24;
                 Log.i("iteratedHourStart", String.valueOf(iteratedHour));
@@ -1537,7 +1541,7 @@ public class MainActivity extends AppCompatActivity implements
                     pulledComparisonHours.add(iteratedHour);
                     iteratedHour++;
             }
-            Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+            Log.i("pulledHoursSizeComp", String.valueOf(pulledComparisonHours.size()));
         }
     }
 

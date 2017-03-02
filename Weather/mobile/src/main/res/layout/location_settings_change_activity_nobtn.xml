@@ -20,21 +20,10 @@
     <TextView
         android:layout_width="@dimen/_165sdp"
         android:layout_height="wrap_content"
-        android:text="Material Weather isn't allowed to use your location. Please grant now, or grant in settings."
+        android:text="Material Weather requires location services to function properly. Please enable location services in settings, and retry."
         android:textSize="17sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:layout_marginBottom="@dimen/_24sdp"/>
-
-    <Button
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:text="Grant access"
-        android:textAllCaps="false"
-        android:textSize="14sp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/colorBlue"
-        android:textColor="@color/colorWhite"
-        android:id="@+id/btnNeedAccess"/>
 
 </LinearLayout>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/colorWhite"
     android:padding="@dimen/_16sdp">
 
@@ -10,30 +11,30 @@
         android:layout_height="@dimen/_100sdp"
         android:id="@+id/iconCurrentConditions"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_storm_white"
-        android:layout_marginTop="@dimen/_55sdp"
-        android:tint="@color/colorBlue"
+        android:src="@drawable/ic_rain_white"
+        android:layout_marginTop="@dimen/_80sdp"
         android:layout_marginBottom="@dimen/_24sdp"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:tint="@color/colorBlue"/>
 
     <TextView
         android:layout_width="@dimen/_165sdp"
         android:layout_height="wrap_content"
-        android:text="Unable to retrieve location."
+        android:text="Material Weather requires location services to function properly. Please enable location services."
         android:textSize="17sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:layout_marginBottom="@dimen/_105sdp"/>
+        android:layout_marginBottom="@dimen/_24sdp"/>
 
     <Button
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_40sdp"
-        android:text="Retry"
+        android:text="Enable"
         android:textAllCaps="false"
         android:textSize="14sp"
         android:layout_gravity="center_horizontal"
         android:background="@color/colorBlue"
         android:textColor="@color/colorWhite"
-        android:id="@+id/btnRetryLocation"/>
+        android:id="@+id/btnEnableLocation"/>
 
 </LinearLayout>
