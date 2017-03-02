@@ -128,6 +128,10 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
             Log.i("GoogleAPIClient", "Creating new instance");
         }
 
+        if(googleApiClient.isConnected()){
+            googleApiClient.disconnect();
+        }
+
         //Connect to the Google API
         googleApiClient.connect();
     }
@@ -209,6 +213,7 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                                 @Override
                                 public void onClick(View v) {
                                     //Retry
+                                    Log.i("IntroActivity", "Airplane retry clicked");
                                     decideActivity();
                                 }
                             });
@@ -266,9 +271,6 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                 case Activity.RESULT_OK:
                     // All required changes were successfully made, rerun logic
                     Log.i("IntroActivity", "Location settings changed");
-                    if(googleApiClient.isConnected()){
-                        googleApiClient.disconnect();
-                    }
                     decideActivity();
                     break;
                 case Activity.RESULT_CANCELED:
