@@ -22,6 +22,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -157,8 +158,6 @@ public class MainActivity extends AppCompatActivity implements
     private boolean loadingPending = false;
     private boolean noConnectionPending = false;
     private boolean locationUnavPending = false;
-    private boolean permissionsPending = false;
-    private boolean changeLocationSetPending = false;
 
     //Data updates
     boolean dataOutdated = false;
@@ -221,19 +220,7 @@ public class MainActivity extends AppCompatActivity implements
             //Refresh data
             case R.id.action_refresh:
                 if(enableRefresh){
-                    Log.i("Refresh", "Enabled");
-                    clearDataSets();
-                    loadingFragmentTransaction();
-                    //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
-                    googleApiClient.connect();
-
-                    //Reset countdown logic
-                    countdown.removeCallbacksAndMessages(null);
-                    dataOutdated = false;
-                    if(outdatedSnackbar != null)
-                        outdatedSnackbar.dismiss();
-                    else
-                        Log.i("outdatedSnackbar", "Null");
+                    refresh();
                 }
                 else{
                     Log.i("Refresh", "Disabled");
@@ -349,8 +336,12 @@ public class MainActivity extends AppCompatActivity implements
                             }
                             break;
                         case Activity.RESULT_CANCELED:
-                            // The user was asked to change location settings, but chose not to
-                            changeLocationSettingsFragmentTransaction();
+                            // The user was asked to change location settings, but chose not to, show activity
+                            Log.i("Main", "Moving to change location settings activity");
+                            googleApiClient.disconnect();
+                            Intent changeSettings = new Intent(MainActivity.this, ChangeLocationSettingsActivity.class);
+                            startActivity(changeSettings);
+                            ChangeLocationSettingsActivity.passContext(MainActivity.this);
                             break;
                         default:
                             break;
@@ -516,8 +507,23 @@ public class MainActivity extends AppCompatActivity implements
                                 }
                                 break;
                             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
-                                changeLocationSettingsFragmentTransaction();
+                                //Check for airplane mode
+                                if(Settings.System.getInt(MainActivity.this.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0){
+                                    //Airplane mode is on, show activity
+                                    Log.i("Main", "Moving to airplane mode activity");
+                                    googleApiClient.disconnect();
+                                    Intent airplaneMode = new Intent(MainActivity.this, AirplaneModeActivity.class);
+                                    startActivity(airplaneMode);
+                                    AirplaneModeActivity.passContext(MainActivity.this);
+                                }
+                                else{
+                                    //Airplane mode is off, show activity
+                                    Log.i("Main", "Settings change unavailable");
+                                    googleApiClient.disconnect();
+                                    Intent locationSettingsUnav = new Intent(MainActivity.this, LocationSettingsNoRes.class);
+                                    startActivity(locationSettingsUnav);
+                                }
+
                                 break;
                         }
                     }
@@ -525,8 +531,11 @@ public class MainActivity extends AppCompatActivity implements
             }
             else{
                 //Tell the user to grant location permissions
-                permissionsFragmentTransaction();
-                Log.i("LocationSettings", "Incompatible");
+                Log.i("Main", "Moving to permissions activity");
+                googleApiClient.disconnect();
+                Intent permissionsActivity = new Intent(MainActivity.this, PermissionsActivity.class);
+                startActivity(permissionsActivity);
+                PermissionsActivity.passContext(MainActivity.this);
             }
         }
         //If there is no connection to the Google API client
@@ -1089,18 +1098,6 @@ public class MainActivity extends AppCompatActivity implements
             }, 1000);
         }
 
-        if(changeLocationSetPending){
-            changeLocationSetPending = false;
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //Commit the fragment after 1 second to preserve animations
-                    changeLocationSettingsFragmentTransaction();
-                }
-            }, 1000);
-        }
-
         if(locationUnavPending){
             locationUnavPending = false;
             final Handler handler = new Handler();
@@ -1124,19 +1121,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }, 1000);
         }
-
-        if(permissionsPending){
-            permissionsPending = false;
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //Commit the fragment after 1 second to preserve animations
-                    permissionsFragmentTransaction();
-                }
-            }, 1000);
-        }
-
     }
 
     @Override
@@ -1170,14 +1154,7 @@ public class MainActivity extends AppCompatActivity implements
                             .setAction("REFRESH", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    clearDataSets();
-                                    //Clear any countdown callbacks, reset boolean
-                                    countdown.removeCallbacksAndMessages(null);
-                                    dataOutdated = false;
-                                    loadingFragmentTransaction();
-                                    if(!googleApiClient.isConnected()){
-                                        googleApiClient.connect();
-                                    }
+                                    refresh();
                                 }
                             });
                     outdatedSnackbar.show();
@@ -1194,9 +1171,50 @@ public class MainActivity extends AppCompatActivity implements
         //Remove countdown callbacks
         countdown.removeCallbacksAndMessages(null);
         clearDataSets();
+        Log.i("MainActivity", "Destroyed");
     }
 
     //Fragments
+
+    /**
+     * Refreshes data.
+     */
+    public void refresh(){
+        clearDataSets();
+        loadingFragmentTransaction();
+        //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
+        if(!googleApiClient.isConnected()){
+            googleApiClient.connect();
+        }
+
+        //Reset countdown logic
+        countdown.removeCallbacksAndMessages(null);
+        dataOutdated = false;
+        if(outdatedSnackbar != null)
+            outdatedSnackbar.dismiss();
+        else
+            Log.i("outdatedSnackbar", "Null");
+    }
+
+    /**
+     * Refreshes data without transacting loadingFragment.
+     */
+    public void refreshNoLoad(){
+        clearDataSets();
+        //Reconnect to Google services, and in onConnected, requestDataAndLocation will be called.
+        if(!googleApiClient.isConnected()){
+            googleApiClient.connect();
+        }
+
+        //Reset countdown logic
+        countdown.removeCallbacksAndMessages(null);
+        dataOutdated = false;
+        if(outdatedSnackbar != null)
+            outdatedSnackbar.dismiss();
+        else
+            Log.i("outdatedSnackbar", "Null");
+    }
+
     /**
      * Creates new mainFragment transaction.
      */
@@ -1300,96 +1318,6 @@ public class MainActivity extends AppCompatActivity implements
         else{
             locationUnavPending = true;
         }
-        //Reset setID
-        setID = 1;
-    }
-
-    /**
-     * Creates new permissionsFragment transaction.
-     */
-    private void permissionsFragmentTransaction(){
-        enableRefresh = false;
-        enableAlerts = false;
-        if(isRunning){
-            FragmentManager permissionsFragmentManager = getFragmentManager();
-            FragmentTransaction permissionsFragmentTransation = permissionsFragmentManager.beginTransaction();
-            PermissionsFragment permissionsFragment = new PermissionsFragment();
-            if(!isFinishing()){
-                permissionsFragmentTransation.replace(R.id.mainContentView, permissionsFragment);
-                permissionsFragmentTransation.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                permissionsFragmentTransation.commit();
-            }
-            else{
-                Log.i("MainActivity", "Finishing");
-            }
-            setMainLayoutColor(1);
-        }
-        else{
-            permissionsPending = true;
-        }
-
-        //Change the preferences to reflect both services being disabled
-        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = mySPrefs.edit();
-        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
-        editor.putBoolean(getString(R.string.alert_notif_key), false);
-        editor.apply();
-
-        //End the ongoing alarm
-        Intent stopOngoing = new Intent(this, alarmInterfaceService.class);
-        stopOngoing.putExtra("repeatNotif", false);
-        startService(stopOngoing);
-
-        //End the alerts alarm
-        Intent stopAlerts = new Intent(this, alarmInterfaceService.class);
-        stopAlerts.putExtra("alertNotif", false);
-        startService(stopAlerts);
-
-        //Reset setID
-        setID = 1;
-    }
-
-    /**
-     * Creates new ChangeLocationSettingsFragment transaction.
-     */
-    private void changeLocationSettingsFragmentTransaction(){
-        enableRefresh = false;
-        enableAlerts = false;
-        if(isRunning){
-            FragmentManager changeLocationSettingsFragmentManager = getFragmentManager();
-            FragmentTransaction changeLocationSettingsFragmentTransaction = changeLocationSettingsFragmentManager.beginTransaction();
-            ChangeLocationSettingsFragment ChangeLocationSettingsFragment = new ChangeLocationSettingsFragment();
-            if (!isFinishing()) {
-                changeLocationSettingsFragmentTransaction.replace(R.id.mainContentView, ChangeLocationSettingsFragment);
-                changeLocationSettingsFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                changeLocationSettingsFragmentTransaction.commit();
-            }
-            else{
-                Log.i("MainActivity", "Finishing");
-            }
-            setMainLayoutColor(1);
-        }
-        else{
-            changeLocationSetPending = true;
-        }
-
-        //Change the preferences to reflect both services being disabled
-        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = mySPrefs.edit();
-        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
-        editor.putBoolean(getString(R.string.alert_notif_key), false);
-        editor.apply();
-
-        //End the ongoing alarm
-        Intent stopOngoing = new Intent(this, alarmInterfaceService.class);
-        stopOngoing.putExtra("repeatNotif", false);
-        startService(stopOngoing);
-
-        //End the alerts alarm
-        Intent stopAlerts = new Intent(this, alarmInterfaceService.class);
-        stopAlerts.putExtra("alertNotif", false);
-        startService(stopAlerts);
-
         //Reset setID
         setID = 1;
     }

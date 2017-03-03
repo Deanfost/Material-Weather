@@ -93,6 +93,23 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                         Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
                     }
                 });
+
+                //Change the preferences to reflect both services being disabled
+                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = mySPrefs.edit();
+                editor.putBoolean(getString(R.string.ongoing_notif_key), false);
+                editor.putBoolean(getString(R.string.alert_notif_key), false);
+                editor.apply();
+
+                //End the ongoing alarm
+                Intent stopOngoing = new Intent(this, alarmInterfaceService.class);
+                stopOngoing.putExtra("repeatNotif", false);
+                startService(stopOngoing);
+
+                //End the alerts alarm
+                Intent stopAlerts = new Intent(this, alarmInterfaceService.class);
+                stopAlerts.putExtra("alertNotif", false);
+                startService(stopAlerts);
             }
         }
     }
@@ -196,6 +213,23 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                                     }
                                 }
                             });
+
+                        //Change the preferences to reflect both services being disabled
+                        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = mySPrefs.edit();
+                        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
+                        editor.putBoolean(getString(R.string.alert_notif_key), false);
+                        editor.apply();
+
+                        //End the ongoing alarm
+                        Intent stopOngoing = new Intent(IntroActivity.this, alarmInterfaceService.class);
+                        stopOngoing.putExtra("repeatNotif", false);
+                        startService(stopOngoing);
+
+                        //End the alerts alarm
+                        Intent stopAlerts = new Intent(IntroActivity.this, alarmInterfaceService.class);
+                        stopAlerts.putExtra("alertNotif", false);
+                        startService(stopAlerts);
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         //Check for airplane mode
@@ -230,6 +264,23 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                             if(googleApiClient.isConnected()){
                                 googleApiClient.disconnect();
                             }
+
+                            //Change the preferences to reflect both services being disabled
+                            SharedPreferences mySPrefs1 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor1 = mySPrefs1.edit();
+                            editor1.putBoolean(getString(R.string.ongoing_notif_key), false);
+                            editor1.putBoolean(getString(R.string.alert_notif_key), false);
+                            editor1.apply();
+
+                            //End the ongoing alarm
+                            Intent stopOngoing1 = new Intent(IntroActivity.this, alarmInterfaceService.class);
+                            stopOngoing1.putExtra("repeatNotif", false);
+                            startService(stopOngoing1);
+
+                            //End the alerts alarm
+                            Intent stopAlerts1 = new Intent(IntroActivity.this, alarmInterfaceService.class);
+                            stopAlerts1.putExtra("alertNotif", false);
+                            startService(stopAlerts1);
                         }
                         break;
                 }

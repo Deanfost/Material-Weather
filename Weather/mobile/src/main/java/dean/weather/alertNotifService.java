@@ -12,6 +12,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -202,26 +203,37 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                             stopSelf();
                             break;
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            //Location settings aren't satisfied, but there is no way to fix them. Do not show dialog.
-                            Log.i("notifService", "Location settings not satisfied");
-                            if (googleApiClient.isConnected()) {
-                                googleApiClient.disconnect();
+                            //Check for airplane mode
+                            if(Settings.System.getInt(alertNotifService.this.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0){
+                                Log.i("alertNotifService", "Airplane mode on");
+                                //Do nothing
+                                if (googleApiClient.isConnected()) {
+                                    googleApiClient.disconnect();
+                                }
+                                stopSelf();
                             }
-                            //Change the preference to reflect the service being disabled
-                            SharedPreferences mySPrefs1 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            SharedPreferences.Editor editor1 = mySPrefs1.edit();
-                            editor1.putBoolean(getString(R.string.alert_notif_key), false);
-                            editor1.apply();
+                            else{
+                                //Airplane mode is off
+                                Log.i("notifService", "Location settings not satisfied");
+                                if (googleApiClient.isConnected()) {
+                                    googleApiClient.disconnect();
+                                }
+                                //Change the preference to reflect the service being disabled
+                                SharedPreferences mySPrefs1 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor1 = mySPrefs1.edit();
+                                editor1.putBoolean(getString(R.string.alert_notif_key), false);
+                                editor1.apply();
 
-                            //End the repeating preference alarm
-                            Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
-                            stopAlarm1.putExtra("alertNotif", false);
-                            startService(stopAlarm1);
+                                //End the repeating preference alarm
+                                Intent stopAlarm1 = new Intent(getApplicationContext(), alarmInterfaceService.class);
+                                stopAlarm1.putExtra("alertNotif", false);
+                                startService(stopAlarm1);
 
-                            //Notify the user
-                            Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
+                                //Notify the user
+                                Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
-                            stopSelf();
+                                stopSelf();
+                            }
                             break;
                     }
                 }
