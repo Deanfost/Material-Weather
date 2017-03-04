@@ -197,6 +197,10 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                             stopAlarm.putExtra("alertNotif", false);
                             startService(stopAlarm);
 
+                            //Cancel notifs
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+
                             //Notify the user
                             Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
@@ -229,6 +233,10 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                                 stopAlarm1.putExtra("alertNotif", false);
                                 startService(stopAlarm1);
 
+                                //Cancel notifs
+                                NotificationManager notificationManager1 = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                notificationManager1.cancel(MainActivity.FOLLOW_NOTIF_ID);
+
                                 //Notify the user
                                 Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
@@ -253,6 +261,10 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
             Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
             stopAlarm.putExtra("alertNotif", false);
             startService(stopAlarm);
+
+            //Cancel notifs
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
 
             Toast.makeText(this, "Please grant location permissions to use this service", Toast.LENGTH_SHORT).show();
             stopSelf();
@@ -449,63 +461,6 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
     }
 
     //Notifications
-
-    /**
-     * Creates notification letting the user know that we were unable to get their summary for Lollipop through Marshmallow.
-     */
-//    private void createErrorNotif(){
-//        //Determine which color to use for large icon background
-//        int setID = determineLayoutColor(todaySunrise, todaySunset);
-//        int color = -1;
-//
-//        switch (setID){
-//            case 0:
-//                color = getResources().getColor(R.color.colorOrange);
-//                break;
-//            case 1:
-//                color = getResources().getColor(R.color.colorBlueLight);
-//                break;
-//            case 2:
-//                color = getResources().getColor(R.color.colorYellow);
-//                break;
-//            case 3:
-//                color = getResources().getColor(R.color.colorPurple);
-//                break;
-//        }
-//
-//        //Create notification asking the user to try again
-//        NotificationCompat.Builder notifBuilder =
-//                new NotificationCompat.Builder(this)
-//                        .setSmallIcon(R.drawable.ic_launcher)
-//                        .setContentTitle("Unable to sync weather")
-//                        .setContentText("Tap to try again now.")
-//                        .setColor(color);
-//        Intent serviceIntent = new Intent(this, AlertNotifService.class);
-//        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-//        notifBuilder.setContentIntent(servicePendingIntent);
-//        notifBuilder.setAutoCancel(true);
-//        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
-//    }
-
-    /**
-     * Creates notification letting the user know we were unable to pull summary for Nougat.
-     */
-//    private void createNewErrorNotif(){
-//        //Create notification asking the user to try again
-//        NotificationCompat.Builder notifBuilder =
-//                new NotificationCompat.Builder(this)
-//                        .setSmallIcon(R.drawable.ic_launcher)
-//                        .setContentTitle("Unable to sync weather")
-//                        .setContentText("Tap to try again now.");
-//        Intent serviceIntent = new Intent(this, AlertNotifService.class);
-//        PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
-//        notifBuilder.setContentIntent(servicePendingIntent);
-//        notifBuilder.setAutoCancel(true);
-//        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
-//    }
-
     /**
      * Creates alert notification for Lollipop through Marshmallow.
      */
@@ -558,6 +513,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
         notifBuilder.setContentIntent(pendingIntent);
         notifBuilder.setAutoCancel(true);
+        notifBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
     }

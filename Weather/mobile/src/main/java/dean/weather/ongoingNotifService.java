@@ -111,6 +111,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 //Intent specifies the service to stop
                 else if (intent.getExtras().containsKey("notSticky")) {
                     Log.i("notifService", "notStickyReceived");
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
                     stopSelf();
                     return START_NOT_STICKY;
                 }
@@ -267,6 +270,11 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             stopAlarm.putExtra("repeatNotif", false);
                             startService(stopAlarm);
 
+                            //Cancel notifs
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+
                             //Notify the user
                             Toast.makeText(ongoingNotifService.this, "Please enable location services to use this service", Toast.LENGTH_LONG).show();
 
@@ -298,6 +306,11 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 stopAlarm1.putExtra("repeatNotif", false);
                                 startService(stopAlarm1);
 
+                                //Cancel notifs
+                                NotificationManager notificationManager1 = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                notificationManager1.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                                notificationManager1.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+
                                 //Notify the user
                                 Toast.makeText(ongoingNotifService.this, "Pelase enable location services to use this service", Toast.LENGTH_LONG).show();
 
@@ -322,6 +335,11 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             Intent stopAlarm = new Intent(this, alarmInterfaceService.class);
             stopAlarm.putExtra("repeatNotif", false);
             startService(stopAlarm);
+
+            //Cancel notifs
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
 
             //Notify the user
             Toast.makeText(this, "Please grant location permission to use this service", Toast.LENGTH_LONG).show();

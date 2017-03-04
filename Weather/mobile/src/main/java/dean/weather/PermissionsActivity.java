@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -62,6 +63,12 @@ public class PermissionsActivity extends AppCompatActivity {
         Intent stopOngoing = new Intent(this, alarmInterfaceService.class);
         stopOngoing.putExtra("repeatNotif", false);
         startService(stopOngoing);
+
+        //Cancel notifs
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+        notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+        notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
 
         //End the alerts alarm
         Intent stopAlerts = new Intent(this, alarmInterfaceService.class);
