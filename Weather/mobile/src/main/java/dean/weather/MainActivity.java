@@ -523,7 +523,6 @@ public class MainActivity extends AppCompatActivity implements
                                     Intent locationSettingsUnav = new Intent(MainActivity.this, LocationSettingsNoRes.class);
                                     startActivity(locationSettingsUnav);
                                 }
-
                                 break;
                         }
                     }
@@ -1272,7 +1271,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void noConnectionFragmentTransaction(){
         enableAlerts = false;
-        enableRefresh = true;
+        enableRefresh = false;
         if(isRunning){
             FragmentManager noConnectionFragmentManager = getFragmentManager();
             FragmentTransaction noConnectionFragmentTransaction = noConnectionFragmentManager.beginTransaction();
@@ -1300,7 +1299,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void locationUnavailableFragmentTransaction(){
         enableAlerts = false;
-        enableRefresh = true;
+        enableRefresh = false;
         if(isRunning){
             FragmentManager locationUnavailableFragmentManager = getFragmentManager();
             FragmentTransaction locationUnavailableFragmentTransaction = locationUnavailableFragmentManager.beginTransaction();

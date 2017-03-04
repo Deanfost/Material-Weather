@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -24,12 +26,14 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.firebase.FirebaseApp;
 
 /**
  * Created by Dean Foster on 3/2/2017.
  */
 
-public class ChangeLocationSettingsActivity extends AppCompatActivity {
+public class ChangeLocationSettingsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    GoogleApiClient googleApiClient;
     LinearLayout parent;
     Button btnEnable;
     static Context passedContext;
@@ -37,7 +41,17 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.location_settings_change_activity);
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            Log.i("GoogleAPIClient", "Creating new instance");
+        }
 
         parent = (LinearLayout) findViewById(R.id.settingsChangeActivityParent);
         btnEnable = (Button) findViewById(R.id.btnEnableLocation);
@@ -53,48 +67,7 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("ChangeSettingsAct", "btn clicked");
-                //Create location request
-                LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                        .addLocationRequest(createLocationRequest());
-
-                //Create location settings request to make sure the request is permitted
-                PendingResult<LocationSettingsResult> locationSettingsResultPendingResult = LocationServices.SettingsApi.checkLocationSettings(MainActivity.googleApiClient, builder.build());
-
-                locationSettingsResultPendingResult.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                    @Override
-                    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
-                        final Status locationStatus = locationSettingsResult.getStatus();
-//                        final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
-
-                        switch (locationStatus.getStatusCode()){
-                            case LocationSettingsStatusCodes.SUCCESS:
-                                //Settings are fine, how did we get here? (Probs airplane mode)
-                                Log.i("ChangeLocSettingsFrag", "Settings are fine");
-                                //Move to main
-                                finish();
-                                MainActivity mainActivity = (MainActivity) passedContext;
-                                mainActivity.refreshNoLoad();
-                                break;
-
-                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                // Location settings are not satisfied, but this can be fixed
-                                // by showing the user a dialog.
-                                try {
-                                    Log.i("changeSettings", "Change required");
-                                    locationStatus.startResolutionForResult(ChangeLocationSettingsActivity.this, 15);
-                                } catch (IntentSender.SendIntentException e) {
-                                    // Ignore the error.
-                                }
-                                break;
-                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                //Location settings aren't satisfied, but there is no way to fix them.
-                                Log.i("changeSettings", "Change unavailable");
-                                Snackbar snackbar = Snackbar.make(parent, "Please enable location services in settings.", Snackbar.LENGTH_LONG);
-                                snackbar.show();
-                                break;
-                        }
-                    }
-                });
+                googleApiClient.connect();
             }
         });
     }
@@ -136,6 +109,10 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity {
                         case Activity.RESULT_OK:
                             // All required changes were successfully made, so move to main
                             try{
+                                if(googleApiClient.isConnected())
+                                {
+                                    googleApiClient.disconnect();
+                                }
                                 finish();
                                 MainActivity mainActivity = (MainActivity) passedContext;
                                 mainActivity.refreshNoLoad();
@@ -147,6 +124,8 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity {
                         case Activity.RESULT_CANCELED:
                             // The user was asked to changeTheme settings, but chose not to
                             //Do nothing
+                            if(googleApiClient.isConnected())
+                                googleApiClient.disconnect();
                             break;
                         default:
                             break;
@@ -154,5 +133,61 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        //Create location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(createLocationRequest());
+
+        //Create location settings request to make sure the request is permitted
+        PendingResult<LocationSettingsResult> locationSettingsResultPendingResult = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+
+        locationSettingsResultPendingResult.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+                final Status locationStatus = locationSettingsResult.getStatus();
+//                        final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
+
+                switch (locationStatus.getStatusCode()){
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        //Settings are fine, how did we get here? (Probs airplane mode)
+                        Log.i("ChangeLocSettingsFrag", "Settings are fine");
+                        //Move to main
+                        finish();
+                        MainActivity mainActivity = (MainActivity) passedContext;
+                        mainActivity.refreshNoLoad();
+                        break;
+
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Location settings are not satisfied, but this can be fixed
+                        // by showing the user a dialog.
+                        try {
+                            Log.i("changeSettings", "Change required");
+                            locationStatus.startResolutionForResult(ChangeLocationSettingsActivity.this, 15);
+                        } catch (IntentSender.SendIntentException e) {
+                            // Ignore the error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        //Location settings aren't satisfied, but there is no way to fix them.
+                        Log.i("changeSettings", "Change unavailable");
+                        Snackbar snackbar = Snackbar.make(parent, "Please enable location services in settings.", Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                        break;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i("ChangeLocSettingsAct", "Connection failed");
     }
 }

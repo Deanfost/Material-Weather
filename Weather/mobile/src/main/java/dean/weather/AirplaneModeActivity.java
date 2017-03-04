@@ -11,6 +11,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by Dean Foster on 3/2/2017.
  */
@@ -22,6 +24,7 @@ public class AirplaneModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.airplane_mode_activity);
 
         btnRetry = (Button) findViewById(R.id.btnRetryAirplane);
@@ -47,7 +50,7 @@ public class AirplaneModeActivity extends AppCompatActivity {
                     Log.i("AirplaneModeAct", "Airplane mode off, refreshing");
                     finish();
                     MainActivity mainActivity = (MainActivity) passedContext;
-                    mainActivity.refresh();
+                    mainActivity.refreshNoLoad();
                 }
             }
         });

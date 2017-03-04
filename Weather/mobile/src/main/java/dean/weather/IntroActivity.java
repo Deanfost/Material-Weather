@@ -30,6 +30,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.firebase.FirebaseApp;
 
 /**
  * Created by DeanF on 10/21/2016.
@@ -42,6 +43,13 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
     Button btnEnableServices;
     Button btnRetryConnection;
     Button btnRetryAirplane;
+
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
+    }
 
     @Override
     protected void onStart() {

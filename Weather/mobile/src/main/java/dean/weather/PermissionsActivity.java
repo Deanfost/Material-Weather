@@ -1,6 +1,5 @@
 package dean.weather;
 
-import android.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.firebase.FirebaseApp;
+
 import static dean.weather.IntroActivity.PERMISSIONS_REQUEST;
 
 /**
@@ -30,6 +31,7 @@ public class PermissionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.need_permission_activity);
 
         btnGrant = (Button) findViewById(R.id.btnNeedAccess);
