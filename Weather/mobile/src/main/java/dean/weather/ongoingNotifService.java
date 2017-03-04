@@ -716,7 +716,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                         new NotificationCompat.Builder(ongoingNotifService.this)
                                 .setSmallIcon(R.drawable.ic_launcher)
                                 .setContentTitle("Error")
-                                .setContentText("Problem pulling forecast.");
+                                .setContentText("Problem accessing Dark ");
                 notifBuilder.setAutoCancel(true);
                 Intent serviceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
                 PendingIntent servicePendingIntent = PendingIntent.getService(ongoingNotifService.this, 0, serviceIntent, 0);

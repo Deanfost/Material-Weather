@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -70,6 +72,23 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity implements
                 googleApiClient.connect();
             }
         });
+
+        //Change the preferences to reflect both services being disabled
+        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = mySPrefs.edit();
+        editor.putBoolean(getString(R.string.ongoing_notif_key), false);
+        editor.putBoolean(getString(R.string.alert_notif_key), false);
+        editor.apply();
+
+        //End the ongoing alarm
+        Intent stopOngoing = new Intent(ChangeLocationSettingsActivity.this, alarmInterfaceService.class);
+        stopOngoing.putExtra("repeatNotif", false);
+        startService(stopOngoing);
+
+        //End the alerts alarm
+        Intent stopAlerts = new Intent(ChangeLocationSettingsActivity.this, alarmInterfaceService.class);
+        stopAlerts.putExtra("alertNotif", false);
+        startService(stopAlerts);
     }
 
     /**

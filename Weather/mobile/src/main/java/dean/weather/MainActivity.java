@@ -75,8 +75,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, PermissionsFragment.Initializer,
-        NoConnectionFragment.connectionRefresher, LocationUnavailableFragment.dataFetcher, ChangeLocationSettingsFragment.Initializer{
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, NoConnectionFragment.connectionRefresher,
+        LocationUnavailableFragment.dataFetcher{
 
     //Layout
     Toolbar toolbar;
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements
     public static boolean enableAlerts = true;
 
     //Activity state
-    private boolean isRunning = true;
+    public static boolean isRunning = true;
 
     //Fragments - if these are true, defer the transactions to onResumeFragments()
     private boolean mainPending = false;
@@ -1061,10 +1061,8 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         //Give fragment interfaces reference to mainActivity
-        PermissionsFragment.setInitializer(this);
         NoConnectionFragment.setConnectionRefresher(this);
         LocationUnavailableFragment.setDataFetcher(this);
-        ChangeLocationSettingsFragment.setInitializer(this);
     }
 
     @Override
@@ -1130,10 +1128,8 @@ public class MainActivity extends AppCompatActivity implements
             outdatedSnackbar.dismiss();
         }
         //Remove references
-        PermissionsFragment.setInitializer(null);
         NoConnectionFragment.setConnectionRefresher(null);
         LocationUnavailableFragment.setDataFetcher(null);
-        ChangeLocationSettingsFragment.setInitializer(null);
     }
 
     @Override
@@ -1319,28 +1315,6 @@ public class MainActivity extends AppCompatActivity implements
         }
         //Reset setID
         setID = 1;
-    }
-
-    /**
-     * Conducts loadingFragment transaction, and begins pulling location and data(called from PermissionsFragment).
-     */
-    @Override
-    public void beginNormalOperations() {
-        loadingFragmentTransaction();
-        requestLocationAndData();
-        if(!googleApiClient.isConnected())
-            googleApiClient.connect();
-    }
-
-    /**
-     * Conducts loadingFragment transaction, and begins pulling location and data(called from ChangeLocationSettingsFragment).
-     */
-    @Override
-    public void beginNormalOperations1() {
-        loadingFragmentTransaction();
-        requestLocationAndData();
-        if(!googleApiClient.isConnected())
-            googleApiClient.connect();
     }
 
     /**
