@@ -672,7 +672,6 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void pullForecast(){
         Log.i("forecastRequest", "pullingForecast");
-        //TODO - CHECK FOR THE UNITS AND STUFF
         //Get the Dark Sky Wrapper API ready
         ForecastApi.create("331ebe65d3032e48b3c603c113435992");
 
@@ -1034,8 +1033,10 @@ public class MainActivity extends AppCompatActivity implements
     //Lifecycle events
     @Override
     protected void onStop() {
-        if(googleApiClient.isConnected()){
-            googleApiClient.disconnect();
+        if(googleApiClient != null){
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
         }
         isRunning = false;
         if(outdatedSnackbar != null){

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.FirebaseApp;
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.NavigationPolicy;
@@ -24,6 +25,7 @@ public class OnboardingActivity extends IntroActivity{
     private Fragment onBoardingFragPermissions;
     private Class onBoardingFragThreeClass;
     public static Activity currentActivity;
+    GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,9 @@ public class OnboardingActivity extends IntroActivity{
         FirebaseApp.initializeApp(this);
         currentActivity = this;
 
+        //TODO - ADD LOGIC TO TEST FOR LOCATION SETTINGS
+
+        //Initialize permissions fragment
         try {
             onBoardingFragThreeClass = OnboardingFragThree.class;
             onBoardingFragPermissions = (Fragment) onBoardingFragThreeClass.newInstance();
@@ -176,6 +181,16 @@ public class OnboardingActivity extends IntroActivity{
     @Override
     protected void onPause() {
         super.onPause();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(googleApiClient != null){
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
+        }
     }
 }

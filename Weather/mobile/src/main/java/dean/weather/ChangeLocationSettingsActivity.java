@@ -216,4 +216,15 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("ChangeLocSettingsAct", "Connection failed");
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(googleApiClient != null){
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
+        }
+    }
 }

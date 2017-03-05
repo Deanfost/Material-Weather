@@ -34,7 +34,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
@@ -54,7 +53,16 @@ import retrofit.client.Response;
  * Created by DeanF on 12/11/2016.
  */
 
-public class ongoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class ongoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    private Integer currentTemp = 0;
+    private String currentIcon = "---";
+    private String currentCondition = "---";
+    private String currentHi = "---";
+    private String currentLo = "---";
+    private String sunriseTimeString = "---";
+    private String sunsetTimeString = "---";
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -69,13 +77,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     private String currentAddress;
     private boolean hasLocation;
 
-    private Integer currentTemp = 0;
-    private String currentIcon = "---";
-    private String currentCondition = "---";
-    private String currentHi = "---";
-    private String currentLo = "---";
-    private String sunriseTimeString = "---";
-    private String sunsetTimeString = "---";
+    //Units
+    int units;
 
     @Nullable
     @Override
@@ -88,6 +91,17 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         super.onCreate();
         FirebaseApp.initializeApp(this);
         Log.i("notifService", "Started");
+
+        //Determine units
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(preferences.getString(getString(R.string.units_list_key), "0").equals("0")){
+            //Set English units
+            units = 0;
+        }
+        else{
+            //Set Metric units
+            units = 1;
+        }
     }
 
     @Override
@@ -120,6 +134,17 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             }
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(googleApiClient != null){
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
+        }
     }
 
     //Location
@@ -221,7 +246,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
                     Log.i("LocationSettings", "Callback received");
                     final Status locationStatus = locationSettingsResult.getStatus();
-                    final LocationSettingsStates locationSettingsStates = locationSettingsResult.getLocationSettingsStates();
 
                     switch (locationStatus.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
@@ -276,7 +300,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
 
                             //Notify the user
-                            Toast.makeText(ongoingNotifService.this, "Please enable location services to use this service", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(ongoingNotifService.this, "Please enable location services to use this service", Toast.LENGTH_LONG).show();
 
                             stopSelf();
                             break;
@@ -312,7 +336,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 notificationManager1.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
 
                                 //Notify the user
-                                Toast.makeText(ongoingNotifService.this, "Pelase enable location services to use this service", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(ongoingNotifService.this, "Pelase enable location services to use this service", Toast.LENGTH_LONG).show();
 
                                 stopSelf();
                             }
@@ -633,8 +657,15 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         request.addExcludeBlock(Request.Block.MINUTELY);
         request.setLat(String.valueOf(latitude));
         request.setLng(String.valueOf(longitude));
-        request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
+
+        //Units
+        if(units == 0){
+            request.setUnits(Request.Units.US);
+        }
+        else{
+            request.setUnits(Request.Units.UK);
+        }
 
         weather.getWeather(request, new Callback<WeatherResponse>() {
             @Override
@@ -818,4 +849,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         sunriseTimeString = null;
         sunsetTimeString = null;
     }
+
+
 }

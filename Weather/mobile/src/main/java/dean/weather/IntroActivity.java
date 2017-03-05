@@ -59,6 +59,17 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
         decideActivity();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(googleApiClient != null){
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
+        }
+    }
+
     /**
      * Chooses which activity to launch, depending on permissions and first launch.
      */

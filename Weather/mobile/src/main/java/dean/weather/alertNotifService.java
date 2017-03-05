@@ -202,7 +202,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
 
                             //Notify the user
-                            Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
                             stopSelf();
                             break;
@@ -238,7 +238,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                                 notificationManager1.cancel(MainActivity.FOLLOW_NOTIF_ID);
 
                                 //Notify the user
-                                Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(alertNotifService.this, "Please enable location services to use this service", Toast.LENGTH_SHORT).show();
 
                                 stopSelf();
                             }
@@ -595,5 +595,16 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
 //        todaySummary = null;
         latitude = 0.0;
         longitude = 0.0;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(googleApiClient != null){
+            if(googleApiClient.isConnected()){
+                googleApiClient.disconnect();
+            }
+        }
     }
 }
