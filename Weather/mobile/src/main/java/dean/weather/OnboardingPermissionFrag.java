@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by DeanF on 10/30/2016.
  */
 
-public class OnboardingFragThree extends Fragment {
+public class OnboardingPermissionFrag extends Fragment {
     Button btnRequestPermissions;
 
     @Override

@@ -124,6 +124,7 @@ public class settingsActivity extends PreferenceActivity{
 
                     NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
                     return true;
                 }
             }

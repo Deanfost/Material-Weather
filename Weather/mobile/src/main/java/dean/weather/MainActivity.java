@@ -323,29 +323,25 @@ public class MainActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         //Check the result of the location settings change request
         if(requestCode == REQUEST_CHANGE_SETTINGS){
-            switch (requestCode) {
-                case REQUEST_CHANGE_SETTINGS:
-                    switch (resultCode) {
-                        case Activity.RESULT_OK:
-                            // All required changes were successfully made, so request location
-                            try{
-                                requestLocationAndData();
-                            }
-                            catch (SecurityException e){
-                                Log.e("LocationPermission", "Permission denied");
-                            }
-                            break;
-                        case Activity.RESULT_CANCELED:
-                            // The user was asked to change location settings, but chose not to, show activity
-                            Log.i("Main", "Moving to change location settings activity");
-                            googleApiClient.disconnect();
-                            Intent changeSettings = new Intent(MainActivity.this, ChangeLocationSettingsActivity.class);
-                            startActivity(changeSettings);
-                            ChangeLocationSettingsActivity.passContext(MainActivity.this);
-                            break;
-                        default:
-                            break;
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    // All required changes were successfully made, so request location
+                    try{
+                        requestLocationAndData();
                     }
+                    catch (SecurityException e){
+                        Log.e("LocationPermission", "Permission denied");
+                    }
+                    break;
+                case Activity.RESULT_CANCELED:
+                    // The user was asked to change location settings, but chose not to, show activity
+                    Log.i("Main", "Moving to change location settings activity");
+                    googleApiClient.disconnect();
+                    Intent changeSettings = new Intent(MainActivity.this, ChangeLocationSettingsActivity.class);
+                    startActivity(changeSettings);
+                    ChangeLocationSettingsActivity.passContext(MainActivity.this);
+                    break;
+                default:
                     break;
             }
         }

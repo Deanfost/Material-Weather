@@ -150,14 +150,12 @@
         <!-- Apache view activity -->
         <activity android:name=".ApacheViewActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme">
         </activity>
 
         <!-- MIT view activity -->
         <activity android:name=".MITVIewActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme">
         </activity>
 

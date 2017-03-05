@@ -2,6 +2,8 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -78,22 +80,24 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
         //Make sure we can access the user's location
         int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         //We have permissions
-        if(locationPermission == PackageManager.PERMISSION_GRANTED){
-            //Make sure location services are enabled
-            checkLocationSettings();
+        //Check to see if the user has completed the onboarding flow
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String firstStart = sharedPref.getString(getResources().getString(R.string.first_launch_key), "0");
+        if(firstStart.equals("0")){
+            //Start the onboarding flow
+            Intent onboardingIntent = new Intent(this, OnboardingActivity.class);
+            startActivity(onboardingIntent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            Log.i("Intent", "Onboarding");
         }
-        else {
-            //If we don't have permission, it may be first start
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            String firstStart = sharedPref.getString(getResources().getString(R.string.first_launch_key), "0");
-            if(firstStart.equals("0")){
-                //It is first start, and we need to onboard the user, so we launch the onboarding activity
-                Intent onboardingIntent = new Intent(this, OnboardingActivity.class);
-                startActivity(onboardingIntent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                Log.i("Intent", "Onboarding");
+        else{
+            //Not first start, check for location settings and permissions
+            if(locationPermission == PackageManager.PERMISSION_GRANTED) {
+                //Make sure location services are enabled
+                checkLocationSettings();
             }
-            else{
+            else {
+                //We need to request permissions
                 //It isn't first start, but we need to request permission for location
                 Log.i("Intent", "Permissions");
                 //Show permissions needed activity
@@ -109,7 +113,7 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                     public void onClick(View v) {
                         //Request location permission
                         ActivityCompat.requestPermissions(IntroActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
+                                Manifest.permission.INTERNET}, PERMISSIONS_REQUEST);
                     }
                 });
 
@@ -124,6 +128,12 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                 Intent stopOngoing = new Intent(this, alarmInterfaceService.class);
                 stopOngoing.putExtra("repeatNotif", false);
                 startService(stopOngoing);
+
+                //Cancel the notifs
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
+                notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+                notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
 
                 //End the alerts alarm
                 Intent stopAlerts = new Intent(this, alarmInterfaceService.class);
@@ -356,7 +366,9 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(googleApiClient.isConnected())
-            googleApiClient.disconnect();
+        if(googleApiClient != null){
+            if(googleApiClient.isConnected())
+                googleApiClient.disconnect();
+        }
     }
 }
