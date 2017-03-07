@@ -58,6 +58,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
+import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
@@ -69,6 +70,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -133,6 +135,9 @@ public class MainActivity extends AppCompatActivity implements
     private String updateTime = "---";
     public static int setID = -1;
     private int alertsCount = 0;
+
+    //Alerts
+    private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
 
     //Units
     int units;
@@ -953,10 +958,70 @@ public class MainActivity extends AppCompatActivity implements
                                 });
 
                         snackbar.show();
+
+                        //Log the new alerts
+                        Log.i("alerts", weatherResponse.getAlerts().size() + "");
+                        for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
+                            Log.i("Alert", weatherResponse.getAlerts().get(i).getTitle());
+                            Log.i("Alert", weatherResponse.getAlerts().get(i).getDescription());
+                        }
+
+                        //Update the alert notif alerts base if enabled
+                        if(preferences.getBoolean(getString(R.string.alert_notif_key), false)){
+                            Log.i("Main activity", "Updating alert notif");
+                            //Check to see if these are new alerts
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                            for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
+                                if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri() + ".Alert")){
+                                    //This is a new alert, add it to the list of new alerts
+                                    newAlerts.add(weatherResponse.getAlerts().get(i));
+                                    Log.i("New alert", weatherResponse.getAlerts().get(i).getUri());
+                                }
+                                else{
+                                    Log.i("Old alert", "ignoring");
+                                }
+                            }
+
+                            SharedPreferences.Editor editor = prefs.edit();
+
+                            //Persist the new alerts list as to not notify the user of the same alerts
+                            for(int i = 0; i < newAlerts.size(); i++){
+                                String alertURI = newAlerts.get(i).getUri();
+                                Long alertIssueTime = newAlerts.get(i).getTime() * 1000;//Store UNIX in millis
+                                editor.putLong(alertURI + ".Alert", alertIssueTime);
+                            }
+
+                            //Check to see if it has been 48 hours, if we can remove any persisted alerts from sharedPrefs
+                            Map<String,?> sharedPrefsKeys = prefs.getAll();
+                            for(String key : sharedPrefsKeys.keySet()){
+                                Log.i("Printing key", key);
+                                if(key.contains(".Alert")){
+                                    //Get the issuance time of the alert in UNIX format
+                                    Log.i("Key", "Contains .Alert");
+                                    Long value = (Long) sharedPrefsKeys.get(key);
+                                    //If 48 hours has passed since the issuance of the alert
+                                    if(System.currentTimeMillis() >= value + 172800000){
+                                        //Remove the alert
+                                        Log.i("Removing alert", key);
+                                        editor.remove(key);
+                                    }
+                                }
+                            }
+                            editor.commit();
+                        }
                     }
                 }
+                //Log stored alerts
                 else{
-                    Log.i("Alerts", "No alerts");
+                    Log.i("alerts", "null");
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    Map<String,?> sharedPrefsKeys = prefs.getAll();
+                    for(String key : sharedPrefsKeys.keySet()){
+                        Log.i("Printing key", key);
+                        if(key.contains(".Alert")){
+                            Log.i("Key", "Contains .Alert");
+                        }
+                    }
                 }
 
                 //Set main layout color
@@ -994,13 +1059,6 @@ public class MainActivity extends AppCompatActivity implements
                 //Terminate Google API Connection
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
-                }
-
-                //Call the alert notification service (if enabled)
-                if(preferences.getBoolean(getString(R.string.alert_notif_key), false)){
-                    Intent alertNotifService = new Intent(MainActivity.this, dean.weather.alertNotifService.class);
-                    startService(alertNotifService);
-                    Log.i("Main Activity", "Starting AlertNotifService");
                 }
 
                 //Setup a countdown of 10 minutes, and when triggered, display a snackbar telling the user that the data is outdated
