@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.text.LoginFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,24 +83,24 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         //Set the background color
         switch (setID){
             case 0:
-                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_yellow));
-                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_yellow));
-                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_yellow));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_background_yellow));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_yellow));
+                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_yellow));
                 break;
             case 1:
-                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_blue));
-                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_blue));
-                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_blue));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_background_blue));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_blue));
+                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_blue));
                 break;
             case 2:
-                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_orange));
-                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_orange));
-                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_orange));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_background_orange));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_orange));
+                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_orange));
                 break;
             case 3:
-                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_rectangle_purple));
-                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
-                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.card_ripple_purple));
+                cardView.setBackground(context.getResources().getDrawable(R.drawable.card_background_purple));
+                cardActionShare.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_purple));
+                cardActionView.setBackground(context.getResources().getDrawable(R.drawable.button_ripple_purple));
                 break;
         }
 

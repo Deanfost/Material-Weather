@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout -->
-    <!--android:orientation="vertical" android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:elevation="@dimen/_2sdp">-->
 
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_180sdp"
         android:elevation="@dimen/_2sdp"
-        android:background="@drawable/card_rectangle_blue"
+        android:background="@drawable/card_background_blue"
         android:layout_margin="@dimen/_10sdp"
         android:clickable="true">
 
@@ -50,7 +46,7 @@
             android:id="@+id/btnCardShare"
             android:textAllCaps="true"
             android:clickable="true"
-            android:background="@drawable/card_ripple_blue"
+            android:background="@drawable/button_ripple_blue"
             android:gravity="center"
             android:layout_marginBottom="@dimen/_16sdp"
             android:layout_marginLeft="@dimen/_16sdp"/>
@@ -66,7 +62,7 @@
             android:id="@+id/btnCardView"
             android:textAllCaps="true"
             android:clickable="true"
-            android:background="@drawable/card_ripple_blue"
+            android:background="@drawable/button_ripple_blue"
             android:gravity="center"
             android:layout_marginBottom="@dimen/_16sdp"/>
 
