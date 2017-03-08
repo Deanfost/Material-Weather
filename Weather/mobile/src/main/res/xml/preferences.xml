@@ -5,12 +5,6 @@
         android:title="Notifications"
         android:key="pref_key_notification_group">
 
-                <!--<SwitchPreference-->
-                    <!--android:key="@string/follow_me_key"-->
-                    <!--android:title="Follow me"-->
-                    <!--android:summary="Use my current location for weather data"-->
-                    <!--android:defaultValue="false" />-->
-
             <SwitchPreference
                 android:key="@string/ongoing_notif_key"
                 android:title="Ongoing notification"
@@ -22,18 +16,6 @@
                     android:title="Show weather alerts"
                     android:summary="Create a push notification for weather alerts and warnings, updating roughly every 30 minutes"
                     android:defaultValue="false" />
-
-                <!--<SwitchPreference-->
-                    <!--android:key="@string/summary_notif_key"-->
-                    <!--android:title="Show weather summary"-->
-                    <!--android:summary="Create a push notification containing a summary of the day's weather forecast"-->
-                    <!--android:defaultValue="false" />-->
-
-                <!--<dean.weather.TimePickerPreference-->
-                    <!--android:key="@string/summary_time_key"-->
-                    <!--android:title="Summary time"-->
-                    <!--android:enabled="false" />-->
-
 
     </PreferenceCategory>
 
@@ -74,8 +56,8 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Support"
-        android:key="@string/support_group_key">
+        android:title="About"
+        android:key="@string/about_group_key">
 
         <!-- Opens activity displaying info about the app -->
         <Preference
@@ -88,6 +70,16 @@
         <Preference
             android:title="Product tour"
             android:key="@string/support_tutorial_key">
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Support"
+        android:key="@string/support_group_key">
+
+        <Preference
+            android:title="Send feedback"
+            android:key="@string/support_feedback_key">
         </Preference>
 
         <!-- Shows modal that is connected with Google Merchant API, shows IAPs to donate-->

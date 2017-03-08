@@ -40,6 +40,7 @@ public class settingsActivity extends PreferenceActivity{
 //    Preference timePickerPref;
     SwitchPreference alertNotif;
     Preference tutorialPref;
+    Preference feedbackPref;
     boolean performChecksReturn;
     int setID = MainActivity.setID;
 
@@ -63,6 +64,7 @@ public class settingsActivity extends PreferenceActivity{
 //        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
 //        timePickerPref = findPreference(getString(R.string.summary_time_key));
             tutorialPref = findPreference(getResources().getString(R.string.support_tutorial_key));
+            feedbackPref = findPreference(getResources().getString(R.string.support_feedback_key));
 
             //Color accents
                 switch(setID){
@@ -89,8 +91,8 @@ public class settingsActivity extends PreferenceActivity{
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
         //Ongoing notification pref
         ongoingNotif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -101,19 +103,19 @@ public class settingsActivity extends PreferenceActivity{
                 Log.i("ongoingNotif", ongoingNotifValue.toString());
                 //Start the notif service
                 if(ongoingNotifValue){
-                        //Check if we are able to use current location
-                        if(performChecks()){
-                            //Start it, everything is looking good
-                            Log.i("ongoingNotifPref", "Looks good, starting service");
-                            Intent serviceIntent = new Intent(settingsActivity.this, alarmInterfaceService.class);
-                            serviceIntent.putExtra("repeatNotif", true);
-                            startService(serviceIntent);
-                            return true;
-                        }
-                        else{
-                            //Don't save the value, conditions not met
-                            return false;
-                        }
+                    //Check if we are able to use current location
+                    if(performChecks()){
+                        //Start it, everything is looking good
+                        Log.i("ongoingNotifPref", "Looks good, starting service");
+                        Intent serviceIntent = new Intent(settingsActivity.this, alarmInterfaceService.class);
+                        serviceIntent.putExtra("repeatNotif", true);
+                        startService(serviceIntent);
+                        return true;
+                    }
+                    else{
+                        //Don't save the value, conditions not met
+                        return false;
+                    }
                 }
                 else{
                     //Stop the notif service
@@ -175,6 +177,27 @@ public class settingsActivity extends PreferenceActivity{
             }
         });
 
+        feedbackPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Log.i("Settings", "Feedback pref clicked");
+                //Launch a chooser for an email app to send feedback to me
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.setType("text/email");
+                email.putExtra(Intent.EXTRA_EMAIL, new String[] { "Deanfoster45@gmail.com" });
+                email.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
+                //Resolve the intent, and launch a chooser
+                PackageManager pm = settingsActivity.this.getPackageManager();
+                if(email.resolveActivity(pm) != null){
+                    startActivity(Intent.createChooser(email, "Send Feedback:"));
+                }
+                else{
+                    Log.i("settingsActivity", "No application can handle email intent");
+                    Toast.makeText(settingsActivity.this, "Please install an email application", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -184,6 +207,8 @@ public class settingsActivity extends PreferenceActivity{
 //        followMePref.setOnPreferenceChangeListener(null);
         ongoingNotif.setOnPreferenceClickListener(null);
         alertNotif.setOnPreferenceChangeListener(null);
+        tutorialPref.setOnPreferenceClickListener(null);
+        feedbackPref.setOnPreferenceClickListener(null);
 //        summaryNotif.setOnPreferenceChangeListener(null);
 //        timePickerPref.setOnPreferenceChangeListener(null);
     }

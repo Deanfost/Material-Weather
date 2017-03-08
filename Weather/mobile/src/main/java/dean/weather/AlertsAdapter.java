@@ -2,14 +2,17 @@ package dean.weather;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.LoginFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 
@@ -129,7 +132,15 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, dataSet.get(position).getUri());
                 shareIntent.setType("text/plain");
-                context.startActivity(Intent.createChooser(shareIntent, "Send to"));
+                //Resolve the intent, and launch chooser
+                PackageManager pm = context.getPackageManager();
+                if(shareIntent.resolveActivity(pm) != null){
+                    context.startActivity(Intent.createChooser(shareIntent, "Send to"));
+                }
+                else{
+                    Log.i("AlertsAdapter", "No application can handle share intent");
+                    Toast.makeText(context, "No application can handle this action", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
