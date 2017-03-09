@@ -31,18 +31,18 @@ public class MainFragment extends Fragment{
     int units;
 
     //Hourly
-    public static List<Integer> passedComparisonHoursValues;
-    public static List<String> passedHoursValues;
-    public static List<Integer> passedTempsValues;
-    public static List<String> passedConditionsValues;
-    public static List<Integer> passedWindValues;
+    public static List<Integer> passedComparisonHoursValues = new ArrayList<>();
+    public static List<String> passedHoursValues = new ArrayList<>();
+    public static List<Integer> passedTempsValues = new ArrayList<>();
+    public static List<String> passedConditionsValues = new ArrayList<>();
+    public static List<Integer> passedWindValues = new ArrayList<>();
 
     //Daily
-    private static List<String> passedDaysValues;
-    private static List<String> passedDailyCondValues;
-    private static List<Integer> passedHIsValues;
-    private static List<Integer> passedLOsValues;
-    private static List<Integer> passedPrecipValues;
+    private static List<String> passedDaysValues = new ArrayList<>();
+    private static List<String> passedDailyCondValues = new ArrayList<>();
+    private static List<Integer> passedHIsValues = new ArrayList<>();
+    private static List<Integer> passedLOsValues = new ArrayList<>();
+    private static List<Integer> passedPrecipValues = new ArrayList<>();
 
     //Setup recyclerViews
     private RecyclerView hourlyRecyclerView;
@@ -259,36 +259,84 @@ public class MainFragment extends Fragment{
                 currentConditionsIcon.setImageResource(R.drawable.ic_partlycloudynight_white);
                 break;
             default:
-                currentConditionsIcon.setImageResource(R.drawable.ic_cloudy_white);
+                currentConditionsIcon.setImageResource(R.drawable.ic_sunny_white);
                 Log.i("CurrentConditions", "Unsupported condition.");
                 break;
-        }
-
-        if(units == 0){
-            currentTemp.setText(passedTempValue + "\u00B0" + "F");
-        }
-        else{
-            currentTemp.setText(passedTempValue + "\u00B0" + "C");
         }
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
         currentMinutely.setText(passedMinutelyValue);
         currentWindValue.setText(passedWindValue);
+
+        //English
         if(units == 0){
-            currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
-            currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
-            currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
-            currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
+            //Check for "null" values
+            if(passedTempValue == -1)
+                currentTemp.setText("---");
+            else
+                currentTemp.setText(passedTempValue + "\u00B0" + "F");
+
+            if(passedPrecipValue == -1)
+                currentPrecipValue.setText("---");
+            else
+                currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
+
+            if(passedHumidityValue == -1)
+                currentHumidityValue.setText("---");
+            else
+                currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
+
+            if(passedDewpointValue == -1)
+                currentDewPointValue.setText("---");
+            else
+                currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
+
+            if(passedPressureValue == -1)
+                currentPressureValue.setText("---");
+            else{
+                currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
+
+            }
             currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "mi");
-            currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
+            if(passedCloudCoverValue == -1)
+                currentCloudCoverValue.setText("---");
+            else
+                currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
         }
+        //Metric
         else{
-            currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
-            currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
-            currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
-            currentPressureValue.setText(String.valueOf(passedPressureValue) + "mb");
+            //Check for "null" values
+            if(passedTempValue == -1)
+                currentTemp.setText("---");
+            else
+                currentTemp.setText(passedTempValue + "\u00B0" + "F");
+
+            if(passedPrecipValue == -1)
+                currentPrecipValue.setText("---");
+            else
+                currentPrecipValue.setText(String.valueOf(passedPrecipValue) + "%");
+
+            if(passedHumidityValue == -1)
+                currentHumidityValue.setText("---");
+            else
+                currentHumidityValue.setText(String.valueOf(passedHumidityValue) + "%");
+
+            if(passedDewpointValue == -1)
+                currentDewPointValue.setText("---");
+            else
+                currentDewPointValue.setText(String.valueOf(passedDewpointValue) + "\u00B0");
+
+            if(passedPressureValue == -1)
+                currentPressureValue.setText("---");
+            else{
+                currentPressureValue.setText(String.valueOf(passedPressureValue) + "mb");
+
+            }
             currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "km");
-            currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
+            if(passedCloudCoverValue == -1)
+                currentCloudCoverValue.setText("---");
+            else
+                currentCloudCoverValue.setText(String.valueOf(passedCloudCoverValue) + "%");
         }
 
         sunriseTime.setText(passedSunriseTimeValue);

@@ -708,6 +708,11 @@ public class MainActivity extends AppCompatActivity implements
                 Double tempDouble = weatherResponse.getCurrently().getTemperature();
                 if(tempDouble != null){
                     currentTemp = tempDouble.intValue();
+                    Log.i("currentTemp", currentTemp + "");
+                }
+                else{
+                    currentTemp = -1;
+                    Log.i("currentTemp", "---");
                 }
 
                 //Set condition icon and condition statement
@@ -715,6 +720,7 @@ public class MainActivity extends AppCompatActivity implements
                     currentIcon = weatherResponse.getCurrently().getIcon();
                 else
                     currentIcon = "---";
+
                 Log.i("currentIcon", currentIcon);
                 switch (currentIcon){
                     case "clear-day":
@@ -846,7 +852,6 @@ public class MainActivity extends AppCompatActivity implements
                     currentWind = "---";
                 }
 
-
                 //Parse Precip
                 String currentPrecipProb = weatherResponse.getCurrently().getPrecipProbability();
                 if(currentPrecipProb != null){
@@ -936,7 +941,7 @@ public class MainActivity extends AppCompatActivity implements
                     currentCloudCover = -1;
                 }
 
-                //Sunrise and sunset times
+                //Sunrise time
                 String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
                 if(sunriseTimeString != null){
                     //Get times in 12 hour format
@@ -965,6 +970,7 @@ public class MainActivity extends AppCompatActivity implements
                     sunriseTime = "---";
                 }
 
+                //Sunset time
                 String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
                 if(sunsetTimeString != null){
                     //Get the times in 12 hour format
@@ -992,8 +998,6 @@ public class MainActivity extends AppCompatActivity implements
                     Log.i("sunsetTime", "---");
                     sunsetTime = "---";
                 }
-
-
 
                 //Get hourly data
                 if(hourFormat == 0){
@@ -1606,7 +1610,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 iteratedHour++;
             }
-            Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+            Log.i("pulledHoursSize24", String.valueOf(pulledHours.size()));
         } else {
             //Use the data available
             int iteratedHour = Integer.valueOf(getCurrentHour());
@@ -1627,7 +1631,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 iteratedHour++;
             }
-            Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
+            Log.i("pulledHoursSize24", String.valueOf(pulledHours.size()));
         }
 
         //Get icon for next 24 hours
