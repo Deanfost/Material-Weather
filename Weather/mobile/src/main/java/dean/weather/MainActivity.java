@@ -706,10 +706,15 @@ public class MainActivity extends AppCompatActivity implements
                 //Parse and format response
                 //Parse currentTemp
                 Double tempDouble = weatherResponse.getCurrently().getTemperature();
-                currentTemp = tempDouble.intValue();
+                if(tempDouble != null){
+                    currentTemp = tempDouble.intValue();
+                }
 
                 //Set condition icon and condition statement
-                currentIcon = weatherResponse.getCurrently().getIcon();
+                if(weatherResponse.getCurrently().getIcon() != null)
+                    currentIcon = weatherResponse.getCurrently().getIcon();
+                else
+                    currentIcon = "---";
                 Log.i("currentIcon", currentIcon);
                 switch (currentIcon){
                     case "clear-day":
@@ -753,8 +758,20 @@ public class MainActivity extends AppCompatActivity implements
                 Double LoDouble;
                 HiDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMax();
                 LoDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMin();
-                todaysHI = String.valueOf(HiDouble.intValue());
-                todaysLO = String.valueOf(LoDouble.intValue());
+                if(HiDouble != null){
+                    todaysHI = String.valueOf(HiDouble.intValue());
+                }
+                else{
+                    todaysHI = "---";
+                }
+
+                if(LoDouble != null){
+                    todaysLO = String.valueOf(LoDouble.intValue());
+                }
+                else{
+                    todaysLO = "---";
+                }
+
                 Log.i("HI", todaysHI);
                 Log.i("LO", todaysLO);
                 todaysHILO = todaysHI + "\u00B0" + "/" + todaysLO + "\u00B0";//76°/42° format
@@ -771,151 +788,212 @@ public class MainActivity extends AppCompatActivity implements
 
                 //Parse current wind speed and bearing
                 String currentWindSpeed = weatherResponse.getCurrently().getWindSpeed();
-                Double currentWindSpeedDouble = Double.valueOf(currentWindSpeed);
-                //Convert MPH to KPH if in metric
-                if(units == 1){
-                    currentWindSpeedDouble = currentWindSpeedDouble * 1.6093440;
-                }
-                int currentWindSpeedInt = currentWindSpeedDouble.intValue();
-                String currentWindBearing = weatherResponse.getCurrently().getWindBearing();
-                int currentWindBearingValue = Integer.valueOf(currentWindBearing);
-                Log.i("WindSpeed", weatherResponse.getCurrently().getWindSpeed());
-                Log.i("WindBearing", weatherResponse.getCurrently().getWindBearing());
-                Log.i("WindBearingValue", String.valueOf(currentWindBearingValue));
-                //TODO - BE SURE TO CHECK FOR THE UNITS!
-                //English units
-                if(units == 0) {
-                    if (currentWindBearingValue >= 0 && currentWindBearingValue < 45) {
-                        currentWind = "↓" + currentWindSpeedInt + "MPH";
-                    } else if (currentWindBearingValue >= 45 && currentWindBearingValue < 90) {
-                        currentWind = "↙" + currentWindSpeedInt + "MPH";
-                    } else if (currentWindBearingValue >= 90 && currentWindBearingValue < 135) {
-                        currentWind = "←" + currentWindSpeedInt + "MPH";
-                    } else if (currentWindBearingValue >= 135 && currentWindBearingValue < 180) {
-                        currentWind = "↖" + currentWindSpeedInt + "MPH";
-                    } else if (currentWindBearingValue >= 180 && currentWindBearingValue < 225) {
-                        currentWind = "↑" + currentWindSpeedInt + "MPH";
-                    } else if (currentWindBearingValue >= 225 && currentWindBearingValue < 270) {
-                        currentWind = "↗" + currentWindSpeedInt + "MPH";
-                    } else if (currentWindBearingValue >= 270 && currentWindBearingValue < 315) {
-                        currentWind = "→" + currentWindSpeedInt + "MPH";
-                    } else if (currentWindBearingValue >= 315 && currentWindBearingValue < 360) {
-                        currentWind = "↘" + currentWindSpeedInt + "MPH";
+                if(currentWindSpeed != null){
+                    Double currentWindSpeedDouble = Double.valueOf(currentWindSpeed);
+                    //Convert MPH to KPH if in metric
+                    if(units == 1){
+                        currentWindSpeedDouble = currentWindSpeedDouble * 1.6093440;
+                    }
+                    int currentWindSpeedInt = currentWindSpeedDouble.intValue();
+                    String currentWindBearing = weatherResponse.getCurrently().getWindBearing();
+                    int currentWindBearingValue = Integer.valueOf(currentWindBearing);
+                    Log.i("WindSpeed", weatherResponse.getCurrently().getWindSpeed());
+                    Log.i("WindBearing", weatherResponse.getCurrently().getWindBearing());
+                    Log.i("WindBearingValue", String.valueOf(currentWindBearingValue));
+                    //TODO - BE SURE TO CHECK FOR THE UNITS!
+                    //English units
+                    if(units == 0) {
+                        if (currentWindBearingValue >= 0 && currentWindBearingValue < 45) {
+                            currentWind = "↓" + currentWindSpeedInt + "MPH";
+                        } else if (currentWindBearingValue >= 45 && currentWindBearingValue < 90) {
+                            currentWind = "↙" + currentWindSpeedInt + "MPH";
+                        } else if (currentWindBearingValue >= 90 && currentWindBearingValue < 135) {
+                            currentWind = "←" + currentWindSpeedInt + "MPH";
+                        } else if (currentWindBearingValue >= 135 && currentWindBearingValue < 180) {
+                            currentWind = "↖" + currentWindSpeedInt + "MPH";
+                        } else if (currentWindBearingValue >= 180 && currentWindBearingValue < 225) {
+                            currentWind = "↑" + currentWindSpeedInt + "MPH";
+                        } else if (currentWindBearingValue >= 225 && currentWindBearingValue < 270) {
+                            currentWind = "↗" + currentWindSpeedInt + "MPH";
+                        } else if (currentWindBearingValue >= 270 && currentWindBearingValue < 315) {
+                            currentWind = "→" + currentWindSpeedInt + "MPH";
+                        } else if (currentWindBearingValue >= 315 && currentWindBearingValue < 360) {
+                            currentWind = "↘" + currentWindSpeedInt + "MPH";
+                        }
+                    }
+                    //Metric units
+                    else{
+                        if (currentWindBearingValue >= 0 && currentWindBearingValue < 45) {
+                            currentWind = "↓" + currentWindSpeedInt + "KPH";
+                        } else if (currentWindBearingValue >= 45 && currentWindBearingValue < 90) {
+                            currentWind = "↙" + currentWindSpeedInt + "KPH";
+                        } else if (currentWindBearingValue >= 90 && currentWindBearingValue < 135) {
+                            currentWind = "←" + currentWindSpeedInt + "KPH";
+                        } else if (currentWindBearingValue >= 135 && currentWindBearingValue < 180) {
+                            currentWind = "↖" + currentWindSpeedInt + "KPH";
+                        } else if (currentWindBearingValue >= 180 && currentWindBearingValue < 225) {
+                            currentWind = "↑" + currentWindSpeedInt + "KPH";
+                        } else if (currentWindBearingValue >= 225 && currentWindBearingValue < 270) {
+                            currentWind = "↗" + currentWindSpeedInt + "KPH";
+                        } else if (currentWindBearingValue >= 270 && currentWindBearingValue < 315) {
+                            currentWind = "→" + currentWindSpeedInt + "KPH";
+                        } else if (currentWindBearingValue >= 315 && currentWindBearingValue < 360) {
+                            currentWind = "↘" + currentWindSpeedInt + "KPH";
+                        }
                     }
                 }
-                //Metric units
                 else{
-                    if (currentWindBearingValue >= 0 && currentWindBearingValue < 45) {
-                        currentWind = "↓" + currentWindSpeedInt + "KPH";
-                    } else if (currentWindBearingValue >= 45 && currentWindBearingValue < 90) {
-                        currentWind = "↙" + currentWindSpeedInt + "KPH";
-                    } else if (currentWindBearingValue >= 90 && currentWindBearingValue < 135) {
-                        currentWind = "←" + currentWindSpeedInt + "KPH";
-                    } else if (currentWindBearingValue >= 135 && currentWindBearingValue < 180) {
-                        currentWind = "↖" + currentWindSpeedInt + "KPH";
-                    } else if (currentWindBearingValue >= 180 && currentWindBearingValue < 225) {
-                        currentWind = "↑" + currentWindSpeedInt + "KPH";
-                    } else if (currentWindBearingValue >= 225 && currentWindBearingValue < 270) {
-                        currentWind = "↗" + currentWindSpeedInt + "KPH";
-                    } else if (currentWindBearingValue >= 270 && currentWindBearingValue < 315) {
-                        currentWind = "→" + currentWindSpeedInt + "KPH";
-                    } else if (currentWindBearingValue >= 315 && currentWindBearingValue < 360) {
-                        currentWind = "↘" + currentWindSpeedInt + "KPH";
-                    }
+                    currentWind = "---";
                 }
+
 
                 //Parse Precip
                 String currentPrecipProb = weatherResponse.getCurrently().getPrecipProbability();
-                Log.i("currentPrecipString", currentPrecipProb);
-                Double currentPrecipDouble = Double.valueOf(currentPrecipProb) * 100;
-                currentPrecip = currentPrecipDouble.intValue();
+                if(currentPrecipProb != null){
+                    Log.i("currentPrecipString", currentPrecipProb);
+                    Double currentPrecipDouble = Double.valueOf(currentPrecipProb) * 100;
+                    currentPrecip = currentPrecipDouble.intValue();
+                }
+                else{
+                    Log.i("currentPrecipString", "---");
+                    currentPrecip = -1;
+                }
 
                 //Parse Humidity
                 String currentHumidityString = weatherResponse.getCurrently().getHumidity();
-                Log.i("currentHumidStr", currentHumidityString);
-                Double currentHumidityDouble = Double.valueOf(currentHumidityString) * 100;
-                currentHumidity = currentHumidityDouble.intValue();
+                if(currentHumidityString != null){
+                    Log.i("currentHumidStr", currentHumidityString);
+                    Double currentHumidityDouble = Double.valueOf(currentHumidityString) * 100;
+                    currentHumidity = currentHumidityDouble.intValue();
+                }
+                else{
+                    Log.i("currentHumidStr", "---");
+                    currentHumidity = -1;
+                }
 
                 //Parse Dew Point
                 String currentDewPointString = weatherResponse.getCurrently().getDewPoint();
-                Log.i("currentDPointStr", currentDewPointString);
-                Double currentDewPointDouble = Double.valueOf(currentDewPointString);
-                currentDewpoint = currentDewPointDouble.intValue();
+                if(currentDewPointString != null){
+                    Log.i("currentDPointStr", currentDewPointString);
+                    Double currentDewPointDouble = Double.valueOf(currentDewPointString);
+                    currentDewpoint = currentDewPointDouble.intValue();
+                }
+                else{
+                    Log.i("currentDPointString", "---");
+                    currentDewpoint = -1;
+                }
 
                 //Parse Pressure
                 String currentPressureString = weatherResponse.getCurrently().getPressure();
-                Log.i("currentPresString", currentPressureString);
-                Double currentPressureDouble = Double.valueOf(currentPressureString);
-                Double currentPressureDoubleConverted;
-                if(units == 0){
-                    //English
-                    currentPressureDoubleConverted = currentPressureDouble * 0.0295301;//Convert Millibars to inHg
+                if(currentPressureString != null){
+                    Log.i("currentPresString", currentPressureString);
+                    Double currentPressureDouble = Double.valueOf(currentPressureString);
+                    Double currentPressureDoubleConverted;
+                    if(units == 0){
+                        //English
+                        currentPressureDoubleConverted = currentPressureDouble * 0.0295301;//Convert Millibars to inHg
+                    }
+                    else{
+                        //Metric
+                        currentPressureDoubleConverted = currentPressureDouble;//Use Millibars
+                    }
+                    currentPressure = currentPressureDoubleConverted.intValue();
                 }
                 else{
-                    //Metric
-                    currentPressureDoubleConverted = currentPressureDouble;//Use Millibars
+                    Log.i("currentPressString", "---");
+                    currentPressure = -1;
                 }
-                currentPressure = currentPressureDoubleConverted.intValue();
 
                 //Parse Visibility
                 String currentVisibilityString = weatherResponse.getCurrently().getVisibility();
-                Log.i("currentVisString", currentVisibilityString);
-                Double currentVisibilityDouble = Double.valueOf(currentVisibilityString);
-                Integer currentVisibiltiyInt = Double.valueOf(currentVisibilityDouble).intValue();
-                //If it is above 1, parse to just an integer
-                if(currentVisibilityDouble > 1){
-                    currentVisibilty = String.valueOf(currentVisibiltiyInt);
+                if(currentVisibilityString != null){
+                    Log.i("currentVisString", currentVisibilityString);
+                    Double currentVisibilityDouble = Double.valueOf(currentVisibilityString);
+                    Integer currentVisibiltiyInt = Double.valueOf(currentVisibilityDouble).intValue();
+                    //If it is above 1, parse to just an integer
+                    if(currentVisibilityDouble > 1){
+                        currentVisibilty = String.valueOf(currentVisibiltiyInt);
+                    }
+                    //Else, pass something like 0.45
+                    else{
+                        currentVisibilty = currentVisibilityDouble.toString();
+                    }
                 }
-                //Else, pass something like 0.45
                 else{
-                    currentVisibilty = currentVisibilityDouble.toString();
+                    Log.i("currentVisString", "---");
+                    currentVisibilty = "---";
                 }
 
                 //Parse cloud cover
                 String currentCloudCoverString = weatherResponse.getCurrently().getCloudClover();
-                Log.i("currentCloudCover", currentCloudCoverString);
-                Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverString) * 100;
-                currentCloudCover = currentCloudCoverDouble.intValue();
+                if(currentCloudCoverString != null){
+                    Log.i("currentCloudCover", currentCloudCoverString);
+                    Double currentCloudCoverDouble = Double.valueOf(currentCloudCoverString) * 100;
+                    currentCloudCover = currentCloudCoverDouble.intValue();
+                }
+                else{
+                    Log.i("currentCloudCover", "---");
+                    currentCloudCover = -1;
+                }
 
                 //Sunrise and sunset times
                 String sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
-                String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
-                //Get times in 12 hour format
-                if(hourFormat == 0){
-                    //Parse sunrise time
-                    Log.i("sunriseTimeUNIX", sunriseTimeString);
-                    Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
-                    Date sunriseDateObject = new Date(sunriseTimeInMili);
-                    SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
-                    sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
-                    Log.i("sunriseTime", sunriseTime);
-
-                    //Parse sunset time
-                    Log.i("sunsetTimeUNIX", sunsetTimeString);
-                    Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
-                    Date sunsetDateObject = new Date(sunsetTimeInMili);
-                    SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
-                    sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
-                    Log.i("sunsetTime", sunsetTime);
+                if(sunriseTimeString != null){
+                    //Get times in 12 hour format
+                    if(hourFormat == 0){
+                        //Parse sunrise time
+                        Log.i("sunriseTimeUNIX", sunriseTimeString);
+                        Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+                        Date sunriseDateObject = new Date(sunriseTimeInMili);
+                        SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
+                        sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+                        Log.i("sunriseTime", sunriseTime);
+                    }
+                    //Else get times in 24 hour format
+                    else{
+                        //Parse sunrise time
+                        Log.i("sunriseTimeUNIX", sunriseTimeString);
+                        Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+                        Date sunriseDateObject = new Date(sunriseTimeInMili);
+                        SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("HH:mm");
+                        sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+                        Log.i("sunriseTime", sunriseTime);
+                    }
                 }
-                //Else get times in 24 hour format
                 else{
-                    //Parse sunrise time
-                    Log.i("sunriseTimeUNIX", sunriseTimeString);
-                    Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
-                    Date sunriseDateObject = new Date(sunriseTimeInMili);
-                    SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("HH:mm");
-                    sunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
-                    Log.i("sunriseTime", sunriseTime);
-
-                    //Parse sunset time
-                    Log.i("sunsetTimeUNIX", sunsetTimeString);
-                    Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
-                    Date sunsetDateObject = new Date(sunsetTimeInMili);
-                    SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("HH:mm");
-                    sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
-                    Log.i("sunsetTime", sunsetTime);
+                    Log.i("sunriseTime", "---");
+                    sunriseTime = "---";
                 }
+
+                String sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
+                if(sunsetTimeString != null){
+                    //Get the times in 12 hour format
+                    if(hourFormat == 0){
+                        //Parse sunset time
+                        Log.i("sunsetTimeUNIX", sunsetTimeString);
+                        Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+                        Date sunsetDateObject = new Date(sunsetTimeInMili);
+                        SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
+                        sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+                        Log.i("sunsetTime", sunsetTime);
+                    }
+                    //Else get the times in 24 hour format
+                    else{
+                        //Parse sunset time
+                        Log.i("sunsetTimeUNIX", sunsetTimeString);
+                        Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+                        Date sunsetDateObject = new Date(sunsetTimeInMili);
+                        SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("HH:mm");
+                        sunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+                        Log.i("sunsetTime", sunsetTime);
+                    }
+                }
+                else{
+                    Log.i("sunsetTime", "---");
+                    sunsetTime = "---";
+                }
+
+
 
                 //Get hourly data
                 if(hourFormat == 0){
