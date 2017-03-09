@@ -189,7 +189,7 @@ public class settingsActivity extends PreferenceActivity{
                 //Resolve the intent, and launch a chooser
                 PackageManager pm = settingsActivity.this.getPackageManager();
                 if(email.resolveActivity(pm) != null){
-                    startActivity(Intent.createChooser(email, "Send Feedback:"));
+                    startActivity(Intent.createChooser(email, "Email developer"));
                 }
                 else{
                     Log.i("settingsActivity", "No application can handle email intent");

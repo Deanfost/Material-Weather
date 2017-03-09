@@ -31,25 +31,25 @@ import java.util.Date;
 
 public class DailyActivity extends AppCompatActivity {
     //View data for top layout
-    private Integer passedDayInt;
-    private String passedDay;
-    private String passedDate;
-    private String pulledDescription;
-    private String pulledLocation;
-    private Integer pulledHi;
-    private Integer pulledLo;
-    private String pulledIcon;
-    private String pulledCondition;
+    private Integer passedDayInt = -1;
+    private String passedDay = "---";
+    private String passedDate = "---";
+    private String pulledDescription = "---";
+    private String pulledLocation = "---";
+    private Integer pulledHi = -1;
+    private Integer pulledLo = -1;
+    private String pulledIcon = "---";
+    private String pulledCondition = "---";
 
     //View data for bottom layout
-    private String pulledWind;
-    private Integer pulledPrecip;
-    private Integer pulledHumidity;
-    private Integer pulledDewpoint;
-    private Integer pulledPressure;
-    private Integer pulledCloudCover;
-    private String daySunriseTime;
-    private String daySunsetTime;
+    private String pulledWind = "---";
+    private Integer pulledPrecip = -1;
+    private Integer pulledHumidity = -1;
+    private Integer pulledDewpoint = -1;
+    private Integer pulledPressure = -1;
+    private Integer pulledCloudCover = -1;
+    private String daySunriseTime = "---";
+    private String daySunsetTime = "---";
 
     //Views
     Toolbar dailyToolbar;
@@ -349,26 +349,56 @@ public class DailyActivity extends AppCompatActivity {
             Log.i("selectedDayPosition", passedDayInt.toString());
 
             //Get the day's description
-            pulledDescription = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSummary();
-            Log.i("dayDesc", pulledDescription);
+            if(MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSummary() != null){
+                pulledDescription = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSummary();
+                Log.i("dayDesc", pulledDescription);
+            }
+            else{
+                pulledDescription = "---";
+                Log.i("dayDesc", "---");
+            }
 
             //Get the day's location
-            pulledLocation = MainActivity.currentLocation;
-            Log.i("dayLocation", pulledLocation);
+            if(MainActivity.currentLocation != null){
+                pulledLocation = MainActivity.currentLocation;
+                Log.i("dayLocation", pulledLocation);
+            }
+            else{
+                pulledLocation = "---";
+                Log.i("dayLocation", "---");
+            }
 
             //Get the day's Hi
             Double pulledHiDouble = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getTemperatureMax();
-            pulledHi = pulledHiDouble.intValue();
-            Log.i("dayHi", pulledHi.toString());
+            if(pulledHiDouble != null){
+                pulledHi = pulledHiDouble.intValue();
+                Log.i("dayHi", pulledHi.toString());
+            }
+            else{
+                pulledHi = -1;
+                Log.i("dayHi", "---");
+            }
 
             //Get the day's Lo
             Double pulledLoDouble = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getTemperatureMin();
-            pulledLo = pulledLoDouble.intValue();
-            Log.i("dayLo", pulledLo.toString());
+            if(pulledLo != null){
+                pulledLo = pulledLoDouble.intValue();
+                Log.i("dayLo", pulledLo.toString());
+            }
+            else{
+                pulledLo = -1;
+                Log.i("dayLo", "---");
+            }
 
             //Get the day's icon
-            pulledIcon = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getIcon();
-            Log.i("dayIcon", pulledIcon);
+            if(MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getIcon() != null){
+                pulledIcon = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getIcon();
+                Log.i("dayIcon", pulledIcon);
+            }
+            else{
+                pulledIcon = "---";
+                Log.i("dayIcon", "---");
+            }
 
             //Get the day's condition
             switch (pulledIcon){
@@ -410,141 +440,195 @@ public class DailyActivity extends AppCompatActivity {
 
             //Parse current wind speed and bearing
             String dayWindSpeed = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getWindSpeed();
-            Double dayWindSpeedDouble = Double.valueOf(dayWindSpeed);
-            //Convert MPH to KPH if in metric
-            if(units == 1){
-                dayWindSpeedDouble = dayWindSpeedDouble * 1.6093440;
-            }
-            int dayWindSpeedInt = dayWindSpeedDouble.intValue();
-            String dayWindBearing = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getWindBearing();
-            int dayWindBearingValue = Integer.valueOf(dayWindBearing);
-            Log.i("dayWindSpeed", dayWindSpeed);
-            Log.i("dayWindBearing", dayWindBearing);
+            if(dayWindSpeed != null){
+                Double dayWindSpeedDouble = Double.valueOf(dayWindSpeed);
+                //Convert MPH to KPH if in metric
+                if(units == 1){
+                    dayWindSpeedDouble = dayWindSpeedDouble * 1.6093440;
+                }
+                int dayWindSpeedInt = dayWindSpeedDouble.intValue();
+                String dayWindBearing = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getWindBearing();
+                int dayWindBearingValue = Integer.valueOf(dayWindBearing);
+                Log.i("dayWindSpeed", dayWindSpeed);
+                Log.i("dayWindBearing", dayWindBearing);
 
-            if(units == 0){
-                if(dayWindBearingValue >= 0 && dayWindBearingValue < 45){
-                    pulledWind = "↓" + dayWindSpeedInt + "MPH";
+                if(units == 0){
+                    if(dayWindBearingValue >= 0 && dayWindBearingValue < 45){
+                        pulledWind = "↓" + dayWindSpeedInt + "MPH";
+                    }
+                    else if(dayWindBearingValue >= 45 && dayWindBearingValue < 90){
+                        pulledWind = "↙" + dayWindSpeedInt + "MPH";
+                    }
+                    else if(dayWindBearingValue >= 90 && dayWindBearingValue < 135){
+                        pulledWind = "←" + dayWindSpeedInt + "MPH";
+                    }
+                    else if(dayWindBearingValue >= 135 && dayWindBearingValue < 180){
+                        pulledWind = "↖" + dayWindSpeedInt + "MPH";
+                    }
+                    else if(dayWindBearingValue >= 180 && dayWindBearingValue < 225){
+                        pulledWind = "↑" + dayWindSpeedInt + "MPH";
+                    }
+                    else if(dayWindBearingValue >= 225 && dayWindBearingValue < 270){
+                        pulledWind = "↗" + dayWindSpeedInt + "MPH";
+                    }
+                    else if(dayWindBearingValue >= 270 && dayWindBearingValue < 315){
+                        pulledWind = "→" + dayWindSpeedInt + "MPH";
+                    }
+                    else if(dayWindBearingValue >= 315 && dayWindBearingValue < 360){
+                        pulledWind = "↘" + dayWindSpeedInt + "MPH";
+                    }
                 }
-                else if(dayWindBearingValue >= 45 && dayWindBearingValue < 90){
-                    pulledWind = "↙" + dayWindSpeedInt + "MPH";
+                else{
+                    if(dayWindBearingValue >= 0 && dayWindBearingValue < 45){
+                        pulledWind = "↓" + dayWindSpeedInt + "KPH";
+                    }
+                    else if(dayWindBearingValue >= 45 && dayWindBearingValue < 90){
+                        pulledWind = "↙" + dayWindSpeedInt + "KPH";
+                    }
+                    else if(dayWindBearingValue >= 90 && dayWindBearingValue < 135){
+                        pulledWind = "←" + dayWindSpeedInt + "KPH";
+                    }
+                    else if(dayWindBearingValue >= 135 && dayWindBearingValue < 180){
+                        pulledWind = "↖" + dayWindSpeedInt + "KPH";
+                    }
+                    else if(dayWindBearingValue >= 180 && dayWindBearingValue < 225){
+                        pulledWind = "↑" + dayWindSpeedInt + "KPH";
+                    }
+                    else if(dayWindBearingValue >= 225 && dayWindBearingValue < 270){
+                        pulledWind = "↗" + dayWindSpeedInt + "KPH";
+                    }
+                    else if(dayWindBearingValue >= 270 && dayWindBearingValue < 315){
+                        pulledWind = "→" + dayWindSpeedInt + "KPH";
+                    }
+                    else if(dayWindBearingValue >= 315 && dayWindBearingValue < 360){
+                        pulledWind = "↘" + dayWindSpeedInt + "KPH";
+                    }
                 }
-                else if(dayWindBearingValue >= 90 && dayWindBearingValue < 135){
-                    pulledWind = "←" + dayWindSpeedInt + "MPH";
-                }
-                else if(dayWindBearingValue >= 135 && dayWindBearingValue < 180){
-                    pulledWind = "↖" + dayWindSpeedInt + "MPH";
-                }
-                else if(dayWindBearingValue >= 180 && dayWindBearingValue < 225){
-                    pulledWind = "↑" + dayWindSpeedInt + "MPH";
-                }
-                else if(dayWindBearingValue >= 225 && dayWindBearingValue < 270){
-                    pulledWind = "↗" + dayWindSpeedInt + "MPH";
-                }
-                else if(dayWindBearingValue >= 270 && dayWindBearingValue < 315){
-                    pulledWind = "→" + dayWindSpeedInt + "MPH";
-                }
-                else if(dayWindBearingValue >= 315 && dayWindBearingValue < 360){
-                    pulledWind = "↘" + dayWindSpeedInt + "MPH";
-                }
+                Log.i("pulledWind", pulledWind);
             }
             else{
-                if(dayWindBearingValue >= 0 && dayWindBearingValue < 45){
-                    pulledWind = "↓" + dayWindSpeedInt + "KPH";
-                }
-                else if(dayWindBearingValue >= 45 && dayWindBearingValue < 90){
-                    pulledWind = "↙" + dayWindSpeedInt + "KPH";
-                }
-                else if(dayWindBearingValue >= 90 && dayWindBearingValue < 135){
-                    pulledWind = "←" + dayWindSpeedInt + "KPH";
-                }
-                else if(dayWindBearingValue >= 135 && dayWindBearingValue < 180){
-                    pulledWind = "↖" + dayWindSpeedInt + "KPH";
-                }
-                else if(dayWindBearingValue >= 180 && dayWindBearingValue < 225){
-                    pulledWind = "↑" + dayWindSpeedInt + "KPH";
-                }
-                else if(dayWindBearingValue >= 225 && dayWindBearingValue < 270){
-                    pulledWind = "↗" + dayWindSpeedInt + "KPH";
-                }
-                else if(dayWindBearingValue >= 270 && dayWindBearingValue < 315){
-                    pulledWind = "→" + dayWindSpeedInt + "KPH";
-                }
-                else if(dayWindBearingValue >= 315 && dayWindBearingValue < 360){
-                    pulledWind = "↘" + dayWindSpeedInt + "KPH";
-                }
+                pulledWind = "---";
+                Log.i("pulledWind", "---");
             }
 
             //Get day's Precip
             String dayPrecipProb = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getPrecipProbability();
-            Double dayPrecipProbDouble = Double.valueOf(dayPrecipProb) * 100;
-            pulledPrecip = dayPrecipProbDouble.intValue();
-            Log.i("dayPrecip", dayPrecipProb);
+            if(dayPrecipProb != null){
+                Double dayPrecipProbDouble = Double.valueOf(dayPrecipProb) * 100;
+                pulledPrecip = dayPrecipProbDouble.intValue();
+                Log.i("dayPrecip", dayPrecipProb);
+            }
+            else{
+                pulledPrecip = -1;
+                Log.i("dayPrecip", "---");
+            }
 
             //Get day's Humidity
             String dayHumidity = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getHumidity();
-            Double dayHumidityDouble = Double.valueOf(dayHumidity) * 100;
-            pulledHumidity = dayHumidityDouble.intValue();
-            Log.i("dayHumidity", dayHumidity);
+            if(dayHumidity != null){
+                Double dayHumidityDouble = Double.valueOf(dayHumidity) * 100;
+                pulledHumidity = dayHumidityDouble.intValue();
+                Log.i("dayHumidity", dayHumidity);
+            }
+            else{
+                pulledHumidity = -1;
+                Log.i("dayHumidity", "---");
+            }
 
             //Get day's Dew Point
             String dayDewPoint = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getDewPoint();
-            Double dayDewPointDouble = Double.valueOf(dayDewPoint);
-            pulledDewpoint = dayDewPointDouble.intValue();
-            Log.i("dayDewPoint", dayDewPoint);
+            if(dayDewPoint != null){
+                Double dayDewPointDouble = Double.valueOf(dayDewPoint);
+                pulledDewpoint = dayDewPointDouble.intValue();
+                Log.i("dayDewPoint", dayDewPoint);
+            }
+            else{
+                pulledDewpoint = -1;
+                Log.i("dayDewPoint", "---");
+            }
 
             //Get day's Pressure
             String dayPressure = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getPressure();
-            Double dayPressureDouble = Double.valueOf(dayPressure);
-            Double currentPressureDoubleConverted;
-            if(units == 0){
-                currentPressureDoubleConverted = dayPressureDouble * 0.0295301;//Convert Millibars to inHg
+            if(dayPressure != null){
+                Double dayPressureDouble = Double.valueOf(dayPressure);
+                Double currentPressureDoubleConverted;
+                if(units == 0){
+                    currentPressureDoubleConverted = dayPressureDouble * 0.0295301;//Convert Millibars to inHg
+                }
+                else{
+                    currentPressureDoubleConverted = dayPressureDouble;//Use Millibars
+                }
+                pulledPressure = currentPressureDoubleConverted.intValue();
+                Log.i("dayPressure", dayPressure);
             }
-            else{
-                currentPressureDoubleConverted = dayPressureDouble;//Use Millibars
+            else {
+                pulledPressure = -1;
+                Log.i("dayPressure", "---");
             }
-            pulledPressure = currentPressureDoubleConverted.intValue();
-            Log.i("dayPressure", dayPressure);
 
             //Get day's cloud cover
             String dayCloudCover = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getCloudClover();
-            Double dayCloudCoverDouble = Double.valueOf(dayCloudCover) * 100;
-            pulledCloudCover = dayCloudCoverDouble.intValue();
-            Log.i("dayCloudCover", dayCloudCover);
-
-            //Get sunrise and sunset times
-            String sunriseTimeString = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSunriseTime();//UNIX timestamp
-            String sunsetTimeString = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSunsetTime();//UNIX timestamp
-            if(hourFormat == 0){
-                //12 hour time
-                //Get day's sunrise time
-                Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
-                Date sunriseDateObject = new Date(sunriseTimeInMili);
-                SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
-                daySunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
-                Log.i("daySunriseTime", daySunriseTime);
-
-                //Get day's sunset time
-                Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
-                Date sunsetDateObject = new Date(sunsetTimeInMili);
-                SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
-                daySunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
-                Log.i("daySunsetTime", daySunsetTime);
+            if(dayCloudCover != null){
+                Double dayCloudCoverDouble = Double.valueOf(dayCloudCover) * 100;
+                pulledCloudCover = dayCloudCoverDouble.intValue();
+                Log.i("dayCloudCover", dayCloudCover);
             }
             else{
-                //24 hour time
-                //Get day's sunrise time
-                Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
-                Date sunriseDateObject = new Date(sunriseTimeInMili);
-                SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("HH:mm");
-                daySunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
-                Log.i("daySunriseTime", daySunriseTime);
+                pulledCloudCover = -1;
+                Log.i("dayCloudCover", "---");
+            }
 
-                //Get day's sunset time
-                Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
-                Date sunsetDateObject = new Date(sunsetTimeInMili);
-                SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("HH:mm");
-                daySunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
-                Log.i("daySunsetTime", daySunsetTime);
+            //Get sunrise time
+            String sunriseTimeString = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSunriseTime();//UNIX timestamp
+            if(sunriseTimeString != null){
+                if(hourFormat == 0){
+                    //12 hour time
+                    //Get day's sunrise time
+                    Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+                    Date sunriseDateObject = new Date(sunriseTimeInMili);
+                    SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("h:mm aa");
+                    daySunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+                    Log.i("daySunriseTime", daySunriseTime);
+                }
+                else{
+                    //24 hour time
+                    //Get day's sunrise time
+                    Long sunriseTimeInMili = Long.valueOf(sunriseTimeString) * 1000;
+                    Date sunriseDateObject = new Date(sunriseTimeInMili);
+                    SimpleDateFormat sunriseDateFormat = new SimpleDateFormat("HH:mm");
+                    daySunriseTime = sunriseDateFormat.format(sunriseDateObject.getTime());
+                    Log.i("daySunriseTime", daySunriseTime);
+                }
+            }else{
+                daySunriseTime = "---";
+                Log.i("daySunriseTime", "---");
+            }
+
+            //Sunset time
+            String sunsetTimeString = MainActivity.pulledWeatherResponse.getDaily().getData().get(passedDayInt).getSunsetTime();//UNIX timestamp
+            if(sunsetTimeString != null){
+                if(hourFormat == 0){
+                    //12 hour time
+                    //Get day's sunset time
+                    Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+                    Date sunsetDateObject = new Date(sunsetTimeInMili);
+                    SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("h:mm aa");
+                    daySunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+                    Log.i("daySunsetTime", daySunsetTime);
+                }
+                else{
+                    //24 hour time
+                    //Get day's sunset time
+                    Long sunsetTimeInMili = Long.valueOf(sunsetTimeString) * 1000;
+                    Date sunsetDateObject = new Date(sunsetTimeInMili);
+                    SimpleDateFormat sunsetDateFormat = new SimpleDateFormat("HH:mm");
+                    daySunsetTime = sunsetDateFormat.format(sunsetDateObject.getTime());
+                    Log.i("daySunsetTime", daySunsetTime);
+                }
+            }
+            else{
+                daySunriseTime = "---";
+                Log.i("daySunsetTime", "---");
             }
 
             //References
@@ -781,7 +865,6 @@ public class DailyActivity extends AppCompatActivity {
     private void setViews(){
         viewLocation.setText(pulledLocation);
         viewDay.setText(passedDay);
-        //TODO - GET NEW ICONS AND UPDATE
         switch (pulledIcon) {
             case "clear-day":
                 viewConditionsIcon.setImageResource(R.drawable.ic_sunny_white);
@@ -821,21 +904,94 @@ public class DailyActivity extends AppCompatActivity {
 
         viewDescription.setText(pulledDescription);
         viewConditions.setText(pulledCondition);
-        viewHiLo.setText(pulledHi + "°/" + pulledLo + "°");
-        viewWindValue.setText(pulledWind);
-        if(units == 0){
-            viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
-            viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
-            viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
-            viewPressureValue.setText(String.valueOf(pulledPressure) + "inHg");
-            viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
+        String pulledHiString;
+        String pulledLoString;
+        if(pulledHi == -1){
+            pulledHiString = "---";
         }
         else{
-            viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
-            viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
-            viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
-            viewPressureValue.setText(String.valueOf(pulledPressure) + "mb");
-            viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
+            pulledHiString = pulledHi.toString();
+        }
+
+        if(pulledLo == -1){
+            pulledLoString = "---";
+        }
+        else{
+            pulledLoString = pulledLo.toString();
+        }
+        viewHiLo.setText(pulledHiString + "°/" + pulledLoString + "°");
+        viewWindValue.setText(pulledWind);
+        if(units == 0){
+            if(pulledPrecip == -1){
+                viewPrecipValue.setText("---");
+            }
+            else{
+                viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
+            }
+
+            if(pulledHumidity == -1){
+                viewHumidityValue.setText("---");
+            }
+            else{
+                viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
+            }
+
+            if(pulledDewpoint != -1){
+                viewDewPointValue.setText("---");
+            }
+            else{
+                viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
+            }
+
+            if(pulledPressure != -1){
+                viewPressureValue.setText("---");
+            }
+            else{
+                viewPressureValue.setText(String.valueOf(pulledPressure) + "inHg");
+            }
+
+            if(pulledCloudCover != -1){
+                viewCloudCoverValue.setText("---");
+            }
+            else{
+                viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
+            }
+        }
+        else{
+            if(pulledPrecip == -1){
+                viewPrecipValue.setText("---");
+            }
+            else{
+                viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
+            }
+
+            if(pulledHumidity == -1){
+                viewHumidityValue.setText("---");
+            }
+            else{
+                viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
+            }
+
+            if(pulledDewpoint != -1){
+                viewDewPointValue.setText("---");
+            }
+            else{
+                viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
+            }
+
+            if(pulledPressure != -1){
+                viewPressureValue.setText("---");
+            }
+            else{
+                viewPressureValue.setText(String.valueOf(pulledPressure) + "mb");
+            }
+
+            if(pulledCloudCover != -1){
+                viewCloudCoverValue.setText("---");
+            }
+            else{
+                viewCloudCoverValue.setText(String.valueOf(pulledCloudCover) + "%");
+            }
         }
         viewSunriseTime.setText(daySunriseTime);
         viewSunsetTime.setText(daySunsetTime);

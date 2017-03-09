@@ -117,17 +117,17 @@ public class MainActivity extends AppCompatActivity implements
     private String currentDay = "---";
     private String currentDate = "---";
     private String currentIcon = "---";
-    private int currentTemp = 0;
+    private int currentTemp = -1;
     private String currentConditions = "---";
     private String todaysHI = "---";
     private String todaysLO = "---";
     private String todaysHILO = "---";
     private String todaysMinutely = "---";
     private String currentWind = "---";
-    private int currentPrecip = 0;
-    private int currentHumidity = 0;
-    private int currentDewpoint = 0;
-    private int currentPressure = 0;
+    private int currentPrecip = -1;
+    private int currentHumidity = -1;
+    private int currentDewpoint = -1;
+    private int currentPressure = -1;
     private String currentVisibilty = "---";
     private int currentCloudCover;
     private String sunriseTime = "---";
@@ -1754,7 +1754,7 @@ public class MainActivity extends AppCompatActivity implements
         String today = simpleDateFormat.format(calendar.getTime());
         Log.i("today", today);
 
-        //Get next 7 days
+        //Get next 7 days or as many days as the data allows
         Calendar calendar1 = Calendar.getInstance();
         SimpleDateFormat dayOfWeekFormat = new SimpleDateFormat("EEE");
         try {
@@ -1774,14 +1774,31 @@ public class MainActivity extends AppCompatActivity implements
             Double tempMax = pulledWeatherResponse.getDaily().getData().get(i).getTemperatureMax();
             pulledLOs.add(tempMin.intValue());
             pulledHIs.add(tempMax.intValue());
-            Log.i("tempMin", String.valueOf(tempMin.intValue()));
-            Log.i("tempMax", String.valueOf(tempMax.intValue()));
+            if(tempMin != null){
+                Log.i("tempMin", String.valueOf(tempMin.intValue()));
+            }
+            else{
+                Log.i("tempMin", "---");
+            }
+
+            if(tempMax != null){
+                Log.i("tempMax", String.valueOf(tempMax.intValue()));
+            }
+            else{
+                Log.i("tempMax", "---");
+            }
         }
 
         //Get Precips
         for(int i = 0; i < dailySetSize; i++){
             String pulledPrecipString = pulledWeatherResponse.getDaily().getData().get(i).getPrecipProbability();
-            Log.i("pulledPrecips", pulledPrecipString);
+            if(pulledPrecipString != null){
+                Log.i("pulledPrecips", pulledPrecipString);
+            }
+            else{
+                Log.i("pulledPrecips", "---");
+            }
+
             Double pulledPrecipDouble = Double.valueOf(pulledPrecipString) * 100;
             Integer pulledPrecipInt = pulledPrecipDouble.intValue();
             pulledPrecips.add(pulledPrecipInt);
@@ -1790,7 +1807,12 @@ public class MainActivity extends AppCompatActivity implements
         //Get Icons
         for(int i = 0; i < dailySetSize; i++){
             String pulledIconString = pulledWeatherResponse.getDaily().getData().get(i).getIcon();
-            Log.i("pulledIconString", pulledIconString);
+            if(pulledIconString != null){
+                Log.i("pulledIconString", pulledIconString);
+            }
+            else{
+                Log.i("pulledIconString", "---");
+            }
             pulledDailyCond.add(pulledIconString);
         }
     }

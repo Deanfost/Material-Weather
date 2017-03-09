@@ -491,7 +491,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                         .setContentText("New weather statement for your area")
 //                        .setLargeIcon(icon)
                         .setColor(color);
-        Intent activityIntent = new Intent(this, MainActivity.class);
+        Intent activityIntent = new Intent(this, IntroActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
         notifBuilder.setContentIntent(pendingIntent);
         notifBuilder.setAutoCancel(true);
@@ -509,7 +509,7 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle("Weather alerts")
                         .setContentText("New weather statement for your area");
-        Intent activityIntent = new Intent(this, MainActivity.class);
+        Intent activityIntent = new Intent(this, IntroActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
         notifBuilder.setContentIntent(pendingIntent);
         notifBuilder.setAutoCancel(true);
