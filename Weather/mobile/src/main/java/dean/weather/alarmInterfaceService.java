@@ -10,6 +10,8 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by Dean on 12/25/2016.
  */
@@ -19,6 +21,12 @@ public class alarmInterfaceService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        FirebaseApp.initializeApp(this);
     }
 
     @Override

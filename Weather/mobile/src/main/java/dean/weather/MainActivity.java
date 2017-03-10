@@ -1818,7 +1818,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Clears values from hourly and daily datasets.
+     * Clears values from datasets and variables.
      */
     public void clearDataSets(){
 
@@ -1835,18 +1835,18 @@ public class MainActivity extends AppCompatActivity implements
 
         currentDay = null;
         currentDate = null;
-        currentTemp = 0;
+        currentTemp = -1;
         currentConditions = null;
         todaysHI = null;
         todaysLO = null;
         todaysHILO = null;
         currentWind = null;
-        currentPrecip = 0;
-        currentHumidity = 0;
-        currentDewpoint = 0;
-        currentPressure = 0;
+        currentPrecip = -1;
+        currentHumidity = -1;
+        currentDewpoint = -1;
+        currentPressure = -1;
         currentVisibilty = null;
-        currentCloudCover = 0;
+        currentCloudCover = -1;
         sunriseTime = null;
         sunsetTime = null;
         updateTime = null;

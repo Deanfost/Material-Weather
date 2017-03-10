@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Libraries"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_18sdp"
                     android:layout_marginBottom="@dimen/_10sdp" />
 
                 <!-- Android Client Wrapper -->
@@ -53,14 +53,14 @@
                         android:text="DarkSkyAPI"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="John Hiott"
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -78,14 +78,14 @@
                         android:text="SDP"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="© Intuit - MIT License"
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -103,14 +103,14 @@
                         android:text="material-intro"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="© Heinrich Reimer - Apache 2.0 License"
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -128,14 +128,14 @@
                         android:text="SimpleArcLoader"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="© Prathamesh Sawant - Apache 2.0 License"
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -144,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Resources"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_18sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
@@ -162,14 +162,14 @@
                         android:text="Android Asset Studio -  Roman Nurik"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Resources created with the Android Asset Studio. "
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -187,14 +187,14 @@
                         android:text="Vectorizer.io"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Vector resources created at Vectorizer.io."
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -212,14 +212,14 @@
                         android:text="Icons8.com"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Icons sourced from icons8.com."
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -228,7 +228,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Dark sky"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_18sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
@@ -246,14 +246,14 @@
                         android:text="Dark Sky"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Weather information and forecasts sourced from the Dark Sky API."
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -262,7 +262,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Android"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_18sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
@@ -280,14 +280,14 @@
                         android:text="Android Open Source Project"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="This app contains code derived from code created by the Android Open Source Project. "
                         android:padding="@dimen/_10sdp"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_22sdp"/>
                 </RelativeLayout>
 
@@ -296,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Licenses"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_18sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"/>
 
@@ -315,7 +315,7 @@
                         android:text="Apache 2.0"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
                 </LinearLayout>
 
                 <!-- MIT -->
@@ -333,7 +333,7 @@
                         android:text="MIT"
                         android:padding="@dimen/_10sdp"
                         android:textColor="@color/colorBlack"
-                        android:textSize="15sp"/>
+                        android:textSize="@dimen/_13sdp"/>
                 </LinearLayout>
 
             </LinearLayout>

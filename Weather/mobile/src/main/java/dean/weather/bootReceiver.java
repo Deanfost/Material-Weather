@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by DeanF on 12/11/2016.
  */
@@ -14,6 +16,7 @@ import android.util.Log;
 public class bootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        FirebaseApp.initializeApp(context);
 
         Log.i("BootReceiver", "broadcastReceived");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +108,7 @@ public class MainFragment extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        FirebaseApp.initializeApp(getActivity());
         super.onCreate(savedInstanceState);
     }
 

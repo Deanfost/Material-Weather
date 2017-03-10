@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.firebase.FirebaseApp;
+
 /**
  * Created by Dean Foster on 3/2/2017.
  */
@@ -17,6 +19,7 @@ public class LocationSettingsNoRes extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.location_settings_change_activity_nobtn);
 
         //Customize window

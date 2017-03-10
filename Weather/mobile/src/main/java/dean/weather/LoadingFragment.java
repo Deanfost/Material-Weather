@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.FirebaseApp;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcLoader;
 
@@ -39,5 +40,11 @@ public class LoadingFragment extends Fragment {
         simpleArcLoader.refreshArcLoaderDrawable(configuration);
         simpleArcLoader.start();
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(getActivity());
     }
 }

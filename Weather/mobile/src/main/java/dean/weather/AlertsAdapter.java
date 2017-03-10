@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 
 import java.util.ArrayList;

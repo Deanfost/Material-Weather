@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.FirebaseApp;
+
 
 /**
  * Created by DeanF on 11/8/2016.
@@ -45,5 +47,11 @@ public class NoConnectionFragment extends Fragment {
                 sConnectionRefresher.retryConnection();
             }
         });
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(getActivity());
     }
 }
