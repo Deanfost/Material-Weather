@@ -784,7 +784,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
      * @return
      */
     private int determineLayoutColor(String sunriseTime, String sunsetTime){
-        //TODO - HANDLE 24 HOUR TIME!
         //Compare currentTime UNIX timestamp to sunriseTime and sunsetTime UNIX timestamp
         String currentTime = getCurrentTime();
         Long currentTimeLong = Long.valueOf(currentTime);

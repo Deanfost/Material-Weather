@@ -52,8 +52,8 @@ import retrofit.client.Response;
 
 public class alertNotifService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener , LocationListener{
     private GoogleApiClient googleApiClient;
-    private Double latitude;
-    private Double longitude;
+    private Double latitude = -1.0;
+    private Double longitude = -1.0;
     private Location lastLocation;
 //    private String currentAddress;
 //    private String todaySummary;
@@ -534,48 +534,52 @@ public class alertNotifService extends IntentService implements GoogleApiClient.
 
     //Time
     /**
-     * Determines layout color based on current time, ID used to determine fog icon.
+     * Determines layout color based on current time, ID used to set notif color
      * @return
      */
     private int determineLayoutColor(String sunriseTime, String sunsetTime){
-        //TODO - HANDLE 24 HOUR TIME!
         //Compare currentTime UNIX timestamp to sunriseTime and sunsetTime UNIX timestamp
         String currentTime = getCurrentTime();
         Long currentTimeLong = Long.valueOf(currentTime);
-        Long sunriseTimeLong = Long.valueOf(sunriseTime);
-        Long sunsetTimeLong = Long.valueOf(sunsetTime);
-        int setID = 4;
-        Log.i("currentTime", currentTime);
-        Log.i("sunriseTime", sunriseTime);
-        Log.i("sunsetTime", sunsetTime);
+        if(sunriseTime != null && sunsetTime != null){
+            Long sunriseTimeLong = Long.valueOf(sunriseTime);
+            Long sunsetTimeLong = Long.valueOf(sunsetTime);
+            int setID = 4;
+            Log.i("currentTime", currentTime);
+            Log.i("sunriseTime", sunriseTime);
+            Log.i("sunsetTime", sunsetTime);
 
-        //If it is sunrise or sunset time
-        if(currentTimeLong.equals(sunriseTimeLong)){
-            setID = 0;
+            //If it is sunrise or sunset time
+            if(currentTimeLong.equals(sunriseTimeLong)){
+                setID = 0;
+            }
+            else if(currentTimeLong.equals(sunsetTimeLong)){
+                setID = 2;
+            }
+            //If it is within 30 mins of sunrise or sunset time
+            else if(currentTimeLong > (sunriseTimeLong - 1800) && currentTimeLong < (sunriseTimeLong + 1800)){
+                setID = 0;
+            }
+            else if(currentTimeLong > (sunsetTimeLong - 1800) && currentTimeLong < (sunsetTimeLong + 1800)){
+                setID = 2;
+            }
+            //If it is day time
+            else if(currentTimeLong > (sunriseTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
+                setID = 1;
+            }
+            //If it is night time
+            else if(currentTimeLong > (sunsetTimeLong + 1800)){
+                setID = 3;
+            }
+            //If it is early morning time
+            else{
+                setID = 3;
+            }
+            return setID;
         }
-        else if(currentTimeLong.equals(sunsetTimeLong)){
-            setID = 2;
-        }
-        //If it is within 30 mins of sunrise or sunset time
-        else if(currentTimeLong > (sunriseTimeLong - 1800) && currentTimeLong < (sunriseTimeLong + 1800)){
-            setID = 0;
-        }
-        else if(currentTimeLong > (sunsetTimeLong - 1800) && currentTimeLong < (sunsetTimeLong + 1800)){
-            setID = 2;
-        }
-        //If it is day time
-        else if(currentTimeLong > (sunriseTimeLong + 1800) && currentTimeLong < (sunsetTimeLong - 1800)){
-            setID = 1;
-        }
-        //If it is night time
-        else if(currentTimeLong > (sunsetTimeLong + 1800)){
-            setID = 3;
-        }
-        //If it is early morning time
         else{
-            setID = 3;
+            return 1;
         }
-        return setID;
     }
 
     /**
