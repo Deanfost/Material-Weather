@@ -754,7 +754,7 @@ public class MainActivity extends AppCompatActivity implements
                         currentConditions = "Partly Cloudy";
                         break;
                     default:
-                        currentConditions = "Clear";
+                        currentConditions = "---";
                         Log.i("CurrentConditions", "Unsupported condition.");
                         break;
                 }

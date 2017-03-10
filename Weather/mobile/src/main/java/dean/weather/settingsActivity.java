@@ -185,7 +185,7 @@ public class settingsActivity extends PreferenceActivity{
                 Intent email = new Intent(Intent.ACTION_SEND);
                 email.setType("text/email");
                 email.putExtra(Intent.EXTRA_EMAIL, new String[] { "Deanfoster45@gmail.com" });
-                email.putExtra(Intent.EXTRA_SUBJECT, "Email developer");
+                email.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
                 //Resolve the intent, and launch a chooser
                 PackageManager pm = settingsActivity.this.getPackageManager();
                 if(email.resolveActivity(pm) != null){

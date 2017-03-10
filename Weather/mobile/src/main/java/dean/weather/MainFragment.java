@@ -366,7 +366,6 @@ public class MainFragment extends Fragment{
         slideIn.setStartDelay(100);
         slideIn.start();
     }
-
         /**
          * Saves passed values from mainActivity to fragment lists.
          */

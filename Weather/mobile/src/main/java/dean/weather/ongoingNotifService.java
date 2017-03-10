@@ -56,7 +56,7 @@ import retrofit.client.Response;
 public class ongoingNotifService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private Integer currentTemp = 0;
+    private Integer currentTemp = -1;
     private String currentIcon = "---";
     private String currentCondition = "---";
     private String currentHi = "---";
@@ -482,7 +482,15 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     break;
             }
             //Set temp and condition
-            notificationView.setTextViewText(R.id.notifCondition, currentTemp.toString() + "° - " + currentCondition);
+            String currentTempString;
+            if(currentTemp != -1){
+                currentTempString = currentTemp.toString();
+            }
+            else{
+                currentTempString = "---";
+            }
+
+            notificationView.setTextViewText(R.id.notifCondition, currentTempString + "° - " + currentCondition);
             //Set location
             if (hasLocation) {
                 notificationView.setTextViewText(R.id.notifLocation, currentAddress);
@@ -580,14 +588,22 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     iconID = R.drawable.ic_partlycloudynight_white;
                     break;
                 default:
-                    iconID = R.drawable.ic_cloudy_white;
+                    iconID = R.drawable.ic_sunny_white;
                     Log.i("CurrentConditions", "Unsupported condition.");
                     break;
             }
+            String currentTempString;
+            if(currentTemp != -1){
+                currentTempString = currentTemp.toString();
+            }
+            else{
+                currentTempString = "---";
+            }
+
             //Build the notification
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
-                            .setContentTitle(currentTemp.toString() + "° - " + currentCondition)
+                            .setContentTitle(currentTempString + "° - " + currentCondition)
                             .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
@@ -674,10 +690,18 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 //Pull and parse data
                 //Parse currentTemp
                 Double tempDouble = weatherResponse.getCurrently().getTemperature();
-                currentTemp = tempDouble.intValue();
+                if(tempDouble != null)
+                    currentTemp = tempDouble.intValue();
+                else
+                    currentTemp = -1;
 
                 //Set condition icon and condition statement
-                currentIcon = weatherResponse.getCurrently().getIcon();
+                if(weatherResponse.getCurrently().getIcon() != null){
+                    currentIcon = weatherResponse.getCurrently().getIcon();
+                }
+                else{
+                    currentIcon = "---";
+                }
                 Log.i("currentIcon", currentIcon);
                 switch (currentIcon){
                     case "clear-day":
@@ -711,7 +735,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                         currentCondition = "Partly Cloudy";
                         break;
                     default:
-                        currentCondition = "Clear";
+                        currentCondition = "---";
                         Log.i("CurrentConditions", "Unsupported condition.");
                         break;
                 }
@@ -721,19 +745,44 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 Double LoDouble;
                 HiDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMax();
                 LoDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMin();
-                currentHi = String.valueOf(HiDouble.intValue());
-                currentLo = String.valueOf(LoDouble.intValue());
-                Log.i("HI", currentHi);
-                Log.i("LO", currentLo);
+                if(HiDouble != null){
+                    currentHi = String.valueOf(HiDouble.intValue());
+                    Log.i("HI", currentHi);
+                }
+                else{
+                    currentHi = "---";
+                    Log.i("HI", "---");
+                }
+
+                if(LoDouble != null){
+                    currentLo = String.valueOf(LoDouble.intValue());
+                    Log.i("LO", currentLo);
+                }
+                else{
+                    currentLo = "---";
+                    Log.i("LO", "---");
+                }
 
                 //Parse sunrise and sunset times to determine current layout color
                 //Parse sunrise time
-                sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();//UNIX timestamp
-                Log.i("sunriseTimeUNIX", sunriseTimeString);
+                if(weatherResponse.getDaily().getData().get(0).getSunriseTime() != null){//UNIX timestamp
+                    sunriseTimeString = weatherResponse.getDaily().getData().get(0).getSunriseTime();
+                    Log.i("sunriseTimeUNIX", sunriseTimeString);
+                }
+                else{
+                    sunriseTimeString = "---";
+                    Log.i("sunriseTimeUNIX", "---");
+                }
 
                 //Parse sunset time
-                sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();//UNIX timestamp
-                Log.i("sunsetTimeUNIX", sunsetTimeString);
+                if(weatherResponse.getDaily().getData().get(0).getSunsetTime() != null){//UNIX timestamp
+                    sunsetTimeString = weatherResponse.getDaily().getData().get(0).getSunsetTime();
+                    Log.i("sunsetTimeUNIX", sunsetTimeString);
+                }
+                else{
+                    sunsetTimeString = "---";
+                    Log.i("sunsetTimeUNIX", "---");
+                }
 
                 //Create/update notification
                 //Test to see which one to make

@@ -433,7 +433,7 @@ public class DailyActivity extends AppCompatActivity {
                     pulledCondition = "Partly Cloudy";
                     break;
                 default:
-                    pulledCondition = "Clear";
+                    pulledCondition = "---";
                     Log.i("CurrentConditions", "Unsupported condition.");
                     break;
             }
@@ -897,7 +897,7 @@ public class DailyActivity extends AppCompatActivity {
                 viewConditionsIcon.setImageResource(R.drawable.ic_partlycloudy_white);
                 break;
             default:
-                viewConditionsIcon.setImageResource(R.drawable.ic_cloudy_white);
+                viewConditionsIcon.setImageResource(R.drawable.ic_sunny_white);
                 Log.i("CurrentConditions", "Unsupported condition.");
                 break;
         }
@@ -936,21 +936,21 @@ public class DailyActivity extends AppCompatActivity {
                 viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
             }
 
-            if(pulledDewpoint != -1){
+            if(pulledDewpoint == -1){
                 viewDewPointValue.setText("---");
             }
             else{
                 viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
             }
 
-            if(pulledPressure != -1){
+            if(pulledPressure == -1){
                 viewPressureValue.setText("---");
             }
             else{
                 viewPressureValue.setText(String.valueOf(pulledPressure) + "inHg");
             }
 
-            if(pulledCloudCover != -1){
+            if(pulledCloudCover == -1){
                 viewCloudCoverValue.setText("---");
             }
             else{
@@ -972,21 +972,21 @@ public class DailyActivity extends AppCompatActivity {
                 viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
             }
 
-            if(pulledDewpoint != -1){
+            if(pulledDewpoint == -1){
                 viewDewPointValue.setText("---");
             }
             else{
                 viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
             }
 
-            if(pulledPressure != -1){
+            if(pulledPressure == -1){
                 viewPressureValue.setText("---");
             }
             else{
                 viewPressureValue.setText(String.valueOf(pulledPressure) + "mb");
             }
 
-            if(pulledCloudCover != -1){
+            if(pulledCloudCover == -1){
                 viewCloudCoverValue.setText("---");
             }
             else{
