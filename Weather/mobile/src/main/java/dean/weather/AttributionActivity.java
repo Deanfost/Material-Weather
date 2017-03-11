@@ -60,7 +60,7 @@ public class AttributionActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(getResources().getColor(R.color.colorGrey));
+        window.setStatusBarColor(getResources().getColor(R.color.colorWhiteDark));
 
         //References
         clientLayout = (RelativeLayout) findViewById(R.id.licensesClientLibLayout);
