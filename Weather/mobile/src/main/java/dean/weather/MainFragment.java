@@ -300,7 +300,13 @@ public class MainFragment extends Fragment{
                 currentPressureValue.setText(String.valueOf(passedPressureValue) + "inHg");
 
             }
-            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "mi");
+            if(passedVisibilityValue.equals("---")){
+                currentVisibilityValue.setText("---");
+            }
+            else{
+                currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "mi");
+            }
+
             if(passedCloudCoverValue == -1)
                 currentCloudCoverValue.setText("---");
             else
@@ -333,9 +339,13 @@ public class MainFragment extends Fragment{
                 currentPressureValue.setText("---");
             else{
                 currentPressureValue.setText(String.valueOf(passedPressureValue) + "mb");
-
             }
-            currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "km");
+            if(passedVisibilityValue.equals("---")){
+                currentVisibilityValue.setText("---");
+            }
+            else{
+                currentVisibilityValue.setText(String.valueOf(passedVisibilityValue) + "km");
+            }
             if(passedCloudCoverValue == -1)
                 currentCloudCoverValue.setText("---");
             else

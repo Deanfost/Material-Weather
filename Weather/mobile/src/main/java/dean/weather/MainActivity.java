@@ -1459,10 +1459,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void retryConnection() {
-        loadingFragmentTransaction();
-        clearDataSets();
-        if(!googleApiClient.isConnected())
-            googleApiClient.connect();
+        refresh();
     }
 
     /**
@@ -1470,10 +1467,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void retryDataFetch() {
-        loadingFragmentTransaction();
-        requestLocationAndData();
-        if(!googleApiClient.isConnected())
-            googleApiClient.connect();
+        refresh();
     }
 
     //View data parsing and formatting

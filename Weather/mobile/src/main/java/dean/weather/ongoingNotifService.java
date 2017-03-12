@@ -191,7 +191,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             Log.i("Geocoder", "Service unavailable.");
             currentAddress = "---";
         }
-        if (!currentAddress.equals("---")) {
+        if (currentAddress != null &&!currentAddress.equals("---")) {
             //Store the pulled location for future reference
             SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             SharedPreferences.Editor editor = mySPrefs.edit();
@@ -493,7 +493,12 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationView.setTextViewText(R.id.notifCondition, currentTempString + "° - " + currentCondition);
             //Set location
             if (hasLocation) {
-                notificationView.setTextViewText(R.id.notifLocation, currentAddress);
+                if(! currentAddress.equals("null")){
+                    notificationView.setTextViewText(R.id.notifLocation, currentAddress);
+                }
+                else{
+                    notificationView.setTextViewText(R.id.notifLocation, "---");
+                }
             } else {
                 SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String savedLocation = mySPrefs.getString(getString(R.string.last_location_key), "---");
@@ -582,7 +587,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     break;
                 case "partly-cloudy-day":
                     iconID = R.drawable.ic_partlycloudy_white;
-
                     break;
                 case "partly-cloudy-night":
                     iconID = R.drawable.ic_partlycloudynight_white;
@@ -600,11 +604,24 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 currentTempString = "---";
             }
 
+            String localCurrentAddress;
+            if(hasLocation){
+                if(!currentAddress.equals("null")){
+                    localCurrentAddress = currentAddress;
+                }
+                else{
+                    localCurrentAddress = "---";
+                }
+            }
+            else{
+                localCurrentAddress = "---";
+            }
+
             //Build the notification
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
                             .setContentTitle(currentTempString + "° - " + currentCondition)
-                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + currentAddress)
+                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + localCurrentAddress)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
             Intent mainIntent = new Intent(this, IntroActivity.class);
