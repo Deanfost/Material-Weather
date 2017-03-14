@@ -38,12 +38,15 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
+import com.johnhiott.darkskyandroidlib.models.AlertsBlock;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -63,6 +66,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     private String currentLo = "---";
     private String sunriseTimeString = "---";
     private String sunsetTimeString = "---";
+    private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
 
     //Address receiver
     protected Location lastLocation;//Location to pass to the address method
@@ -128,6 +132,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
                     notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+                    notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
                     stopSelf();
                     return START_NOT_STICKY;
                 }
@@ -523,7 +528,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
             //You know its working when this happens
-            createTestNotif();
+            createOngoingTestNotif();
 
         } else {
             //Create notification asking the user to try again
@@ -656,9 +661,65 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     }
 
     /**
+     * Creates alert notification for Lollipop through Marshmallow.
+     */
+    private void createAlertNotification(){
+        //Determine which color to use for large icon background
+        int setID = determineLayoutColor(sunriseTimeString, sunsetTimeString);
+        int color = -1;
+
+        switch (setID){
+            case 0:
+                color = getResources().getColor(R.color.colorOrange);
+                break;
+            case 1:
+                color = getResources().getColor(R.color.colorBlueLight);
+                break;
+            case 2:
+                color = getResources().getColor(R.color.colorYellow);
+                break;
+            case 3:
+                color = getResources().getColor(R.color.colorPurple);
+                break;
+        }
+
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Weather alerts")
+                        .setContentText("New weather statement for your area")
+                        .setColor(color);
+        Intent activityIntent = new Intent(this, IntroActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+        notifBuilder.setContentIntent(pendingIntent);
+        notifBuilder.setAutoCancel(true);
+        notifBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
+    }
+
+    /**
+     * Creates alert notification for Nougat.
+     */
+    private void createNewAlertNotification(){
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Weather alerts")
+                        .setContentText("New weather statement for your area");
+        Intent activityIntent = new Intent(this, IntroActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+        notifBuilder.setContentIntent(pendingIntent);
+        notifBuilder.setAutoCancel(true);
+        notifBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
+    }
+
+    /**
      * Creates test notification to go along with actual ongoing notif.
      */
-    private void createTestNotif(){
+    private void createOngoingTestNotif(){
         NotificationCompat.Builder notifBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_check_color)
@@ -668,6 +729,20 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(1);
         mNotificationManager.notify(1, notifBuilder.build());
+    }
+
+    /**
+     * Creates test notification every time the alert service is updated.
+     */
+    private void createAlertTestNotif(){
+        NotificationCompat.Builder notifBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_info_white)
+                        .setContentTitle("Update")
+                        .setContentText("Updated alert notification");
+        notifBuilder.setAutoCancel(true);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, notifBuilder.build());
     }
 
     //Dark Sky API
@@ -684,7 +759,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();
         final Request request = new Request();
-        request.addExcludeBlock(Request.Block.ALERTS);
         request.addExcludeBlock(Request.Block.HOURLY);
         request.addExcludeBlock(Request.Block.FLAGS);
         request.addExcludeBlock(Request.Block.MINUTELY);
@@ -704,81 +778,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.i("DarkSky API", "Pull request successful");
-                //Pull and parse data
-                //Parse currentTemp
-                Double tempDouble = weatherResponse.getCurrently().getTemperature();
-                if(tempDouble != null)
-                    currentTemp = tempDouble.intValue();
-                else
-                    currentTemp = -1;
-
-                //Set condition icon and condition statement
-                if(weatherResponse.getCurrently().getIcon() != null){
-                    currentIcon = weatherResponse.getCurrently().getIcon();
-                }
-                else{
-                    currentIcon = "---";
-                }
-                Log.i("currentIcon", currentIcon);
-                switch (currentIcon){
-                    case "clear-day":
-                        currentCondition = "Clear";
-                        break;
-                    case "clear-night":
-                        currentCondition = "Clear";
-                        break;
-                    case "rain":
-                        currentCondition = "Rain";
-                        break;
-                    case "snow":
-                        currentCondition = "Snow";
-                        break;
-                    case "sleet":
-                        currentCondition = "Sleet";
-                        break;
-                    case "wind":
-                        currentCondition = "Windy";
-                        break;
-                    case "fog":
-                        currentCondition = "Foggy";
-                        break;
-                    case "cloudy":
-                        currentCondition = "Cloudy";
-                        break;
-                    case "partly-cloudy-day":
-                        currentCondition = "Partly Cloudy";
-                        break;
-                    case "partly-cloudy-night":
-                        currentCondition = "Partly Cloudy";
-                        break;
-                    default:
-                        currentCondition = "---";
-                        Log.i("CurrentConditions", "Unsupported condition.");
-                        break;
-                }
-
-                //Parse HI/LO
-                Double HiDouble;
-                Double LoDouble;
-                HiDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMax();
-                LoDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMin();
-                if(HiDouble != null){
-                    currentHi = String.valueOf(HiDouble.intValue());
-                    Log.i("HI", currentHi);
-                }
-                else{
-                    currentHi = "---";
-                    Log.i("HI", "---");
-                }
-
-                if(LoDouble != null){
-                    currentLo = String.valueOf(LoDouble.intValue());
-                    Log.i("LO", currentLo);
-                }
-                else{
-                    currentLo = "---";
-                    Log.i("LO", "---");
-                }
+                //Pull and parse data for ongoing notif if enabled
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ongoingNotifService.this);
 
                 //Parse sunrise and sunset times to determine current layout color
                 //Parse sunrise time
@@ -801,15 +802,173 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     Log.i("sunsetTimeUNIX", "---");
                 }
 
-                //Create/update notification
-                //Test to see which one to make
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                    //Create notification for Lollipop through Marshmallow
-                    createNotification(true);
+                //Parse ongoing notif data if enabled
+                if(preferences.getBoolean(getResources().getString(R.string.ongoing_notif_key), false)){
+                    //Parse currentTemp
+                    Double tempDouble = weatherResponse.getCurrently().getTemperature();
+                    if(tempDouble != null)
+                        currentTemp = tempDouble.intValue();
+                    else
+                        currentTemp = -1;
+
+                    //Set condition icon and condition statement
+                    if(weatherResponse.getCurrently().getIcon() != null){
+                        currentIcon = weatherResponse.getCurrently().getIcon();
+                    }
+                    else{
+                        currentIcon = "---";
+                    }
+                    Log.i("currentIcon", currentIcon);
+                    switch (currentIcon){
+                        case "clear-day":
+                            currentCondition = "Clear";
+                            break;
+                        case "clear-night":
+                            currentCondition = "Clear";
+                            break;
+                        case "rain":
+                            currentCondition = "Rain";
+                            break;
+                        case "snow":
+                            currentCondition = "Snow";
+                            break;
+                        case "sleet":
+                            currentCondition = "Sleet";
+                            break;
+                        case "wind":
+                            currentCondition = "Windy";
+                            break;
+                        case "fog":
+                            currentCondition = "Foggy";
+                            break;
+                        case "cloudy":
+                            currentCondition = "Cloudy";
+                            break;
+                        case "partly-cloudy-day":
+                            currentCondition = "Partly Cloudy";
+                            break;
+                        case "partly-cloudy-night":
+                            currentCondition = "Partly Cloudy";
+                            break;
+                        default:
+                            currentCondition = "---";
+                            Log.i("CurrentConditions", "Unsupported condition.");
+                            break;
+                    }
+
+                    //Parse HI/LO
+                    Double HiDouble;
+                    Double LoDouble;
+                    HiDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMax();
+                    LoDouble = weatherResponse.getDaily().getData().get(0).getTemperatureMin();
+                    if(HiDouble != null){
+                        currentHi = String.valueOf(HiDouble.intValue());
+                        Log.i("HI", currentHi);
+                    }
+                    else{
+                        currentHi = "---";
+                        Log.i("HI", "---");
+                    }
+
+                    if(LoDouble != null){
+                        currentLo = String.valueOf(LoDouble.intValue());
+                        Log.i("LO", currentLo);
+                    }
+                    else{
+                        currentLo = "---";
+                        Log.i("LO", "---");
+                    }
+
+                    //Create/update notification for ongoing
+                    //Test to see which one to make
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        //Create notification for Lollipop through Marshmallow
+                        createNotification(true);
+                    }
+                    else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                        //Create notification for Nougat and above
+                        createNewNotification(true);
+                    }
                 }
-                else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
-                    //Create notification for Nougat and above
-                    createNewNotification(true);
+
+                //Pull and parse data for the alert notif if enabled
+                if(preferences.getBoolean(getResources().getString(R.string.alert_notif_key), false)){
+                    if(weatherResponse.getAlerts() != null){
+                        Log.i("alerts", weatherResponse.getAlerts().size() + "");
+                        for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
+                            Log.i("Alert", weatherResponse.getAlerts().get(i).getTitle());
+                            Log.i("Alert", weatherResponse.getAlerts().get(i).getDescription());
+                        }
+
+                        //Check to see if these are new alerts
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ongoingNotifService.this);
+                        for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
+                            if(!prefs.contains(weatherResponse.getAlerts().get(i).getUri() + ".Alert")){
+                                //This is a new alert, add it to the list of new alerts
+                                newAlerts.add(weatherResponse.getAlerts().get(i));
+                                Log.i("New alert", weatherResponse.getAlerts().get(i).getUri());
+                            }
+                            else{
+                                Log.i("Old alert", "ignoring");
+                            }
+                        }
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        //Persist the alerts list as to not notify the user of the same alerts
+                        for(int i = 0; i < newAlerts.size(); i++){
+                            String alertURI = newAlerts.get(i).getUri();
+                            Long alertIssueTime = newAlerts.get(i).getTime() * 1000;//Store UNIX in millis
+                            editor.putLong(alertURI + ".Alert", alertIssueTime);
+                        }
+
+                        //Check to see if it has been 48 hours (just to be safe), and if we can remove any persisted alert from sharedPrefs
+                        Map<String,?> sharedPrefsKeys = prefs.getAll();
+                        for(String key : sharedPrefsKeys.keySet()){
+                            Log.i("Printing key", key);
+                            if(key.contains(".Alert")){
+                                //Get the issuance time of the alert in UNIX format
+                                Log.i("Key", "Contains .Alert");
+                                Long value = (Long) sharedPrefsKeys.get(key);
+                                //If 48 hours has passed since the issuance of the alert
+                                if(System.currentTimeMillis() >= value + 172800000){
+                                    //Remove the alert
+                                    Log.i("Removing alert", key);
+                                    editor.remove(key);
+                                }
+                            }
+                        }
+                        editor.commit();
+                    }
+                    else{
+                        Log.i("alerts", "null");
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ongoingNotifService.this);
+                        Map<String,?> sharedPrefsKeys = prefs.getAll();
+                        for(String key : sharedPrefsKeys.keySet()){
+                            Log.i("Printing key", key);
+                            if(key.contains(".Alert")){
+                                Log.i("Key", "Contains .Alert");
+                            }
+                        }
+                    }
+
+                    //Create/update notification if there is new data to notify the user about
+                    if(newAlerts.size() > 0){
+                        Log.i("alertService", "New alerts available, notifying");
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                            //Create notification for Lollipop through Marshmallow
+                            createAlertNotification();
+                        }
+                        else if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
+                            //Create notification for Nougat and above
+                            createNewAlertNotification();
+                        }
+                    }
+                    else{
+                        Log.i("alertService", "No new alerts");
+                    }
+
+                    //Its working!
+                    createAlertTestNotif();
                 }
 
                 //Kill the connection

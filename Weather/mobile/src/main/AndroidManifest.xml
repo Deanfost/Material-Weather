@@ -166,10 +166,6 @@
         </service>
 
         <!--Alert notification service-->
-        <service android:name="dean.weather.alertNotifService"
-            android:exported="false"
-            android:enabled="true">
-        </service>
 
         <!--Alarm interface service-->
         <service android:name=".alarmInterfaceService"

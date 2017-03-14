@@ -118,12 +118,13 @@ public class settingsActivity extends PreferenceActivity{
                     }
                 }
                 else{
-                    //Stop the notif service
+                    //Tell the alarmservice to kill the alarm if both services have been disabled
                     Log.i("ongoingNotifPref", "stoppingService");
                     Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("repeatNotif", false);
                     startService(stopService);
 
+                    //Cancel the notification
                     NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
                     notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
@@ -140,10 +141,10 @@ public class settingsActivity extends PreferenceActivity{
                 if((Boolean) newValue){
                     //Check to see if we can do this
                     if(performChecks()){
-                        //Start the alarm intent service, everything is looking good
+                        //Start the alert service
                         Log.i("alert pref", "Starting service");
                         Intent alarmService = new Intent(settingsActivity.this, alarmInterfaceService.class);
-                        alarmService.putExtra("alertNotif", true);
+                        alarmService.putExtra("repeatNotif", true);
                         startService(alarmService);
                         return true;
                     }
@@ -154,10 +155,10 @@ public class settingsActivity extends PreferenceActivity{
                     }
                 }
                 else{
-                    //Kill the alarm
+                    //Tell the alarmservice to kill the alarm if both services have been disabled
                     Log.i("alert pref", "Killing alarm");
                     Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
-                    stopService.putExtra("alertNotif", false);
+                    stopService.putExtra("repeatNotif", false);
                     startService(stopService);
 
                     //Kill the notification
