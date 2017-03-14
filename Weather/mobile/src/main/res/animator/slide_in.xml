@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
-        android:propertyName="y"
-        android:valueType="floatType"
-        android:valueFrom="@dimen/_400sdp"
-        android:valueTo="0"
-        android:duration="300"
-        android:interpolator="@android:anim/decelerate_interpolator" />
-</set>
+<objectAnimator android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+    android:propertyName="translationY"
+    android:valueType="floatType"
+    android:valueFrom="1280"
+    android:valueTo="0"
+    android:duration="450"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    </objectAnimator>

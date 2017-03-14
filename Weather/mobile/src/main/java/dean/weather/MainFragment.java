@@ -365,19 +365,16 @@ public class MainFragment extends Fragment{
         dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDaysValues, passedDailyCondValues, passedHIsValues, passedLOsValues, passedPrecipValues);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
 
-        //Reset data sets
-        ((MainActivity)getActivity()).clearDataSets();
-
-        //Top layout anim
-        Animator topSlideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in);
-        topSlideIn.setTarget(topLayout);
-        topSlideIn.start();
-
-        //Lower layout anim
-        Animator slideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_lower);
-        slideIn.setTarget(wrapperLayout);
-        slideIn.setStartDelay(100);
-        slideIn.start();
+//        //Top layout anim
+//        Animator topSlideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in);
+//        topSlideIn.setTarget(topLayout);
+//        topSlideIn.start();
+//
+//        //Lower layout anim
+//        Animator slideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_lower);
+//        slideIn.setTarget(wrapperLayout);
+//        slideIn.setStartDelay(100);
+//        slideIn.start();
     }
         /**
          * Saves passed values from mainActivity to fragment lists.

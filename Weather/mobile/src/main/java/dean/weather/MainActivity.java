@@ -1359,8 +1359,8 @@ public class MainActivity extends AppCompatActivity implements
             FragmentTransaction mainFragmentTransaction = mainFragmentManager.beginTransaction();
             MainFragment MainFragment = new MainFragment();
             if(!isFinishing()){
+                mainFragmentTransaction.setCustomAnimations(R.animator.slide_in, 0);
                 mainFragmentTransaction.replace(R.id.mainContentView, MainFragment);
-                mainFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 mainFragmentTransaction.commit();
             }
             else{
@@ -1385,7 +1385,6 @@ public class MainActivity extends AppCompatActivity implements
             LoadingFragment LoadingFragment = new LoadingFragment();
             if(!isFinishing()){
                 loadingFragmentTransaction.replace(R.id.mainContentView, LoadingFragment);
-                loadingFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 loadingFragmentTransaction.commit();
             }
             else{
@@ -1410,8 +1409,8 @@ public class MainActivity extends AppCompatActivity implements
             FragmentTransaction noConnectionFragmentTransaction = noConnectionFragmentManager.beginTransaction();
             NoConnectionFragment noConnectionFragment = new NoConnectionFragment();
             if(!isFinishing()){
-                noConnectionFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
                 noConnectionFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                noConnectionFragmentTransaction.replace(R.id.mainContentView, noConnectionFragment);
                 noConnectionFragmentTransaction.commit();
             }
             else{
@@ -1438,8 +1437,8 @@ public class MainActivity extends AppCompatActivity implements
             FragmentTransaction locationUnavailableFragmentTransaction = locationUnavailableFragmentManager.beginTransaction();
             LocationUnavailableFragment locationUnavailableFragment = new LocationUnavailableFragment();
             if(!isFinishing()){
-                locationUnavailableFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
                 locationUnavailableFragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                locationUnavailableFragmentTransaction.replace(R.id.mainContentView, locationUnavailableFragment);
                 locationUnavailableFragmentTransaction.commit();
             }
             else{
