@@ -1,11 +1,13 @@
 package dean.weather;
 
 import android.app.ActivityManager;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,7 +29,8 @@ public class ViewAlertActivity extends AppCompatActivity {
 //    TextView srcView;
     String alertTitle;
     String alertDesc;
-//    String alertSrc;
+    String alertSrc;
+    Long alertTime;
     Integer setID;
 
     @Override
@@ -45,7 +48,8 @@ public class ViewAlertActivity extends AppCompatActivity {
             setID = getIntent().getExtras().getInt("setID");
             alertTitle = getIntent().getExtras().getString("alertTitle");
             alertDesc = getIntent().getExtras().getString("alertDesc");
-//            alertSrc = getIntent().getExtras().getString("alertSrc");
+            alertSrc = getIntent().getExtras().getString("alertSrc");
+            alertTime = getIntent().getExtras().getLong("alertTime") * 1000;//Convert UNIX to millis
         }
 
         setContentView(R.layout.activity_view_alert);
@@ -98,6 +102,14 @@ public class ViewAlertActivity extends AppCompatActivity {
         descView.setText(alertDesc);
 //        srcView.setTypeface(robotoLight);
 //        srcView.setText(alertSrc);
+
+        //Make sure to remove the icon
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!preferences.contains(alertSrc + ".Seen")){
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putLong(alertSrc + ".Seen", alertTime);
+            editor.apply();
+        }
     }
 
     @Override

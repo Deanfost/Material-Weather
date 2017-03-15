@@ -1084,7 +1084,7 @@ public class MainActivity extends AppCompatActivity implements
                             for(String key : sharedPrefsKeys.keySet()){
                                 Log.i("Printing key", key);
                                 if(key.contains(".Alert")){
-                                    //Get the issuance time of the alert in UNIX format
+                                    //Get the issuance time of the alert in UNIX * 1000
                                     Log.i("Key", "Contains .Alert");
                                     Long value = (Long) sharedPrefsKeys.get(key);
                                     //If 48 hours has passed since the issuance of the alert
@@ -1095,9 +1095,29 @@ public class MainActivity extends AppCompatActivity implements
                                     }
                                 }
                             }
-                            editor.commit();
+                            editor.apply();
                         }
                     }
+
+                    //Make sure to remove the seen key-value pairs for the alert adapter after 48 hours
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    Map<String,?> sharedPrefsKeys = prefs.getAll();
+                    for(String key : sharedPrefsKeys.keySet()){
+                        if(key.contains(".Seen")){
+                            //Get the issuance time of the alert in UNIX * 1000
+                            Log.i("Key", "Contains .Seen");
+                            Long value = (Long) sharedPrefsKeys.get(key);
+                            //If 48 hours has passed since the issuance of the alert
+                            if(System.currentTimeMillis() >= value + 172800000){
+                                //Remove the alert
+                                Log.i("Removing seen pair", key);
+                                editor.remove(key);
+                            }
+                        }
+                    }
+                    editor.apply();
+
                 }
                 //Log stored alerts
                 else{

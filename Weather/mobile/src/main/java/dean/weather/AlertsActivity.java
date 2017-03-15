@@ -33,6 +33,7 @@ public class AlertsActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager alertsLayoutManager;
     private Integer setID;
     private String currentIcon;
+    boolean alertsExist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class AlertsActivity extends AppCompatActivity {
 
             //Check to see if there are any alerts
             if(MainActivity.pulledWeatherResponse.getAlerts() != null){
+                alertsExist = true;
                 //Pull the alerts
                 alertsList = new ArrayList<>();
                 for(int i = 0; i < MainActivity.pulledWeatherResponse.getAlerts().size(); i++){
@@ -113,6 +115,7 @@ public class AlertsActivity extends AppCompatActivity {
                 alertsRecycler.setAdapter(alertsAdapter);
             }
             else{
+                alertsExist = false;
                 //There are no alerts
                 setContentView(R.layout.activity_no_alerts);
 
@@ -203,6 +206,16 @@ public class AlertsActivity extends AppCompatActivity {
                         Log.i("CurrentConditions", "Unsupported condition.");
                         break;
                 }
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(alertsExist){
+            for(int i = 0; i < alertsList.size(); i++){
+                alertsAdapter.notifyItemChanged(i);
             }
         }
     }

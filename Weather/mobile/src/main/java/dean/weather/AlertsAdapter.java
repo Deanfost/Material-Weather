@@ -2,14 +2,17 @@ package dean.weather;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public FrameLayout card;
+        public ImageView cardIcon;
         public TextView cardTitle;
         public TextView cardDesc;
         public TextView cardActionShare;
@@ -40,6 +44,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
             card = (FrameLayout) itemView.findViewById(R.id.alertCardView);
+            cardIcon = (ImageView) itemView.findViewById(R.id.cardViewIcon);
             cardTitle = (TextView) itemView.findViewById(R.id.cardViewTitle);
             cardDesc = (TextView) itemView.findViewById(R.id.cardViewDesc);
             cardActionShare = (TextView) itemView.findViewById(R.id.btnCardShare);
@@ -71,10 +76,23 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
 
         //Set the views in the card
         FrameLayout cardView = holder.card;
+        ImageView icon = holder.cardIcon;
         TextView title = holder.cardTitle;
         TextView desc = holder.cardDesc;
         TextView cardActionView = holder.cardActionView;
         TextView cardActionShare = holder.cardActionShare;
+        //Determine if the user has seen this alert yet
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if(preferences.contains(dataSet.get(position).getUri() + ".Seen")){
+            //The user has seen this alert, don't show the icon
+            icon.setVisibility(View.INVISIBLE);
+        }
+        else{
+            //The user has not seen this alert, show the icon
+            icon.setVisibility(View.VISIBLE);
+        }
+
+        //Set the content of the alert card
         title.setText(alertTitle);
         desc.setText(alertDesc);
 
@@ -117,6 +135,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
                 alertIntent.putExtra("alertTitle", dataSet.get(position).getTitle());
                 alertIntent.putExtra("alertDesc", dataSet.get(position).getDescription());
                 alertIntent.putExtra("alertSrc", dataSet.get(position).getUri());
+                alertIntent.putExtra("alertTime", dataSet.get(position).getTime());
                 getContext().startActivity(alertIntent);
             }
         });
@@ -156,6 +175,7 @@ public class AlertsAdapter extends RecyclerView.Adapter<AlertsAdapter.ViewHolder
                 alertIntent.putExtra("alertTitle", dataSet.get(position).getTitle());
                 alertIntent.putExtra("alertDesc", dataSet.get(position).getDescription());
                 alertIntent.putExtra("alertSrc", dataSet.get(position).getUri());
+                alertIntent.putExtra("alertTime", dataSet.get(position).getTime());
                 getContext().startActivity(alertIntent);
             }
         });
