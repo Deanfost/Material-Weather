@@ -1857,8 +1857,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        //Block back button for now
-
+        //Kill the app process
+        super.onBackPressed();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     //Notifications
