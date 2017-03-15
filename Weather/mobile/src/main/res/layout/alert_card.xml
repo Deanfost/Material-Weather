@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/alertCardView"
@@ -10,6 +9,16 @@
         android:background="@drawable/card_background_blue"
         android:layout_margin="@dimen/_10sdp"
         android:clickable="true">
+
+    <ImageView
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_alerts_white"
+        android:id="@+id/cardViewIcon"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginRight="@dimen/_16sdp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -67,4 +76,3 @@
             android:layout_marginBottom="@dimen/_16sdp"/>
 
     </FrameLayout>
-<!--</LinearLayout>-->

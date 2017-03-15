@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements
 
     //Alerts
     private ArrayList<AlertsBlock> newAlerts = new ArrayList<>();
+    Snackbar alertSnackbar;
 
     //Units
     int units;
@@ -234,6 +235,11 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_alerts:
                 if(enableAlerts){
                     Log.i("Alerts", "Enabled");
+                    //Dismiss the alert snackbar
+                    if(alertSnackbar != null){
+                        alertSnackbar.dismiss();
+                    }
+
                     //Move to the alerts activity
                     Intent alertsIntent = new Intent(this, AlertsActivity.class);
                     alertsIntent.putExtra("setID", setID);
@@ -1025,7 +1031,7 @@ public class MainActivity extends AppCompatActivity implements
                     //Any alerts?
                     if(alertsCount != 0){
                         //Display a snackbar for 6 seconds
-                        Snackbar snackbar = Snackbar
+                        alertSnackbar = Snackbar
                                 .make(mainActivityLayout, "Weather alerts available.", Snackbar.LENGTH_LONG)
                                 .setDuration(6000)
                                 .setAction("View", new View.OnClickListener() {
@@ -1039,7 +1045,7 @@ public class MainActivity extends AppCompatActivity implements
                                     }
                                 });
 
-                        snackbar.show();
+                        alertSnackbar.show();
 
                         //Log the new alerts
                         Log.i("alerts", weatherResponse.getAlerts().size() + "");
