@@ -8,13 +8,13 @@
             <SwitchPreference
                 android:key="@string/ongoing_notif_key"
                 android:title="Ongoing notification"
-                android:summary="Display weather data for your current location, updating roughly every 20 minutes"
+                android:summary="Display weather data for your current location"
                 android:defaultValue="false" />
 
                 <SwitchPreference
                     android:key="@string/alert_notif_key"
                     android:title="Show weather alerts"
-                    android:summary="Create a push notification for weather alerts and warnings, updating roughly every 20 minutes"
+                    android:summary="Create a push notification for weather alerts and warnings"
                     android:defaultValue="false" />
 
     </PreferenceCategory>

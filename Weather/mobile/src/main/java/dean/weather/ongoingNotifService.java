@@ -13,6 +13,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -114,16 +115,23 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         if (intent != null) {
             if (intent.getExtras() != null) {
                 if (intent.getExtras().getBoolean("pull", false)) {
-                    Log.i("notifService", "new intent received, updating");
-                    //Setup GoogleAPIClient
-                    if (googleApiClient == null) {
-                        googleApiClient = new GoogleApiClient.Builder(this)
-                                .addConnectionCallbacks(this)
-                                .addOnConnectionFailedListener(this)
-                                .addApi(LocationServices.API)
-                                .build();
+                    //Determine if low power mode is on
+                    PowerManager pm = (PowerManager) getBaseContext().getSystemService(Context.POWER_SERVICE);
+                    if(!pm.isPowerSaveMode()){
+                        Log.i("notifService", "new intent received, updating");
+                        //Setup GoogleAPIClient
+                        if (googleApiClient == null) {
+                            googleApiClient = new GoogleApiClient.Builder(this)
+                                    .addConnectionCallbacks(this)
+                                    .addOnConnectionFailedListener(this)
+                                    .addApi(LocationServices.API)
+                                    .build();
+                        }
+                        googleApiClient.connect();
                     }
-                    googleApiClient.connect();
+                    else{
+                        Log.i("ongoingNotifService", "Power saving mode is on");
+                    }
                     return START_STICKY;
                 }
                 //Intent specifies the service to stop

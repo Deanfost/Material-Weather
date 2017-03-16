@@ -47,6 +47,7 @@ public class alarmInterfaceService extends Service {
                         PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
 
                         //Setup an alarm to fire immediately and then every 20 minutes after
+                        alarmManager.cancel(ongoingAlarmIntent);
                         alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1200000, 1200000, ongoingAlarmIntent);
 
                         //Start the first pull
