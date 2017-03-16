@@ -156,7 +156,6 @@ public class settingsActivity extends PreferenceActivity{
                 }
                 else{
                     //Tell the alarmservice to kill the alarm if both services have been disabled
-                    Log.i("alert pref", "Killing alarm");
                     Intent stopService = new Intent(settingsActivity.this, alarmInterfaceService.class);
                     stopService.putExtra("repeatNotif", false);
                     startService(stopService);
