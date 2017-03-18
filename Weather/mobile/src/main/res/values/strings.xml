@@ -31,6 +31,6 @@
     <string name="support_feedback_key">key_support_feedback</string>
     <string name="support_donate_key">key_support_donate</string>
 
-    <!-- Licenses -->
-    <string name="apache_2_0"><html><body></body></html></string>
+    <!-- Dark Sky API Key-->
+    <string name="api_key">331ebe65d3032e48b3c603c113435992</string>
 </resources>

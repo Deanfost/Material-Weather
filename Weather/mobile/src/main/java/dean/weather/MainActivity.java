@@ -680,7 +680,7 @@ public class MainActivity extends AppCompatActivity implements
     private void pullForecast(){
         Log.i("forecastRequest", "pullingForecast");
         //Get the Dark Sky Wrapper API ready
-        ForecastApi.create("331ebe65d3032e48b3c603c113435992");
+        ForecastApi.create(getResources().getString(R.string.api_key));
 
         //Determine which units to use
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

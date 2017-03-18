@@ -760,9 +760,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
      */
     private void pullForecast() {
         Log.i("forecastRequest", "pullingForecast");
-        //TODO - CHECK FOR THE UNITS AND STUFF, AS WELL AS WHEN THE PREFERENCES CHANGE
         //Get the Dark Sky Wrapper API ready
-        ForecastApi.create("331ebe65d3032e48b3c603c113435992");
+        ForecastApi.create(getResources().getString(R.string.api_key));
 
         //Form a pull request
         RequestBuilder weather = new RequestBuilder();
