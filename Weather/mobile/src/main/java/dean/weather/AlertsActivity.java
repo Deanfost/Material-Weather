@@ -211,8 +211,8 @@ public class AlertsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onPause() {
+        super.onPause();
         if(alertsExist){
             for(int i = 0; i < alertsList.size(); i++){
                 alertsAdapter.notifyItemChanged(i);
