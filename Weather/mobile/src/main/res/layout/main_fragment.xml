@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
 
@@ -107,385 +109,394 @@
 
             </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/colorWhiteDark"
-            android:id="@+id/lowerFragmentWrapperContainer">
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@color/colorWhite"
-                android:id="@+id/hourlyContentView"
-                android:gravity="center_vertical">
+                android:background="@color/colorWhiteDark"
+                android:id="@+id/lowerFragmentWrapperContainer">
 
-                <android.support.v7.widget.RecyclerView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:background="@color/colorWhite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_100sdp"
-                    android:id="@+id/hourlyRecyclerView"
-                    android:scrollbars="horizontal"
-                    android:fadeScrollbars="true"
-                    android:scrollbarStyle="insideInset"
-                    android:scrollbarThumbHorizontal="@drawable/hourly_scrollbar"
-                    android:scrollbarSize="@dimen/_3sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
-                    android:orientation="horizontal"/>
-            </LinearLayout>
+                    android:id="@+id/hourlyContentView"
+                    android:gravity="center_vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_242sdp"
-                android:orientation="vertical"
-                android:id="@+id/dailyContentView"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:background="@color/colorWhite">
+                    <android.support.v7.widget.RecyclerView
+                        android:background="@color/colorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_100sdp"
+                        android:id="@+id/hourlyRecyclerView"
+                        android:scrollbars="horizontal"
+                        android:fadeScrollbars="true"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbarThumbHorizontal="@drawable/hourly_scrollbar"
+                        android:scrollbarSize="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:orientation="horizontal"/>
+                </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_242sdp"
-                    android:id="@+id/dailyRecyclerView" />
+                    android:orientation="vertical"
+                    android:id="@+id/dailyContentView"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:background="@color/colorWhite">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_242sdp"
+                        android:id="@+id/dailyRecyclerView" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detailsContentView"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:background="@color/colorWhite"
+                    android:padding="@dimen/_16sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Current details"
+                        android:textSize="16sp"
+                        android:id="@+id/currentDetailsLabel"
+                        android:layout_marginBottom="@dimen/_10sdp"/>
+
+                    <TextView
+                        android:layout_width="@dimen/_260sdp"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentMinutelySummary"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:layout_below="@id/currentDetailsLabel"
+                        android:layout_marginLeft="@dimen/_1sdp"/>
+
+                    <!-- Left side of details label -->
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_windrose_white"
+                        android:tint="@color/colorLightBlack"
+                        android:layout_below="@id/currentMinutelySummary"
+                        android:id="@+id/currentWindIcon"
+                        android:layout_marginRight="@dimen/_6sdp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wind"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsWindLabel"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_145sdp"
+                        android:layout_below="@id/currentMinutelySummary"
+                        android:layout_toRightOf="@id/currentWindIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_raingauge_black"
+                        android:tint="@color/colorLightBlack"
+                        android:layout_below="@id/currentDetailsWindLabel"
+                        android:id="@+id/currentPrecipIcon"
+                        android:layout_marginRight="@dimen/_6sdp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Precip"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsPrecipLabel"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_145sdp"
+                        android:layout_below="@id/currentDetailsWindLabel"
+                        android:layout_toRightOf="@id/currentWindIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_humidity_white"
+                        android:tint="@color/colorLightBlack"
+                        android:layout_below="@id/currentDetailsPrecipLabel"
+                        android:id="@+id/currentHumidityIcon"
+                        android:layout_marginRight="@dimen/_6sdp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Humidity"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsHumidityLabel"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_145sdp"
+                        android:layout_below="@id/currentDetailsPrecipLabel"
+                        android:layout_toRightOf="@+id/currentHumidityIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_dewpoint_black"
+                        android:tint="@color/colorLightBlack"
+                        android:layout_below="@id/currentDetailsHumidityLabel"
+                        android:id="@+id/currentDewpointIcon"
+                        android:layout_marginRight="@dimen/_6sdp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dew point"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsDewpointLabel"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_145sdp"
+                        android:layout_below="@id/currentDetailsHumidityLabel"
+                        android:layout_toRightOf="@+id/currentDewpointIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_pressure_black"
+                        android:tint="@color/colorLightBlack"
+                        android:layout_below="@id/currentDetailsDewpointLabel"
+                        android:id="@+id/currentPressureIcon"
+                        android:layout_marginRight="@dimen/_6sdp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pressure"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsPressureLabel"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_145sdp"
+                        android:layout_below="@id/currentDetailsDewpointLabel"
+                        android:layout_toRightOf="@id/currentPressureIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_visibility_black"
+                        android:tint="@color/colorLightBlack"
+                        android:layout_below="@id/currentDetailsPressureLabel"
+                        android:id="@+id/currentVisibilityIcon"
+                        android:layout_marginRight="@dimen/_6sdp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Visibility"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsVisibilityLabel"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_145sdp"
+                        android:layout_below="@id/currentDetailsPressureLabel"
+                        android:layout_toRightOf="@id/currentVisibilityIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_cloudfilled_black"
+                        android:tint="@color/colorLightBlack"
+                        android:layout_below="@id/currentDetailsVisibilityLabel"
+                        android:id="@+id/currentCloudCoverIcon"
+                        android:layout_marginRight="@dimen/_6sdp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cloud cover"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsCloudCoverLabel"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_145sdp"
+                        android:layout_below="@id/currentDetailsVisibilityLabel"
+                        android:layout_toRightOf="@id/currentCloudCoverIcon"/>
+
+                    <!-- Right side of details -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsWindValue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_below="@id/currentMinutelySummary"
+                        android:layout_toRightOf="@id/currentDetailsWindLabel"
+                        android:textColor="@color/colorBlue"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsPrecipValue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_below="@id/currentDetailsWindLabel"
+                        android:layout_toRightOf="@id/currentDetailsWindLabel"
+                        android:textColor="@color/colorBlue"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsHumidityValue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_below="@id/currentDetailsPrecipLabel"
+                        android:layout_toRightOf="@id/currentDetailsWindLabel"
+                        android:textColor="@color/colorBlue"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsDewPointValue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_below="@id/currentDetailsHumidityLabel"
+                        android:layout_toRightOf="@id/currentDetailsWindLabel"
+                        android:textColor="@color/colorBlue"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsPressureValue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_below="@id/currentDetailsDewpointLabel"
+                        android:layout_toRightOf="@id/currentDetailsWindLabel"
+                        android:textColor="@color/colorBlue"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsVisibilityValue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_below="@id/currentDetailsPressureLabel"
+                        android:layout_toRightOf="@id/currentDetailsWindLabel"
+                        android:textColor="@color/colorBlue"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="14sp"
+                        android:id="@+id/currentDetailsCloudCoverValue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_below="@id/currentDetailsVisibilityLabel"
+                        android:layout_toRightOf="@id/currentDetailsWindLabel"
+                        android:textColor="@color/colorBlue"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_220sdp"
+                    android:id="@+id/sunriseSunsetContentView"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:background="@color/colorWhite"
+                    android:padding="@dimen/_16sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sunrise/Sunset"
+                        android:textSize="16sp"
+                        android:id="@+id/sunriseSunsetLabel"
+                        android:layout_marginBottom="@dimen/_16sdp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:src="@drawable/ic_sunny_white"
+                        android:id="@+id/sunriseIcon"
+                        android:layout_marginTop="@dimen/_40sdp"
+                        android:layout_marginRight="@dimen/_30sdp"
+                        android:scaleType="fitXY"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="22sp"
+                        android:id="@+id/sunriseTime"
+                        android:layout_marginBottom="@dimen/_19sdp"
+                        android:layout_toRightOf="@id/sunriseIcon"
+                        android:layout_alignBottom="@+id/sunriseIcon"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:src="@drawable/ic_clear_night_white"
+                        android:id="@+id/sunsetIcon"
+                        android:layout_below="@id/sunriseIcon"
+                        android:layout_marginRight="@dimen/_30sdp"
+                        android:scaleType="fitXY"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:textSize="22sp"
+                        android:id="@+id/sunsetTime"
+                        android:layout_marginBottom="@dimen/_19sdp"
+                        android:layout_toRightOf="@id/sunsetIcon"
+                        android:layout_alignBottom="@+id/sunsetIcon"/>
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="-&#45;&#45;"-->
+                        <!--android:textSize="12sp"-->
+                        <!--android:id="@+id/updateTime"-->
+                        <!--android:layout_alignParentBottom="true"-->
+                        <!--android:layout_alignParentEnd="true" />-->
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Powered by Dark Sky"
+                        android:textSize="12sp"
+                        android:id="@+id/poweredByForecast"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true" />
+
+                </RelativeLayout>
             </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/detailsContentView"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:background="@color/colorWhite"
-                android:padding="@dimen/_16sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Current details"
-                    android:textSize="16sp"
-                    android:id="@+id/currentDetailsLabel"
-                    android:layout_marginBottom="@dimen/_10sdp"/>
-
-                <TextView
-                    android:layout_width="@dimen/_260sdp"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentMinutelySummary"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:layout_below="@id/currentDetailsLabel"
-                    android:layout_marginLeft="@dimen/_1sdp"/>
-
-                <!-- Left side of details label -->
-
-                <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_windrose_white"
-                    android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentMinutelySummary"
-                    android:id="@+id/currentWindIcon"
-                    android:layout_marginRight="@dimen/_6sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Wind"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsWindLabel"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentMinutelySummary"
-                    android:layout_toRightOf="@id/currentWindIcon"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_raingauge_black"
-                    android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentDetailsWindLabel"
-                    android:id="@+id/currentPrecipIcon"
-                    android:layout_marginRight="@dimen/_6sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Precip"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsPrecipLabel"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsWindLabel"
-                    android:layout_toRightOf="@id/currentWindIcon"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_humidity_white"
-                    android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentDetailsPrecipLabel"
-                    android:id="@+id/currentHumidityIcon"
-                    android:layout_marginRight="@dimen/_6sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Humidity"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsHumidityLabel"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsPrecipLabel"
-                    android:layout_toRightOf="@+id/currentHumidityIcon"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_dewpoint_black"
-                    android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentDetailsHumidityLabel"
-                    android:id="@+id/currentDewpointIcon"
-                    android:layout_marginRight="@dimen/_6sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dew point"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsDewpointLabel"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsHumidityLabel"
-                    android:layout_toRightOf="@+id/currentDewpointIcon"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_pressure_black"
-                    android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentDetailsDewpointLabel"
-                    android:id="@+id/currentPressureIcon"
-                    android:layout_marginRight="@dimen/_6sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pressure"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsPressureLabel"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsDewpointLabel"
-                    android:layout_toRightOf="@id/currentPressureIcon"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_visibility_black"
-                    android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentDetailsPressureLabel"
-                    android:id="@+id/currentVisibilityIcon"
-                    android:layout_marginRight="@dimen/_6sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Visibility"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsVisibilityLabel"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsPressureLabel"
-                    android:layout_toRightOf="@id/currentVisibilityIcon"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_cloudfilled_black"
-                    android:tint="@color/colorLightBlack"
-                    android:layout_below="@id/currentDetailsVisibilityLabel"
-                    android:id="@+id/currentCloudCoverIcon"
-                    android:layout_marginRight="@dimen/_6sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cloud cover"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsCloudCoverLabel"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_145sdp"
-                    android:layout_below="@id/currentDetailsVisibilityLabel"
-                    android:layout_toRightOf="@id/currentCloudCoverIcon"/>
-
-                <!-- Right side of details -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsWindValue"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentMinutelySummary"
-                    android:layout_toRightOf="@id/currentDetailsWindLabel"
-                    android:textColor="@color/colorBlue"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsPrecipValue"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsWindLabel"
-                    android:layout_toRightOf="@id/currentDetailsWindLabel"
-                    android:textColor="@color/colorBlue"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsHumidityValue"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsPrecipLabel"
-                    android:layout_toRightOf="@id/currentDetailsWindLabel"
-                    android:textColor="@color/colorBlue"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsDewPointValue"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsHumidityLabel"
-                    android:layout_toRightOf="@id/currentDetailsWindLabel"
-                    android:textColor="@color/colorBlue"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsPressureValue"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsDewpointLabel"
-                    android:layout_toRightOf="@id/currentDetailsWindLabel"
-                    android:textColor="@color/colorBlue"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsVisibilityValue"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsPressureLabel"
-                    android:layout_toRightOf="@id/currentDetailsWindLabel"
-                    android:textColor="@color/colorBlue"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="14sp"
-                    android:id="@+id/currentDetailsCloudCoverValue"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
-                    android:layout_below="@id/currentDetailsVisibilityLabel"
-                    android:layout_toRightOf="@id/currentDetailsWindLabel"
-                    android:textColor="@color/colorBlue"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_220sdp"
-                android:id="@+id/sunriseSunsetContentView"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:background="@color/colorWhite"
-                android:padding="@dimen/_16sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sunrise/Sunset"
-                    android:textSize="16sp"
-                    android:id="@+id/sunriseSunsetLabel"
-                    android:layout_marginBottom="@dimen/_16sdp"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_60sdp"
-                    android:src="@drawable/ic_sunny_white"
-                    android:id="@+id/sunriseIcon"
-                    android:layout_marginTop="@dimen/_40sdp"
-                    android:layout_marginRight="@dimen/_30sdp"
-                    android:scaleType="fitXY"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="22sp"
-                    android:id="@+id/sunriseTime"
-                    android:layout_marginBottom="@dimen/_19sdp"
-                    android:layout_toRightOf="@id/sunriseIcon"
-                    android:layout_alignBottom="@+id/sunriseIcon"/>
-
-                <ImageView
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_60sdp"
-                    android:src="@drawable/ic_clear_night_white"
-                    android:id="@+id/sunsetIcon"
-                    android:layout_below="@id/sunriseIcon"
-                    android:layout_marginRight="@dimen/_30sdp"
-                    android:scaleType="fitXY"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="---"
-                    android:textSize="22sp"
-                    android:id="@+id/sunsetTime"
-                    android:layout_marginBottom="@dimen/_19sdp"
-                    android:layout_toRightOf="@id/sunsetIcon"
-                    android:layout_alignBottom="@+id/sunsetIcon"/>
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="-&#45;&#45;"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:id="@+id/updateTime"-->
-                    <!--android:layout_alignParentBottom="true"-->
-                    <!--android:layout_alignParentEnd="true" />-->
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Powered by Dark Sky"
-                    android:textSize="12sp"
-                    android:id="@+id/poweredByForecast"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true" />
-
-            </RelativeLayout>
-        </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/main_banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
 </LinearLayout>

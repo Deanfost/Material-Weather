@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "366476215958-44feepvsqo8cvv6vq7sc65ph5h2i4u55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dean.weather",
+            "certificate_hash": "717176d837670c0340b79ac1618ebe014f81cad9"
+          }
+        },
+        {
           "client_id": "366476215958-oubkvcobdbm1nlgtgg4k0j644g4g7ro6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "dean.weather",
-            "certificate_hash": "262D9B349FC3D54ADC6BA79617EB1AA35BAD4379"
+            "certificate_hash": "262d9b349fc3d54adc6ba79617eb1aa35bad4379"
           }
         },
         {

@@ -33,4 +33,8 @@
 
     <!-- Dark Sky API Key-->
     <string name="api_key">331ebe65d3032e48b3c603c113435992</string>
+
+    <!-- Ads -->
+    <string name="main_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
 </resources>
