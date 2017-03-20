@@ -533,6 +533,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
             //You know its working when this happens
@@ -644,6 +645,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
         } else {
@@ -703,6 +705,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         notifBuilder.setAutoCancel(true);
         notifBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
         mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
     }
 
@@ -721,6 +724,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         notifBuilder.setAutoCancel(true);
         notifBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
         mNotificationManager.notify(MainActivity.ALERT_NOTIF_ID, notifBuilder.build());
     }
 

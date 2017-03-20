@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, NoConnectionFragment.connectionRefresher,
         LocationUnavailableFragment.dataFetcher{
     //Ads
-    private static final String AD_TAG = "mainFragment";
-    private AdView adView;
+//    private static final String AD_TAG = "mainFragment";
+//    private AdView adView;
 
     //Layout
     Toolbar toolbar;
@@ -186,11 +186,11 @@ public class MainActivity extends AppCompatActivity implements
             setContentView(R.layout.activity_main);
 
             //Ads
-            adView = (AdView) findViewById(R.id.adViewMain);
-            AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("352591080099668")
-                    .build();
-            adView.loadAd(adRequest);
+//            adView = (AdView) findViewById(R.id.adViewMain);
+//            AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+//                    .addTestDevice("352591080099668")
+//                    .build();
+//            adView.loadAd(adRequest);
 
             //Create an instance of GoogleAPIClient
             if (googleApiClient == null) {
