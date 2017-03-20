@@ -1,7 +1,5 @@
 package dean.weather;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -19,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.FirebaseApp;
 
 import java.util.ArrayList;

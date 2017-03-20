@@ -43,6 +43,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -79,6 +81,9 @@ import retrofit.client.Response;
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, NoConnectionFragment.connectionRefresher,
         LocationUnavailableFragment.dataFetcher{
+    //Ads
+    private static final String AD_TAG = "mainFragment";
+    private AdView adView;
 
     //Layout
     Toolbar toolbar;
@@ -174,7 +179,18 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("onCreate", "started");
+            //Firebase
             FirebaseApp.initializeApp(this);
+
+            //Set content view
+            setContentView(R.layout.activity_main);
+
+            //Ads
+            adView = (AdView) findViewById(R.id.adViewMain);
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice("352591080099668")
+                    .build();
+            adView.loadAd(adRequest);
 
             //Create an instance of GoogleAPIClient
             if (googleApiClient == null) {
@@ -188,9 +204,6 @@ public class MainActivity extends AppCompatActivity implements
 
             //Connect to the Google API
             googleApiClient.connect();
-
-            //Set content view
-            setContentView(R.layout.activity_main);
 
             //Customize toolbar
             toolbar = (Toolbar) findViewById(R.id.toolbar);
