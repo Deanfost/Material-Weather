@@ -132,18 +132,22 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     else{
                         Log.i("ongoingNotifService", "Power saving mode is on");
                     }
-                    return START_STICKY;
-                }
-                //Intent specifies the service to stop
-                else if (intent.getExtras().containsKey("notSticky")) {
-                    Log.i("notifService", "notStickyReceived");
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
-                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
-                    notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
-                    stopSelf();
                     return START_NOT_STICKY;
                 }
+                else{
+                    Log.i("ongoingNotifService", "get boolean - false");
+                    return START_NOT_STICKY;
+                }
+//                //Intent specifies the service to stop
+//                else if (intent.getExtras().containsKey("notSticky")) {
+//                    Log.i("notifService", "notStickyReceived");
+//                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+//                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+//                    notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
+//                    stopSelf();
+//                    return START_NOT_STICKY;
+//                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -401,6 +405,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             //Create notification for Nougat and above
             createNewNotification(false);
         }
+        stopSelf();
     }
 
     @Override
@@ -987,6 +992,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     googleApiClient.disconnect();
                 }
                 clearData();
+                stopSelf();
             }
 
             @Override
@@ -1010,6 +1016,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
                 mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ERROR_ID, notifBuilder.build());
                 clearData();
+                stopSelf();
             }
         });
     }
@@ -1084,6 +1091,4 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         sunriseTimeString = null;
         sunsetTimeString = null;
     }
-
-
 }

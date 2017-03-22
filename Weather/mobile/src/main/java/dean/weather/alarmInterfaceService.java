@@ -69,10 +69,10 @@ public class alarmInterfaceService extends Service {
 
                             alarmManager.cancel(ongoingAlarmIntent);
 
-                            //Kill the notification service
-                            Intent notSticky = new Intent(this, ongoingNotifService.class);
-                            notSticky.putExtra("notSticky", false);//Sends an intent to the service to return START_NOT_STICKY, which will allow it to die
-                            startService(notSticky);
+//                            //Kill the notification service
+//                            Intent notSticky = new Intent(this, ongoingNotifService.class);
+//                            notSticky.putExtra("notSticky", false);//Sends an intent to the service to return START_NOT_STICKY, which will allow it to die
+//                            startService(notSticky);
                         }
                         else{
                             Log.i("AlarmInterfaceService", "Both services are not disabled");

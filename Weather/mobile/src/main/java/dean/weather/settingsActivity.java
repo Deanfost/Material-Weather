@@ -3,11 +3,14 @@ package dean.weather;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -27,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.google.firebase.FirebaseApp;
 
 /**
@@ -34,13 +38,15 @@ import com.google.firebase.FirebaseApp;
  */
 
 public class settingsActivity extends PreferenceActivity{
-//    Preference followMePref;
+    //In app billing
+    IInAppBillingService mService;
+
+    //Preferences
     SwitchPreference ongoingNotif;
-//    SwitchPreference summaryNotif;
-//    Preference timePickerPref;
     SwitchPreference alertNotif;
     Preference tutorialPref;
     Preference feedbackPref;
+    Preference supportPref;
     boolean performChecksReturn;
     int setID = MainActivity.setID;
 
@@ -58,13 +64,11 @@ public class settingsActivity extends PreferenceActivity{
             addPreferencesFromResource(R.xml.preferences);
 
             //Preferences
-//        followMePref = findPreference(getString(R.string.follow_me_key));
             ongoingNotif = (SwitchPreference) findPreference(getString(R.string.ongoing_notif_key));
             alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
-//        summaryNotif = (SwitchPreference) findPreference(getString(R.string.summary_notif_key));
-//        timePickerPref = findPreference(getString(R.string.summary_time_key));
             tutorialPref = findPreference(getResources().getString(R.string.support_tutorial_key));
             feedbackPref = findPreference(getResources().getString(R.string.support_feedback_key));
+            supportPref = findPreference(getResources().getString(R.string.support_donate_key));
 
             //Color accents
                 switch(setID){
@@ -198,19 +202,38 @@ public class settingsActivity extends PreferenceActivity{
                 return true;
             }
         });
+
+        supportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                return true;
+            }
+        });
+
+        ServiceConnection mServiceConn = new ServiceConnection() {
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mService = null;
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name,
+                                           IBinder service) {
+                mService = IInAppBillingService.Stub.asInterface(service);
+            }
+        };
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         //Un-register click listeners
-//        followMePref.setOnPreferenceChangeListener(null);
         ongoingNotif.setOnPreferenceClickListener(null);
         alertNotif.setOnPreferenceChangeListener(null);
         tutorialPref.setOnPreferenceClickListener(null);
         feedbackPref.setOnPreferenceClickListener(null);
-//        summaryNotif.setOnPreferenceChangeListener(null);
-//        timePickerPref.setOnPreferenceChangeListener(null);
+        supportPref.setOnPreferenceClickListener(null);
     }
 
     //Checks and callbacks
