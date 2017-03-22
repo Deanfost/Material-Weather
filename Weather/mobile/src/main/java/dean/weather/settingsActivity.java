@@ -39,7 +39,19 @@ import com.google.firebase.FirebaseApp;
 
 public class settingsActivity extends PreferenceActivity{
     //In app billing
-    IInAppBillingService mService;
+    IInAppBillingService billingService;
+    ServiceConnection billingServiceConn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            billingService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name,
+                                       IBinder service) {
+            billingService = IInAppBillingService.Stub.asInterface(service);
+        }
+    };
 
     //Preferences
     SwitchPreference ongoingNotif;
@@ -206,23 +218,13 @@ public class settingsActivity extends PreferenceActivity{
         supportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-
+                Intent serviceIntent =
+                        new Intent("com.android.vending.billing.InAppBillingService.BIND");
+                serviceIntent.setPackage("com.android.vending");
+                bindService(serviceIntent, billingServiceConn, Context.BIND_AUTO_CREATE);
                 return true;
             }
         });
-
-        ServiceConnection mServiceConn = new ServiceConnection() {
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                mService = null;
-            }
-
-            @Override
-            public void onServiceConnected(ComponentName name,
-                                           IBinder service) {
-                mService = IInAppBillingService.Stub.asInterface(service);
-            }
-        };
     }
 
     @Override
@@ -382,6 +384,9 @@ public class settingsActivity extends PreferenceActivity{
     protected void onDestroy() {
         super.onDestroy();
         Log.i("Settings Activity", "Finishing");
+        if (billingService != null) {
+            unbindService(billingServiceConn);
+        }
     }
 
     @Override
