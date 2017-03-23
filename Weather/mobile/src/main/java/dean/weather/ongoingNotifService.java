@@ -1,5 +1,6 @@
 package dean.weather;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -138,16 +139,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     Log.i("ongoingNotifService", "get boolean - false");
                     return START_NOT_STICKY;
                 }
-//                //Intent specifies the service to stop
-//                else if (intent.getExtras().containsKey("notSticky")) {
-//                    Log.i("notifService", "notStickyReceived");
-//                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
-//                    notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
-//                    notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
-//                    stopSelf();
-//                    return START_NOT_STICKY;
-//                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -405,6 +396,13 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             //Create notification for Nougat and above
             createNewNotification(false);
         }
+        //Set a single alarm in 5 mins to try again
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent ongoingServiceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
+        ongoingServiceIntent.putExtra("pull", true);
+        PendingIntent ongoingAlarmIntent = PendingIntent.getService(ongoingNotifService.this, 0, ongoingServiceIntent, 0);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, 300000, ongoingAlarmIntent);
+
         stopSelf();
     }
 
@@ -991,6 +989,14 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 if(googleApiClient.isConnected()){
                     googleApiClient.disconnect();
                 }
+
+                //Cancel any retry alarms
+                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                Intent ongoingServiceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
+                ongoingServiceIntent.putExtra("pull", true);
+                PendingIntent ongoingAlarmIntent = PendingIntent.getService(ongoingNotifService.this, 0, ongoingServiceIntent, 0);
+                alarmManager.cancel(ongoingAlarmIntent);
+
                 clearData();
                 stopSelf();
             }
@@ -1016,6 +1022,13 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 mNotificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
                 mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ERROR_ID, notifBuilder.build());
                 clearData();
+
+                //Set a single alarm in 5 mins to try again
+                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                Intent ongoingServiceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
+                ongoingServiceIntent.putExtra("pull", true);
+                PendingIntent ongoingAlarmIntent = PendingIntent.getService(ongoingNotifService.this, 0, ongoingServiceIntent, 0);
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME, 300000, ongoingAlarmIntent);
                 stopSelf();
             }
         });

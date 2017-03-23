@@ -2,6 +2,7 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,7 +11,9 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.RemoteException;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -34,16 +37,26 @@ import android.widget.Toast;
 import com.android.vending.billing.IInAppBillingService;
 import com.google.firebase.FirebaseApp;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.logging.Handler;
 
 /**
  * Created by Dean on 12/23/2016.
  */
 
-public class settingsActivity extends PreferenceActivity{
+public class settingsActivity extends PreferenceActivity implements IabDialogFragment.BillingDialogListener{
     //In app billing
     IInAppBillingService billingService;
+    int donationPriceOne;
+    int donationPriceTwo;
+    int donationPriceThree;
+    int donationPriceFour;
+    Object skuOne;
+    Object skuTwo;
+    Object skuThree;
+    Object skuFour;
     ServiceConnection billingServiceConn = new ServiceConnection() {
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -228,7 +241,7 @@ public class settingsActivity extends PreferenceActivity{
                 serviceIntent.setPackage("com.android.vending");
                 bindService(serviceIntent, billingServiceConn, Context.BIND_AUTO_CREATE);
 
-                //Setup a list of items to purchase
+                //Setup a list of item ids for items to purchase
                 ArrayList<String> skuList = new ArrayList<> ();
                 skuList.add("Donation - $0.99");
                 skuList.add("Donation - $1.99");
@@ -238,20 +251,53 @@ public class settingsActivity extends PreferenceActivity{
                 querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
 
                 //Retrieve item information from google play
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Bundle skuDetails = billingService.getSkuDetails(3,
-                                    getPackageName(), "inapp", querySkus);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
+                try {
+                    //TODO - MOVE THIS TO A NEW THREAD
+                    Bundle skuDetails = billingService.getSkuDetails(3,
+                            getPackageName(), "inapp", querySkus);
+
+                    int response = skuDetails.getInt("RESPONSE_CODE");
+                    if(response == 0){
+                        ArrayList<String> responseList
+                                = skuDetails.getStringArrayList("DETAILS_LIST");
+
+                        //Get item prices
+                        for (String thisResponse : responseList) {
+                            JSONObject object = new JSONObject(thisResponse);
+                            String sku = object.getString("productId");
+                            String price = object.getString("price");
+                            switch (sku) {
+                                case "Donation - $0.99":
+                                    donationPriceOne = Integer.valueOf(price);
+                                    skuOne = sku;
+                                    break;
+                                case "Donation - $1.99":
+                                    donationPriceTwo = Integer.valueOf(price);
+                                    skuTwo = sku;
+                                    break;
+                                case "Donation - $4.99":
+                                    donationPriceThree = Integer.valueOf(price);
+                                    skuThree = sku;
+                                    break;
+                                case "Donation - $9.99":
+                                    donationPriceFour = Integer.valueOf(price);
+                                    skuFour = sku;
+                                    break;
+                            }
                         }
+
+                        //Show the billing dialog
+                        DialogFragment dialog = new IabDialogFragment();
+                        dialog.show(getFragmentManager(), "Donation");
                     }
-                });
-                thread.start();
-
-
+                    else{
+                        Toast.makeText(settingsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 return true;
             }
@@ -425,5 +471,34 @@ public class settingsActivity extends PreferenceActivity{
         Log.i("onSaveInstanceState", "Called - Settings");
         outState.putBoolean("restoring", true);
         super.onSaveInstanceState(outState);
+    }
+
+    //Click events for the billing dialog
+    @Override
+    public void onIndexOneClick() {
+        Log.i("Billing dialog", "List item one clicked");
+        try {
+            Bundle buyIntentBundle = billingService.getBuyIntent(3, getPackageName(),
+                    "Donation - $0.99", "inapp", "");
+
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onIndexTwoClick() {
+        Log.i("Billing dialog", "List item two clicked");
+    }
+
+    @Override
+    public void onIndexThreeClick() {
+        Log.i("Billing dialog", "List item three clicked");
+    }
+
+    @Override
+    public void onIndexFourClick() {
+        Log.i("Billing dialog", "List item four clicked");
     }
 }
