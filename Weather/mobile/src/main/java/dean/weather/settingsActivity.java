@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -32,6 +33,9 @@ import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.google.firebase.FirebaseApp;
+
+import java.util.ArrayList;
+import java.util.logging.Handler;
 
 /**
  * Created by Dean on 12/23/2016.
@@ -218,10 +222,37 @@ public class settingsActivity extends PreferenceActivity{
         supportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                //Bind to the IAB service
                 Intent serviceIntent =
                         new Intent("com.android.vending.billing.InAppBillingService.BIND");
                 serviceIntent.setPackage("com.android.vending");
                 bindService(serviceIntent, billingServiceConn, Context.BIND_AUTO_CREATE);
+
+                //Setup a list of items to purchase
+                ArrayList<String> skuList = new ArrayList<> ();
+                skuList.add("Donation - $0.99");
+                skuList.add("Donation - $1.99");
+                skuList.add("Donation - $4.99");
+                skuList.add("Donation - $9.99");
+                final Bundle querySkus = new Bundle();
+                querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
+
+                //Retrieve item information from google play
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Bundle skuDetails = billingService.getSkuDetails(3,
+                                    getPackageName(), "inapp", querySkus);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                thread.start();
+
+
+
                 return true;
             }
         });
