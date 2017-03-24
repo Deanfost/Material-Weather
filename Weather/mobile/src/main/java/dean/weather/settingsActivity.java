@@ -67,6 +67,64 @@ public class settingsActivity extends PreferenceActivity implements IabDialogFra
         public void onServiceConnected(ComponentName name,
                                        IBinder service) {
             billingService = IInAppBillingService.Stub.asInterface(service);
+
+            //Setup a list of item ids for items to purchase
+            ArrayList<String> skuList = new ArrayList<> ();
+            skuList.add("Donation - $0.99");
+            skuList.add("Donation - $1.99");
+            skuList.add("Donation - $4.99");
+            skuList.add("Donation - $9.99");
+            final Bundle querySkus = new Bundle();
+            querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
+
+            //Retrieve item information from google play
+            try {
+                //TODO - MOVE THIS TO A NEW THREAD
+                Bundle skuDetails = billingService.getSkuDetails(3,
+                        getPackageName(), "inapp", querySkus);
+
+                int response = skuDetails.getInt("RESPONSE_CODE");
+                if(response == 0){
+                    ArrayList<String> responseList
+                            = skuDetails.getStringArrayList("DETAILS_LIST");
+
+                    //Get item prices
+                    for (String thisResponse : responseList) {
+                        JSONObject object = new JSONObject(thisResponse);
+                        String sku = object.getString("productId");
+                        String price = object.getString("price");
+                        switch (sku) {
+                            case "Donation - $0.99":
+                                donationPriceOne = Integer.valueOf(price);
+                                skuOne = sku;
+                                break;
+                            case "Donation - $1.99":
+                                donationPriceTwo = Integer.valueOf(price);
+                                skuTwo = sku;
+                                break;
+                            case "Donation - $4.99":
+                                donationPriceThree = Integer.valueOf(price);
+                                skuThree = sku;
+                                break;
+                            case "Donation - $9.99":
+                                donationPriceFour = Integer.valueOf(price);
+                                skuFour = sku;
+                                break;
+                        }
+                    }
+
+                    //Show the billing dialog
+                    DialogFragment dialog = new IabDialogFragment();
+                    dialog.show(getFragmentManager(), "Donation");
+                }
+                else{
+                    Toast.makeText(settingsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -240,64 +298,6 @@ public class settingsActivity extends PreferenceActivity implements IabDialogFra
                         new Intent("com.android.vending.billing.InAppBillingService.BIND");
                 serviceIntent.setPackage("com.android.vending");
                 bindService(serviceIntent, billingServiceConn, Context.BIND_AUTO_CREATE);
-
-                //Setup a list of item ids for items to purchase
-                ArrayList<String> skuList = new ArrayList<> ();
-                skuList.add("Donation - $0.99");
-                skuList.add("Donation - $1.99");
-                skuList.add("Donation - $4.99");
-                skuList.add("Donation - $9.99");
-                final Bundle querySkus = new Bundle();
-                querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
-
-                //Retrieve item information from google play
-                try {
-                    //TODO - MOVE THIS TO A NEW THREAD
-                    Bundle skuDetails = billingService.getSkuDetails(3,
-                            getPackageName(), "inapp", querySkus);
-
-                    int response = skuDetails.getInt("RESPONSE_CODE");
-                    if(response == 0){
-                        ArrayList<String> responseList
-                                = skuDetails.getStringArrayList("DETAILS_LIST");
-
-                        //Get item prices
-                        for (String thisResponse : responseList) {
-                            JSONObject object = new JSONObject(thisResponse);
-                            String sku = object.getString("productId");
-                            String price = object.getString("price");
-                            switch (sku) {
-                                case "Donation - $0.99":
-                                    donationPriceOne = Integer.valueOf(price);
-                                    skuOne = sku;
-                                    break;
-                                case "Donation - $1.99":
-                                    donationPriceTwo = Integer.valueOf(price);
-                                    skuTwo = sku;
-                                    break;
-                                case "Donation - $4.99":
-                                    donationPriceThree = Integer.valueOf(price);
-                                    skuThree = sku;
-                                    break;
-                                case "Donation - $9.99":
-                                    donationPriceFour = Integer.valueOf(price);
-                                    skuFour = sku;
-                                    break;
-                            }
-                        }
-
-                        //Show the billing dialog
-                        DialogFragment dialog = new IabDialogFragment();
-                        dialog.show(getFragmentManager(), "Donation");
-                    }
-                    else{
-                        Toast.makeText(settingsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
                 return true;
             }
