@@ -396,12 +396,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             //Create notification for Nougat and above
             createNewNotification(false);
         }
-        //Set a single alarm in 5 mins to try again
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent ongoingServiceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
-        ongoingServiceIntent.putExtra("pull", true);
-        PendingIntent ongoingAlarmIntent = PendingIntent.getService(ongoingNotifService.this, 0, ongoingServiceIntent, 0);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, 300000, ongoingAlarmIntent);
 
         stopSelf();
     }
@@ -990,13 +984,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     googleApiClient.disconnect();
                 }
 
-                //Cancel any retry alarms
-                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                Intent ongoingServiceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
-                ongoingServiceIntent.putExtra("pull", true);
-                PendingIntent ongoingAlarmIntent = PendingIntent.getService(ongoingNotifService.this, 0, ongoingServiceIntent, 0);
-                alarmManager.cancel(ongoingAlarmIntent);
-
                 clearData();
                 stopSelf();
             }
@@ -1023,12 +1010,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 mNotificationManager.notify(MainActivity.FOLLOW_NOTIF_ERROR_ID, notifBuilder.build());
                 clearData();
 
-                //Set a single alarm in 5 mins to try again
-                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                Intent ongoingServiceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
-                ongoingServiceIntent.putExtra("pull", true);
-                PendingIntent ongoingAlarmIntent = PendingIntent.getService(ongoingNotifService.this, 0, ongoingServiceIntent, 0);
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME, 300000, ongoingAlarmIntent);
                 stopSelf();
             }
         });
