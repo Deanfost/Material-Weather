@@ -1,6 +1,5 @@
 package dean.weather;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -11,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -53,6 +53,10 @@ import java.util.Map;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_DISABLED;
+import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED;
+import static android.net.ConnectivityManager.RESTRICT_BACKGROUND_STATUS_WHITELISTED;
 
 /**
  * Created by DeanF on 12/11/2016.
@@ -116,9 +120,36 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         if (intent != null) {
             if (intent.getExtras() != null) {
                 if (intent.getExtras().getBoolean("pull", false)) {
+                    boolean pull = true;
                     //Determine if low power mode is on
                     PowerManager pm = (PowerManager) getBaseContext().getSystemService(Context.POWER_SERVICE);
-                    if(!pm.isPowerSaveMode()){
+                    if(pm.isPowerSaveMode()){
+                        pull = false;
+                    }
+
+                    //Check data saver(api 24 and up)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                        if(connMgr.isActiveNetworkMetered()){
+                            switch (connMgr.getRestrictBackgroundStatus()){
+                                case RESTRICT_BACKGROUND_STATUS_ENABLED:
+                                    //Don't pull - data saver enabled
+                                    pull = false;
+                                    break;
+                                case RESTRICT_BACKGROUND_STATUS_WHITELISTED:
+                                    //Pull - app has been whitelisted
+                                    pull = true;
+                                    break;
+                                case RESTRICT_BACKGROUND_STATUS_DISABLED:
+                                    //Data saver disabled
+                                    pull = true;
+                                    break;
+                            }
+                        }
+                    }
+
+                    //Start the service
+                    if(pull) {
                         Log.i("notifService", "new intent received, updating");
                         //Setup GoogleAPIClient
                         if (googleApiClient == null) {
@@ -131,7 +162,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                         googleApiClient.connect();
                     }
                     else{
-                        Log.i("ongoingNotifService", "Power saving mode is on");
+                        stopSelf();
                     }
                     return START_NOT_STICKY;
                 }
@@ -542,7 +573,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
-                            .setContentText("Tap to try again now.");
+                            .setContentText("Tap to try again.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
             notifBuilder.setContentIntent(servicePendingIntent);
@@ -651,7 +682,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.mipmap.ic_launcher)
                             .setContentTitle("Unable to sync weather")
-                            .setContentText("Tap to try again now.");
+                            .setContentText("Tap to try again.");
             Intent serviceIntent = new Intent(this, ongoingNotifService.class);
             serviceIntent.putExtra("pull", true);
             PendingIntent servicePendingIntent = PendingIntent.getService(this, 0, serviceIntent, 0);
@@ -999,8 +1030,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 NotificationCompat.Builder notifBuilder =
                         new NotificationCompat.Builder(ongoingNotifService.this)
                                 .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle("Error")
-                                .setContentText("Problem accessing Dark Sky");
+                                .setContentTitle("Unable to sync weather")
+                                .setContentText("Tap to try again.");
                 notifBuilder.setAutoCancel(true);
                 Intent serviceIntent = new Intent(ongoingNotifService.this, ongoingNotifService.class);
                 PendingIntent servicePendingIntent = PendingIntent.getService(ongoingNotifService.this, 0, serviceIntent, 0);

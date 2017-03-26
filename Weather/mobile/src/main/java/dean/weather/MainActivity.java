@@ -166,9 +166,9 @@ public class MainActivity extends AppCompatActivity implements
     private boolean locationUnavPending = false;
 
     //Data updates
-    boolean dataOutdated = false;
-    final Handler countdown = new Handler();
-    Snackbar outdatedSnackbar;
+//    boolean dataOutdated = false;
+//    final Handler countdown = new Handler();
+//    Snackbar outdatedSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1171,14 +1171,14 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 //Setup a countdown of 10 minutes, and when triggered, display a snackbar telling the user that the data is outdated
-                countdown.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Set outdated boolean to true
-                        Log.i("countdown", "returned");
-                        dataOutdated = true;
-                    }
-                }, 600000);
+//                countdown.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //Set outdated boolean to true
+//                        Log.i("countdown", "returned");
+//                        dataOutdated = true;
+//                    }
+//                }, 600000);
             }
 
             @Override
@@ -1202,9 +1202,9 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
         isRunning = false;
-        if(outdatedSnackbar != null){
-            outdatedSnackbar.dismiss();
-        }
+//        if(outdatedSnackbar != null){
+//            outdatedSnackbar.dismiss();
+//        }
         super.onStop();
     }
 
@@ -1288,9 +1288,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onPause() {
         super.onPause();
         isRunning = false;
-        if(outdatedSnackbar != null){
-            outdatedSnackbar.dismiss();
-        }
+//        if(outdatedSnackbar != null){
+//            outdatedSnackbar.dismiss();
+//        }
         //Remove references
         NoConnectionFragment.setConnectionRefresher(null);
         LocationUnavailableFragment.setDataFetcher(null);
@@ -1300,35 +1300,35 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         //Display a snackbar if it has been 10 minutes since the data was updated
-        if(dataOutdated){
-            Log.i("onStart", "Data outdated");
-
-            //Display the snackbar after 1 second
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    outdatedSnackbar = Snackbar
-                            .make(mainActivityLayout, "Forecast is outdated.", Snackbar.LENGTH_LONG)
-                            .setAction("REFRESH", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    refresh();
-                                }
-                            });
-                    outdatedSnackbar.show();
-                }
-            }, 1000);
-        }
-        else
-            Log.i("onStart", "Data up to date");
+//        if(dataOutdated){
+//            Log.i("onStart", "Data outdated");
+//
+//            //Display the snackbar after 1 second
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    outdatedSnackbar = Snackbar
+//                            .make(mainActivityLayout, "Forecast is outdated.", Snackbar.LENGTH_LONG)
+//                            .setAction("REFRESH", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    refresh();
+//                                }
+//                            });
+//                    outdatedSnackbar.show();
+//                }
+//            }, 1000);
+//        }
+//        else
+//            Log.i("onStart", "Data up to date");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //Remove countdown callbacks
-        countdown.removeCallbacksAndMessages(null);
+//        countdown.removeCallbacksAndMessages(null);
         clearDataSets();
         Log.i("MainActivity", "Destroyed");
     }
@@ -1347,12 +1347,12 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         //Reset countdown logic
-        countdown.removeCallbacksAndMessages(null);
-        dataOutdated = false;
-        if(outdatedSnackbar != null)
-            outdatedSnackbar.dismiss();
-        else
-            Log.i("outdatedSnackbar", "Null");
+//        countdown.removeCallbacksAndMessages(null);
+//        dataOutdated = false;
+//        if(outdatedSnackbar != null)
+//            outdatedSnackbar.dismiss();
+//        else
+//            Log.i("outdatedSnackbar", "Null");
     }
 
     /**
@@ -1366,12 +1366,12 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         //Reset countdown logic
-        countdown.removeCallbacksAndMessages(null);
-        dataOutdated = false;
-        if(outdatedSnackbar != null)
-            outdatedSnackbar.dismiss();
-        else
-            Log.i("outdatedSnackbar", "Null");
+//        countdown.removeCallbacksAndMessages(null);
+//        dataOutdated = false;
+//        if(outdatedSnackbar != null)
+//            outdatedSnackbar.dismiss();
+//        else
+//            Log.i("outdatedSnackbar", "Null");
     }
 
     /**

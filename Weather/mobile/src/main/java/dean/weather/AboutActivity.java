@@ -63,11 +63,11 @@ public class AboutActivity extends AppCompatActivity {
         rateLayout = (RelativeLayout) findViewById(R.id.aboutRateLayout);
         licenseLayout = (RelativeLayout) findViewById(R.id.aboutAttrLayout);
         srcLayout = (RelativeLayout) findViewById(R.id.aboutSrcLayout);
-        donateLayout = (RelativeLayout) findViewById(R.id.aboutDonateLayout);
+//        donateLayout = (RelativeLayout) findViewById(R.id.aboutDonateLayout);
         rateIcon = (ImageView) findViewById(R.id.aboutRateIcon);
         licenseIcon = (ImageView) findViewById(R.id.aboutAttrIcon);
         srcIcon = (ImageView) findViewById(R.id.aboutSrcIcon);
-        donateIcon = (ImageView) findViewById(R.id.aboutDonateIcon);
+//        donateIcon = (ImageView) findViewById(R.id.aboutDonateIcon);
 
         //Set the color of the layout
         Window window = this.getWindow();
