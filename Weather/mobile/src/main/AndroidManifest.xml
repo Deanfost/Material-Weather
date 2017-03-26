@@ -173,8 +173,6 @@
             android:exported="false">
         </service>
 
-        <!--Notification intent receiver-->
-
         <!--Boot receiver-->
         <receiver
             android:name="dean.weather.bootReceiver"

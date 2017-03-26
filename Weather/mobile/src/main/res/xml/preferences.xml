@@ -82,10 +82,5 @@
             android:key="@string/support_feedback_key">
         </Preference>
 
-        <!-- Shows modal that is connected with Google Merchant API, shows IAPs to donate-->
-        <Preference
-            android:title="Support developer"
-            android:key="@string/support_donate_key" />
-
     </PreferenceCategory>
 </PreferenceScreen>

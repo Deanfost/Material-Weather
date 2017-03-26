@@ -2,19 +2,12 @@ package dean.weather;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.NotificationManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.RemoteException;
+import android.os.Bundle;;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -34,13 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
 import com.google.firebase.FirebaseApp;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by Dean on 12/23/2016.
@@ -53,7 +41,6 @@ public class settingsActivity extends PreferenceActivity{
     SwitchPreference alertNotif;
     Preference tutorialPref;
     Preference feedbackPref;
-    Preference supportPref;
     boolean performChecksReturn;
     int setID = MainActivity.setID;
 
@@ -75,7 +62,6 @@ public class settingsActivity extends PreferenceActivity{
             alertNotif = (SwitchPreference) findPreference(getString(R.string.alert_notif_key));
             tutorialPref = findPreference(getResources().getString(R.string.support_tutorial_key));
             feedbackPref = findPreference(getResources().getString(R.string.support_feedback_key));
-            supportPref = findPreference(getResources().getString(R.string.support_donate_key));
 
             //Color accents
                 switch(setID){
@@ -219,7 +205,6 @@ public class settingsActivity extends PreferenceActivity{
         alertNotif.setOnPreferenceChangeListener(null);
         tutorialPref.setOnPreferenceClickListener(null);
         feedbackPref.setOnPreferenceClickListener(null);
-        supportPref.setOnPreferenceClickListener(null);
     }
 
     //Checks and callbacks
