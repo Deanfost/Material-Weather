@@ -68,7 +68,7 @@ public class alarmInterfaceService extends Service {
                             PendingIntent ongoingAlarmIntent = PendingIntent.getService(this, 0, ongoingServiceIntent, 0);
 
                             alarmManager.cancel(ongoingAlarmIntent);
-                            
+
                         }
                         else{
                             Log.i("AlarmInterfaceService", "Both services are not disabled");

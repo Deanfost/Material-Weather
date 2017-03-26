@@ -244,46 +244,5 @@
                 android:layout_below="@id/aboutSrcTitle"/>
         </RelativeLayout>
 
-        <!-- Donate -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_65sdp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/_20sdp"
-            android:paddingTop="@dimen/_7sdp"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground"
-            android:id="@+id/aboutDonateLayout">
-
-            <ImageView
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_heart_black"
-                android:tint="@color/colorBlue"
-                android:layout_gravity="center_vertical"
-                android:id="@+id/aboutDonateIcon"
-                android:elevation="@dimen/_2sdp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Donate"
-                android:textSize="@dimen/_16sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_toRightOf="@id/aboutDonateIcon"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:id="@+id/aboutDonateTitle"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Support the developer."
-                android:textSize="@dimen/_12sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_toRightOf="@id/aboutDonateIcon"
-                android:layout_below="@id/aboutDonateTitle"/>
-        </RelativeLayout>
-
     </LinearLayout>
 </LinearLayout>
