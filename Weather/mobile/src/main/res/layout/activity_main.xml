@@ -22,12 +22,4 @@
         android:id="@+id/mainContentView">
     </FrameLayout>
 
-    <!--<com.google.android.gms.ads.AdView-->
-        <!--android:id="@+id/adViewMain"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--ads:adSize="BANNER"-->
-        <!--ads:adUnitId="@string/main_banner_ad_unit_id">-->
-    <!--</com.google.android.gms.ads.AdView>-->
-
 </LinearLayout>

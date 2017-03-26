@@ -46,87 +46,7 @@ import java.util.ArrayList;
  * Created by Dean on 12/23/2016.
  */
 
-public class settingsActivity extends PreferenceActivity implements IabDialogFragment.BillingDialogListener{
-    //In app billing
-    IInAppBillingService billingService;
-    int donationPriceOne;
-    int donationPriceTwo;
-    int donationPriceThree;
-    int donationPriceFour;
-    Object skuOne;
-    Object skuTwo;
-    Object skuThree;
-    Object skuFour;
-    ServiceConnection billingServiceConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            billingService = null;
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
-            billingService = IInAppBillingService.Stub.asInterface(service);
-
-            //Setup a list of item ids for items to purchase
-            ArrayList<String> skuList = new ArrayList<> ();
-            skuList.add("Donation - $0.99");
-            skuList.add("Donation - $1.99");
-            skuList.add("Donation - $4.99");
-            skuList.add("Donation - $9.99");
-            final Bundle querySkus = new Bundle();
-            querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
-
-            //Retrieve item information from google play
-            try {
-                //TODO - MOVE THIS TO A NEW THREAD
-                Bundle skuDetails = billingService.getSkuDetails(3,
-                        getPackageName(), "inapp", querySkus);
-
-                int response = skuDetails.getInt("RESPONSE_CODE");
-                if(response == 0){
-                    ArrayList<String> responseList
-                            = skuDetails.getStringArrayList("DETAILS_LIST");
-
-                    //Get item prices
-                    for (String thisResponse : responseList) {
-                        JSONObject object = new JSONObject(thisResponse);
-                        String sku = object.getString("productId");
-                        String price = object.getString("price");
-                        switch (sku) {
-                            case "Donation - $0.99":
-                                donationPriceOne = Integer.valueOf(price);
-                                skuOne = sku;
-                                break;
-                            case "Donation - $1.99":
-                                donationPriceTwo = Integer.valueOf(price);
-                                skuTwo = sku;
-                                break;
-                            case "Donation - $4.99":
-                                donationPriceThree = Integer.valueOf(price);
-                                skuThree = sku;
-                                break;
-                            case "Donation - $9.99":
-                                donationPriceFour = Integer.valueOf(price);
-                                skuFour = sku;
-                                break;
-                        }
-                    }
-
-                    //Show the billing dialog
-                    DialogFragment dialog = new IabDialogFragment();
-                    dialog.show(getFragmentManager(), "Donation");
-                }
-                else{
-                    Toast.makeText(settingsActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    };
+public class settingsActivity extends PreferenceActivity{
 
     //Preferences
     SwitchPreference ongoingNotif;
@@ -289,19 +209,6 @@ public class settingsActivity extends PreferenceActivity implements IabDialogFra
                 return true;
             }
         });
-
-        supportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                //Bind to the IAB service
-                Intent serviceIntent =
-                        new Intent("com.android.vending.billing.InAppBillingService.BIND");
-                serviceIntent.setPackage("com.android.vending");
-                bindService(serviceIntent, billingServiceConn, Context.BIND_AUTO_CREATE);
-
-                return true;
-            }
-        });
     }
 
     @Override
@@ -461,9 +368,7 @@ public class settingsActivity extends PreferenceActivity implements IabDialogFra
     protected void onDestroy() {
         super.onDestroy();
         Log.i("Settings Activity", "Finishing");
-        if (billingService != null) {
-            unbindService(billingServiceConn);
-        }
+
     }
 
     @Override
@@ -471,34 +376,5 @@ public class settingsActivity extends PreferenceActivity implements IabDialogFra
         Log.i("onSaveInstanceState", "Called - Settings");
         outState.putBoolean("restoring", true);
         super.onSaveInstanceState(outState);
-    }
-
-    //Click events for the billing dialog
-    @Override
-    public void onIndexOneClick() {
-        Log.i("Billing dialog", "List item one clicked");
-        try {
-            Bundle buyIntentBundle = billingService.getBuyIntent(3, getPackageName(),
-                    "Donation - $0.99", "inapp", "");
-
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onIndexTwoClick() {
-        Log.i("Billing dialog", "List item two clicked");
-    }
-
-    @Override
-    public void onIndexThreeClick() {
-        Log.i("Billing dialog", "List item three clicked");
-    }
-
-    @Override
-    public void onIndexFourClick() {
-        Log.i("Billing dialog", "List item four clicked");
     }
 }
