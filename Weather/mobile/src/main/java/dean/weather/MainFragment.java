@@ -82,6 +82,7 @@ public class MainFragment extends Fragment{
     TextView currentTemp;
     TextView currentConditions;
     TextView todaysHiLo;
+    TextView updateTime;
     TextView currentMinutely;
     TextView currentWind;
     TextView currentPrecip;
@@ -101,7 +102,6 @@ public class MainFragment extends Fragment{
     ImageView sunsetIcon;
     TextView sunriseTime;
     TextView sunsetTime;
-//    TextView updateTime;
     TextView poweredLabel;
 
     @Override
@@ -139,6 +139,7 @@ public class MainFragment extends Fragment{
         currentTemp = (TextView) getView().findViewById(R.id.currentTemp);
         currentConditions = (TextView) getView().findViewById(R.id.currentConditions);
         todaysHiLo = (TextView) getView().findViewById(R.id.todaysHiLo);
+        updateTime = (TextView) getView().findViewById(R.id.updateTime);
         currentMinutely = (TextView) getView().findViewById(R.id.currentMinutelySummary);
         currentWind = (TextView) getView().findViewById(R.id.currentDetailsWindLabel);
         currentPrecip = (TextView) getView().findViewById(R.id.currentDetailsPrecipLabel);
@@ -158,13 +159,13 @@ public class MainFragment extends Fragment{
         sunsetIcon = (ImageView) getView().findViewById(R.id.sunsetIcon);
         sunriseTime = (TextView) getView().findViewById(R.id.sunriseTime);
         sunsetTime = (TextView) getView().findViewById(R.id.sunsetTime);
-//        updateTime = (TextView) getView().findViewById(R.id.updateTime);
         poweredLabel = (TextView) getView().findViewById(R.id.poweredByForecast);
 
         //Typeface
         currentTemp.setTypeface(robotoLight);
         currentConditions.setTypeface(robotoLight);
         todaysHiLo.setTypeface(robotoLight);
+        updateTime.setTypeface(robotoLight);
         currentMinutely.setTypeface(robotoLight);
         currentWind.setTypeface(robotoLight);
         currentPrecip.setTypeface(robotoLight);
@@ -182,7 +183,6 @@ public class MainFragment extends Fragment{
         currentCloudCoverValue.setTypeface(robotoLight);
         sunriseTime.setTypeface(robotoLight);
         sunsetTime.setTypeface(robotoLight);
-//        updateTime.setTypeface(robotoLight);
         poweredLabel.setTypeface(robotoLight);
 
         //Set color
@@ -266,6 +266,7 @@ public class MainFragment extends Fragment{
         }
         currentConditions.setText(passedConditionValue);
         todaysHiLo.setText(passedHILOValue);
+        updateTime.setText(passedUpdateTimeValue);
         currentMinutely.setText(passedMinutelyValue);
         currentWindValue.setText(passedWindValue);
 
@@ -352,7 +353,6 @@ public class MainFragment extends Fragment{
 
         sunriseTime.setText(passedSunriseTimeValue);
         sunsetTime.setText(passedSunsetTimeValue);
-//        updateTime.setText(passedUpdateTimeValue);
 
         //Setup adapters and load in data for recyclerViews
         //Hourly adapter
@@ -362,17 +362,6 @@ public class MainFragment extends Fragment{
         //Daily adapter
         dailyRecyclerAdapter = new DailyAdapter(getActivity(), passedDaysValues, passedDailyCondValues, passedHIsValues, passedLOsValues, passedPrecipValues);
         dailyRecyclerView.setAdapter(dailyRecyclerAdapter);
-
-//        //Top layout anim
-//        Animator topSlideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in);
-//        topSlideIn.setTarget(topLayout);
-//        topSlideIn.start();
-//
-//        //Lower layout anim
-//        Animator slideIn = AnimatorInflater.loadAnimator(getActivity(), R.animator.slide_in_lower);
-//        slideIn.setTarget(wrapperLayout);
-//        slideIn.setStartDelay(100);
-//        slideIn.start();
     }
         /**
          * Saves passed values from mainActivity to fragment lists.

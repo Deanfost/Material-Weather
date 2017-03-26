@@ -1505,7 +1505,7 @@ public class MainActivity extends AppCompatActivity implements
         getAddresses();
         getDay();
         getDate();
-//        getUpdateTime();
+        getUpdateTime();
     }
 
     /**
@@ -1541,14 +1541,22 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Gets the time of the update call(current time).
      */
-//    private void getUpdateTime(){
-//        //TODO - Make sure to account for the units the system has set(AM/PM or 24 hour time)
-//        Date time = new Date();
-//        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
-//        Calendar calendar = Calendar.getInstance();
-//        SimpleDateFormat format = new SimpleDateFormat("MMMM d");
-//        updateTime = "Updated " + format.format(calendar.getTime()) + ", " + timeFormat.format(time.getTime());
-//    }
+    private void getUpdateTime(){
+        Date time = new Date();
+        if(hourFormat == 0){
+            //12 hour time
+            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat("MMMM d");
+            updateTime = "Updated - " + timeFormat.format(time.getTime());
+        }
+        else{
+            //24 hour time
+            SimpleDateFormat timeFormat = new SimpleDateFormat("kk:mm");
+            Calendar calendar = Calendar.getInstance();
+            updateTime = "Updated - " + timeFormat.format(time.getTime());
+        }
+    }
 
     /**
      * Gets current UNIX timestamp.
