@@ -37,7 +37,7 @@ public class AboutActivity extends AppCompatActivity {
     ImageView rateIcon;
     ImageView licenseIcon;
     ImageView srcIcon;
-    ImageView donateIcon;
+//    ImageView donateIcon;
     int setID = MainActivity.setID;
 
     @Override
@@ -91,7 +91,7 @@ public class AboutActivity extends AppCompatActivity {
                     rateIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
                     licenseIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
                     srcIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
-                    donateIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
+//                    donateIcon.setColorFilter(getResources().getColor(R.color.colorYellow));
                     window.setStatusBarColor(getResources().getColor(R.color.colorYellowDark));
                     break;
                 case 1:
@@ -101,7 +101,7 @@ public class AboutActivity extends AppCompatActivity {
                     rateIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
                     licenseIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
                     srcIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
-                    donateIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
+//                    donateIcon.setColorFilter(getResources().getColor(R.color.colorBlue));
                     window.setStatusBarColor(getResources().getColor(R.color.colorBlueDark));
                     break;
                 case 2:
@@ -111,7 +111,7 @@ public class AboutActivity extends AppCompatActivity {
                     rateIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
                     licenseIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
                     srcIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
-                    donateIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
+//                    donateIcon.setColorFilter(getResources().getColor(R.color.colorOrange));
                     window.setStatusBarColor(getResources().getColor(R.color.colorOrangeDark));
                     break;
                 case 3:
@@ -121,7 +121,7 @@ public class AboutActivity extends AppCompatActivity {
                     rateIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
                     licenseIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
                     srcIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
-                    donateIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
+//                    donateIcon.setColorFilter(getResources().getColor(R.color.colorPurple));
                     window.setStatusBarColor(getResources().getColor(R.color.colorPurpleDark));
                     break;
             }
@@ -166,15 +166,15 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        donateLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("aboutActivity", "donate clicked");
-                Snackbar snackbar = Snackbar
-                        .make(parentLayout, "Coming soon.", Snackbar.LENGTH_SHORT);
-                snackbar.show();
-            }
-        });
+//        donateLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.i("aboutActivity", "donate clicked");
+//                Snackbar snackbar = Snackbar
+//                        .make(parentLayout, "Coming soon.", Snackbar.LENGTH_SHORT);
+//                snackbar.show();
+//            }
+//        });
         super.onResume();
     }
 
@@ -183,7 +183,7 @@ public class AboutActivity extends AppCompatActivity {
         rateLayout.setOnClickListener(null);
         licenseLayout.setOnClickListener(null);
         srcLayout.setOnClickListener(null);
-        donateLayout.setOnClickListener(null);
+//        donateLayout.setOnClickListener(null);
         super.onPause();
     }
 

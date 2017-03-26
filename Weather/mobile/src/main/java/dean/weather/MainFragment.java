@@ -316,7 +316,7 @@ public class MainFragment extends Fragment{
             if(passedTempValue == -1)
                 currentTemp.setText("---");
             else
-                currentTemp.setText(passedTempValue + "\u00B0" + "F");
+                currentTemp.setText(passedTempValue + "\u00B0" + "C");
 
             if(passedPrecipValue == -1)
                 currentPrecipValue.setText("---");
