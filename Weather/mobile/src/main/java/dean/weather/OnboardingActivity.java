@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -33,6 +34,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
  * Created by DeanF on 10/29/2016.
  */
 
+@Keep
 public class OnboardingActivity extends IntroActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     static int PERMISSIONS_REQUEST = 42;
     private Fragment onBoardingFragPermissions;
@@ -50,7 +52,6 @@ public class OnboardingActivity extends IntroActivity implements GoogleApiClient
         FirebaseApp.initializeApp(this);
         currentActivity = this;
 
-        //TODO - ADD LOGIC TO TEST FOR LOCATION SETTINGS
         //Connect to GoogleApiClient
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)

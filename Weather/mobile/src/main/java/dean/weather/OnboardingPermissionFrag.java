@@ -1,6 +1,7 @@
 package dean.weather;
 
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.google.firebase.FirebaseApp;
  * Created by DeanF on 10/30/2016.
  */
 
+@Keep
 public class OnboardingPermissionFrag extends Fragment {
     Button btnRequestPermissions;
 

@@ -1,6 +1,7 @@
 package dean.weather;
 
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.google.firebase.FirebaseApp;
  * Created by Dean Foster on 3/5/2017.
  */
 
+@Keep
 public class OnboardingSettingsFrag extends Fragment {
     Button btnFixSettings;
 
