@@ -1420,7 +1420,7 @@ public class MainActivity extends AppCompatActivity implements
             setMainLayoutColor(1);
         }
         else{
-            Log.i("laodingTransaction", "!isRunning");
+            Log.i("loadingTransaction", "!isRunning");
             loadingPending = true;
         }
     }

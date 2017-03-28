@@ -565,7 +565,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
             //You know its working when this happens
-            createOngoingTestNotif();
+//            createOngoingTestNotif();
 
         } else {
             //Create notification asking the user to try again
@@ -759,31 +759,31 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     /**
      * Creates test notification to go along with actual ongoing notif.
      */
-    private void createOngoingTestNotif(){
-        NotificationCompat.Builder notifBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_check_color)
-                        .setContentTitle("Update")
-                        .setContentText("Updated weather notification");
-        notifBuilder.setAutoCancel(true);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(1);
-        mNotificationManager.notify(1, notifBuilder.build());
-    }
+//    private void createOngoingTestNotif(){
+//        NotificationCompat.Builder notifBuilder =
+//                new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.drawable.ic_check_color)
+//                        .setContentTitle("Update")
+//                        .setContentText("Updated weather notification");
+//        notifBuilder.setAutoCancel(true);
+//        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.cancel(1);
+//        mNotificationManager.notify(1, notifBuilder.build());
+//    }
 
     /**
      * Creates test notification every time the alert service is updated.
      */
-    private void createAlertTestNotif(){
-        NotificationCompat.Builder notifBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_info_white)
-                        .setContentTitle("Update")
-                        .setContentText("Updated alert notification");
-        notifBuilder.setAutoCancel(true);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, notifBuilder.build());
-    }
+//    private void createAlertTestNotif(){
+//        NotificationCompat.Builder notifBuilder =
+//                new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.drawable.ic_info_white)
+//                        .setContentTitle("Update")
+//                        .setContentText("Updated alert notification");
+//        notifBuilder.setAutoCancel(true);
+//        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(0, notifBuilder.build());
+//    }
 
     //Dark Sky API
 
@@ -1007,7 +1007,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                     }
 
                     //Its working!
-                    createAlertTestNotif();
+//                    createAlertTestNotif();
                 }
 
                 //Kill the connection

@@ -1,8 +1,11 @@
 package dean.weather;
 
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.FirebaseApp;
+
+import java.util.List;
 
 /**
  * Created by Dean Foster on 2/7/2017.
@@ -138,10 +143,30 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("aboutActivity", "rate clicked");
-                //TODO - MOVE TO THE APP'S PAGE
-                Snackbar snackbar = Snackbar
-                        .make(parentLayout, "Coming soon.", Snackbar.LENGTH_SHORT);
-                snackbar.show();
+                boolean marketFound = false;
+                String appId = getPackageName();
+                Intent rateIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appId));
+                final List<ResolveInfo> otherApps = getPackageManager().queryIntentActivities(rateIntent, 0);
+                for (ResolveInfo otherApp: otherApps) {
+                    //Find the actual google play app
+                    if (otherApp.activityInfo.applicationInfo.packageName.equals("com.android.vending")) {
+                        ActivityInfo otherAppActivity = otherApp.activityInfo;
+                        ComponentName componentName = new ComponentName(otherAppActivity.applicationInfo.packageName, otherAppActivity.name);
+                        rateIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        rateIntent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                        rateIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        rateIntent.setComponent(componentName);
+                        startActivity(rateIntent);
+                        marketFound = true;
+                        break;
+                    }
+                }
+
+                //If there is no google play app, open the browser
+                if(!marketFound){
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+appId));
+                    startActivity(webIntent);
+                }
             }
         });
 
