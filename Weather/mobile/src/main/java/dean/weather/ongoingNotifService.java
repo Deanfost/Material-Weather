@@ -219,9 +219,12 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 if (addressList.get(0).getLocality() != null) {
                     currentAddress = addressList.get(0).getLocality();//Assign locality if available
                     Log.i("getLocality", addressList.get(0).getLocality());
-                } else {
+                } else if (addressList.get(0).getSubAdminArea() != null){
                     currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
                     Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+                }
+                else{
+                    currentAddress = "---";
                 }
             } else {
                 Log.i("getLocality", "No localities found.");
@@ -311,9 +314,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                     //Request for a location update, and execute rest of logic when a new location is returned
                                     if(googleApiClient.isConnected()){
                                         startLocationUpdates();
-                                    }
-                                    else{
-                                        googleApiClient.connect();
                                     }
                                 }
                             } catch (SecurityException e) {
@@ -564,7 +564,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 
@@ -676,7 +675,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             notificationBuilder.setContentIntent(resultPendingIntent);
             notificationBuilder.setOngoing(true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
             notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
             notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
 

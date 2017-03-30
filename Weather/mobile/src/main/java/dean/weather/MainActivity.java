@@ -192,9 +192,6 @@ public class MainActivity extends AppCompatActivity implements
                 Log.i("GoogleAPIClient", "Creating new instance");
             }
 
-            //Connect to the Google API
-            googleApiClient.connect();
-
             //Customize toolbar
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -214,6 +211,9 @@ public class MainActivity extends AppCompatActivity implements
             //Set default layout color(blue)
             setID = 1;
             setMainLayoutColor(1);
+
+            //Connect to the Google API
+            googleApiClient.connect();
     }
 
     //Action bar events
@@ -393,16 +393,26 @@ public class MainActivity extends AppCompatActivity implements
                 if(addressList.get(0).getLocality()!= null){
                     currentLocation = addressList.get(0).getLocality();//Assign locality if available
                     Log.i("getLocality", addressList.get(0).getLocality());
+
+                    //Save the last location for future reference by the ongoing notification
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(getString(R.string.last_location_key), currentLocation);
+                    editor.apply();
                 }
-                else{
+                else if(addressList.get(0).getSubAdminArea() != null){
                     currentLocation = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
                     Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+
+                    //Save the last location for future reference by the ongoing notification
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(getString(R.string.last_location_key), currentLocation);
+                    editor.apply();
                 }
-                //Save the last location for future reference by the ongoing notification
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(getString(R.string.last_location_key), currentLocation);
-                editor.apply();
+                else{
+                    currentLocation = "---";
+                }
             }
             else{
                 Log.i("getLocality", "No localities found.");
@@ -484,23 +494,25 @@ public class MainActivity extends AppCompatActivity implements
                                     else{
                                         //Pull a location update
                                         Log.i("mainActivity", "Last location unavailable");
-                                        startLocationUpdates();
+                                        if(googleApiClient.isConnected()){
+                                            startLocationUpdates();
 
-                                        //Setup a timeout
-                                        final Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //Stop the location updates after 20 seconds, show the user the location unavailable fragment
-                                                if(googleApiClient.isConnected()){
-                                                    stopLocationUpdates();
-                                                    googleApiClient.disconnect();
+                                            //Setup a timeout
+                                            final Handler handler = new Handler();
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    //Stop the location updates after 20 seconds, show the user the location unavailable fragment
+                                                    if(googleApiClient.isConnected()){
+                                                        stopLocationUpdates();
+                                                        googleApiClient.disconnect();
+                                                    }
+                                                    //Only show this fragment if the updates didn't work
+                                                    if(lastLocation == null)
+                                                        locationUnavailableFragmentTransaction();
                                                 }
-                                                //Only show this fragment if the updates didn't work
-                                                if(lastLocation == null)
-                                                    locationUnavailableFragmentTransaction();
-                                            }
-                                        }, 20000);
+                                            }, 20000);
+                                        }
                                     }
                                 }
                                 catch (SecurityException e){

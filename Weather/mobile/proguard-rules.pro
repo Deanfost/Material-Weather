@@ -17,27 +17,28 @@
 #}
 
 -optimizationpasses 5
--assumenosideeffects class android.util.Log{
-    public static *** d(...);
-    public static *** v(...);
-}
+
 -dontwarn com.facebook.android.BuildConfig
-
 -dontwarn rx.**
-
 -dontwarn okio.**
-
 -dontwarn com.squareup.okhttp.*
-
 -dontwarn retrofit.appengine.UrlFetchClient
 
--keepattributes *Annotation*
-
 -keep class retrofit.** { *; }
+-keep class com.johnhiott.darkskyandroidlib** { *; }
 
 -keepclasseswithmembers class * {
     @retrofit.http.* <methods>;
 }
 
 -keepattributes Signature
--keep class com.johnhiott.darkskyandroidlib** { *; }
+-keepattributes *Annotation*
+
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
