@@ -264,7 +264,6 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.i("NotifService", "GoogleAPIClient connected");
-        //TODO - CHECK TO SEE IF THE USER HAS A DEFAULT LOCATION SET/IF THE USER WANTS A LOCATION REPORT
         int locationPermissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         //If we have location permissions, check for location settings, if not, then end the service
         if (locationPermissionCheck == PackageManager.PERMISSION_GRANTED) {
@@ -310,7 +309,12 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 } else {
                                     Log.i("notifService", "Unable to gather location");
                                     //Request for a location update, and execute rest of logic when a new location is returned
-                                    startLocationUpdates();
+                                    if(googleApiClient.isConnected()){
+                                        startLocationUpdates();
+                                    }
+                                    else{
+                                        googleApiClient.connect();
+                                    }
                                 }
                             } catch (SecurityException e) {
                                 Log.e("LocationPermission", "Permission denied");

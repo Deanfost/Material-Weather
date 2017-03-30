@@ -40,3 +40,4 @@
 }
 
 -keepattributes Signature
+-keep class com.johnhiott.darkskyandroidlib** { *; }
