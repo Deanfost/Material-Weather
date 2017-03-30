@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -34,6 +35,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.LoginFilter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,8 +45,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -56,6 +60,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.security.ProviderInstaller;
 import com.google.firebase.FirebaseApp;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
@@ -80,7 +85,7 @@ import retrofit.client.Response;
 @Keep
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, NoConnectionFragment.connectionRefresher,
-        LocationUnavailableFragment.dataFetcher{
+        LocationUnavailableFragment.dataFetcher, ProviderInstaller.ProviderInstallListener{
 
     //Layout
     Toolbar toolbar;
@@ -167,53 +172,85 @@ public class MainActivity extends AppCompatActivity implements
     private boolean noConnectionPending = false;
     private boolean locationUnavPending = false;
 
-    //Data updates
-//    boolean dataOutdated = false;
-//    final Handler countdown = new Handler();
-//    Snackbar outdatedSnackbar;
+    //Security updates
+    private static final int ERROR_DIALOG_REQUEST_CODE = 1;
+    private boolean mRetryProviderInstall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("onCreate", "started");
-            //Firebase
-            FirebaseApp.initializeApp(this);
+        //Firebase
+        FirebaseApp.initializeApp(this);
 
-            //Set content view
-            setContentView(R.layout.activity_main);
+        //Set content view
+        setContentView(R.layout.activity_main);
 
-            //Create an instance of GoogleAPIClient
-            if (googleApiClient == null) {
-                googleApiClient = new GoogleApiClient.Builder(this)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .addApi(LocationServices.API)
-                        .build();
-                Log.i("GoogleAPIClient", "Creating new instance");
-            }
+        //Create an instance of GoogleAPIClient
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            Log.i("GoogleAPIClient", "Creating new instance");
+        }
 
-            //Customize toolbar
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        //Customize toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            //Customize the app bar
-            assert toolbar != null;
-            assert getSupportActionBar() != null;
-            getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlue)));
+        //Customize the app bar
+        assert toolbar != null;
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBlue)));
 
-            //Reference to mainLayout
-            mainActivityLayout = (LinearLayout) findViewById(R.id.mainActivityLayout);
+        //Reference to mainLayout
+        mainActivityLayout = (LinearLayout) findViewById(R.id.mainActivityLayout);
 
-            //Initialize loading fragment at start
-            loadingFragmentTransaction();
+        //Initialize loading fragment at start
+        loadingFragmentTransaction();
 
-            //Set default layout color(blue)
-            setID = 1;
-            setMainLayoutColor(1);
+        //Set default layout color(blue)
+        setID = 1;
+        setMainLayoutColor(1);
 
-            //Connect to the Google API
-            googleApiClient.connect();
+//      //Connect to the Google API
+//      googleApiClient.connect();
+
+        //Determine if the security provider is up to date
+        ProviderInstaller.installIfNeededAsync(this, this);
+    }
+
+    //Security provider callbacks
+    @Override
+    public void onProviderInstalled() {
+        Log.i("Main", "Provider is up to date");
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onProviderInstallFailed(int i, Intent intent) {
+        if (GooglePlayServicesUtil.isUserRecoverableError(i)) {
+            // Recoverable error. Show a dialog prompting the user to
+            // install/update/enable Google Play services.
+            GooglePlayServicesUtil.showErrorDialogFragment(i, this, ERROR_DIALOG_REQUEST_CODE, new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            // The user chose not to take the recovery action
+                            onProviderInstallerNotAvailable();
+                        }
+                    });
+        } else {
+            // Google Play services is not available.
+            onProviderInstallerNotAvailable();
+        }
+    }
+
+    private void onProviderInstallerNotAvailable(){
+        Log.i("Main", "Unable to update the security provider");
+        googleApiClient.connect();
     }
 
     //Action bar events
@@ -316,8 +353,8 @@ public class MainActivity extends AppCompatActivity implements
         //Get latitude and longitude for DarkSky API
         latitude = lastLocation.getLatitude();
         longitude = lastLocation.getLongitude();
-        Log.i("Latitude", String.valueOf(latitude));
-        Log.i("Longitude", String.valueOf(longitude));
+//        Log.i("Latitude", String.valueOf(latitude));
+//        Log.i("Longitude", String.valueOf(longitude));
         //Determine if a geocoder is available
         if(!Geocoder.isPresent()){
             Log.i("Geocoder", "Unavailable");
@@ -359,6 +396,10 @@ public class MainActivity extends AppCompatActivity implements
                     break;
             }
         }
+        //Check the result of the security update
+        else if(requestCode == ERROR_DIALOG_REQUEST_CODE){
+            mRetryProviderInstall = true;
+        }
     }
 
     //Location
@@ -392,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements
             if (addressList.size() > 0) {
                 if(addressList.get(0).getLocality()!= null){
                     currentLocation = addressList.get(0).getLocality();//Assign locality if available
-                    Log.i("getLocality", addressList.get(0).getLocality());
+//                    Log.i("getLocality", addressList.get(0).getLocality());
 
                     //Save the last location for future reference by the ongoing notification
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -402,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 else if(addressList.get(0).getSubAdminArea() != null){
                     currentLocation = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
-                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+//                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
 
                     //Save the last location for future reference by the ongoing notification
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -1296,6 +1337,16 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }, 1000);
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (mRetryProviderInstall) {
+            // We can now safely retry installation.
+            ProviderInstaller.installIfNeededAsync(this, this);
+        }
+        mRetryProviderInstall = false;
     }
 
     @Override

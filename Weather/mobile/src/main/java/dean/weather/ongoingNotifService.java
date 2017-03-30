@@ -218,10 +218,10 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             if (addressList.size() > 0) {
                 if (addressList.get(0).getLocality() != null) {
                     currentAddress = addressList.get(0).getLocality();//Assign locality if available
-                    Log.i("getLocality", addressList.get(0).getLocality());
+//                    Log.i("getLocality", addressList.get(0).getLocality());
                 } else if (addressList.get(0).getSubAdminArea() != null){
                     currentAddress = addressList.get(0).getSubAdminArea();//Assign the county if there is no locality
-                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
+//                    Log.i("getSubAdminArea", addressList.get(0).getSubAdminArea());
                 }
                 else{
                     currentAddress = "---";
@@ -298,8 +298,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                     //Get latitude and longitude of last known location
                                     latitude = lastLocation.getLatitude();
                                     longitude = lastLocation.getLongitude();
-                                    Log.i("Latitude", String.valueOf(latitude));
-                                    Log.i("Longitude", String.valueOf(longitude));
+//                                    Log.i("Latitude", String.valueOf(latitude));
+//                                    Log.i("Longitude", String.valueOf(longitude));
                                     //Determine if a geocoder is available
                                     if (!Geocoder.isPresent()) {
                                         Log.i("Geocoder", "Unavailable");
