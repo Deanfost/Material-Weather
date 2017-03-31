@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="@dimen/_165sdp"
         android:layout_height="wrap_content"
-        android:text="Material Weather requires location services to function properly. Please enable Google location services."
+        android:text="Material Weather requires location services to function properly. Please enable Google's location service."
         android:textSize="17sp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"

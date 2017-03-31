@@ -470,7 +470,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         if (successful) {
             //Create the weather notification
             int iconID;
-            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_older);
+            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.custom_notif);
             //Set icon
             switch (currentIcon) {
                 case "clear-day":

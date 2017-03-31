@@ -255,16 +255,18 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                         stopOngoing.putExtra("repeatNotif", false);
                         startService(stopOngoing);
 
-                        //End the alerts alarm
-                        Intent stopAlerts = new Intent(IntroActivity.this, alarmInterfaceService.class);
-                        stopAlerts.putExtra("alertNotif", false);
-                        startService(stopAlerts);
+                        //Cancel the notifs
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+                        notificationManager.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                        notificationManager.cancel(MainActivity.ALERT_NOTIF_ID);
+
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         //Check for airplane mode
                         if(Settings.System.getInt(IntroActivity.this.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0){
                             Log.i("IntroActivity", "Airplane mode enabled");
-                            //Airplane mode is on, show layout, and disable services
+                            //Airplane mode is on, show layout
                             setContentView(R.layout.airplane_mode_activity);
                             //Setup references and customizations for layout
                             Window window1 = IntroActivity.this.getWindow();
@@ -306,10 +308,12 @@ public class IntroActivity extends AppCompatActivity implements GoogleApiClient.
                             stopOngoing1.putExtra("repeatNotif", false);
                             startService(stopOngoing1);
 
-                            //End the alerts alarm
-                            Intent stopAlerts1 = new Intent(IntroActivity.this, alarmInterfaceService.class);
-                            stopAlerts1.putExtra("alertNotif", false);
-                            startService(stopAlerts1);
+                            //Cancel the notifs
+                            NotificationManager notificationManager1 = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            notificationManager1.cancel(MainActivity.FOLLOW_NOTIF_ERROR_ID);
+                            notificationManager1.cancel(MainActivity.FOLLOW_NOTIF_ID);
+                            notificationManager1.cancel(MainActivity.ALERT_NOTIF_ID);
+
                         }
                         break;
                 }

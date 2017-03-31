@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;;
+import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -224,7 +224,7 @@ public class settingsActivity extends PreferenceActivity{
             }
             else{
                 //Show a toast asking the user to enable location services
-                Toast.makeText(this, "Please enable location services", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enable Google's location service", Toast.LENGTH_SHORT).show();
                 performChecksReturn = false;
             }
         }

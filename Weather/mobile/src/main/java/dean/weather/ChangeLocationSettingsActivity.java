@@ -109,6 +109,7 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         //Override onBackPressed
+
     }
 
     /**
@@ -178,7 +179,7 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity implements
 
                 switch (locationStatus.getStatusCode()){
                     case LocationSettingsStatusCodes.SUCCESS:
-                        //Settings are fine, how did we get here? (Probs airplane mode)
+                        //Settings are fine, how did we get here?
                         Log.i("ChangeLocSettingsFrag", "Settings are fine");
                         //Move to main
                         finish();
