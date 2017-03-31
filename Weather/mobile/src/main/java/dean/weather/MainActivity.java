@@ -35,7 +35,6 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.LoginFilter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +44,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -519,8 +517,8 @@ public class MainActivity extends AppCompatActivity implements
                                         //Get latitude and longitude for DarkSky API
                                         latitude = lastLocation.getLatitude();
                                         longitude = lastLocation.getLongitude();
-                                        Log.i("Latitude", String.valueOf(latitude));
-                                        Log.i("Longitude", String.valueOf(longitude));
+//                                        Log.i("Latitude", String.valueOf(latitude));
+//                                        Log.i("Longitude", String.valueOf(longitude));
                                         //Determine if a geocoder is available
                                         if(!Geocoder.isPresent()){
                                             Log.i("Geocoder", "Unavailable");

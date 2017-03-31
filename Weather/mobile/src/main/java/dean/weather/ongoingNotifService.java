@@ -443,8 +443,8 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
         //Get latitude and longitude of last known location
         latitude = lastLocation.getLatitude();
         longitude = lastLocation.getLongitude();
-        Log.i("Latitude", String.valueOf(latitude));
-        Log.i("Longitude", String.valueOf(longitude));
+//        Log.i("Latitude", String.valueOf(latitude));
+//        Log.i("Longitude", String.valueOf(longitude));
 
         //Determine if a geocoder is available
         if (!Geocoder.isPresent()) {
