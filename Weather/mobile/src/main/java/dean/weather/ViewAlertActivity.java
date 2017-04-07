@@ -110,6 +110,15 @@ public class ViewAlertActivity extends AppCompatActivity {
             editor.putLong(alertSrc + ".Seen", alertTime);
             editor.apply();
         }
+
+        //Add a new key-value pair to the store for the alerts if it is enabled
+        if(preferences.getBoolean(getResources().getString(R.string.alert_notif_key), false)){
+            if(!preferences.contains(alertSrc + ".Alert")){
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong(alertSrc + ".Alert", alertTime);
+                editor.apply();
+            }
+        }
     }
 
     @Override

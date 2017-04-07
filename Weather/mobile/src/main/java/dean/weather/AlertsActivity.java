@@ -213,6 +213,7 @@ public class AlertsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //Refresh the alert icons
         if(alertsExist){
             for(int i = 0; i < alertsList.size(); i++){
                 alertsAdapter.notifyItemChanged(i);
