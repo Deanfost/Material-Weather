@@ -551,7 +551,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             }
 
             //Set high and low
-            notificationView.setTextViewText(R.id.notifBody, "Hi - " + currentHi + "° Lo - " + currentLo + "°");
+            notificationView.setTextViewText(R.id.notifBody, "Lo - " + currentLo + "° Hi - " + currentHi + "°");
             //Build the notification
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
@@ -666,7 +666,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
                             .setContentTitle(currentTempString + "° - " + currentCondition)
-                            .setContentTitle(currentHi + "°/" + currentLo + "° · " + localCurrentAddress)
+                            .setContentTitle(currentLo + "°/" + currentHi + "° · " + localCurrentAddress)
                             .setSmallIcon(iconID);
             //Intent to go to main activity
             Intent mainIntent = new Intent(this, IntroActivity.class);

@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hi - 49&#xb0; Lo - 22&#xb0;"
+        android:text="Lo - 22&#xb0; Hi - 49&#xb0;"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
