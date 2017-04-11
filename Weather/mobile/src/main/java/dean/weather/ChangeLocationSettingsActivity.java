@@ -109,7 +109,6 @@ public class ChangeLocationSettingsActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         //Override onBackPressed
-
     }
 
     /**

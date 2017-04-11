@@ -1102,10 +1102,10 @@ public class MainActivity extends AppCompatActivity implements
                         alertSnackbar.show();
 
                         //Log the new alerts
-                        Log.i("alerts", weatherResponse.getAlerts().size() + "");
+                        Log.i("New alerts", weatherResponse.getAlerts().size() + "");
                         for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
-                            Log.i("Alert", weatherResponse.getAlerts().get(i).getTitle());
-                            Log.i("Alert", weatherResponse.getAlerts().get(i).getDescription());
+                            Log.i("New alert", weatherResponse.getAlerts().get(i).getTitle());
+                            Log.i("New alert", weatherResponse.getAlerts().get(i).getDescription());
                         }
 
                         //Update the alert notif alerts base if enabled
@@ -1133,7 +1133,7 @@ public class MainActivity extends AppCompatActivity implements
                                 editor.putLong(alertURI + ".Alert", alertIssueTime);
                             }
 
-                            //Check to see if it has been 48 hours, if we can remove any persisted alerts from sharedPrefs
+                            //Check to see if it has been 48 hours, if we can remove any persisted alerts for notifs
                             Map<String,?> sharedPrefsKeys = prefs.getAll();
                             for(String key : sharedPrefsKeys.keySet()){
                                 Log.i("Printing key", key);
@@ -1173,17 +1173,52 @@ public class MainActivity extends AppCompatActivity implements
                     editor.apply();
 
                 }
-                //Log stored alerts
                 else{
                     Log.i("alerts", "null");
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    //Log stored alerts
                     Map<String,?> sharedPrefsKeys = prefs.getAll();
+                    for(String key : sharedPrefsKeys.keySet()) {
+                        Log.i("Printing key", key);
+                        if (key.contains(".Alert")) {
+                            Log.i("Key", "Contains .Alert");
+                        } else if (key.contains(".Seen")) {
+                            Log.i("Key", "Contains .Seen");
+                        }
+                    }
+
+                    //Check to see if it has been 48 hours, if we can remove any persisted alerts for notifs
                     for(String key : sharedPrefsKeys.keySet()){
                         Log.i("Printing key", key);
                         if(key.contains(".Alert")){
+                            //Get the issuance time of the alert in UNIX * 1000
                             Log.i("Key", "Contains .Alert");
+                            Long value = (Long) sharedPrefsKeys.get(key);
+                            //If 48 hours has passed since the issuance of the alert
+                            if(System.currentTimeMillis() >= value + 172800000){
+                                //Remove the alert
+                                Log.i("Removing alert pair", key);
+                                editor.remove(key);
+                            }
                         }
                     }
+
+                    //Make sure to remove the seen key-value pairs for the alert adapter after 48 hours
+                    for(String key : sharedPrefsKeys.keySet()){
+                        if(key.contains(".Seen")){
+                            //Get the issuance time of the alert in UNIX * 1000
+                            Log.i("Key", "Contains .Seen");
+                            Long value = (Long) sharedPrefsKeys.get(key);
+                            //If 48 hours has passed since the issuance of the alert
+                            if(System.currentTimeMillis() >= value + 172800000){
+                                //Remove the alert
+                                Log.i("Removing seen pair", key);
+                                editor.remove(key);
+                            }
+                        }
+                    }
+                    editor.apply();
                 }
 
                 //Set main layout color
@@ -1943,7 +1978,7 @@ public class MainActivity extends AppCompatActivity implements
         updateTime = null;
     }
 
-    //Activities
+    //Activities and nav
 
     /**
      * Launches dailyActivity with data parameters passed from dailyAdapter.

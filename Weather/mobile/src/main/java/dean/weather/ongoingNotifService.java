@@ -935,10 +935,10 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                 //Pull and parse data for the alert notif if enabled
                 if(preferences.getBoolean(getResources().getString(R.string.alert_notif_key), false)){
                     if(weatherResponse.getAlerts() != null){
-                        Log.i("alerts", weatherResponse.getAlerts().size() + "");
+                        Log.i("alerts - service", weatherResponse.getAlerts().size() + "");
                         for(int i = 0; i < weatherResponse.getAlerts().size(); i++){
-                            Log.i("Alert", weatherResponse.getAlerts().get(i).getTitle());
-                            Log.i("Alert", weatherResponse.getAlerts().get(i).getDescription());
+                            Log.i("Alert - service", weatherResponse.getAlerts().get(i).getTitle());
+                            Log.i("Alert - service", weatherResponse.getAlerts().get(i).getDescription());
                         }
 
                         //Check to see if these are new alerts
@@ -965,7 +965,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                         //Check to see if it has been 48 hours (just to be safe), and if we can remove any persisted alert from sharedPrefs
                         Map<String,?> sharedPrefsKeys = prefs.getAll();
                         for(String key : sharedPrefsKeys.keySet()){
-                            Log.i("Printing key", key);
+                            Log.i("Printing key - service", key);
                             if(key.contains(".Alert")){
                                 //Get the issuance time of the alert in UNIX format
                                 Log.i("Key", "Contains .Alert");
@@ -973,7 +973,7 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                                 //If 48 hours has passed since the issuance of the alert
                                 if(System.currentTimeMillis() >= value + 172800000){
                                     //Remove the alert
-                                    Log.i("Removing alert", key);
+                                    Log.i("Removing alert - serv", key);
                                     editor.remove(key);
                                 }
                             }
@@ -981,11 +981,11 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
                         editor.commit();
                     }
                     else{
-                        Log.i("alerts", "null");
+                        Log.i("alerts - service", "null");
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ongoingNotifService.this);
                         Map<String,?> sharedPrefsKeys = prefs.getAll();
                         for(String key : sharedPrefsKeys.keySet()){
-                            Log.i("Printing key", key);
+                            Log.i("Printing key - service", key);
                             if(key.contains(".Alert")){
                                 Log.i("Key", "Contains .Alert");
                             }
