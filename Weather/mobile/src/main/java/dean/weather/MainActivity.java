@@ -2071,7 +2071,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         //Set high and low
-        notificationView.setTextViewText(R.id.notifBody, "Hi - " + todaysHI + "° Lo - " + todaysLO + "°");
+        notificationView.setTextViewText(R.id.notifBody, "Lo - " + todaysLO + "° Hi - " + todaysHI + "°");
         //Build the notification
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
@@ -2151,7 +2151,7 @@ public class MainActivity extends AppCompatActivity implements
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
                         .setContentTitle(currentTemp + "° - " + currentConditions)
-                        .setContentText(todaysHI + "°/" + todaysLO + "° · " + notifLocation)
+                        .setContentText(todaysLO + "°/" + todaysHI + "° · " + notifLocation)
                         .setSmallIcon(iconID);
 
         //Intent to go to main activity
