@@ -36,18 +36,18 @@ public class DailyActivity extends AppCompatActivity {
     private String passedDate = "---";
     private String pulledDescription = "---";
     private String pulledLocation = "---";
-    private Integer pulledHi = -1;
-    private Integer pulledLo = -1;
+    private Integer pulledHi = -1000;
+    private Integer pulledLo = -1000;
     private String pulledIcon = "---";
     private String pulledCondition = "---";
 
     //View data for bottom layout
     private String pulledWind = "---";
-    private Integer pulledPrecip = -1;
-    private Integer pulledHumidity = -1;
-    private Integer pulledDewpoint = -1;
-    private Integer pulledPressure = -1;
-    private Integer pulledCloudCover = -1;
+    private Integer pulledPrecip = -1000;
+    private Integer pulledHumidity = -1000;
+    private Integer pulledDewpoint = -1000;
+    private Integer pulledPressure = -1000;
+    private Integer pulledCloudCover = -1000;
     private String daySunriseTime = "---";
     private String daySunsetTime = "---";
 
@@ -375,7 +375,7 @@ public class DailyActivity extends AppCompatActivity {
                 Log.i("dayHi", pulledHi.toString());
             }
             else{
-                pulledHi = -1;
+                pulledHi = -1000;
                 Log.i("dayHi", "---");
             }
 
@@ -386,7 +386,7 @@ public class DailyActivity extends AppCompatActivity {
                 Log.i("dayLo", pulledLo.toString());
             }
             else{
-                pulledLo = -1;
+                pulledLo = -1000;
                 Log.i("dayLo", "---");
             }
 
@@ -519,7 +519,7 @@ public class DailyActivity extends AppCompatActivity {
                 Log.i("dayPrecip", dayPrecipProb);
             }
             else{
-                pulledPrecip = -1;
+                pulledPrecip = -1000;
                 Log.i("dayPrecip", "---");
             }
 
@@ -531,7 +531,7 @@ public class DailyActivity extends AppCompatActivity {
                 Log.i("dayHumidity", dayHumidity);
             }
             else{
-                pulledHumidity = -1;
+                pulledHumidity = -1000;
                 Log.i("dayHumidity", "---");
             }
 
@@ -543,7 +543,7 @@ public class DailyActivity extends AppCompatActivity {
                 Log.i("dayDewPoint", dayDewPoint);
             }
             else{
-                pulledDewpoint = -1;
+                pulledDewpoint = -1000;
                 Log.i("dayDewPoint", "---");
             }
 
@@ -562,7 +562,7 @@ public class DailyActivity extends AppCompatActivity {
                 Log.i("dayPressure", dayPressure);
             }
             else {
-                pulledPressure = -1;
+                pulledPressure = -1000;
                 Log.i("dayPressure", "---");
             }
 
@@ -574,7 +574,7 @@ public class DailyActivity extends AppCompatActivity {
                 Log.i("dayCloudCover", dayCloudCover);
             }
             else{
-                pulledCloudCover = -1;
+                pulledCloudCover = -1000;
                 Log.i("dayCloudCover", "---");
             }
 
@@ -885,7 +885,7 @@ public class DailyActivity extends AppCompatActivity {
                 viewConditionsIcon.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                    viewConditionsIcon.setImageResource(R.drawable.ic_foggyday_white);
+                viewConditionsIcon.setImageResource(R.drawable.ic_foggyday_white);
                 break;
             case "cloudy":
                 viewConditionsIcon.setImageResource(R.drawable.ic_cloudy_white);
@@ -906,51 +906,51 @@ public class DailyActivity extends AppCompatActivity {
         viewConditions.setText(pulledCondition);
         String pulledHiString;
         String pulledLoString;
-        if(pulledHi == -1){
+        if(pulledHi == -1000){
             pulledHiString = "---";
         }
         else{
             pulledHiString = pulledHi.toString();
         }
 
-        if(pulledLo == -1){
+        if(pulledLo == -1000){
             pulledLoString = "---";
         }
         else{
             pulledLoString = pulledLo.toString();
         }
-        viewHiLo.setText(pulledHiString + "°/" + pulledLoString + "°");
+        viewHiLo.setText(pulledLoString + "°/" + pulledHiString + "°");
         viewWindValue.setText(pulledWind);
         if(units == 0){
-            if(pulledPrecip == -1){
+            if(pulledPrecip == -1000){
                 viewPrecipValue.setText("---");
             }
             else{
                 viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
             }
 
-            if(pulledHumidity == -1){
+            if(pulledHumidity == -1000){
                 viewHumidityValue.setText("---");
             }
             else{
                 viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
             }
 
-            if(pulledDewpoint == -1){
+            if(pulledDewpoint == -1000){
                 viewDewPointValue.setText("---");
             }
             else{
                 viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
             }
 
-            if(pulledPressure == -1){
+            if(pulledPressure == -1000){
                 viewPressureValue.setText("---");
             }
             else{
                 viewPressureValue.setText(String.valueOf(pulledPressure) + "inHg");
             }
 
-            if(pulledCloudCover == -1){
+            if(pulledCloudCover == -1000){
                 viewCloudCoverValue.setText("---");
             }
             else{
@@ -958,35 +958,35 @@ public class DailyActivity extends AppCompatActivity {
             }
         }
         else{
-            if(pulledPrecip == -1){
+            if(pulledPrecip == -1000){
                 viewPrecipValue.setText("---");
             }
             else{
                 viewPrecipValue.setText(String.valueOf(pulledPrecip) + "%");
             }
 
-            if(pulledHumidity == -1){
+            if(pulledHumidity == -1000){
                 viewHumidityValue.setText("---");
             }
             else{
                 viewHumidityValue.setText(String.valueOf(pulledHumidity) + "%");
             }
 
-            if(pulledDewpoint == -1){
+            if(pulledDewpoint == -1000){
                 viewDewPointValue.setText("---");
             }
             else{
                 viewDewPointValue.setText(String.valueOf(pulledDewpoint) + "\u00B0");
             }
 
-            if(pulledPressure == -1){
+            if(pulledPressure == -1000){
                 viewPressureValue.setText("---");
             }
             else{
                 viewPressureValue.setText(String.valueOf(pulledPressure) + "mb");
             }
 
-            if(pulledCloudCover == -1){
+            if(pulledCloudCover == -1000){
                 viewCloudCoverValue.setText("---");
             }
             else{

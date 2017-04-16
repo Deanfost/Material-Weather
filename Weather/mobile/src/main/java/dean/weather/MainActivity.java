@@ -234,12 +234,12 @@ public class MainActivity extends AppCompatActivity implements
             // Recoverable error. Show a dialog prompting the user to
             // install/update/enable Google Play services.
             GooglePlayServicesUtil.showErrorDialogFragment(i, this, ERROR_DIALOG_REQUEST_CODE, new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            // The user chose not to take the recovery action
-                            onProviderInstallerNotAvailable();
-                        }
-                    });
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    // The user chose not to take the recovery action
+                    onProviderInstallerNotAvailable();
+                }
+            });
         } else {
             // Google Play services is not available.
             onProviderInstallerNotAvailable();
@@ -257,9 +257,9 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             //Settings
             case R.id.action_settings:
-                    //Open the settings activity
-                    Intent settingsIntent = new Intent(this, settingsActivity.class);
-                    startActivity(settingsIntent);
+                //Open the settings activity
+                Intent settingsIntent = new Intent(this, settingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             //Refresh data
             case R.id.action_refresh:
@@ -478,8 +478,8 @@ public class MainActivity extends AppCompatActivity implements
      * Stops location updates.
      */
     public void stopLocationUpdates() {
-            LocationServices.FusedLocationApi.removeLocationUpdates(
-                    googleApiClient, this);
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                googleApiClient, this);
     }
 
     /**
@@ -840,7 +840,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 Log.i("HI", todaysHI);
                 Log.i("LO", todaysLO);
-                todaysHILO = todaysHI + "\u00B0" + "/" + todaysLO + "\u00B0";//76°/42° format
+                todaysHILO = todaysLO + "\u00B0" + "/" + todaysHI + "\u00B0";//42°/76° format
 
                 //Parse summary forecast
                 if(weatherResponse.getMinutely() != null){
@@ -1690,8 +1690,8 @@ public class MainActivity extends AppCompatActivity implements
             for (int i = 0; i < 24; i++) {
                 Log.i("iteratedHourComp", iteratedHour + "");
                 //Keep iterating for up to the next 24 hours, with entries that go over 23 being the next day
-                    pulledComparisonHours.add(iteratedHour);
-                    iteratedHour++;
+                pulledComparisonHours.add(iteratedHour);
+                iteratedHour++;
             }
             Log.i("pulledHoursSize24", String.valueOf(pulledComparisonHours.size()));
         } else {
@@ -1702,8 +1702,8 @@ public class MainActivity extends AppCompatActivity implements
                 iteratedHour = iteratedHour % 24;
                 Log.i("iteratedHourStart", String.valueOf(iteratedHour));
                 //Keep iterating for up to the amount of data we have, with entries that go over 23 being the next day
-                    pulledComparisonHours.add(iteratedHour);
-                    iteratedHour++;
+                pulledComparisonHours.add(iteratedHour);
+                iteratedHour++;
             }
             Log.i("pulledHoursSizeComp", String.valueOf(pulledComparisonHours.size()));
         }
@@ -2001,91 +2001,91 @@ public class MainActivity extends AppCompatActivity implements
      * Updates ongoing notification if one exists on activity launch.
      */
     private void updateNotification() {
-            //Create the weather notification
-            int iconID;
-            RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.custom_notif);
-            //Set icon
-            switch (currentIcon) {
-                case "clear-day":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sunny_white);
-                    iconID = R.drawable.ic_sunny_white;
-                    break;
-                case "clear-night":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_clear_night_white);
-                    iconID = R.drawable.ic_clear_night_white;
-                    break;
-                case "rain":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_rain_white);
-                    iconID = R.drawable.ic_rain_white;
-                    break;
-                case "snow":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_snow_white);
-                    iconID = R.drawable.ic_snow_white;
-                    break;
-                case "sleet":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sleet_white);
-                    iconID = R.drawable.ic_sleet_white;
-                    break;
-                case "wind":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_windrose_white);
-                    iconID = R.drawable.ic_windrose_white;
-                    break;
-                case "fog":
-                    //If it is daytime
-                    if (setID != 3) {
-                        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggyday_white);
-                        iconID = R.drawable.ic_foggyday_white;
-                    } else {
-                        notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggynight_white);
-                        iconID = R.drawable.ic_foggynight_white;
-                    }
-                    break;
-                case "cloudy":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
-                    iconID = R.drawable.ic_cloudy_white;
-                    break;
-                case "partly-cloudy-day":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudy_white);
-                    iconID = R.drawable.ic_partlycloudy_white;
+        //Create the weather notification
+        int iconID;
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.custom_notif);
+        //Set icon
+        switch (currentIcon) {
+            case "clear-day":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sunny_white);
+                iconID = R.drawable.ic_sunny_white;
+                break;
+            case "clear-night":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_clear_night_white);
+                iconID = R.drawable.ic_clear_night_white;
+                break;
+            case "rain":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_rain_white);
+                iconID = R.drawable.ic_rain_white;
+                break;
+            case "snow":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_snow_white);
+                iconID = R.drawable.ic_snow_white;
+                break;
+            case "sleet":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_sleet_white);
+                iconID = R.drawable.ic_sleet_white;
+                break;
+            case "wind":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_windrose_white);
+                iconID = R.drawable.ic_windrose_white;
+                break;
+            case "fog":
+                //If it is daytime
+                if (setID != 3) {
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggyday_white);
+                    iconID = R.drawable.ic_foggyday_white;
+                } else {
+                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_foggynight_white);
+                    iconID = R.drawable.ic_foggynight_white;
+                }
+                break;
+            case "cloudy":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
+                iconID = R.drawable.ic_cloudy_white;
+                break;
+            case "partly-cloudy-day":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudy_white);
+                iconID = R.drawable.ic_partlycloudy_white;
 
-                    break;
-                case "partly-cloudy-night":
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudynight_white);
-                    iconID = R.drawable.ic_partlycloudynight_white;
-                    break;
-                default:
-                    notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
-                    iconID = R.drawable.ic_cloudy_white;
-                    Log.i("CurrentConditions", "Unsupported condition.");
-                    break;
-            }
-            //Set temp and condition
-            notificationView.setTextViewText(R.id.notifCondition, currentTemp + "" + "° - " + currentConditions);
-            //Set location
-            if (!currentLocation.equals("---")) {
-                notificationView.setTextViewText(R.id.notifLocation, currentLocation);
-            } else {
-                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String savedLocation = mySPrefs.getString(getString(R.string.last_location_key), "---");
-                notificationView.setTextViewText(R.id.notifLocation, savedLocation);
-            }
-
-            //Set high and low
-            notificationView.setTextViewText(R.id.notifBody, "Hi - " + todaysHI + "° Lo - " + todaysLO + "°");
-            //Build the notification
-            NotificationCompat.Builder notificationBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setContent(notificationView)
-                            .setSmallIcon(iconID);
-            //Intent to go to main activity
-            Intent mainIntent = new Intent(this, IntroActivity.class);
-            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0);
-            notificationBuilder.setContentIntent(resultPendingIntent);
-            notificationBuilder.setOngoing(true);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
+                break;
+            case "partly-cloudy-night":
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_partlycloudynight_white);
+                iconID = R.drawable.ic_partlycloudynight_white;
+                break;
+            default:
+                notificationView.setImageViewResource(R.id.notifCondIcon, R.drawable.ic_cloudy_white);
+                iconID = R.drawable.ic_cloudy_white;
+                Log.i("CurrentConditions", "Unsupported condition.");
+                break;
         }
+        //Set temp and condition
+        notificationView.setTextViewText(R.id.notifCondition, currentTemp + "" + "° - " + currentConditions);
+        //Set location
+        if (!currentLocation.equals("---")) {
+            notificationView.setTextViewText(R.id.notifLocation, currentLocation);
+        } else {
+            SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String savedLocation = mySPrefs.getString(getString(R.string.last_location_key), "---");
+            notificationView.setTextViewText(R.id.notifLocation, savedLocation);
+        }
+
+        //Set high and low
+        notificationView.setTextViewText(R.id.notifBody, "Hi - " + todaysHI + "° Lo - " + todaysLO + "°");
+        //Build the notification
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
+                        .setContent(notificationView)
+                        .setSmallIcon(iconID);
+        //Intent to go to main activity
+        Intent mainIntent = new Intent(this, IntroActivity.class);
+        mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0);
+        notificationBuilder.setContentIntent(resultPendingIntent);
+        notificationBuilder.setOngoing(true);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(MainActivity.FOLLOW_NOTIF_ID, notificationBuilder.build());
+    }
 
     /**
      * Updates ongoing notification if one exists on activity launch.

@@ -94,7 +94,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
         TextView dayView = holder.dayView;
         dayView.setText(pulledDay);
         TextView HILOView = holder.HILOView;
-        HILOView.setText(String.valueOf(pulledHI) + (char) 0x00B0 + "/" + String.valueOf(pulledLO)+ (char) 0x00B0);
+        HILOView.setText(String.valueOf(pulledLO) + (char) 0x00B0 + "/" + String.valueOf(pulledHI)+ (char) 0x00B0);
         TextView precipView = holder.precipView;
         precipView.setText(String.valueOf(pulledPrecip)+ "%");
         ImageView condIcon = holder.condIcon;
@@ -119,7 +119,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder> 
                 condIcon.setImageResource(R.drawable.ic_windrose_white);
                 break;
             case "fog":
-                    condIcon.setImageResource(R.drawable.ic_foggyday_white);
+                condIcon.setImageResource(R.drawable.ic_foggyday_white);
                 break;
             case "cloudy":
                 condIcon.setImageResource(R.drawable.ic_cloudy_white);
