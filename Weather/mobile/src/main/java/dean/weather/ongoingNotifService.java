@@ -666,8 +666,9 @@ public class ongoingNotifService extends Service implements GoogleApiClient.Conn
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(this)
                             .setContentTitle(currentTempString + "° - " + currentCondition)
-                            .setContentTitle(currentLo + "°/" + currentHi + "° · " + localCurrentAddress)
+                            .setContentText(currentLo + "°/" + currentHi + "° · " + localCurrentAddress)
                             .setSmallIcon(iconID);
+
             //Intent to go to main activity
             Intent mainIntent = new Intent(this, IntroActivity.class);
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
