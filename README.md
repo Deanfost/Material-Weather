@@ -10,8 +10,7 @@ The top half of the screen acts as your dashboard. Get a quick summary by lookin
 of a specific day.
 
 ## Your Better Half
-Maybe you're one for the details - we are too. Down below, "Current Details" will give you access to data such as the current wind speed and direction, 
-precipitation chance, humidity, and more. Down below, you can check out sunrise and sunset times. 
+Maybe you're one for the details - we are too. Down below, "Current Details" will give you access to data such as the current wind speed and direction, precipitation chance, humidity, and more. Further down, you can check out sunrise and sunset times. 
 
 ## Notifications
 Don't have the app handy? We got you covered. Enable ongoing weather notifications and weather alerts to always know what to expect. 
