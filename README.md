@@ -1,5 +1,6 @@
 # Material-Weather
 A simple and quick look outside.
 
-Material Weather is my take on a simple, light-weight weather app for Android handsets. Designed and built by me as a senior
-in high school, I'm excited to share it with you.
+Material Weather is an Android weather application. It includes all basic weather information, including wind speeds and direction, 
+temperatures, sky conditions and more, for your current location. There are hourly forecasts for the next 24 hours, and daily forecasts
+for the next week.
