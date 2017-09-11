@@ -13,6 +13,6 @@ of a specific day.
 Maybe you're one for the details - we are too. Down below, "Current Details" will give you access to data such as the current wind speed and direction, precipitation chance, humidity, and more. Further down, you can check out sunrise and sunset times. 
 
 ## Notifications
-Don't have the app handy? We've got you covered. Enable ongoing weather notifications and weather alerts to always know what to expect. 
+Don't have the app handy? We've got you covered. Enable ongoing weather notifications and weather alerts to always stay in the know.
 
 
