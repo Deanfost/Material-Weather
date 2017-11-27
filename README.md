@@ -5,4 +5,4 @@ Material Weather is an Android weather application. It includes all basic weathe
 temperatures, sky conditions and more, for your current location. There are hourly forecasts for the next 24 hours, and daily forecasts
 for the next week. In addition, there are a few background services including ongoing weather notifications and weather alerts.
 
-Note - This project has not been maintained since Android 7.0's release.
+Note - This project has not been maintained since Android 7.1's release.
